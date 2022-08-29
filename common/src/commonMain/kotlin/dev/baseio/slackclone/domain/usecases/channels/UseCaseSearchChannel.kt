@@ -7,8 +7,8 @@ import dev.baseio.slackclone.domain.usecases.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 
 class UseCaseSearchChannel(private val channelsRepository: ChannelsRepository) :
-  BaseUseCase<PagingData<DomainLayerChannels.SlackChannel>, String> {
-  override fun performStreaming(params: String?): Flow<PagingData<DomainLayerChannels.SlackChannel>> {
+  BaseUseCase<List<DomainLayerChannels.SlackChannel>, String> {
+  override fun performStreaming(params: String?): Flow<List<DomainLayerChannels.SlackChannel>> {
     return channelsRepository.fetchChannelsPaged(params)
   }
 

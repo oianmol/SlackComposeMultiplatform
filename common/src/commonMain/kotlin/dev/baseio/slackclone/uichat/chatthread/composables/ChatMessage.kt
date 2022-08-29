@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
@@ -16,8 +15,6 @@ import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
-import java.text.SimpleDateFormat
-import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

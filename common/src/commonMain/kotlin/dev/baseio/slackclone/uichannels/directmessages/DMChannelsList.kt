@@ -6,22 +6,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
-import androidx.paging.compose.collectAsLazyPagingItems
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.chatcore.views.DMLastMessageItem
+import org.koin.java.KoinJavaComponent.inject
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun DMChannelsList(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
-  channelVM: DMessageViewModel = hiltViewModel()
 ) {
-
+  val channelVM: MessageViewModel by inject(MessageViewModel::class.java)
   val channels by channelVM.channels.collectAsState()
-  val channelsFlow = channels.collectAsLazyPagingItems()
+  val channelsFlow by channels.collectAsState(emptyList())
   val listState = rememberLazyListState()
 
   LaunchedEffect(key1 = Unit) {
@@ -29,8 +24,8 @@ fun DMChannelsList(
   }
 
   LazyColumn(state = listState) {
-    for (channelIndex in 0 until channelsFlow.itemCount) {
-      val channel = channelsFlow.peek(channelIndex)!!
+    for (channelIndex in 0 until channelsFlow.size) {
+      val channel = channelsFlow.get(channelIndex)!!
 
       item {
         DMLastMessageItem({

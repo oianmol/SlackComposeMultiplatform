@@ -8,9 +8,9 @@ import dev.baseio.slackclone.domain.usecases.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 
 class UseCaseFetchChannelsWithLastMessage(private val channelLastMessageRepository: ChannelLastMessageRepository) :
-  BaseUseCase<PagingData<DomainLayerMessages.LastMessage>, Unit> {
+  BaseUseCase<List<DomainLayerMessages.LastMessage>, Unit> {
 
-  override fun performStreaming(params: Unit?): Flow<PagingData<DomainLayerMessages.LastMessage>> {
+  override fun performStreaming(params: Unit?): Flow<List<DomainLayerMessages.LastMessage>> {
     return channelLastMessageRepository.fetchChannels()
   }
 

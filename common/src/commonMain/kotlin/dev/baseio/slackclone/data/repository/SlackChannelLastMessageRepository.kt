@@ -1,34 +1,33 @@
 package dev.baseio.slackclone.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.map
-import dev.baseio.slackclone.data.local.dao.SlackChannelDao
-import dev.baseio.slackclone.data.local.model.DBSlackChannel
-import dev.baseio.slackclone.data.local.model.DBSlackMessage
+import database.SlackChannel
+import database.SlackMessage
+import dev.baseio.database.SlackDB
+import dev.baseio.slackclone.data.local.asFlow
+import dev.baseio.slackclone.data.local.mapToList
+import dev.baseio.slackclone.data.local.mapToOne
 import dev.baseio.slackclone.data.mapper.EntityMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
 import dev.baseio.slackclone.domain.repository.ChannelLastMessageRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class SlackChannelLastMessageRepository @Inject constructor(
-  private val slackChannelDao: SlackChannelDao,
-  private val messagesMapper: EntityMapper<DomainLayerMessages.SlackMessage, DBSlackMessage>,
-  private val slackChannelMapper: EntityMapper<DomainLayerChannels.SlackChannel, DBSlackChannel>
+class SlackChannelLastMessageRepository constructor(
+  private val slackChannelDao: SlackDB,
+  private val messagesMapper: EntityMapper<DomainLayerMessages.SlackMessage, SlackMessage>,
+  private val slackChannelMapper: EntityMapper<DomainLayerChannels.SlackChannel, SlackChannel>
 ) : ChannelLastMessageRepository {
-  override fun fetchChannels(): Flow<PagingData<DomainLayerMessages.LastMessage>> {
-    val chatPager = Pager(PagingConfig(pageSize = 20)) {
-      slackChannelDao.getChannelsWithLastMessage()
-    }
-    return chatPager.flow.map {
+  override fun fetchChannels(): Flow<List<DomainLayerMessages.LastMessage>> {
+    val chatPager = slackChannelDao.slackDBQueries.selectChannelsWithLastMessage().asFlow().mapToList()
+    return chatPager.map {
       it.map {
+        val channel = slackChannelDao.slackDBQueries.selectChannelById(it.channelId!!).executeAsOne()
+        val message =
+          SlackMessage(it.uid, it.channelId, it.message, it.fromUser, it.createdBy, it.createdDate, it.modifiedDate)
         DomainLayerMessages.LastMessage(
-          slackChannelMapper.mapToDomain(it.dbSlackChannel),
-          messagesMapper.mapToDomain(it.message)
+          slackChannelMapper.mapToDomain(channel),
+          messagesMapper.mapToDomain(message)
         )
       }
     }

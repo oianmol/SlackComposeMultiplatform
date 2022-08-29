@@ -1,35 +1,40 @@
 package dev.baseio.slackclone.data.injection
 
-import com.github.vatbub.randomusers.result.RandomUser
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import dev.baseio.slackclone.data.local.model.DBSlackChannel
-import dev.baseio.slackclone.data.local.model.DBSlackMessage
+import database.SlackChannel
+import database.SlackMessage
 import dev.baseio.slackclone.data.mapper.*
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
 import dev.baseio.slackclone.domain.model.users.DomainLayerUsers
-import javax.inject.Singleton
+import dev.baseio.slackclone.domain.model.users.RandomUser
+import org.koin.core.qualifier.Qualifier
+import org.koin.core.qualifier.QualifierValue
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class DataMappersModule {
+val dataMappersModule = module {
+  single<EntityMapper<DomainLayerUsers.SlackUser, SlackChannel>>(qualifier = SlackUserChannel) { SlackUserChannelMapper() }
+  single<EntityMapper<DomainLayerUsers.SlackUser, RandomUser>>(qualifier = SlackUserRandomUser) { SlackUserMapper() }
+  single<EntityMapper<DomainLayerChannels.SlackChannel, SlackChannel>>(qualifier = SlackChannelChannel) { SlackChannelMapper() }
+  single<EntityMapper<DomainLayerMessages.SlackMessage, SlackMessage>>(qualifier = SlackMessageMessage) { SlackMessageMapper() }
+}
 
-  @Binds
-  @Singleton
-  abstract fun bindSlackUserChannelMapper(slackUserChannelMapper: SlackUserChannelMapper): EntityMapper<DomainLayerUsers.SlackUser, DBSlackChannel>
+object SlackMessageMessage: Qualifier{
+  override val value: QualifierValue
+    get() = "SlackMessageMessage"
 
-  @Binds
-  @Singleton
-  abstract fun bindSlackUserDataDomainMapper(slackUserMapper: SlackUserMapper): EntityMapper<DomainLayerUsers.SlackUser, RandomUser>
+}
+object SlackUserChannel : Qualifier {
+  override val value: QualifierValue
+    get() = "SlackUserChannel"
+}
 
-  @Binds
-  @Singleton
-  abstract fun bindSlackChannelDataDomainMapper(slackChannelMapper: SlackChannelMapper): EntityMapper<DomainLayerChannels.SlackChannel, DBSlackChannel>
+object SlackUserRandomUser :Qualifier {
+  override val value: QualifierValue
+    get() = "SlackUserRandomUser"
+}
 
-  @Binds
-  @Singleton
-  abstract fun bindSlackMessageDataDomMapper(slackMessageMapper: SlackMessageMapper): EntityMapper<DomainLayerMessages.SlackMessage, DBSlackMessage>
+object SlackChannelChannel: Qualifier{
+  override val value: QualifierValue
+    get() = "SlackChannelChannel"
+
 }

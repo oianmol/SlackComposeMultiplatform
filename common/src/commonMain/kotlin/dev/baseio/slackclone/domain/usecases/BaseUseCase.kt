@@ -1,5 +1,7 @@
 package dev.baseio.slackclone.domain.usecases
 
+import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
+import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
 import kotlinx.coroutines.flow.Flow
 
 interface BaseUseCase<out Result, in ExecutableParam> {

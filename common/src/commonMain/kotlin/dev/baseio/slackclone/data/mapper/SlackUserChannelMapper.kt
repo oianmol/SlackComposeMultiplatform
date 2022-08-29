@@ -1,16 +1,27 @@
 package dev.baseio.slackclone.data.mapper
 
-import dev.baseio.slackclone.data.local.model.DBSlackChannel
+import database.SlackChannel
 import dev.baseio.slackclone.domain.model.users.DomainLayerUsers
-import javax.inject.Inject
 
-class SlackUserChannelMapper @Inject constructor() :
-  EntityMapper<DomainLayerUsers.SlackUser, DBSlackChannel> {
-  override fun mapToDomain(entity: DBSlackChannel): DomainLayerUsers.SlackUser {
+class SlackUserChannelMapper :
+  EntityMapper<DomainLayerUsers.SlackUser, SlackChannel> {
+  override fun mapToDomain(entity: SlackChannel): DomainLayerUsers.SlackUser {
     TODO("Not yet implemented")
   }
 
-  override fun mapToData(model: DomainLayerUsers.SlackUser): DBSlackChannel {
-    return DBSlackChannel(model.login, model.name, avatarUrl = model.picture, isOneToOne = true)
+  override fun mapToData(model: DomainLayerUsers.SlackUser): SlackChannel {
+    return SlackChannel(
+      model.login,
+      model.name,
+      isStarred = 0L,
+      photo = model.picture,
+      email = "",
+      createdDate = null,
+      modifiedDate = null,
+      isMuted = 0L,
+      isPrivate = 1L,
+      isShareOutSide = null,
+      isOneToOne = 1L
+    )
   }
 }

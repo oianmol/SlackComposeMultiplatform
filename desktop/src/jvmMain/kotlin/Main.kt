@@ -3,9 +3,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.data.DriverFactory
+import dev.baseio.slackclone.initKoin
 
 fun main() = application {
   Window(onCloseRequest = ::exitApplication) {
@@ -16,9 +19,8 @@ fun main() = application {
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow
       ) {
-        App()
+        App(sqlDriver = DriverFactory().createDriver())
       }
     }
   }
 }
-

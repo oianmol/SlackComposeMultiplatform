@@ -8,6 +8,7 @@ import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.domain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -16,9 +17,9 @@ class ChatScreenVM constructor(
   private val useCaseSendMessage: UseCaseSendMessage
 ) : ViewModel() {
   var channel: UiLayerChannels.SlackChannel? = null
-  var chatMessagesFlow = MutableStateFlow<Flow<PagingData<DomainLayerMessages.SlackMessage>>?>(null)
+  var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SlackMessage>>>(emptyFlow())
   var message = MutableStateFlow("")
-  var chatBoxState = MutableStateFlow(BoxState.Collapsed)
+  var chatBoxState = MutableStateFlow(BoxState.Expanded)
 
   fun requestFetch(slackChannel: UiLayerChannels.SlackChannel) {
     this.channel = slackChannel

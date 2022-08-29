@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.chatcore.views
 
-import android.text.format.DateUtils
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -12,17 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import dev.baseio.slackclone.common.extensions.TimeGranularity
+import dev.baseio.slackclone.common.extensions.calculateTimeAgoByTimeGranularity
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
+import java.util.*
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SlackChannelItem(
   slackChannel: UiLayerChannels.SlackChannel,
@@ -126,12 +126,8 @@ private fun ChannelMessage(slackMessage: DomainLayerMessages.SlackMessage, textS
 @Composable
 fun RelativeTime(createdDate: Long) {
   Text(
-    DateUtils.getRelativeTimeSpanString(
-      createdDate,
-      System.currentTimeMillis(),
-      0L,
-      DateUtils.FORMAT_ABBREV_RELATIVE
-    ).toString(),
+    calculateTimeAgoByTimeGranularity
+      (System.currentTimeMillis(), Date(createdDate), TimeGranularity.MINUTES) ?: "$createdDate",
     style = SlackCloneTypography.caption.copy(
       color = SlackCloneColorProvider.colors.textSecondary
     ), modifier = Modifier.padding(4.dp)

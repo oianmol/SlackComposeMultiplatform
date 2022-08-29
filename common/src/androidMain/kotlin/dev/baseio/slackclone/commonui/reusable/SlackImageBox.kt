@@ -5,6 +5,6 @@ import androidx.compose.ui.Modifier
 import coil.compose.AsyncImage
 
 @Composable
-fun SlackImageBox(modifier: Modifier, imageUrl: String) {
+actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
   AsyncImage(model = imageUrl, modifier = modifier, contentDescription = null)
 }

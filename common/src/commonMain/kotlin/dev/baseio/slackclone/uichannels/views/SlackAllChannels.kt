@@ -1,25 +1,21 @@
 package dev.baseio.slackclone.uichannels.views
 
-import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
-import dev.baseio.slackclone.uichannels.R
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import androidx.compose.runtime.*
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import org.koin.java.KoinJavaComponent.inject
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SlackAllChannels(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
-  channelVM: SlackChannelVM = hiltViewModel(),
   onClickAdd: () -> Unit
 ) {
-  val recent = stringResource(R.string.channels)
+  val channelVM: SlackChannelVM by inject(SlackChannelVM::class.java)
+
+  val recent = "Channels"
   val channelsFlow = channelVM.channels.collectAsState()
-  val channels by channelsFlow.value.collectAsState(initialValue = emptyList())
+  val channels by channelsFlow.value.collectAsState(emptyList())
 
   LaunchedEffect(key1 = Unit) {
     channelVM.allChannels()

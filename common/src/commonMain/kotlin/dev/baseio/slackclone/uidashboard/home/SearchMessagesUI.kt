@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
@@ -20,7 +19,6 @@ import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.uidashboard.R
 import dev.baseio.slackclone.uidashboard.home.search.SearchCancel
 
 @Composable
@@ -52,12 +50,12 @@ private fun Content() {
   Column(Modifier.verticalScroll(rememberScrollState())) {
     SlackListItem(
       icon = Icons.Default.ShoppingCart,
-      title = stringResource(R.string.browse_people)
+      title = "browse_people"
     )
-    SlackListItem(icon = Icons.Default.Search, title = stringResource(R.string.browse_channels))
+    SlackListItem(icon = Icons.Default.Search, title = "browse_channels")
     SlackListDivider()
     // Recent Searches
-    SearchText(stringResource(R.string.recent_searches))
+    SearchText("recent_searches")
     repeat(5) {
       SlackListItem(
         icon = Icons.Default.Favorite,
@@ -67,7 +65,7 @@ private fun Content() {
     }
     SlackListDivider()
     // Narrow Your Search
-    SearchText(stringResource(R.string.narrow_your_search))
+    SearchText("narrow_your_search")
     repeat(5) {
       SlackListItemTrailingView(
         icon = Icons.Default.Favorite,

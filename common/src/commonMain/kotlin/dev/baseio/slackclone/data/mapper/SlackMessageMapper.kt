@@ -1,26 +1,24 @@
 package dev.baseio.slackclone.data.mapper
 
-import dev.baseio.slackclone.data.local.model.DBSlackMessage
+import database.SlackMessage
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
 import java.util.*
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class SlackMessageMapper @Inject constructor() : EntityMapper<DomainLayerMessages.SlackMessage, DBSlackMessage> {
-  override fun mapToDomain(entity: DBSlackMessage): DomainLayerMessages.SlackMessage {
+class SlackMessageMapper constructor() : EntityMapper<DomainLayerMessages.SlackMessage, SlackMessage> {
+  override fun mapToDomain(entity: SlackMessage): DomainLayerMessages.SlackMessage {
     return DomainLayerMessages.SlackMessage(
-      entity.uuid,
-      entity.channelId,
-      entity.message,
-      entity.userId,
-      entity.createdBy,
-      entity.createdDate,
-      entity.modifiedDate
+      entity.uid,
+      entity.channelId!!,
+      entity.message!!,
+      entity.uid,
+      entity.createdBy!!,
+      entity.createdDate!!,
+      entity.modifiedDate!!
     )
   }
 
-  override fun mapToData(model: DomainLayerMessages.SlackMessage): DBSlackMessage {
-    return DBSlackMessage(
+  override fun mapToData(model: DomainLayerMessages.SlackMessage): SlackMessage {
+    return SlackMessage(
       model.uuid,
       model.channelId,
       model.message,

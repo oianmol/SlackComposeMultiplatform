@@ -7,8 +7,8 @@ import dev.baseio.slackclone.domain.usecases.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 
 class UseCaseFetchMessages(private val messagesRepository: MessagesRepository) :
-  BaseUseCase<PagingData<DomainLayerMessages.SlackMessage>, String> {
-  override fun performStreaming(params: String?): Flow<PagingData<DomainLayerMessages.SlackMessage>> {
+  BaseUseCase<List<DomainLayerMessages.SlackMessage>, String> {
+  override fun performStreaming(params: String?): Flow<List<DomainLayerMessages.SlackMessage>> {
     return messagesRepository.fetchMessages(params)
   }
 }

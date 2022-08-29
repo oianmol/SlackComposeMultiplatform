@@ -11,34 +11,26 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
-import androidx.paging.compose.collectAsLazyPagingItems
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigator.ComposeNavigator
-import dev.baseio.slackclone.uichat.R
+import dev.baseio.slackclone.navigation.ComposeNavigator
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun NewChatThreadScreen(
   composeNavigator: ComposeNavigator,
-  newChatThread: NewChatThreadVM = hiltViewModel(),
 ) {
-  SlackCloneTheme {
-    val scaffoldState = rememberScaffoldState()
+  val newChatThread: NewChatThreadVM by inject(NewChatThreadVM::class.java)
 
-    SlackCloneTheme {
-      ListRandomUsers(scaffoldState, composeNavigator, newChatThread = newChatThread)
-    }
-  }
+  val scaffoldState = rememberScaffoldState()
+
+  ListRandomUsers(scaffoldState, composeNavigator, newChatThread = newChatThread)
 }
 
 @Composable
@@ -51,9 +43,7 @@ private fun ListRandomUsers(
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,
       contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier
-        .statusBarsPadding()
-        .navigationBarsPadding(),
+      modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
         SearchAppBar(composeNavigator)
@@ -81,16 +71,16 @@ private fun SearchContent(innerPadding: PaddingValues, newChatThread: NewChatThr
   }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllUsers(newChatThread: NewChatThreadVM) {
   val channels by newChatThread.users.collectAsState()
-  val channelsFlow = channels.collectAsLazyPagingItems()
+  val channelsFlow by channels.collectAsState(emptyList())
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
-    for (channelIndex in 0 until channelsFlow.itemCount) {
-      val channel = channelsFlow.peek(channelIndex)!!
+    for (channelIndex in 0 until channelsFlow.size) {
+      val channel = channelsFlow.get(channelIndex)!!
       val newDrawn = channel.name?.first().toString()
       if (canDrawHeader(lastDrawnChannel, newDrawn)) {
         stickyHeader {
@@ -98,7 +88,7 @@ private fun ListAllUsers(newChatThread: NewChatThreadVM) {
         }
       }
       item {
-        SlackChannelItem(channel){
+        SlackChannelItem(channel) {
           newChatThread.navigate(it)
         }
       }
@@ -126,7 +116,6 @@ fun SlackChannelHeader(title: String) {
   }
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun SearchUsersTF(newChatThread: NewChatThreadVM) {
   val searchChannel by newChatThread.search.collectAsState()
@@ -139,7 +128,7 @@ private fun SearchUsersTF(newChatThread: NewChatThreadVM) {
     textStyle = textStyleFieldPrimary(),
     placeholder = {
       Text(
-        text = stringResource(R.string.search_channel_conv),
+        text = "search_channel_conv",
         style = textStyleFieldSecondary(),
         textAlign = TextAlign.Start
       )
@@ -189,7 +178,7 @@ private fun SearchAppBar(composeNavigator: ComposeNavigator) {
 @Composable
 private fun SearchNavTitle() {
   Text(
-    text = stringResource(R.string.new_message),
+    text = "new_message",
     style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
   )
 }
@@ -201,7 +190,7 @@ private fun NavBackIcon(composeNavigator: ComposeNavigator) {
   }) {
     Icon(
       imageVector = Icons.Filled.Clear,
-      contentDescription = stringResource(R.string.clear),
+      contentDescription = "clear",
       modifier = Modifier.padding(start = 8.dp),
       tint = SlackCloneColorProvider.colors.appBarIconColor
     )

@@ -16,8 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.keyboard.Keyboard
-import dev.baseio.slackclone.commonui.keyboard.keyboardAsState
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -26,22 +24,19 @@ fun SearchCancel() {
   val keyboardController = LocalSoftwareKeyboardController.current
 
   Row {
-    val isKeyboardOpen by keyboardAsState()
     var search by remember { mutableStateOf("") }
 
     SearchMessagesTF(modifier = Modifier.weight(1f), search) { newValue ->
       search = newValue
     }
-    AnimatedVisibility(visible = isKeyboardOpen is Keyboard.Opened) {
-      TextButton(onClick = {
-        search = ""
-        keyboardController?.hide()
-      }) {
-        Text(
-          "Cancel",
-          style = SlackCloneTypography.subtitle1.copy(color = Color.White)
-        )
-      }
+    TextButton(onClick = {
+      search = ""
+      keyboardController?.hide()
+    }) {
+      Text(
+        "Cancel",
+        style = SlackCloneTypography.subtitle1.copy(color = Color.White)
+      )
     }
   }
 }

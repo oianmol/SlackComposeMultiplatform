@@ -14,25 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
-import dev.baseio.slackclone.commonui.keyboard.Keyboard
-import dev.baseio.slackclone.commonui.keyboard.keyboardAsState
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
-  val keyboard by keyboardAsState()
-
-  SideEffect {
-    if (keyboard is Keyboard.Closed) {
-      viewModel.chatBoxState.value = BoxState.Collapsed
-    }
-  }
 
   Column(
     modifier.background(SlackCloneColorProvider.colors.uiBackground),
@@ -44,17 +32,14 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
         start = 4.dp
       )
     )
-    if (keyboard is Keyboard.Opened) {
-      ChatOptions(
-        viewModel,
-        Modifier
-      )
-    }
+    ChatOptions(
+      viewModel,
+      Modifier
+    )
   }
 
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ChatOptions(viewModel: ChatScreenVM, modifier: Modifier = Modifier) {
   val search by viewModel.message.collectAsState()
@@ -91,13 +76,11 @@ fun ChatOptions(viewModel: ChatScreenVM, modifier: Modifier = Modifier) {
 
 private fun chatOptionIconSize() = Modifier.size(20.dp)
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun MessageTFRow(
   viewModel: ChatScreenVM,
   modifier: Modifier
 ) {
-  val keyboard by keyboardAsState()
 
   val search by viewModel.message.collectAsState()
   Column {
@@ -121,17 +104,12 @@ private fun MessageTFRow(
         modifier = Modifier.weight(1f)
       )
 
-      if (keyboard is Keyboard.Closed) {
-        SendMessageButton(viewModel, search)
-      } else {
-        CollapseExpandButton(viewModel)
-      }
+      SendMessageButton(viewModel, search)
     }
   }
 
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun CollapseExpandButton(viewModel: ChatScreenVM) {
   val isExpanded by viewModel.chatBoxState.collectAsState()

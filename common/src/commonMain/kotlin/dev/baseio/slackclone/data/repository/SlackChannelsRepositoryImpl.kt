@@ -1,9 +1,10 @@
 package dev.baseio.slackclone.data.repository
 
-import androidx.paging.*
+import database.SlackChannel
+import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.common.injection.dispatcher.CoroutineDispatcherProvider
-import dev.baseio.slackclone.data.local.dao.SlackChannelDao
-import dev.baseio.slackclone.data.local.model.DBSlackChannel
+import dev.baseio.slackclone.data.local.asFlow
+import dev.baseio.slackclone.data.local.mapToList
 import dev.baseio.slackclone.data.mapper.EntityMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.model.users.DomainLayerUsers
@@ -11,62 +12,73 @@ import dev.baseio.slackclone.domain.repository.ChannelsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class SlackChannelsRepositoryImpl @Inject constructor(
-  private val slackChannelDao: SlackChannelDao,
-  private val slackUserChannelMapper: EntityMapper<DomainLayerUsers.SlackUser, DBSlackChannel>,
-  private val slackChannelMapper: EntityMapper<DomainLayerChannels.SlackChannel, DBSlackChannel>,
+class SlackChannelsRepositoryImpl(
+  private val slackChannelDao: SlackDB,
+  private val slackChannelMapper: EntityMapper<DomainLayerChannels.SlackChannel, SlackChannel>,
   private val coroutineMainDispatcherProvider: CoroutineDispatcherProvider
 ) :
   ChannelsRepository {
 
-  override fun fetchChannelsPaged(params: String?): Flow<PagingData<DomainLayerChannels.SlackChannel>> {
-    val chatPager = Pager(PagingConfig(pageSize = 20)) {
-      params?.takeIf { it.isNotEmpty() }?.let {
-        slackChannelDao.channelsByName(params)
-      } ?: run {
-        slackChannelDao.channelsByName()
+  override fun fetchChannelsPaged(params: String?): Flow<List<DomainLayerChannels.SlackChannel>> {
+    val flow = params?.takeIf { it.isNotEmpty() }?.let {
+      slackChannelDao.slackDBQueries.selectAllChannelsByName(params).asFlow().mapToList()
+    } ?: run {
+      slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList()
+    }
+    return flow.map {
+      it.map { message ->
+        slackChannelMapper.mapToDomain(message)
       }
     }
-   return chatPager.flow.map {
-     it.map {message->
-       slackChannelMapper.mapToDomain(message)
-     }
-   }
   }
 
-  override suspend fun channelCount(): Int {
-    return withContext(coroutineMainDispatcherProvider.io) {
-      slackChannelDao.count()
-    }
+  override suspend fun channelCount(): Long {
+    return slackChannelDao.slackDBQueries.countChannels().executeAsOne()
   }
 
   override fun fetchChannels(): Flow<List<DomainLayerChannels.SlackChannel>> {
-    return slackChannelDao.getAllAsFlow()
+    return slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList()
       .map { list -> dbToDomList(list) }
   }
 
-  private fun dbToDomList(list: List<DBSlackChannel>) =
+  private fun dbToDomList(list: List<SlackChannel>) =
     list.map { channel -> slackChannelMapper.mapToDomain(channel) }
 
-  override suspend fun getChannel(uuid: String): DomainLayerChannels.SlackChannel? {
-    val dbSlack = slackChannelDao.getById(uuid)
-    return dbSlack?.let { slackChannelMapper.mapToDomain(it) }
+  override suspend fun getChannel(uuid: String): DomainLayerChannels.SlackChannel {
+    val dbSlack = slackChannelDao.slackDBQueries.selectChannelById(uuid).executeAsOne()
+    return slackChannelMapper.mapToDomain(dbSlack)
   }
 
   override suspend fun saveOneToOneChannels(params: List<DomainLayerUsers.SlackUser>) {
     return withContext(coroutineMainDispatcherProvider.io) {
-      slackChannelDao.insertAll(params.map {
-        slackUserChannelMapper.mapToData(it)
-      })
+      params.forEach {
+        slackChannelDao.slackDBQueries.insertChannel(
+          System.currentTimeMillis().toString(),
+          it.name,
+          it.email,
+          System.currentTimeMillis(), System.currentTimeMillis(), 0L, 0L, 1L, 0L, it.picture, 1L
+        )
+      }
     }
   }
 
   override suspend fun saveChannel(params: DomainLayerChannels.SlackChannel): DomainLayerChannels.SlackChannel? {
     return withContext(coroutineMainDispatcherProvider.io) {
-      slackChannelDao.insert(slackChannelMapper.mapToData(params))
-      slackChannelDao.getById(params.uuid!!)?.let { slackChannelMapper.mapToDomain(it) }
+      slackChannelDao.slackDBQueries.insertChannel(
+        params.uuid!!,
+        params.name,
+        "someelamil@sdffd.com",
+        params.createdDate,
+        params.modifiedDate,
+        params.isMuted.let { if (it == true) 1L else 0L },
+        params.isStarred.let { if (it == true) 1L else 0L },
+        params.isPrivate.let { if (it == true) 1L else 0L },
+        params.isShareOutSide.let { if (it == true) 1L else 0L },
+        params.avatarUrl,
+        params.isOneToOne.let { if (it == true) 1L else 0L }
+      )
+      slackChannelDao.slackDBQueries.selectChannelById(params.uuid).executeAsOne().let { slackChannelMapper.mapToDomain(it) }
     }
   }
 }

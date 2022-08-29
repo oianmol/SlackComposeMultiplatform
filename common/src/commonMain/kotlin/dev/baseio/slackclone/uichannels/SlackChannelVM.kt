@@ -1,16 +1,13 @@
 package dev.baseio.slackclone.uichannels
 
-import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.domain.mappers.UiModelMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.usecases.channels.UseCaseFetchChannels
 import kotlinx.coroutines.flow.*
-import javax.inject.Inject
 
-@HiltViewModel
-class SlackChannelVM @Inject constructor(
+class SlackChannelVM constructor(
   private val ucFetchChannels: UseCaseFetchChannels,
   private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>
 ) : ViewModel() {

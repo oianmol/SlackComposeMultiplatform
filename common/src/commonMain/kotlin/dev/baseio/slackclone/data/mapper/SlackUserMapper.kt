@@ -1,32 +1,26 @@
 package dev.baseio.slackclone.data.mapper
 
-import com.github.vatbub.randomusers.result.Name
-import com.github.vatbub.randomusers.result.RandomUser
 import dev.baseio.slackclone.domain.model.users.DomainLayerUsers
-import javax.inject.Inject
+import dev.baseio.slackclone.domain.model.users.RandomUser
 
-class SlackUserMapper @Inject constructor() : EntityMapper<DomainLayerUsers.SlackUser, RandomUser> {
+class SlackUserMapper : EntityMapper<DomainLayerUsers.SlackUser, RandomUser> {
   override fun mapToDomain(entity: RandomUser): DomainLayerUsers.SlackUser {
     return DomainLayerUsers.SlackUser(
-      entity.gender.genderText,
-      entity.name.fullName(),
-      entity.location.city,
-      entity.email,
-      entity.login.username,
-      entity.dateOfBirth.time,
-      entity.registrationDate.time,
-      entity.phone,
-      entity.cell,
-      entity.picture.mediumPicture.toURI().toString(),
-      entity.nationality.shortCode
+      "Male",
+      entity.name(),
+      "City",
+      "anmol@gmail.com",
+      "username",
+      System.currentTimeMillis(),
+      System.currentTimeMillis(),
+      "8284866938",
+      "8284866938",
+      "https://www.google.com",
+      "IN"
     )
   }
 
   override fun mapToData(model: DomainLayerUsers.SlackUser): RandomUser {
     TODO("not needed!")
   }
-}
-
-private fun Name.fullName(): String {
-  return "${this.firstName} ${this.lastName}"
 }

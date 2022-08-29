@@ -11,30 +11,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigator.ComposeNavigator
-import dev.baseio.slackclone.uichannels.R
+import dev.baseio.slackclone.navigation.ComposeNavigator
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun CreateNewChannelUI(
   composeNavigator: ComposeNavigator,
-  createChannelVM: CreateChannelVM = hiltViewModel()
 ) {
-  SlackCloneTheme {
-    val scaffoldState = rememberScaffoldState()
+  val createChannelVM: CreateChannelVM by inject(CreateChannelVM::class.java)
 
-    SlackCloneTheme {
-      CreateChannel(scaffoldState, composeNavigator, createChannelVM = createChannelVM)
-    }
-  }
+  val scaffoldState = rememberScaffoldState()
+  CreateChannel(scaffoldState, composeNavigator, createChannelVM = createChannelVM)
+
 }
 
 @Composable
@@ -47,9 +40,7 @@ private fun CreateChannel(
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,
       contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier
-        .statusBarsPadding()
-        .navigationBarsPadding(),
+      modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
         NewChannelAppBar(composeNavigator, createChannelVM)
@@ -63,7 +54,6 @@ private fun CreateChannel(
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: CreateChannelVM) {
   val searchChannel by createChannelVM.channel.collectAsState()
@@ -98,10 +88,10 @@ private fun ShareOutSideOrg(
   createChannelVM: CreateChannelVM
 ) {
   ListItem(text = {
-    Text(text = stringResource(R.string.share_outside), style = textStyleFieldPrimary())
+    Text(text = "Share Outside", style = textStyleFieldPrimary())
   }, secondaryText = {
     Text(
-      text = stringResource(R.string.share_outside_subtitle),
+      text = "Share Outside subtitle",
       style = textStyleFieldSecondary()
     )
   }, trailing = {
@@ -124,12 +114,10 @@ private fun PrivateChannel(
   createChannelVM: CreateChannelVM
 ) {
   ListItem(text = {
-    Text(text = stringResource(R.string.make_private), style = textStyleFieldPrimary())
+    Text(text = "Make Private", style = textStyleFieldPrimary())
   }, secondaryText = {
     Text(
-      text = if (isChecked) stringResource(R.string.make_private_subtitle_checked) else stringResource(
-        R.string.make_private_subtitle
-      ),
+      text = if (isChecked) "make_private_subtitle_checked" else "make_private_subtitle",
       style = textStyleFieldSecondary()
     )
   }, trailing = {
@@ -151,13 +139,12 @@ private fun PrivateChannel(
 @Composable
 private fun Name() {
   Text(
-    text = stringResource(R.string.Name),
+    text = "Name",
     style = textStyleFieldPrimary(),
     modifier = Modifier.padding(8.dp)
   )
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun NameField(createChannelVM: CreateChannelVM) {
   val searchChannel by createChannelVM.channel.collectAsState()
@@ -234,7 +221,7 @@ private fun NewChannelAppBar(composeNavigator: ComposeNavigator, createChannelVM
         }
       }) {
         Text(
-          stringResource(R.string.create),
+          "Create",
           style = textStyleFieldSecondary().copy(color = SlackCloneColorProvider.colors.appBarTextSubTitleColor)
         )
       }

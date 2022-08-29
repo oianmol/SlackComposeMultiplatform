@@ -13,6 +13,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.SlackScreens
 
 @Composable
 fun CommonInputUI(
@@ -22,7 +23,6 @@ fun CommonInputUI(
 ) {
   val scaffoldState = rememberScaffoldState()
 
-  SlackCloneTheme {
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,
       contentColor = SlackCloneColorProvider.colors.textSecondary,
@@ -54,7 +54,6 @@ fun CommonInputUI(
         }
       }
 
-    }
   }
 }
 
@@ -62,7 +61,7 @@ fun CommonInputUI(
 fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
-      //composeNavigator.navigate()
+      composeNavigator.navigate(SlackScreens.DashboardNavigation)
     },
     modifier
       .fillMaxWidth()

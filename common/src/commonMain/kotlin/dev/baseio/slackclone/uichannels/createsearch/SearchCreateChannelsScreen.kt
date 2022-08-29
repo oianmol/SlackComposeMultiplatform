@@ -17,34 +17,27 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
-import androidx.paging.compose.collectAsLazyPagingItems
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigator.ComposeNavigator
-import dev.baseio.slackclone.navigator.SlackScreen
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
+import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.SlackScreens
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun SearchCreateChannelUI(
-  searchChannelsVM: SearchChannelsVM = hiltViewModel(),
   composeNavigator: ComposeNavigator
 ) {
-  SlackCloneTheme {
-    val scaffoldState = rememberScaffoldState()
+  val searchChannelsVM: SearchChannelsVM by inject(SearchChannelsVM::class.java)
 
-    SlackCloneTheme {
-      ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM) {
-        composeNavigator.navigate(SlackScreen.CreateNewChannel.name)
-      }
-    }
+  val scaffoldState = rememberScaffoldState()
+
+  ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM) {
+    composeNavigator.navigate(SlackScreens.CreateNewChannel)
   }
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun ListChannels(
   scaffoldState: ScaffoldState,
@@ -56,9 +49,7 @@ private fun ListChannels(
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,
       contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier
-        .statusBarsPadding()
-        .navigationBarsPadding(),
+      modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
         val channelCount by searchChannelsVM.channelCount.collectAsState()
@@ -90,16 +81,16 @@ private fun SearchContent(innerPadding: PaddingValues, searchChannelsVM: SearchC
   }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllChannels(searchChannelsVM: SearchChannelsVM) {
   val channels by searchChannelsVM.channels.collectAsState()
-  val channelsFlow = channels.collectAsLazyPagingItems()
+  val channelsFlow by channels.collectAsState(emptyList())
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
-    for (channelIndex in 0 until channelsFlow.itemCount) {
-      val channel = channelsFlow.peek(channelIndex)!!
+    for (channelIndex in 0 until channelsFlow.size) {
+      val channel = channelsFlow.get(channelIndex)!!
       val newDrawn = channel.name?.first().toString()
       if (canDrawHeader(lastDrawnChannel, newDrawn)) {
         stickyHeader {
@@ -107,7 +98,7 @@ private fun ListAllChannels(searchChannelsVM: SearchChannelsVM) {
         }
       }
       item {
-        SlackChannelItem(channel){
+        SlackChannelItem(channel) {
           searchChannelsVM.navigate(it)
         }
       }
@@ -146,7 +137,6 @@ fun SlackChannelHeader(title: String) {
   }
 }
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 private fun SearchChannelsTF(searchChannelsVM: SearchChannelsVM) {
   val searchChannel by searchChannelsVM.search.collectAsState()

@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,9 +37,8 @@ import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigator.ComposeNavigator
-import dev.baseio.slackclone.navigator.SlackScreen
-import dev.baseio.slackclone.uidashboard.R
+import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.SlackScreens
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -55,15 +53,12 @@ fun UserProfileUI(composeNavigator: ComposeNavigator) {
       Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
         StatusBox()
       }
-      SlackListItem(Icons.Default.Notifications, stringResource(R.string.pause_notifications))
-      SlackListItem(Icons.Default.Person, stringResource(R.string.set_away))
+      SlackListItem(Icons.Default.Notifications, "pause_notifications")
+      SlackListItem(Icons.Default.Person, "set_away")
       Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-      SlackListItem(Icons.Default.FavoriteBorder, stringResource(R.string.saved_items))
-      SlackListItem(Icons.Default.Person, stringResource(R.string.view_profile))
-      SlackListItem(Icons.Default.Notifications, stringResource(R.string.notifications))
-      SlackListItem(Icons.Default.Settings, stringResource(R.string.preferences), onItemClick = {
-        composeNavigator.navigate(SlackScreen.SlackPreferences.name)
-      })
+      SlackListItem(Icons.Default.FavoriteBorder, "saved_items")
+      SlackListItem(Icons.Default.Person, "view_profile")
+      SlackListItem(Icons.Default.Notifications, "notifications")
     }
   }
 }

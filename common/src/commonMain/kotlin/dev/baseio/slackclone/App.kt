@@ -4,6 +4,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import com.squareup.sqldelight.db.SqlDriver
+import dev.baseio.database.SlackDB
+import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
+import dev.baseio.slackclone.common.injection.dispatcherModule
+import dev.baseio.slackclone.data.DriverFactory
+import dev.baseio.slackclone.data.injection.dataMappersModule
+import dev.baseio.slackclone.data.injection.repositoryModule
+import dev.baseio.slackclone.data.injection.useCaseModule
+import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.Navigator
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.navigation.screen
@@ -13,13 +22,14 @@ import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
+import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 @Composable
-fun App(modifier: Modifier = Modifier) {
-  initKoin()
-  Box(modifier){
+fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
+  initKoin(SlackDB.invoke(sqlDriver))
+  Box(modifier) {
     Navigator(initialScreen = SlackScreens.GettingStarted) {
       screen(SlackScreens.GettingStarted) {
         GettingStartedUI(this)
@@ -33,23 +43,17 @@ fun App(modifier: Modifier = Modifier) {
       screen(SlackScreens.EmailAddressInputUI) {
         EmailAddressInputUI(this)
       }
-      screen(SlackScreens.DashboardNavigation){
+      screen(SlackScreens.DashboardNavigation) {
         DashboardNavigation()
       }
     }
   }
 }
 
-fun initKoin() {
-  startKoin{
-    module {
-      appModule()
-    }
+fun initKoin(slackDB: SlackDB): KoinApplication {
+  return startKoin {
+    modules(module {
+      single { slackDB }
+    }, repositoryModule, dataMappersModule, useCaseModule, viewModelModule, uiModelMapperModule, dispatcherModule)
   }
 }
-
-val viewModelModules = module {
-  single { DashboardVM() }
-}
-
-fun appModule()  = listOf(viewModelModules,)

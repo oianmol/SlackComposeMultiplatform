@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChannelsRepository {
   fun fetchChannels(): Flow<List<DomainLayerChannels.SlackChannel>>
-  fun fetchChannelsPaged(params: String?): Flow<PagingData<DomainLayerChannels.SlackChannel>>
+  fun fetchChannelsPaged(params: String?): Flow<List<DomainLayerChannels.SlackChannel>>
   suspend fun saveChannel(params: DomainLayerChannels.SlackChannel): DomainLayerChannels.SlackChannel?
   suspend fun getChannel(uuid: String): DomainLayerChannels.SlackChannel?
-  suspend fun channelCount(): Int
+  suspend fun channelCount(): Long
   suspend fun saveOneToOneChannels(params: List<DomainLayerUsers.SlackUser>)
 }
 

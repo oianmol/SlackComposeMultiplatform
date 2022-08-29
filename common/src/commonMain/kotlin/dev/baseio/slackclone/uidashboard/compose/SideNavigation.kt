@@ -17,16 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
-import dev.baseio.slackclone.uidashboard.R
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
-import dev.baseio.slackclone.navigator.ComposeNavigator
-import dev.baseio.slackclone.navigator.SlackScreen
+import dev.baseio.slackclone.navigation.ComposeNavigator
 
 @Composable
 fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator) {
@@ -49,14 +46,13 @@ fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator) {
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SideNavFooter(composeNavigator: ComposeNavigator) {
-  Column(modifier = Modifier.navigationBarsPadding()) {
+  Column(modifier = Modifier) {
     Divider(color = SlackCloneColorProvider.colors.lineColor)
-    SlackListItem(Icons.Filled.AddCircle, stringResource(id = R.string.add_workspace))
-    SlackListItem(Icons.Filled.Settings, stringResource(id = R.string.preferences))
-    SlackListItem(Icons.Filled.CheckCircle, stringResource(id = R.string.help))
+    SlackListItem(Icons.Filled.AddCircle, "add_workspace")
+    SlackListItem(Icons.Filled.Settings, "preferences")
+    SlackListItem(Icons.Filled.CheckCircle, "help")
   }
 }
 
@@ -91,11 +87,10 @@ fun OrganizationDetails() {
     horizontalAlignment = Alignment.Start
   ) {
     Text(
-      text = stringResource(R.string.mutualmobile),
+      text = "mutualmobile",
       style = SlackCloneTypography.h6.copy(color = SlackCloneColorProvider.colors.textPrimary, fontWeight = FontWeight.SemiBold)
     )
-    Text(
-      stringResource(R.string.mmlink),
+    Text("mmlink",
       style = SlackCloneTypography.subtitle1.copy(
         fontWeight = FontWeight.Normal,
         color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f)
@@ -128,13 +123,11 @@ private fun WorkspacesBar() {
   SlackSurfaceAppBar(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     elevation = 0.dp,
-    contentPadding = WindowInsets.statusBars.asPaddingValues()
   ) {
     Text(
-      text = stringResource(id = R.string.head_workspaces),
+      text = "head_workspaces",
       style = SlackCloneTypography.h5.copy(
         color = SlackCloneColorProvider.colors.textPrimary,
-        fontFamily = slackFontFamily,
         fontWeight = FontWeight.Bold
       ),
       modifier = Modifier.padding(start = 8.dp)

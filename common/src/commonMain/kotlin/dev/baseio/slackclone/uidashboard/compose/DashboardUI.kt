@@ -37,17 +37,14 @@ import dev.baseio.slackclone.uidashboard.home.HomeScreenUI
 import dev.baseio.slackclone.uidashboard.home.MentionsReactionsUI
 import dev.baseio.slackclone.uidashboard.home.SearchMessagesUI
 import dev.baseio.slackclone.uidashboard.home.UserProfileUI
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
-fun DashboardUI(
-  composeNavigator: ComposeNavigator,
-  dashboardVM: DashboardVM = DashboardVM()
-) {
+fun DashboardUI(composeNavigator: ComposeNavigator) {
+  val dashboardVM: DashboardVM by inject(DashboardVM::class.java)
   val scaffoldState = rememberScaffoldState()
 
-  SlackCloneTheme {
-    DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM)
-  }
+  DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM)
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -56,8 +53,9 @@ private fun DashboardScreenRegular(
   scaffoldState: ScaffoldState,
   composeNavigator: ComposeNavigator,
   dashboardVM: DashboardVM,
-  viewModel: ChatScreenVM = ChatScreenVM()
 ) {
+  val viewModel: ChatScreenVM by inject(ChatScreenVM::class.java)
+
   val keyboardController = LocalSoftwareKeyboardController.current
   val lastChannel by dashboardVM.selectedChatChannel.collectAsState()
 

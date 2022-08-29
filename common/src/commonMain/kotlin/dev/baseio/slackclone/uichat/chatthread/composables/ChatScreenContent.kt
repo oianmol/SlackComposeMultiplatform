@@ -2,26 +2,16 @@ package dev.baseio.slackclone.uichat.chatthread.composables
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.layoutId
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.Dimension
-import androidx.constraintlayout.compose.ExperimentalMotionApi
-import androidx.constraintlayout.compose.MotionLayout
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsState
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMotionApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ChatScreenContent(viewModel: ChatScreenVM) {
   val checkBoxState by viewModel.chatBoxState.collectAsState()
@@ -39,20 +29,14 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
     )
   )
 
-  MotionLayout(
-    start = chatConstrains(),
-    end = chatConstrainsExpanded(),
-    progress = change,
+  Column(
     modifier = Modifier
-      .navigationBarsPadding()
-      .imePadding()
       .fillMaxHeight()
       .fillMaxWidth()
   ) {
     ChatMessagesUI(
       viewModel,
       Modifier
-        .layoutId("chatView")
     )
     ChatMessageBox(
       viewModel,
@@ -62,7 +46,6 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
         }) {
           viewModel.chatBoxState.value = BoxState.Collapsed
         }
-        .layoutId("chatBox")
     )
   }
 }
@@ -108,45 +91,3 @@ private fun Modifier.animateDrag(
         })
     }
   }
-
-private fun chatConstrainsExpanded(): ConstraintSet {
-  return ConstraintSet {
-    val chatBox = createRefFor("chatBox")
-    val chatView = createRefFor("chatView")
-    constrain(chatView) {
-      top.linkTo(parent.top)
-      start.linkTo(parent.start)
-      end.linkTo(parent.end)
-      bottom.linkTo(parent.bottom)
-    }
-    constrain(chatBox) {
-      height = Dimension.fillToConstraints
-      top.linkTo(parent.top)
-      start.linkTo(parent.start)
-      end.linkTo(parent.end)
-      bottom.linkTo(parent.bottom)
-    }
-
-  }
-}
-
-private fun chatConstrains(): ConstraintSet {
-  return ConstraintSet {
-    val chatBox = createRefFor("chatBox")
-    val chatView = createRefFor("chatView")
-    constrain(chatView) {
-      height = Dimension.fillToConstraints
-      width = Dimension.fillToConstraints
-      top.linkTo(parent.top)
-      start.linkTo(parent.start)
-      end.linkTo(parent.end)
-      bottom.linkTo(chatBox.top)
-    }
-    constrain(chatBox) {
-      start.linkTo(parent.start)
-      end.linkTo(parent.end)
-      bottom.linkTo(parent.bottom)
-    }
-
-  }
-}

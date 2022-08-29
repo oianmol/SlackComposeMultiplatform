@@ -23,68 +23,66 @@ import dev.baseio.slackclone.navigation.SlackScreens
 
 @Composable
 fun SkipTypingUI(composeNavigator: ComposeNavigator) {
-  SlackCloneTheme() {
-    val scaffoldState = rememberScaffoldState()
-    Scaffold(
-      backgroundColor = SlackCloneColor,
-      contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier, scaffoldState = scaffoldState,
-      topBar = {
-        SlackSurfaceAppBar(
-          title = {
+  val scaffoldState = rememberScaffoldState()
+  Scaffold(
+    backgroundColor = SlackCloneColor,
+    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    modifier = Modifier, scaffoldState = scaffoldState,
+    topBar = {
+      SlackSurfaceAppBar(
+        title = {
 
-          },
-          navigationIcon = {
-            IconButton(onClick = {
-              composeNavigator.navigateUp()
-            }) {
-              Icon(
-                imageVector = Icons.Filled.Clear,
-                contentDescription = "Clear",
-                modifier = Modifier.padding(start = 8.dp), tint = Color.White
-              )
-            }
-          },
-          backgroundColor = SlackCloneColor,
-          elevation = 0.dp
-        )
-      },
-      snackbarHost = {
-        scaffoldState.snackbarHostState
-      }
-    ) { innerPadding ->
-      Box(modifier = Modifier.padding(innerPadding)) {
-        SlackCloneSurface(
-          color = SlackCloneColor,
-          modifier = Modifier
-            .padding(28.dp)
-        ) {
-          Column(
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-              .fillMaxHeight()
-              .fillMaxWidth()
-          ) {
-            Image(
-              painter = PainterRes.gettingStarted(),
-              contentDescription = "Logo",
-              Modifier
+        },
+        navigationIcon = {
+          IconButton(onClick = {
+            composeNavigator.navigateUp()
+          }) {
+            Icon(
+              imageVector = Icons.Filled.Clear,
+              contentDescription = "Clear",
+              modifier = Modifier.padding(start = 8.dp), tint = Color.White
             )
-            TitleSubtitleText()
-            Spacer(Modifier.padding(8.dp))
-            Column {
-              EmailMeMagicLink(composeNavigator)
-              Box(modifier = Modifier.height(12.dp))
-              IWillSignInManually(composeNavigator)
-            }
-
+          }
+        },
+        backgroundColor = SlackCloneColor,
+        elevation = 0.dp
+      )
+    },
+    snackbarHost = {
+      scaffoldState.snackbarHostState
+    }
+  ) { innerPadding ->
+    Box(modifier = Modifier.padding(innerPadding)) {
+      SlackCloneSurface(
+        color = SlackCloneColor,
+        modifier = Modifier
+          .padding(28.dp)
+      ) {
+        Column(
+          verticalArrangement = Arrangement.SpaceAround,
+          horizontalAlignment = Alignment.CenterHorizontally,
+          modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+        ) {
+          Image(
+            painter = PainterRes.gettingStarted(),
+            contentDescription = "Logo",
+            Modifier
+          )
+          TitleSubtitleText()
+          Spacer(Modifier.padding(8.dp))
+          Column {
+            EmailMeMagicLink(composeNavigator)
+            Box(modifier = Modifier.height(12.dp))
+            IWillSignInManually(composeNavigator)
           }
 
         }
-      }
 
+      }
     }
+
   }
 
 

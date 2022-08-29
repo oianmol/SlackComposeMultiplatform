@@ -1,25 +1,27 @@
 package dev.baseio.slackclone.chatcore.injection
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import dev.baseio.slackclone.chatcore.ChannelUIModelMapper
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import dev.baseio.slackclone.data.injection.SlackChannelChannel
 import dev.baseio.slackclone.domain.mappers.UiModelMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.model.users.DomainLayerUsers
-import javax.inject.Singleton
+import org.koin.core.qualifier.Qualifier
+import org.koin.core.qualifier.QualifierValue
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class UiModelMapperModule {
+val uiModelMapperModule = module {
+  single<UiModelMapper<DomainLayerUsers.SlackUser, UiLayerChannels.SlackChannel>>(qualifier = SlackUserSlackChannel) { UserChannelUiMapper() }
+  single<UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>>(qualifier = SlackChannelUiLayerChannels) { ChannelUIModelMapper() }
+}
 
-  @Binds
-  @Singleton
-  abstract fun bindSlackUserChannelMapper(userChannelUiMapper: UserChannelUiMapper): UiModelMapper<DomainLayerUsers.SlackUser, UiLayerChannels.SlackChannel>
+object SlackChannelUiLayerChannels:Qualifier{
+  override val value: QualifierValue
+    get() = "SlackChannelUiLayerChannels"
 
-  @Binds
-  @Singleton
-  abstract fun bindChannelUIModelMapper(channelUIModelMapper: ChannelUIModelMapper): UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>
+}
+object SlackUserSlackChannel:Qualifier{
+  override val value: QualifierValue
+    get() = "SlackUserSlackChannel"
+
 }

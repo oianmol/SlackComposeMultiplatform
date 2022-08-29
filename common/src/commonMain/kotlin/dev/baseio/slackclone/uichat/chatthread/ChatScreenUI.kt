@@ -17,9 +17,6 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.uichat.chatthread.composables.ChatScreenContent
 
-@OptIn(
-  androidx.constraintlayout.compose.ExperimentalMotionApi::class
-)
 @Composable
 fun ChatScreenUI(
   modifier: Modifier,
@@ -31,26 +28,23 @@ fun ChatScreenUI(
   SideEffect {
     viewModel.requestFetch(slackChannel)
   }
-  SlackCloneTheme {
-    Scaffold(
-      backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-      contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = modifier
-        .statusBarsPadding(),
-      scaffoldState = scaffoldState,
-      snackbarHost = {
-        scaffoldState.snackbarHostState
-      },
-      topBar = {
-        ChatAppBar(onBackClick, slackChannel)
-      }
-    ) { innerPadding ->
-      Box(
-        modifier = Modifier
-          .padding(innerPadding)
-      ) {
-        ChatScreenContent(viewModel)
-      }
+  Scaffold(
+    backgroundColor = SlackCloneColorProvider.colors.uiBackground,
+    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    modifier = modifier,
+    scaffoldState = scaffoldState,
+    snackbarHost = {
+      scaffoldState.snackbarHostState
+    },
+    topBar = {
+      ChatAppBar(onBackClick, slackChannel)
+    }
+  ) { innerPadding ->
+    Box(
+      modifier = Modifier
+        .padding(innerPadding)
+    ) {
+      ChatScreenContent(viewModel)
     }
   }
 

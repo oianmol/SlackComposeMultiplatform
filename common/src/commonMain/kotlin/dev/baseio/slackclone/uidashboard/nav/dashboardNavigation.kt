@@ -10,7 +10,6 @@ import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
-import dev.baseio.slackclone.uidashboard.home.preferences.PreferencesUI
 
 @Composable
 fun DashboardNavigation(modifier:Modifier = Modifier) {
@@ -27,9 +26,6 @@ fun DashboardNavigation(modifier:Modifier = Modifier) {
       }
       screen(SlackScreens.CreateNewDM) {
         NewChatThreadScreen(this)
-      }
-      screen(SlackScreens.SlackPreferences) {
-        PreferencesUI(composeNavigator = this)
       }
     }
   }

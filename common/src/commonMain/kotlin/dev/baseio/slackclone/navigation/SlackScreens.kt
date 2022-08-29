@@ -12,8 +12,6 @@ class SlackScreens {
   object CreateChannelsScreen : BackstackScreen("CreateChannelsScreen")
   object CreateNewChannel : BackstackScreen("CreateNewChannel")
   object CreateNewDM : BackstackScreen("CreateNewDM")
-  object SlackPreferences : BackstackScreen("SlackPreferences")
-
   object Home : BackstackScreen("Home")
   object DMs : BackstackScreen("DMs")
   object Mentions :

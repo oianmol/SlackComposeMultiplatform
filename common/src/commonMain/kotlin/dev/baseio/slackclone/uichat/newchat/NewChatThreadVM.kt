@@ -1,22 +1,15 @@
 package dev.baseio.slackclone.uichat.newchat
 
-import androidx.lifecycle.ViewModel
+import ViewModel
 import androidx.paging.map
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.domain.mappers.UiModelMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.usecases.channels.UseCaseSearchChannel
-import dev.baseio.slackclone.navigator.ComposeNavigator
-import dev.baseio.slackclone.navigator.NavigationKeys
-import dev.baseio.slackclone.navigator.SlackScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-@HiltViewModel
-class NewChatThreadVM @Inject constructor(
-  private val composeNavigator: ComposeNavigator,
+class NewChatThreadVM  constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
   private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>
 ) :
@@ -37,11 +30,12 @@ class NewChatThreadVM @Inject constructor(
   }
 
   fun navigate(channel: UiLayerChannels.SlackChannel) {
-    composeNavigator.navigateBackWithResult(
+    TODO("navigateBackWithResult SlackChannel")
+   /* composeNavigator.navigateBackWithResult(
       NavigationKeys.navigateChannel,
       channel.uuid!!,
       SlackScreen.Dashboard.name
-    )
+    )*/
   }
 
 
