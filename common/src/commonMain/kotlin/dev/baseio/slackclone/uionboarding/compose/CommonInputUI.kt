@@ -12,12 +12,11 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigation.Navigator
-import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackclone.navigation.ComposeNavigator
 
 @Composable
 fun CommonInputUI(
-  composeNavigator: Navigator,
+  composeNavigator: ComposeNavigator,
   TopView: @Composable (modifier: Modifier) -> Unit,
   subtitleText: String
 ) {
@@ -60,7 +59,7 @@ fun CommonInputUI(
 }
 
 @Composable
-fun NextButton(modifier: Modifier = Modifier, composeNavigator: Navigator) {
+fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
       //composeNavigator.navigate()

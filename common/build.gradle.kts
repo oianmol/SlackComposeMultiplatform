@@ -10,6 +10,21 @@ group = "dev.baseio.slackclone"
 version = "1.0"
 val ktor_version = "2.1.0"
 val DECOMPOSE = "1.0.0-alpha-04"
+
+object Versions {
+    const val koin = "3.2.0"
+}
+
+object Deps {
+
+    object Koin {
+        const val core = "io.insert-koin:koin-core:${Versions.koin}"
+        const val test = "io.insert-koin:koin-test:${Versions.koin}"
+        const val android = "io.insert-koin:koin-android:${Versions.koin}"
+    }
+
+}
+
 kotlin {
     android{
     }
@@ -21,7 +36,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("androidx.paging:paging-common-ktx:3.1.1")
                 implementation("com.alialbaali.kamel:kamel-image:0.4.0")
+                implementation(Deps.Koin.core)
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
@@ -29,11 +46,13 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
+                implementation(Deps.Koin.test)
                 implementation(kotlin("test"))
             }
         }
         val androidMain by getting {
             dependencies {
+                implementation(Deps.Koin.android)
                 implementation("io.coil-kt:coil-compose:2.2.0")
                 api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
                 implementation("io.ktor:ktor-client-android:$ktor_version")

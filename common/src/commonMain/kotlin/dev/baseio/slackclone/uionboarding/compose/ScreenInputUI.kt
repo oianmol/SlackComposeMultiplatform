@@ -2,10 +2,10 @@ package dev.baseio.slackclone.uionboarding.compose
 
 import androidx.compose.runtime.*
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.navigation.Navigator
+import dev.baseio.slackclone.navigation.ComposeNavigator
 
 @Composable
-fun EmailAddressInputUI(composeNavigator: Navigator) {
+fun EmailAddressInputUI(composeNavigator: ComposeNavigator) {
   SlackCloneTheme() {
     CommonInputUI(
       composeNavigator,
@@ -18,7 +18,7 @@ fun EmailAddressInputUI(composeNavigator: Navigator) {
 }
 
 @Composable
-fun WorkspaceInputUI(composeNavigator: Navigator) {
+fun WorkspaceInputUI(composeNavigator: ComposeNavigator) {
   SlackCloneTheme() {
     CommonInputUI(
       composeNavigator,

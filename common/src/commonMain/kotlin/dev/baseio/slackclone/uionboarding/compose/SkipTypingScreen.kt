@@ -18,11 +18,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.Navigator
+import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
 
 @Composable
-fun SkipTypingUI(composeNavigator: Navigator) {
+fun SkipTypingUI(composeNavigator: ComposeNavigator) {
   SlackCloneTheme() {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
@@ -91,7 +91,7 @@ fun SkipTypingUI(composeNavigator: Navigator) {
 }
 
 @Composable
-fun EmailMeMagicLink(composeNavigator: Navigator) {
+fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
   OutlinedButton(
     onClick = {
       composeNavigator.navigate(SlackScreens.EmailAddressInputUI)
@@ -110,7 +110,7 @@ fun EmailMeMagicLink(composeNavigator: Navigator) {
 }
 
 @Composable
-private fun IWillSignInManually(composeNavigator: Navigator) {
+private fun IWillSignInManually(composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
       composeNavigator.navigate(SlackScreens.WorkspaceInputUI)

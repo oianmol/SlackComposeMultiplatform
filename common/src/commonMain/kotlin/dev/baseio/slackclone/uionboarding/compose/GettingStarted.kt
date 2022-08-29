@@ -17,11 +17,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.Navigator
+import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
 
 @Composable
-fun GettingStartedUI(composeNavigator: Navigator) {
+fun GettingStartedUI(composeNavigator: ComposeNavigator) {
   val scaffoldState = rememberScaffoldState()
   var showSlackAnim by remember {
     mutableStateOf(true)
@@ -99,7 +99,7 @@ private fun ImageEnterTransition() = expandIn(
 )
 
 @Composable
-private fun GetStartedButton(composeNavigator: Navigator) {
+private fun GetStartedButton(composeNavigator: ComposeNavigator) {
   var expanded by remember { mutableStateOf(false) }
 
   LaunchedEffect(Unit) {
