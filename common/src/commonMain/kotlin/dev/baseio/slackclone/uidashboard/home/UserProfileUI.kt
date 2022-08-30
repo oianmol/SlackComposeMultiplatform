@@ -118,7 +118,7 @@ fun UserHeader() {
   Row(Modifier.padding(12.dp)) {
     SlackImageBox(
       Modifier.size(72.dp),
-      "https://ca.slack-edge.com/T02TLUWLZ-U2ZG961MW-176c142f9265-512"
+      "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no"
     )
     Column(Modifier.padding(start = 8.dp)) {
       Text(text = "Anmol Verma", style = SlackCloneTypography.h6.copy(fontWeight = FontWeight.Bold))

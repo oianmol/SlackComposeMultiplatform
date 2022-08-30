@@ -46,7 +46,7 @@ class SlackComposeNavigator(initialScreen: BackstackScreen) : ComposeNavigator {
     }
 
     override val lastScreen: BackstackScreen
-        get() = backStack.peekLast()
+        get() = currentScreen.value
 
     override fun navigate(screenTag: BackstackScreen) {
         backStack.add(screenTag)

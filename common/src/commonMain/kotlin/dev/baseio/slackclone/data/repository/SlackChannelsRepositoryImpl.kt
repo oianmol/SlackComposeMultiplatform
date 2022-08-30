@@ -54,7 +54,7 @@ class SlackChannelsRepositoryImpl(
     return withContext(coroutineMainDispatcherProvider.io) {
       params.forEach {
         slackChannelDao.slackDBQueries.insertChannel(
-          System.currentTimeMillis().toString(),
+          it.login,
           it.name,
           it.email,
           System.currentTimeMillis(), System.currentTimeMillis(), 0L, 0L, 1L, 0L, it.picture, 1L

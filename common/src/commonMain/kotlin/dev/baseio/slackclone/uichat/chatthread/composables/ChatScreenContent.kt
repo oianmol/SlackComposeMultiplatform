@@ -2,10 +2,9 @@ package dev.baseio.slackclone.uichat.chatthread.composables
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.pointerInput
@@ -14,33 +13,18 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 
 @Composable
 fun ChatScreenContent(viewModel: ChatScreenVM) {
-  val checkBoxState by viewModel.chatBoxState.collectAsState()
-  val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
-    1f
-  } else {
-    0f
-  }
-
-  val change by animateFloatAsState(
-    manualExpandValue,
-    animationSpec = spring(
-      dampingRatio = Spring.DampingRatioLowBouncy,
-      stiffness = Spring.StiffnessMediumLow
-    )
-  )
-
-  Column(
+  Box(
     modifier = Modifier
       .fillMaxHeight()
       .fillMaxWidth()
   ) {
     ChatMessagesUI(
       viewModel,
-      Modifier
+      Modifier.fillMaxSize()
     )
     ChatMessageBox(
       viewModel,
-      Modifier
+      Modifier.align(Alignment.BottomCenter)
         .animateDrag({
           viewModel.chatBoxState.value = BoxState.Expanded
         }) {

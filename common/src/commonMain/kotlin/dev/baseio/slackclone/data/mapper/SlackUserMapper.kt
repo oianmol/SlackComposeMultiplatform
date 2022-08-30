@@ -10,7 +10,7 @@ class SlackUserMapper : EntityMapper<DomainLayerUsers.SlackUser, RandomUser> {
       entity.name(),
       "City",
       "anmol@gmail.com",
-      "username",
+      entity.name(),
       System.currentTimeMillis(),
       System.currentTimeMillis(),
       "8284866938",

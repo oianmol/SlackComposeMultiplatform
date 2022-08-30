@@ -33,8 +33,8 @@ class ChatScreenVM constructor(
           UUID.randomUUID().toString(),
           channel!!.uuid!!,
           search,
-          UUID.randomUUID().toString(),
-          "Anmol Verma",
+          channel!!.uuid!!,
+          "SlackUser",
           System.currentTimeMillis(),
           System.currentTimeMillis(),
         )

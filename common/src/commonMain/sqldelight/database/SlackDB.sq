@@ -50,7 +50,7 @@ selectAllMessages:
 SELECT * FROM slackMessage ORDER BY modifiedDate DESC ;
 
 selectAllMessagesByUserId:
-SELECT * FROM slackMessage WHERE uid = :uid ORDER BY modifiedDate DESC ;
+SELECT * FROM slackMessage WHERE fromUser = :uid ORDER BY modifiedDate DESC ;
 
 deleteAllMessages:
 DELETE FROM slackMessage;

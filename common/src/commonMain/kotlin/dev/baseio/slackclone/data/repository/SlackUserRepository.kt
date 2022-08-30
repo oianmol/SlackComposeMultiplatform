@@ -16,7 +16,7 @@ class SlackUserRepository constructor(
     return withContext(coroutineMainDispatcherProvider.io) {
       mutableListOf<RandomUser>().apply {
         repeat(count) {
-          add(RandomUser("Anmol","Verma","https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"))
+          add(RandomUser("Anmol","Verma","https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no"))
         }
       }.map {
         mapper.mapToDomain(it)

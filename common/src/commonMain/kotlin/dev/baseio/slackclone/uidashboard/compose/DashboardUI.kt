@@ -124,7 +124,6 @@ private fun DashboardScreenRegular(
             dashboardVM.selectedChatChannel.value = it
             dashboardVM.isChatViewClosed.value = false
           },
-          composeNavigator = composeNavigator
         )
       }
     } else {
@@ -158,7 +157,6 @@ private fun DashboardScreenRegular(
             dashboardVM.selectedChatChannel.value = it
             dashboardVM.isChatViewClosed.value = false
           },
-          composeNavigator = composeNavigator
         )
       }
 
@@ -196,9 +194,8 @@ private fun DashboardScaffold(
   modifier: Modifier,
   appBarIconClick: () -> Unit,
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
-  composeNavigator: ComposeNavigator,
 ) {
-  var bottomNavigationNavigator = remember<ComposeNavigator?> { null }
+  var bottomNavigationNavigator: ComposeNavigator? by remember { mutableStateOf(null) }
   Box(modifier) {
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,
@@ -212,7 +209,7 @@ private fun DashboardScaffold(
         scaffoldState.snackbarHostState
       },
       floatingActionButton = {
-        floatingDM(composeNavigator)
+        bottomNavigationNavigator?.let { floatingDM(it) }
       }
     ) { innerPadding ->
       Box(modifier = Modifier.padding(innerPadding)) {
@@ -227,7 +224,7 @@ private fun DashboardScaffold(
                 appBarIconClick,
                 onItemClick = onItemClick,
                 onCreateChannelRequest = {
-                  composeNavigator.navigate(SlackScreens.CreateChannelsScreen)
+                  this.navigate(SlackScreens.CreateChannelsScreen)
                 })
             }
             screen(SlackScreens.DMs) {
@@ -240,7 +237,7 @@ private fun DashboardScaffold(
               SearchMessagesUI()
             }
             screen(SlackScreens.You) {
-              UserProfileUI(composeNavigator)
+              UserProfileUI(this)
             }
           }
         }
