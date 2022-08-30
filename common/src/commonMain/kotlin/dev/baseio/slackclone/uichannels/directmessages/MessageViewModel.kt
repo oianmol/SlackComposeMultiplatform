@@ -1,7 +1,7 @@
 package dev.baseio.slackclone.uichannels.directmessages
 
 import ViewModel
-import androidx.paging.PagingData
+
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.domain.mappers.UiModelMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels

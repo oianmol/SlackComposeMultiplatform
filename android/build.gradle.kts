@@ -17,13 +17,13 @@ dependencies {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
         applicationId = "dev.baseio.slackclone"
         minSdk = 24
-        targetSdk = 31
+        targetSdk = 32
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

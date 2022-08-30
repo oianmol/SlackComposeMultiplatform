@@ -8,7 +8,6 @@ import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.data.DriverFactory
-import dev.baseio.slackclone.initKoin
 
 fun main() = application {
   Window(onCloseRequest = ::exitApplication) {

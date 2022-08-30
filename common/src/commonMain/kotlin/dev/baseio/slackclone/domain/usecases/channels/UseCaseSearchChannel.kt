@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.domain.usecases.channels
 
-import androidx.paging.PagingData
+
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.repository.ChannelsRepository
 import dev.baseio.slackclone.domain.usecases.BaseUseCase

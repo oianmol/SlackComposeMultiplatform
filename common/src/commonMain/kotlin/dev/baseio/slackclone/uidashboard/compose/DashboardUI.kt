@@ -306,7 +306,7 @@ private fun RowScope.BottomNavItem(
     icon = { Icon(PainterRes.homeTabIcon(), contentDescription = null) },
     label = {
       Text(
-        "Tab Text",
+        screen.name,
         maxLines = 1,
         style = SlackCloneTypography.overline,
       )

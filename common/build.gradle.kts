@@ -39,8 +39,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("androidx.paging:paging-compose:1.0.0-alpha16")
-                implementation("androidx.paging:paging-common-ktx:3.1.1")
                 implementation("com.alialbaali.kamel:kamel-image:0.4.0")
                 implementation("com.squareup.sqldelight:runtime:1.5.3")
                 implementation(Deps.Koin.core)
@@ -93,11 +91,11 @@ sqldelight {
 
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 24
-        targetSdk = 31
+        targetSdk = 32
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

@@ -26,9 +26,14 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
+
+var koinApp: KoinApplication? = null
+
 @Composable
 fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
-  initKoin(SlackDB.invoke(sqlDriver))
+  if (koinApp == null) {
+    koinApp = initKoin(SlackDB.invoke(sqlDriver))
+  }
   Box(modifier) {
     Navigator(initialScreen = SlackScreens.GettingStarted) {
       screen(SlackScreens.GettingStarted) {

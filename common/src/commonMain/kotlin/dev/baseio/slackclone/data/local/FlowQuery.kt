@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.data.local
 
-import androidx.paging.PagingData
 import com.squareup.sqldelight.Query
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
 
