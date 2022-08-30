@@ -2,6 +2,7 @@ package dev.baseio.slackclone.commonui.reusable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import io.kamel.image.KamelImage
 import io.kamel.image.lazyPainterResource
 
@@ -12,6 +13,6 @@ actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
       data = imageUrl,
     ),
     contentDescription = null,
-    modifier = modifier
+    modifier = modifier, contentScale = ContentScale.FillBounds
   )
 }
