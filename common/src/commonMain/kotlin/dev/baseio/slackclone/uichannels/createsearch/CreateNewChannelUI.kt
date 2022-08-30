@@ -215,7 +215,7 @@ private fun NewChannelAppBar(composeNavigator: ComposeNavigator, createChannelVM
     actions = {
       TextButton(onClick = {
         createChannelVM.channel.value.name?.takeIf { it.isNotEmpty() }?.let {
-          createChannelVM.createChannel()
+          createChannelVM.createChannel(composeNavigator)
         } ?: run {
           haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         }

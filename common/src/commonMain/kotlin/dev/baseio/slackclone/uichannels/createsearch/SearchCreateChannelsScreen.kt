@@ -22,6 +22,7 @@ import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.NavigationKey
 import dev.baseio.slackclone.navigation.SlackScreens
 import org.koin.java.KoinJavaComponent.inject
 
@@ -34,6 +35,9 @@ fun SearchCreateChannelUI(
   val scaffoldState = rememberScaffoldState()
 
   ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM) {
+    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel) {
+      composeNavigator.navigateUp()
+    }
     composeNavigator.navigate(SlackScreens.CreateNewChannel)
   }
 }

@@ -225,7 +225,7 @@ private fun DashboardScaffold(
                 appBarIconClick,
                 onItemClick = onItemClick,
                 onCreateChannelRequest = {
-                  this.navigate(SlackScreens.CreateChannelsScreen)
+                  composeNavigator.navigate(SlackScreens.CreateChannelsScreen)
                 })
             }
             screen(SlackScreens.DMs) {
