@@ -20,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
+import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.commonui.reusable.SlackDragComposableView
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
@@ -46,6 +48,17 @@ fun DashboardUI(composeNavigator: ComposeNavigator) {
   DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM)
 }
 
+enum class WindowSize { Compact, Medium, Expanded }
+
+fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
+  windowDpSize.width < 0.dp ->
+    throw IllegalArgumentException("Dp value cannot be negative")
+
+  windowDpSize.width < 600.dp -> WindowSize.Compact
+  windowDpSize.width < 840.dp -> WindowSize.Medium
+  else -> WindowSize.Expanded
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun DashboardScreenRegular(
@@ -60,7 +73,8 @@ private fun DashboardScreenRegular(
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
   val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState()
-  val screenWidth = LocalWindow.current.width.dp
+  val size = getWindowSizeClass(LocalWindow.current)
+  val screenWidth = LocalWindow.current.width
   val sideNavWidth = screenWidth * 0.8f
   val sideNavPxValue = with(LocalDensity.current) { sideNavWidth.toPx() }
   val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
@@ -83,9 +97,7 @@ private fun DashboardScreenRegular(
   }
 
   BoxWithConstraints {
-    val isPortrait = maxWidth < maxHeight
-    // TODO Work on this so this can adapt to different window sizes.
-    if (maxWidth < 400.dp && isPortrait) {
+    if (size != WindowSize.Expanded) {
       SlackDragComposableView(
         isLeftNavOpen = isLeftNavOpen,
         isChatViewClosed = checkChatViewClosed(lastChannel, isChatViewClosed),

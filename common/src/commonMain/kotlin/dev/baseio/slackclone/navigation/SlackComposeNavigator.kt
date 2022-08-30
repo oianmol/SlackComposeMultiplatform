@@ -39,7 +39,7 @@ class SlackComposeNavigator(initialScreen: BackstackScreen) : ComposeNavigator {
   override fun navigateBackWithResult(key: NavigationKey, data: Any, screen: BackstackScreen) {
     navigationResultMap[key]?.let {
       it(data)
-      navigationResultMap.remove(key)
+      navigationResultMap.remove(key)// the result has been handled! we don't need to keep the callback
     }
   }
 

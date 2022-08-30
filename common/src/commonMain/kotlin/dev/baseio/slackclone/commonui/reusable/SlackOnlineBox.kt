@@ -20,7 +20,7 @@ fun SlackOnlineBox(
   parentModifier: Modifier = Modifier.size(34.dp),
   imageModifier: Modifier = Modifier.size(28.dp)
 ) {
-  Box {
+  Box(parentModifier) {
     SlackImageBox(
       imageModifier, imageUrl
     )
