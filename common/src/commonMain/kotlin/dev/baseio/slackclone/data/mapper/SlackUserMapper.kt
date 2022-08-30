@@ -15,7 +15,7 @@ class SlackUserMapper : EntityMapper<DomainLayerUsers.SlackUser, RandomUser> {
       System.currentTimeMillis(),
       "8284866938",
       "8284866938",
-      "https://www.google.com",
+      "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no",
       "IN"
     )
   }
