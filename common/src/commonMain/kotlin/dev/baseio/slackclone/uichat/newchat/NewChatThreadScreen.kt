@@ -52,20 +52,24 @@ private fun ListRandomUsers(
         scaffoldState.snackbarHostState
       }
     ) { innerPadding ->
-      SearchContent(innerPadding, newChatThread)
+      SearchContent(innerPadding, newChatThread,composeNavigator)
     }
   }
 }
 
 @Composable
-private fun SearchContent(innerPadding: PaddingValues, newChatThread: NewChatThreadVM) {
+private fun SearchContent(
+  innerPadding: PaddingValues,
+  newChatThread: NewChatThreadVM,
+  composeNavigator: ComposeNavigator
+) {
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
       modifier = Modifier.fillMaxSize()
     ) {
       Column() {
         SearchUsersTF(newChatThread)
-        ListAllUsers(newChatThread)
+        ListAllUsers(newChatThread,composeNavigator)
       }
     }
   }
@@ -73,7 +77,7 @@ private fun SearchContent(innerPadding: PaddingValues, newChatThread: NewChatThr
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllUsers(newChatThread: NewChatThreadVM) {
+private fun ListAllUsers(newChatThread: NewChatThreadVM, composeNavigator: ComposeNavigator) {
   val channels by newChatThread.users.collectAsState()
   val channelsFlow by channels.collectAsState(emptyList())
   val listState = rememberLazyListState()
@@ -89,7 +93,7 @@ private fun ListAllUsers(newChatThread: NewChatThreadVM) {
       }
       item {
         SlackChannelItem(channel) {
-          newChatThread.navigate(it)
+          newChatThread.navigate(it,composeNavigator)
         }
       }
       lastDrawnChannel = newDrawn

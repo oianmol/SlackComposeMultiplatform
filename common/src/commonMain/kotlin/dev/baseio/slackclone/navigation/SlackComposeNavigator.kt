@@ -8,76 +8,97 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashMap
 
 class SlackComposeNavigator(initialScreen: BackstackScreen) : ComposeNavigator {
-    private val backStack: Deque<BackstackScreen> = LinkedList()
-    override val changePublisher = Channel<Unit>()
-    private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
-    private val currentScreen: MutableState<BackstackScreen> by lazy {
-        mutableStateOf(initialScreen)
+  private val backStack: Deque<BackstackScreen> = LinkedList()
+  override val changePublisher = Channel<Unit>()
+  private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
+  private val currentScreen: MutableState<BackstackScreen> by lazy {
+    mutableStateOf(initialScreen)
+  }
+
+  private val navigationResultMap = LinkedHashMap<NavigationKey, (Any) -> Unit>()
+  private val navigatorScope = MainScope()
+
+  override val screenCount: Int
+    get() = backStack.size
+
+  init {
+    backStack.add(initialScreen)
+  }
+
+  override val totalScreens: Int
+    get() = screenProviders.size
+
+  override fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit) {
+    screenProviders[screenTag] = screen
+  }
+
+  override fun navigateBackWithResult(key: NavigationKey, data: Any, screen: BackstackScreen) {
+    navigationResultMap[key]?.let {
+      it(data)
+      navigationResultMap.remove(key)
     }
+  }
 
-    private val navigatorScope = MainScope()
+  override fun registerForNavigationResult(navigateChannel: NavigationKey, function: (Any) -> Unit) {
+    navigationResultMap[navigateChannel] = function
+  }
 
-    override val screenCount: Int
-        get() = backStack.size
-
-    init {
-        backStack.add(initialScreen)
-    }
-
-    override val totalScreens: Int
-        get() = screenProviders.size
-
-    override fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit) {
-        screenProviders[screenTag] = screen
-    }
-
-    override fun navigateUp() {
-        if (backStack.size > 1) {
-            backStack.pollLast()
-            backStack.peek()?.let {
-                currentScreen.value = it
-                navigatorScope.launch {
-                    changePublisher.send(Unit)
-                }
-            }
+  override fun navigateUp() {
+    if (backStack.size > 1) {
+      backStack.pollLast()
+      backStack.peek()?.let {
+        currentScreen.value = it
+        navigatorScope.launch {
+          changePublisher.send(Unit)
         }
+      }
     }
+  }
 
-    override val lastScreen: BackstackScreen
-        get() = currentScreen.value
+  override val lastScreen: BackstackScreen
+    get() = currentScreen.value
 
-    override fun navigate(screenTag: BackstackScreen) {
-        backStack.add(screenTag)
-        currentScreen.value = screenTag
-        navigatorScope.launch(Dispatchers.Default) {
-            changePublisher.send(Unit)
-        }
+  override fun navigate(screenTag: BackstackScreen) {
+    backStack.add(screenTag)
+    currentScreen.value = screenTag
+    navigatorScope.launch(Dispatchers.Default) {
+      changePublisher.send(Unit)
     }
+  }
 
-    @Composable
-    override fun start() {
-        screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
-            throw IllegalArgumentException("Screen not found!")
-        }
+  @Composable
+  override fun start() {
+    screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
+      throw IllegalArgumentException("Screen not found!")
     }
+  }
 
 }
 
-open class BackstackScreen(var name:String)
+open class BackstackScreen(var name: String)
 
 interface ComposeNavigator {
-    val lastScreen: BackstackScreen
-    val changePublisher : Channel<Unit>
+  val lastScreen: BackstackScreen
+  val changePublisher: Channel<Unit>
 
-    val totalScreens: Int
-    val screenCount: Int
+  val totalScreens: Int
+  val screenCount: Int
 
-    fun navigateUp()
-    fun navigate(screenTag: BackstackScreen)
+  fun navigateUp()
+  fun navigate(screenTag: BackstackScreen)
 
-    @Composable
-    fun start()
-    fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit)
+  @Composable
+  fun start()
+  fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit)
+  fun navigateBackWithResult(
+    key: NavigationKey,
+    data: Any,
+    screen: BackstackScreen
+  )
+
+  fun registerForNavigationResult(navigateChannel: NavigationKey, function: (Any) -> Unit)
 }

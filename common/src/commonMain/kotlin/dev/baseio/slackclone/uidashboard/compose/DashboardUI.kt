@@ -27,7 +27,6 @@ import dev.baseio.slackclone.commonui.reusable.SlackDragComposableView
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.*
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenUI
@@ -123,7 +122,7 @@ private fun DashboardScreenRegular(
           onItemClick = {
             dashboardVM.selectedChatChannel.value = it
             dashboardVM.isChatViewClosed.value = false
-          },
+          }, composeNavigator
         )
       }
     } else {
@@ -157,6 +156,7 @@ private fun DashboardScreenRegular(
             dashboardVM.selectedChatChannel.value = it
             dashboardVM.isChatViewClosed.value = false
           },
+          composeNavigator = composeNavigator,
         )
       }
 
@@ -194,6 +194,7 @@ private fun DashboardScaffold(
   modifier: Modifier,
   appBarIconClick: () -> Unit,
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
+  composeNavigator: ComposeNavigator,
 ) {
   var bottomNavigationNavigator: ComposeNavigator? by remember { mutableStateOf(null) }
   Box(modifier) {
@@ -209,7 +210,7 @@ private fun DashboardScaffold(
         scaffoldState.snackbarHostState
       },
       floatingActionButton = {
-        bottomNavigationNavigator?.let { floatingDM(it) }
+        floatingDM(composeNavigator, onItemClick)
       }
     ) { innerPadding ->
       Box(modifier = Modifier.padding(innerPadding)) {
@@ -250,8 +251,12 @@ private fun DashboardScaffold(
 }
 
 @Composable
-private fun floatingDM(composeNavigator: ComposeNavigator) {
+private fun floatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
   FloatingActionButton(onClick = {
+    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel) {
+      composeNavigator.navigateUp()
+      onItemClick(it as UiLayerChannels.SlackChannel)
+    }
     composeNavigator.navigate(SlackScreens.CreateNewDM)
   }, backgroundColor = Color.White) {
     Icon(
@@ -323,19 +328,19 @@ private fun navigateTab(
   screen: BackstackScreen
 ) {
   navController?.navigate(screen)
-/*  {
-    // Pop up to the start destination of the graph to
-    // avoid building up a large stack of destinations
-    // on the back stack as users select items
-    popUpTo(navController.graph.findStartDestination().id) {
-      saveState = true
-    }
-    // Avoid multiple copies of the same destination when
-    // reselecting the same item
-    launchSingleTop = true
-    // Restore state when reselecting a previously selected item
-    restoreState = true
-  }*/
+  /*  {
+      // Pop up to the start destination of the graph to
+      // avoid building up a large stack of destinations
+      // on the back stack as users select items
+      popUpTo(navController.graph.findStartDestination().id) {
+        saveState = true
+      }
+      // Avoid multiple copies of the same destination when
+      // reselecting the same item
+      launchSingleTop = true
+      // Restore state when reselecting a previously selected item
+      restoreState = true
+    }*/
 }
 
 private fun getDashTabs(): MutableList<BackstackScreen> {

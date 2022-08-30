@@ -16,7 +16,13 @@ class SlackScreens {
   object DMs : BackstackScreen("DMs")
   object Mentions :
     BackstackScreen("Mentions")
+
   object Search :
     BackstackScreen("Search")
+
   object You : BackstackScreen("You")
+}
+
+sealed class NavigationKey {
+  object NavigateChannel : NavigationKey()
 }

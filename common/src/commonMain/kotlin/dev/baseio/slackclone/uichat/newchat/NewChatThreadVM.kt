@@ -5,10 +5,13 @@ import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.domain.mappers.UiModelMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.usecases.channels.UseCaseSearchChannel
+import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.NavigationKey
+import dev.baseio.slackclone.navigation.SlackScreens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
-class NewChatThreadVM  constructor(
+class NewChatThreadVM constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
   private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>
 ) :
@@ -28,13 +31,12 @@ class NewChatThreadVM  constructor(
     users.value = flow(newValue)
   }
 
-  fun navigate(channel: UiLayerChannels.SlackChannel) {
-    TODO("navigateBackWithResult SlackChannel")
-   /* composeNavigator.navigateBackWithResult(
-      NavigationKeys.navigateChannel,
-      channel.uuid!!,
-      SlackScreen.Dashboard.name
-    )*/
+  fun navigate(channel: UiLayerChannels.SlackChannel, composeNavigator: ComposeNavigator) {
+     composeNavigator.navigateBackWithResult(
+       NavigationKey.NavigateChannel,
+       channel,
+       SlackScreens.Dashboard
+     )
   }
 
 
