@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 
@@ -20,7 +21,7 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
   ) {
     ChatMessagesUI(
       viewModel,
-      Modifier.fillMaxSize()
+      Modifier.fillMaxSize().padding(bottom = 100.dp)
     )
     ChatMessageBox(
       viewModel,
