@@ -40,6 +40,10 @@ import dev.baseio.slackclone.uidashboard.home.SearchMessagesUI
 import dev.baseio.slackclone.uidashboard.home.UserProfileUI
 import org.koin.java.KoinJavaComponent.inject
 
+val homeNavigator = SlackComposeNavigator(
+  SlackScreens.Home
+)
+
 @Composable
 fun DashboardUI(composeNavigator: ComposeNavigator) {
   val dashboardVM: DashboardVM by inject(DashboardVM::class.java)
@@ -230,7 +234,7 @@ private fun DashboardScaffold(
           color = SlackCloneColorProvider.colors.uiBackground,
           modifier = Modifier.fillMaxSize()
         ) {
-          Navigator(initialScreen = SlackScreens.Home) {
+          Navigator(homeNavigator) {
             bottomNavigationNavigator = this
             screen(SlackScreens.Home) {
               HomeScreenUI(

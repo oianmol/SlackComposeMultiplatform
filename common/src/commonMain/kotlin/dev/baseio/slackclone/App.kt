@@ -3,6 +3,7 @@ package dev.baseio.slackclone
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
@@ -14,6 +15,7 @@ import dev.baseio.slackclone.data.injection.repositoryModule
 import dev.baseio.slackclone.data.injection.useCaseModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.Navigator
+import dev.baseio.slackclone.navigation.SlackComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.navigation.screen
 import dev.baseio.slackclone.uidashboard.compose.DashboardVM
@@ -28,14 +30,16 @@ import org.koin.dsl.module
 
 
 var koinApp: KoinApplication? = null
-
+val appNavigator = SlackComposeNavigator(
+  SlackScreens.GettingStarted
+)
 @Composable
 fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
   if (koinApp == null) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver))
   }
   Box(modifier) {
-    Navigator(initialScreen = SlackScreens.GettingStarted) {
+    Navigator(navigator = appNavigator) {
       screen(SlackScreens.GettingStarted) {
         GettingStartedUI(this)
       }

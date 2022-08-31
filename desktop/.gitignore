@@ -3,6 +3,7 @@ prebuilds/fullsdk-darwin
 out
 *.iml
 .gradle
+build
 /local.properties
 /.idea
 /.idea/caches

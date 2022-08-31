@@ -11,26 +11,26 @@ import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.LinkedHashMap
 
-class SlackComposeNavigator(initialScreen: BackstackScreen) : ComposeNavigator {
-  private val backStack: Deque<BackstackScreen> = LinkedList()
+class SlackComposeNavigator(var initialScreen: BackstackScreen) : ComposeNavigator {
+  var backStack: Deque<BackstackScreen> = LinkedList()
+  var navigationResultMap = LinkedHashMap<NavigationKey, (Any) -> Unit>()
   override val changePublisher = Channel<Unit>()
   private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
   private val currentScreen: MutableState<BackstackScreen> by lazy {
     mutableStateOf(initialScreen)
   }
 
-  private val navigationResultMap = LinkedHashMap<NavigationKey, (Any) -> Unit>()
   private val navigatorScope = MainScope()
-
+  override val lastScreen: BackstackScreen
+    get() = currentScreen.value
+  override val totalScreens: Int
+    get() = screenProviders.size
   override val screenCount: Int
     get() = backStack.size
 
   init {
     backStack.add(initialScreen)
   }
-
-  override val totalScreens: Int
-    get() = screenProviders.size
 
   override fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit) {
     screenProviders[screenTag] = screen
@@ -59,8 +59,7 @@ class SlackComposeNavigator(initialScreen: BackstackScreen) : ComposeNavigator {
     }
   }
 
-  override val lastScreen: BackstackScreen
-    get() = currentScreen.value
+
 
   override fun navigate(screenTag: BackstackScreen) {
     backStack.add(screenTag)
