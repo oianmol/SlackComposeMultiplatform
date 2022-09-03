@@ -32,6 +32,9 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.*
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenUI
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uidashboard.compose.layouts.SlackDesktopLayout
+import dev.baseio.slackclone.uidashboard.compose.layouts.SlackSideBarLayoutDesktop
+import dev.baseio.slackclone.uidashboard.compose.layouts.SlackWorkspaceLayoutDesktop
 import dev.baseio.slackclone.uidashboard.home.DirectMessagesUI
 import dev.baseio.slackclone.uidashboard.home.HomeScreenUI
 import dev.baseio.slackclone.uidashboard.home.MentionsReactionsUI
@@ -49,15 +52,17 @@ fun DashboardUI(composeNavigator: ComposeNavigator) {
   DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM)
 }
 
-enum class WindowSize { Compact, Medium, Expanded }
+enum class WindowSize { Phones, Tablets, BigTablets, DesktopOne, DesktopTwo }
 
 fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
   windowDpSize.width < 0.dp ->
     throw IllegalArgumentException("Dp value cannot be negative")
 
-  windowDpSize.width < 600.dp -> WindowSize.Compact
-  windowDpSize.width < 840.dp -> WindowSize.Medium
-  else -> WindowSize.Expanded
+  windowDpSize.width < 600.dp -> WindowSize.Phones
+  windowDpSize.width < 840.dp -> WindowSize.Tablets
+  windowDpSize.width < 960.dp -> WindowSize.BigTablets
+  windowDpSize.width < 1024.dp -> WindowSize.DesktopOne
+  else -> WindowSize.DesktopTwo
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -98,58 +103,109 @@ private fun DashboardScreenRegular(
   }
 
   BoxWithConstraints {
-    if (size != WindowSize.Expanded) {
-      SlackDragComposableView(
-        isLeftNavOpen = isLeftNavOpen,
-        isChatViewClosed = checkChatViewClosed(lastChannel, isChatViewClosed),
-        mainScreenOffset = sideNavPxValue,
-        chatScreenOffset = screenWidthPxValue,
-        onOpenCloseLeftView = {
-          isLeftNavOpen = it
-        },
-        onOpenCloseRightView = {
-          dashboardVM.isChatViewClosed.value = it
-        },
-        leftViewComposable = { sideNavModifier ->
-          SideNavigation(
-            modifier = sideNavModifier.width(sideNavWidth),
-            composeNavigator = composeNavigator
-          )
-        },
-        rightViewComposable = { chatViewModifier ->
-          lastChannel?.let { slackChannel ->
-            ChatScreenUI(
-              modifier = chatViewModifier,
-              slackChannel = slackChannel,
-              onBackClick = { dashboardVM.isChatViewClosed.value = true },
-              viewModel = viewModel
+    when (size) {
+      WindowSize.Phones -> {
+        SlackDragComposableView(
+          isLeftNavOpen = isLeftNavOpen,
+          isChatViewClosed = checkChatViewClosed(lastChannel, isChatViewClosed),
+          mainScreenOffset = sideNavPxValue,
+          chatScreenOffset = screenWidthPxValue,
+          onOpenCloseLeftView = {
+            isLeftNavOpen = it
+          },
+          onOpenCloseRightView = {
+            dashboardVM.isChatViewClosed.value = it
+          },
+          leftViewComposable = { sideNavModifier ->
+            SideNavigation(
+              modifier = sideNavModifier.width(sideNavWidth),
+              composeNavigator = composeNavigator
             )
+          },
+          rightViewComposable = { chatViewModifier ->
+            lastChannel?.let { slackChannel ->
+              ChatScreenUI(
+                modifier = chatViewModifier,
+                slackChannel = slackChannel,
+                onBackClick = { dashboardVM.isChatViewClosed.value = true },
+                viewModel = viewModel
+              )
+            }
           }
-        }
-      ) { mainViewModifier ->
-        DashboardScaffold(
-          needsOverlay = isLeftNavOpen || isChatViewClosed.not(),
-          scaffoldState = scaffoldState,
-          modifier = mainViewModifier,
-          appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
-          onItemClick = {
-            dashboardVM.selectedChatChannel.value = it
-            dashboardVM.isChatViewClosed.value = false
-          }, composeNavigator
-        )
-      }
-    } else {
-      SlackDualPaneLayoutView(
-        leftViewComposable = {
-          SideNavigation(
-            modifier = it,
-            composeNavigator = composeNavigator
+        ) { mainViewModifier ->
+          DashboardScaffold(
+            needsOverlay = isLeftNavOpen || isChatViewClosed.not(),
+            scaffoldState = scaffoldState,
+            modifier = mainViewModifier,
+            appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
+            onItemClick = {
+              dashboardVM.selectedChatChannel.value = it
+              dashboardVM.isChatViewClosed.value = false
+            }, composeNavigator
           )
-        },
-        rightViewComposable = { chatViewModifier ->
+        }
+      }
+
+      WindowSize.Tablets, WindowSize.BigTablets -> {
+        SlackDualPaneLayoutView(
+          leftViewComposable = {
+            SideNavigation(
+              modifier = it,
+              composeNavigator = composeNavigator
+            )
+          },
+          rightViewComposable = { chatViewModifier ->
+            lastChannel?.let { slackChannel ->
+              ChatScreenUI(
+                modifier = chatViewModifier,
+                slackChannel = slackChannel,
+                onBackClick = {
+                  dashboardVM.isChatViewClosed.value = true
+                  dashboardVM.selectedChatChannel.value = null
+                },
+                viewModel = viewModel
+              )
+            }
+          },
+        ) { modifier ->
+          DashboardScaffold(
+            needsOverlay = false,
+            scaffoldState = scaffoldState,
+            modifier = modifier,
+            appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
+            onItemClick = {
+              dashboardVM.selectedChatChannel.value = it
+              dashboardVM.isChatViewClosed.value = false
+            },
+            composeNavigator = composeNavigator,
+          )
+        }
+
+      }
+
+      WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
+        val onItemClick = { channel: Any ->
+          dashboardVM.selectedChatChannel.value = channel as UiLayerChannels.SlackChannel
+          dashboardVM.isChatViewClosed.value = false
+        }
+        SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = {
+          SlackSideBarLayoutDesktop(it)
+        }, workSpaceAndChannels = {
+          SlackWorkspaceLayoutDesktop(it, onItemClick = {
+            onItemClick(it)
+          }, onCreateChannelRequest = {
+            composeNavigator.registerForNavigationResult(
+              NavigationKey.NavigateChannel,
+              SlackScreens.Dashboard
+            ) {
+              onItemClick(it as UiLayerChannels.SlackChannel)
+            }
+            composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
+          }, composeNavigator)
+        }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
-              modifier = chatViewModifier,
+              modifier = contentModifier,
               slackChannel = slackChannel,
               onBackClick = {
                 dashboardVM.isChatViewClosed.value = true
@@ -157,22 +213,17 @@ private fun DashboardScreenRegular(
               },
               viewModel = viewModel
             )
-          }
-        },
-      ) { modifier ->
-        DashboardScaffold(
-          needsOverlay = false,
-          scaffoldState = scaffoldState,
-          modifier = modifier,
-          appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
-          onItemClick = {
-            dashboardVM.selectedChatChannel.value = it
-            dashboardVM.isChatViewClosed.value = false
-          },
-          composeNavigator = composeNavigator,
-        )
-      }
+          } ?: run {
+            SlackCloneSurface(
+              color = SlackCloneColorProvider.colors.uiBackground,
+              modifier = contentModifier
+            ) {
 
+            }
+
+          }
+        }
+      }
     }
   }
 
@@ -222,7 +273,7 @@ private fun DashboardScaffold(
         scaffoldState.snackbarHostState
       },
       floatingActionButton = {
-        floatingDM(composeNavigator, onItemClick)
+        FloatingDM(composeNavigator, onItemClick)
       }
     ) { innerPadding ->
       Box(modifier = Modifier.padding(innerPadding)) {
@@ -270,9 +321,9 @@ private fun DashboardScaffold(
 }
 
 @Composable
-private fun floatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
+fun FloatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
   FloatingActionButton(onClick = {
-    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel,SlackScreens.Dashboard) {
+    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel, SlackScreens.Dashboard) {
       composeNavigator.navigateUp()
       onItemClick(it as UiLayerChannels.SlackChannel)
     }
@@ -327,7 +378,7 @@ private fun RowScope.BottomNavItem(
   BottomNavigationItem(
     selectedContentColor = SlackCloneColorProvider.colors.bottomNavSelectedColor,
     unselectedContentColor = SlackCloneColorProvider.colors.bottomNavUnSelectedColor,
-    icon = { Icon(PainterRes.homeTabIcon(), contentDescription = null) },
+    icon = { Icon(PainterRes.homeTabIcon(), contentDescription = null,Modifier.size(24.dp)) },
     label = {
       Text(
         screen.name,

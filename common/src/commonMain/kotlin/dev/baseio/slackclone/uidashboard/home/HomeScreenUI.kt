@@ -38,7 +38,7 @@ fun HomeScreenUI(
       Column(Modifier.verticalScroll(rememberScrollState())) {
         JumpToText()
         ThreadsTile()
-        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+        SlackListDivider()
         SlackRecentChannels({
           onItemClick(it)
         }, onClickAdd = {
@@ -74,7 +74,7 @@ fun HomeScreenUI(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ThreadsTile() {
-  SlackListItem(Icons.Default.MailOutline, "threads")
+  SlackListItem(Icons.Default.MailOutline, "Threads")
 }
 
 @Composable

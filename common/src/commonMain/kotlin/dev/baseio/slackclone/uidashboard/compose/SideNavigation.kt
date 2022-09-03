@@ -119,13 +119,13 @@ fun OrganizationLogo() {
 }
 
 @Composable
-private fun WorkspacesBar() {
+fun WorkspacesBar() {
   SlackSurfaceAppBar(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     elevation = 0.dp,
   ) {
     Text(
-      text = "head_workspaces",
+      text = "mutualmobile",
       style = SlackCloneTypography.h5.copy(
         color = SlackCloneColorProvider.colors.textPrimary,
         fontWeight = FontWeight.Bold

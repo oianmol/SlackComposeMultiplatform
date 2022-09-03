@@ -17,6 +17,7 @@ private val LightColorPalette = SlackCloneColorPalette(
   brand = SlackCloneColor,
   accent = SlackCloneColor,
   uiBackground = Color.White,
+  onUiBackground = Color.Black.copy(alpha = 0.2f),
   textPrimary = Color.Black,
   textSecondary = Color.DarkGray,
   error = FunctionalRed,
@@ -40,6 +41,7 @@ private val DarkColorPalette = SlackCloneColorPalette(
   brand = SlackCloneColor,
   accent = SlackCloneColor,
   uiBackground = DarkBackground,
+  onUiBackground = Color.White.copy(alpha = 0.2f),
   textPrimary = Color.White,
   textSecondary = Color.White,
   error = FunctionalRedDark,
@@ -90,6 +92,7 @@ class SlackCloneColorPalette(
   brand: Color,
   accent: Color,
   uiBackground: Color,
+  onUiBackground:Color,
   textPrimary: Color = brand,
   textSecondary: Color,
   error: Color,
@@ -113,6 +116,8 @@ class SlackCloneColorPalette(
   var accent by mutableStateOf(accent)
     private set
   var uiBackground by mutableStateOf(uiBackground)
+    private set
+  var onUiBackground by mutableStateOf(onUiBackground)
     private set
   var statusBarColor by mutableStateOf(statusBarColor)
     private set
@@ -156,6 +161,7 @@ class SlackCloneColorPalette(
   fun update(other: SlackCloneColorPalette) {
     brand = other.brand
     uiBackground = other.uiBackground
+    onUiBackground = other.onUiBackground
     textPrimary = other.textPrimary
     textSecondary = other.textSecondary
     error = other.error
