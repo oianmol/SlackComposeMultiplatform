@@ -17,13 +17,13 @@ class CreateChannelVM constructor(
 ) :
   ViewModel() {
 
-  var channel =
+  var createChannelState =
     MutableStateFlow(DomainLayerChannels.SlackChannel(isOneToOne = false, avatarUrl = null))
 
   fun createChannel(composeNavigator: ComposeNavigator) {
     viewModelScope.launch {
-      if (channel.value.name?.isNotEmpty() == true) {
-        val channel = useCaseCreateChannel.perform(channel.value)
+      if (createChannelState.value.name?.isNotEmpty() == true) {
+        val channel = useCaseCreateChannel.perform(createChannelState.value)
         composeNavigator.deliverResult(
           NavigationKey.NavigateChannel,
           channelMapper.mapToPresentation(channel!!),

@@ -56,7 +56,7 @@ private fun CreateChannel(
 
 @Composable
 private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.channel.collectAsState()
+  val searchChannel by createChannelVM.createChannelState.collectAsState()
 
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
@@ -97,7 +97,7 @@ private fun ShareOutSideOrg(
   }, trailing = {
     Checkbox(
       checked = isChecked, onCheckedChange = {
-        createChannelVM.channel.value = createChannelVM.channel.value.copy(isShareOutSide = it)
+        createChannelVM.createChannelState.value = createChannelVM.createChannelState.value.copy(isShareOutSide = it)
       }, colors = CheckboxDefaults.colors(
         checkedColor = Color.LightGray,
         uncheckedColor = Color.LightGray,
@@ -123,7 +123,7 @@ private fun PrivateChannel(
   }, trailing = {
     Switch(
       checked = isChecked, onCheckedChange = {
-        createChannelVM.channel.value = createChannelVM.channel.value.copy(isPrivate = it)
+        createChannelVM.createChannelState.value = createChannelVM.createChannelState.value.copy(isPrivate = it)
       }, colors = SwitchDefaults.colors(
         checkedThumbColor = SlackCloneColorProvider.colors.accent,
         uncheckedThumbColor = Color.LightGray,
@@ -147,14 +147,14 @@ private fun Name() {
 
 @Composable
 private fun NameField(createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.channel.collectAsState()
+  val searchChannel by createChannelVM.createChannelState.collectAsState()
 
   TextField(
     value = searchChannel.name ?: "",
     onValueChange = { newValue ->
       val newId = newValue.replace(" ", "-")
-      createChannelVM.channel.value =
-        createChannelVM.channel.value.copy(name = newId, uuid = newId)
+      createChannelVM.createChannelState.value =
+        createChannelVM.createChannelState.value.copy(name = newId, uuid = newId)
     },
     textStyle = textStyleFieldPrimary(),
     leadingIcon = {
@@ -217,7 +217,7 @@ private fun NewChannelAppBar(
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
     actions = {
       TextButton(onClick = {
-        createChannelVM.channel.value.name?.takeIf { it.isNotEmpty() }?.let {
+        createChannelVM.createChannelState.value.name?.takeIf { it.isNotEmpty() }?.let {
           createChannelVM.createChannel(composeNavigator)
         } ?: run {
           haptic.performHapticFeedback(HapticFeedbackType.LongPress)
