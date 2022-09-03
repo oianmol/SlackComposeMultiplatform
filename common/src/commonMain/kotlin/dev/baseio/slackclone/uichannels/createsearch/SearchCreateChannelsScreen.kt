@@ -38,7 +38,7 @@ fun SearchCreateChannelUI(
     composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel) {
       composeNavigator.navigateUp()
     }
-    composeNavigator.navigate(SlackScreens.CreateNewChannel)
+    composeNavigator.navigateScreen(SlackScreens.CreateNewChannel)
   }
 }
 

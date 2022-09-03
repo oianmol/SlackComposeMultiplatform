@@ -9,7 +9,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.ComposeNavigator
@@ -61,7 +60,7 @@ fun CommonInputUI(
 fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
-      composeNavigator.navigate(SlackScreens.DashboardNavigation)
+      composeNavigator.navigateRoute(SlackScreens.DashboardRoute)
     },
     modifier
       .fillMaxWidth()

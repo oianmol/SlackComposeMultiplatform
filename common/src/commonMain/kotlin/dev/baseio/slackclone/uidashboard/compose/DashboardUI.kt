@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
@@ -40,9 +39,7 @@ import dev.baseio.slackclone.uidashboard.home.SearchMessagesUI
 import dev.baseio.slackclone.uidashboard.home.UserProfileUI
 import org.koin.java.KoinJavaComponent.inject
 
-val homeNavigator = SlackComposeNavigator(
-  SlackScreens.Home
-)
+val homeNavigator = SlackComposeNavigator()
 
 @Composable
 fun DashboardUI(composeNavigator: ComposeNavigator) {
@@ -212,7 +209,6 @@ private fun DashboardScaffold(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
   composeNavigator: ComposeNavigator,
 ) {
-  var bottomNavigationNavigator: ComposeNavigator? by remember { mutableStateOf(null) }
   Box(modifier) {
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,
@@ -220,7 +216,7 @@ private fun DashboardScaffold(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       bottomBar = {
-        DashboardBottomNavBar(bottomNavigationNavigator)
+        DashboardBottomNavBar(homeNavigator)
       },
       snackbarHost = {
         scaffoldState.snackbarHostState
@@ -234,27 +230,28 @@ private fun DashboardScaffold(
           color = SlackCloneColorProvider.colors.uiBackground,
           modifier = Modifier.fillMaxSize()
         ) {
-          Navigator(homeNavigator) {
-            bottomNavigationNavigator = this
-            screen(SlackScreens.Home) {
-              HomeScreenUI(
-                appBarIconClick,
-                onItemClick = onItemClick,
-                onCreateChannelRequest = {
-                  composeNavigator.navigate(SlackScreens.CreateChannelsScreen)
-                })
-            }
-            screen(SlackScreens.DMs) {
-              DirectMessagesUI(onItemClick = onItemClick)
-            }
-            screen(SlackScreens.Mentions) {
-              MentionsReactionsUI()
-            }
-            screen(SlackScreens.Search) {
-              SearchMessagesUI()
-            }
-            screen(SlackScreens.You) {
-              UserProfileUI(this)
+          Navigator(homeNavigator, initialRoute = SlackScreens.HomeRoute) {
+            this.route(SlackScreens.HomeRoute) {
+              screen(SlackScreens.Home) {
+                HomeScreenUI(
+                  appBarIconClick,
+                  onItemClick = onItemClick,
+                  onCreateChannelRequest = {
+                    composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
+                  })
+              }
+              screen(SlackScreens.DMs) {
+                DirectMessagesUI(onItemClick = onItemClick)
+              }
+              screen(SlackScreens.Mentions) {
+                MentionsReactionsUI()
+              }
+              screen(SlackScreens.Search) {
+                SearchMessagesUI()
+              }
+              screen(SlackScreens.You) {
+                UserProfileUI(this)
+              }
             }
           }
         }
@@ -273,7 +270,7 @@ private fun floatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayer
       composeNavigator.navigateUp()
       onItemClick(it as UiLayerChannels.SlackChannel)
     }
-    composeNavigator.navigate(SlackScreens.CreateNewDM)
+    composeNavigator.navigateScreen(SlackScreens.CreateNewDM)
   }, backgroundColor = Color.White) {
     Icon(
       imageVector = Icons.Default.Edit,
@@ -343,7 +340,7 @@ private fun navigateTab(
   navController: ComposeNavigator?,
   screen: BackstackScreen
 ) {
-  navController?.navigate(screen)
+  navController?.navigateScreen(screen)
   /*  {
       // Pop up to the start destination of the graph to
       // avoid building up a large stack of destinations

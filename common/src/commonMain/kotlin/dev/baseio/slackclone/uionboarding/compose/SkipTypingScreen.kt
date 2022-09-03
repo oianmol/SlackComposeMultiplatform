@@ -92,7 +92,7 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
 fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
   OutlinedButton(
     onClick = {
-      composeNavigator.navigate(SlackScreens.EmailAddressInputUI)
+      composeNavigator.navigateScreen(SlackScreens.EmailAddressInputUI)
     },
     border = BorderStroke(1.dp, color = Color.White),
     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
@@ -111,7 +111,7 @@ fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
 private fun IWillSignInManually(composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
-      composeNavigator.navigate(SlackScreens.WorkspaceInputUI)
+      composeNavigator.navigateScreen(SlackScreens.WorkspaceInputUI)
     },
     Modifier
       .fillMaxWidth()

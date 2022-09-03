@@ -113,7 +113,7 @@ private fun GetStartedButton(composeNavigator: ComposeNavigator) {
   ) {
     Button(
       onClick = {
-        composeNavigator.navigate(SlackScreens.SkipTypingScreen)
+        composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
       },
       Modifier
         .fillMaxWidth()
