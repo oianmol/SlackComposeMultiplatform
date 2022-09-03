@@ -27,6 +27,6 @@ class SlackScreens {
   object You : BackstackScreen("You")
 }
 
-sealed class NavigationKey {
-  object NavigateChannel : NavigationKey()
+sealed class NavigationKey(val key:String) {
+  object NavigateChannel : NavigationKey("navigateChannel")
 }

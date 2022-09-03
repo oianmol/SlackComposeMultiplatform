@@ -28,14 +28,23 @@ import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun SearchCreateChannelUI(
-  composeNavigator: ComposeNavigator
+  composeNavigator: ComposeNavigator,
 ) {
   val searchChannelsVM: SearchChannelsVM by inject(SearchChannelsVM::class.java)
 
   val scaffoldState = rememberScaffoldState()
 
-  ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM) {
-    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel) {
+  ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM, { slackChannel: Any ->
+    val channel = slackChannel as UiLayerChannels.SlackChannel
+    composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
+    composeNavigator.navigateUp()
+  }) {
+    composeNavigator.registerForNavigationResult(
+      NavigationKey.NavigateChannel,
+      SlackScreens.CreateChannelsScreen
+    ) { slackChannel: Any ->
+      val channel = slackChannel as UiLayerChannels.SlackChannel
+      composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
       composeNavigator.navigateUp()
     }
     composeNavigator.navigateScreen(SlackScreens.CreateNewChannel)
@@ -47,6 +56,7 @@ private fun ListChannels(
   scaffoldState: ScaffoldState,
   composeNavigator: ComposeNavigator,
   searchChannelsVM: SearchChannelsVM,
+  onItemClick: (Any) -> Unit,
   newChannel: () -> Unit
 ) {
   Box {
@@ -66,20 +76,24 @@ private fun ListChannels(
         NewChannelFAB(newChannel)
       }
     ) { innerPadding ->
-      SearchContent(innerPadding, searchChannelsVM)
+      SearchContent(innerPadding, searchChannelsVM, onItemClick)
     }
   }
 }
 
 @Composable
-private fun SearchContent(innerPadding: PaddingValues, searchChannelsVM: SearchChannelsVM) {
+private fun SearchContent(
+  innerPadding: PaddingValues,
+  searchChannelsVM: SearchChannelsVM,
+  onItemClick: (UiLayerChannels.SlackChannel) -> Unit
+) {
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
       modifier = Modifier.fillMaxSize()
     ) {
-      Column() {
+      Column {
         SearchChannelsTF(searchChannelsVM)
-        ListAllChannels(searchChannelsVM)
+        ListAllChannels(searchChannelsVM, onItemClick)
       }
     }
   }
@@ -87,7 +101,10 @@ private fun SearchContent(innerPadding: PaddingValues, searchChannelsVM: SearchC
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllChannels(searchChannelsVM: SearchChannelsVM) {
+private fun ListAllChannels(
+  searchChannelsVM: SearchChannelsVM,
+  onItemClick: (UiLayerChannels.SlackChannel) -> Unit
+) {
   val channels by searchChannelsVM.channels.collectAsState()
   val channelsFlow by channels.collectAsState(emptyList())
   val listState = rememberLazyListState()
@@ -103,7 +120,7 @@ private fun ListAllChannels(searchChannelsVM: SearchChannelsVM) {
       }
       item {
         SlackChannelItem(channel) {
-          searchChannelsVM.navigate(it)
+          onItemClick(it)
         }
       }
       lastDrawnChannel = newDrawn

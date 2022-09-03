@@ -202,7 +202,10 @@ private fun textFieldColors() = TextFieldDefaults.textFieldColors(
 )
 
 @Composable
-private fun NewChannelAppBar(composeNavigator: ComposeNavigator, createChannelVM: CreateChannelVM) {
+private fun NewChannelAppBar(
+  composeNavigator: ComposeNavigator,
+  createChannelVM: CreateChannelVM
+) {
   val haptic = LocalHapticFeedback.current
   SlackSurfaceAppBar(
     title = {

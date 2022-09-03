@@ -237,6 +237,12 @@ private fun DashboardScaffold(
                   appBarIconClick,
                   onItemClick = onItemClick,
                   onCreateChannelRequest = {
+                    composeNavigator.registerForNavigationResult(
+                      NavigationKey.NavigateChannel,
+                      SlackScreens.Dashboard
+                    ) {
+                      onItemClick(it as UiLayerChannels.SlackChannel)
+                    }
                     composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
                   })
               }
@@ -266,7 +272,7 @@ private fun DashboardScaffold(
 @Composable
 private fun floatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
   FloatingActionButton(onClick = {
-    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel) {
+    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel,SlackScreens.Dashboard) {
       composeNavigator.navigateUp()
       onItemClick(it as UiLayerChannels.SlackChannel)
     }

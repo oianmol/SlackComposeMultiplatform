@@ -6,10 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -17,7 +13,7 @@ import kotlin.collections.LinkedHashMap
 class SlackComposeNavigator : ComposeNavigator {
   private var backStackRoute: LinkedHashMap<BackstackRoute, Deque<BackstackScreen>> =
     LinkedHashMap()
-  private var navigationResultMap = LinkedHashMap<NavigationKey, (Any) -> Unit>()
+  private var navigationResultMap = LinkedHashMap<String, (Any) -> Unit>()
 
   private val currentRoute: MutableState<BackstackRoute?> = mutableStateOf(null)
   private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
@@ -49,26 +45,28 @@ class SlackComposeNavigator : ComposeNavigator {
     function()
   }
 
-  override fun navigateBackWithResult(key: NavigationKey, data: Any, screen: BackstackScreen) {
-    navigationResultMap[key]?.let {
+  override fun deliverResult(key: NavigationKey, data: Any, screen: BackstackScreen) {
+    navigationResultMap[key.key.plus(screen.name)]?.let {
       it(data)
-      navigationResultMap.remove(key)// the result has been handled! we don't need to keep the callback
+      navigationResultMap.remove(key.key.plus(screen.name))// the result has been handled! we don't need to keep the callback
     }
   }
 
-  override fun registerForNavigationResult(navigateChannel: NavigationKey, function: (Any) -> Unit) {
-    navigationResultMap[navigateChannel] = function
+  override fun registerForNavigationResult(navigateChannel: NavigationKey,backstackScreen: BackstackScreen, function: (Any) -> Unit) {
+    navigationResultMap[navigateChannel.key.plus(backstackScreen.name)] = function
   }
 
   override fun navigateUp() {
-    if (backStackRoute.size > 1) {
-      backStackRoute[currentRoute.value]?.pollLast()
-      if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
-        backStackRoute.remove(currentRoute.value)
-      }
-      val lastRoute = backStackRoute.keys.last()
-      backStackRoute[lastRoute]?.peek()?.let {
-        navigateScreen(it)
+    backStackRoute[currentRoute.value]?.poll()
+    if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
+      // if the route has empty screens then remove the route entirely
+      backStackRoute.remove(currentRoute.value)
+    }
+    val lastRoute = backStackRoute.keys.last() // take the last route and peek-load the last screen
+    backStackRoute[lastRoute]?.peek()?.let {
+      currentScreen.value = it
+      navigatorScope.launch {
+        changePublisher.send(Unit)
       }
     }
   }
@@ -76,6 +74,7 @@ class SlackComposeNavigator : ComposeNavigator {
   override fun navigateRoute(route: BackstackRoute) {
     currentRoute.value = route
     currentScreen.value = route.initialScreen
+    backStackRoute[currentRoute.value]?.push(route.initialScreen)
     navigatorScope.launch {
       changePublisher.send(Unit)
     }
@@ -91,18 +90,14 @@ class SlackComposeNavigator : ComposeNavigator {
   }
 
   @Composable
-  private fun LoadScreenTag() {
+  override fun start(route: BackstackRoute) {
+    if (currentScreen.value == null) {
+      currentScreen.value = route.initialScreen
+      currentRoute.value = route
+    }
     screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
       throw IllegalArgumentException("Screen not found!")
     }
-  }
-
-  @Composable
-  override fun start(route: BackstackRoute) {
-    changePublisher.receiveAsFlow().onEach {
-      LoadScreenTag()
-    }.launchIn(navigatorScope)
-    navigateRoute(route)
   }
 
 
@@ -124,13 +119,13 @@ interface ComposeNavigator {
 
   @Composable
   fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit)
-  fun navigateBackWithResult(
+  fun deliverResult(
     key: NavigationKey,
     data: Any,
     screen: BackstackScreen
   )
 
-  fun registerForNavigationResult(navigateChannel: NavigationKey, function: (Any) -> Unit)
+  fun registerForNavigationResult(navigateChannel: NavigationKey,backstackScreen: BackstackScreen, function: (Any) -> Unit)
 
   @Composable
   fun route(route: BackstackRoute, function: @Composable () -> Unit)

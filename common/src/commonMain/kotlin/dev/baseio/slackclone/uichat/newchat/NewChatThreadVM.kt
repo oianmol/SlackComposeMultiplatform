@@ -32,7 +32,7 @@ class NewChatThreadVM constructor(
   }
 
   fun navigate(channel: UiLayerChannels.SlackChannel, composeNavigator: ComposeNavigator) {
-     composeNavigator.navigateBackWithResult(
+     composeNavigator.deliverResult(
        NavigationKey.NavigateChannel,
        channel,
        SlackScreens.Dashboard

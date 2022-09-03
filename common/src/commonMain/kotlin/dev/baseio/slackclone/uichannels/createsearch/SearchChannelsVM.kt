@@ -6,6 +6,9 @@ import dev.baseio.slackclone.domain.mappers.UiModelMapper
 import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.domain.usecases.channels.UseCaseFetchChannelCount
 import dev.baseio.slackclone.domain.usecases.channels.UseCaseSearchChannel
+import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.NavigationKey
+import dev.baseio.slackclone.navigation.SlackScreens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -37,15 +40,6 @@ class SearchChannelsVM constructor(
   fun search(newValue: String) {
     search.value = newValue
     channels.value = flow(newValue)
-  }
-
-  fun navigate(channel: UiLayerChannels.SlackChannel) {
-    TODO("pending navigateBackWithResult")
-    /*composeNavigator.navigateBackWithResult(
-      NavigationKeys.navigateChannel,
-      channel.uuid!!,
-      SlackScreen.Dashboard.name
-    )*/
   }
 
 }
