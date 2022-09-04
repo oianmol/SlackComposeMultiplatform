@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,7 +31,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator) {
   Scaffold(
     backgroundColor = SlackCloneColor,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
-    modifier = Modifier, scaffoldState = scaffoldState, snackbarHost = {
+    modifier = Modifier.fillMaxSize(), scaffoldState = scaffoldState, snackbarHost = {
       scaffoldState.snackbarHostState
     }
   ) { innerPadding ->
@@ -69,22 +70,16 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-private fun CenterImage() {
-  var expanded by remember { mutableStateOf(false) }
-
-  LaunchedEffect(Unit) {
-    expanded = !expanded
-  }
-  AnimatedVisibility(
-    visible = expanded, enter = ImageEnterTransition(),
-    exit = ImageExitTrans()
-  ) {
-    Image(
-      painter = PainterRes.gettingStarted(),
-      contentDescription = "Logo",
-      Modifier
-    )
-  }
+private fun ColumnScope.CenterImage() {
+  val painter = PainterRes.gettingStarted()
+  Image(
+    modifier = Modifier.weight(1f, fill = false)
+      .aspectRatio(painter.intrinsicSize.height / painter.intrinsicSize.width)
+      .fillMaxWidth(),
+    painter = painter,
+    contentDescription = null,
+    contentScale = ContentScale.Fit
+  )
 }
 
 @Composable

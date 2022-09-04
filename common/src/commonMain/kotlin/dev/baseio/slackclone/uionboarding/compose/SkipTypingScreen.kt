@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -65,10 +66,14 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
             .fillMaxHeight()
             .fillMaxWidth()
         ) {
+          val painter = PainterRes.gettingStarted()
           Image(
-            painter = PainterRes.gettingStarted(),
-            contentDescription = "Logo",
-            Modifier
+            modifier = Modifier.weight(1f, fill = false)
+              .aspectRatio(painter.intrinsicSize.height / painter.intrinsicSize.width)
+              .fillMaxWidth(),
+            painter = painter,
+            contentDescription = null,
+            contentScale = ContentScale.Fit
           )
           TitleSubtitleText()
           Spacer(Modifier.padding(8.dp))
