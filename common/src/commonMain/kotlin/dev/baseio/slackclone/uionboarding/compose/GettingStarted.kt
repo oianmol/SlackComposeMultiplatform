@@ -20,13 +20,14 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun GettingStartedUI(composeNavigator: ComposeNavigator) {
+  val gettingStartedVM: GettingStartedVM by inject(GettingStartedVM::class.java)
   val scaffoldState = rememberScaffoldState()
-  var showSlackAnim by remember {
-    mutableStateOf(true)
-  }
+  val showSlackAnim by gettingStartedVM.showSlackAnim
 
   Scaffold(
     backgroundColor = SlackCloneColor,
@@ -44,9 +45,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator) {
 
 
         if (showSlackAnim) {
-          SlackAnimation {
-            showSlackAnim = false
-          }
+          SlackAnimation(gettingStartedVM)
         } else {
           AnimatedVisibility(visible = !showSlackAnim) {
             Column(
@@ -56,10 +55,10 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator) {
                 .fillMaxHeight()
                 .fillMaxWidth()
             ) {
-              IntroText(modifier = Modifier.padding(top = 12.dp))
+              IntroText(modifier = Modifier.padding(top = 12.dp),gettingStartedVM)
               CenterImage()
               Spacer(Modifier.padding(8.dp))
-              GetStartedButton(composeNavigator)
+              GetStartedButton(composeNavigator,gettingStartedVM)
             }
           }
         }
@@ -94,12 +93,9 @@ private fun ImageEnterTransition() = expandIn(
 )
 
 @Composable
-private fun GetStartedButton(composeNavigator: ComposeNavigator) {
-  var expanded by remember { mutableStateOf(false) }
+private fun GetStartedButton(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM) {
+  val expanded by gettingStartedVM.introTextExpanded
 
-  LaunchedEffect(Unit) {
-    expanded = !expanded
-  }
   val density = LocalDensity.current
 
   AnimatedVisibility(
@@ -140,12 +136,9 @@ private fun GetStartedEnterTransition(density: Density) =
   )
 
 @Composable
-private fun IntroText(modifier: Modifier = Modifier) {
-  var expanded by remember { mutableStateOf(false) }
+private fun IntroText(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedVM) {
+  val expanded by gettingStartedVM.introTextExpanded
 
-  LaunchedEffect(Unit) {
-    expanded = !expanded
-  }
   val density = LocalDensity.current
 
   AnimatedVisibility(

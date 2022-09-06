@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import kotlinx.coroutines.delay
 
 
@@ -27,15 +28,13 @@ val loaderGreen = Color(91, 178, 128)
 val slackWhite = Color(255, 255, 255)
 
 @Composable
-fun SlackAnimation(onComplete: () -> Unit) {
+fun SlackAnimation(gettingStartedVM: GettingStartedVM) {
   Box(
     modifier = Modifier
       .fillMaxSize()
   ) {
 
-    var isStartAnimation by remember {
-      mutableStateOf(false)
-    }
+    val isStartAnimation by gettingStartedVM.isStartAnimation
 
     val animatedRotateLogo by animateFloatAsState(
       targetValue = if (isStartAnimation) 0f else 360f,
@@ -46,15 +45,6 @@ fun SlackAnimation(onComplete: () -> Unit) {
       targetValue = if (isStartAnimation) (-120).dp else 0.dp,
       tween(SlackAnimSpec.ANIM_DURATION)
     )
-
-    LaunchedEffect(key1 = true, block = {
-      isStartAnimation = true
-      delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(700))
-      isStartAnimation = false
-      delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(800))
-      onComplete.invoke()
-    })
-
 
     SKTextLoader(Modifier.align(Alignment.Center), isStartAnimation)
 

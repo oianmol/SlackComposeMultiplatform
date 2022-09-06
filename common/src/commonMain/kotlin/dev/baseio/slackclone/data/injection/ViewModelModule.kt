@@ -8,12 +8,14 @@ import dev.baseio.slackclone.uichannels.directmessages.MessageViewModel
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.compose.DashboardVM
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import org.koin.dsl.module
 
 val viewModelModule = module {
+  single { GettingStartedVM() }
   single { DashboardVM(get(), get(), get(), get(qualifier = SlackChannelUiLayerChannels)) }
   single { ChatScreenVM(get(), get()) }
-  single { CreateChannelVM(get(),get(SlackChannelUiLayerChannels)) }
+  single { CreateChannelVM(get(), get(SlackChannelUiLayerChannels)) }
   single { NewChatThreadVM(get(), get(SlackChannelUiLayerChannels)) }
   single { SlackChannelVM(get(), get(SlackChannelUiLayerChannels)) }
   single { MessageViewModel(get(), get(SlackChannelUiLayerChannels)) }
