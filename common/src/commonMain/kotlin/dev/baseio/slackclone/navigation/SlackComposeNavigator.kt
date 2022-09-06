@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -62,21 +63,23 @@ class SlackComposeNavigator : ComposeNavigator {
     navigationResultMap[navigateChannel.key.plus(backstackScreen.name)] = function
   }
 
-  override var whenRouteCanNoLongerNavigateBack: () -> Unit = {
-
-  }
+  override var whenRouteCanNoLongerNavigateBack: () -> Unit = {}
 
   override fun navigateUp() {
     backStackRoute[currentRoute.value]?.remove(currentScreen.value)
     // now if the current route becomes empty set the current route to the previous route
     checkWhenWeCantNavigateBack()
     backStackRoute[currentRoute.value]?.peek()?.let {
-      currentScreen.value = it
-      navigatorScope.launch {
-        changePublisher.send(Unit)
-      }
+      setCurrentScreenAndNotify(it)
     } ?: run {
       whenRouteCanNoLongerNavigateBack.invoke()
+    }
+  }
+
+  private fun setCurrentScreenAndNotify(screen: BackstackScreen) {
+    currentScreen.value = screen
+    navigatorScope.launch {
+      changePublisher.send(Unit)
     }
   }
 
@@ -98,27 +101,20 @@ class SlackComposeNavigator : ComposeNavigator {
       }
     }
     currentRoute.value = route
-    currentScreen.value = route.initialScreen
-    backStackRoute[currentRoute.value]?.push(route.initialScreen)
-    navigatorScope.launch {
-      changePublisher.send(Unit)
-    }
+    navigateScreen(route.initialScreen)
   }
 
 
   override fun navigateScreen(screenTag: BackstackScreen) {
     backStackRoute[currentRoute.value]?.push(screenTag)
-    currentScreen.value = screenTag
-    navigatorScope.launch {
-      changePublisher.send(Unit)
-    }
+    setCurrentScreenAndNotify(screenTag)
   }
 
   @Composable
   override fun start(route: BackstackRoute) {
     if (currentScreen.value == null) {
-      currentScreen.value = route.initialScreen
       currentRoute.value = route
+      currentScreen.value = route.initialScreen
       backStackRoute[currentRoute.value]?.push(route.initialScreen)
     }
     screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
