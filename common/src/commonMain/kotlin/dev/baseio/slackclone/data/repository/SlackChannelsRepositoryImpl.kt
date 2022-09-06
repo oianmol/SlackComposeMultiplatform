@@ -12,6 +12,7 @@ import dev.baseio.slackclone.domain.repository.ChannelsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 
 class SlackChannelsRepositoryImpl(
   private val slackChannelDao: SlackDB,
@@ -57,7 +58,7 @@ class SlackChannelsRepositoryImpl(
           it.login,
           it.name,
           it.email,
-          System.currentTimeMillis(), System.currentTimeMillis(), 0L, 0L, 1L, 0L, it.picture, 1L
+           Clock.System.now().toEpochMilliseconds(),  Clock.System.now().toEpochMilliseconds(), 0L, 0L, 1L, 0L, it.picture, 1L
         )
       }
     }

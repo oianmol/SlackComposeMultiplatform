@@ -4,14 +4,14 @@ import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import androidx.compose.runtime.*
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import org.koin.java.KoinJavaComponent
+import dev.baseio.slackclone.slackComponent
 
 @Composable
 fun SlackRecentChannels(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
   onClickAdd: () -> Unit
 ) {
-  val channelVM: SlackChannelVM by KoinJavaComponent.inject(SlackChannelVM::class.java)
+  val channelVM: SlackChannelVM  = slackComponent.provideSlackChannelVM()
 
   val recent = "Recent"
   val channelsFlow = channelVM.channels.collectAsState()

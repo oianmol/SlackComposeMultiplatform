@@ -24,13 +24,12 @@ import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.NavigationKey
 import dev.baseio.slackclone.navigation.SlackScreens
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun SearchCreateChannelUI(
   composeNavigator: ComposeNavigator,
+  searchChannelsVM: SearchChannelsVM,
 ) {
-  val searchChannelsVM: SearchChannelsVM by inject(SearchChannelsVM::class.java)
 
   val scaffoldState = rememberScaffoldState()
 

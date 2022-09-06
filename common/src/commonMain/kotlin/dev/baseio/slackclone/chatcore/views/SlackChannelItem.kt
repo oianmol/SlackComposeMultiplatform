@@ -2,7 +2,6 @@ package dev.baseio.slackclone.chatcore.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -14,14 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.common.extensions.TimeGranularity
 import dev.baseio.slackclone.common.extensions.calculateTimeAgoByTimeGranularity
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
-import java.util.*
+import kotlinx.datetime.Clock
 
 @Composable
 fun SlackChannelItem(
@@ -127,7 +125,7 @@ private fun ChannelMessage(slackMessage: DomainLayerMessages.SlackMessage, textS
 fun RelativeTime(createdDate: Long) {
   Text(
     calculateTimeAgoByTimeGranularity
-      (System.currentTimeMillis(), Date(createdDate), TimeGranularity.MINUTES) ?: "$createdDate",
+      (Clock.System.now().toEpochMilliseconds(), createdDate) ?: "$createdDate",
     style = SlackCloneTypography.caption.copy(
       color = SlackCloneColorProvider.colors.textSecondary
     ), modifier = Modifier.padding(4.dp)

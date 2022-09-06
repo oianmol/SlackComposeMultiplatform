@@ -1,11 +1,6 @@
 package dev.baseio.slackclone
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
@@ -16,6 +11,7 @@ import dev.baseio.slackclone.data.injection.dataMappersModule
 import dev.baseio.slackclone.data.injection.repositoryModule
 import dev.baseio.slackclone.data.injection.useCaseModule
 import dev.baseio.slackclone.data.injection.viewModelModule
+import dev.baseio.slackclone.injection.SlackComponent
 import dev.baseio.slackclone.navigation.*
 import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
@@ -30,6 +26,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 
+lateinit var slackComponent: SlackComponent
 var koinApp: KoinApplication? = null
 val appNavigator = SlackComposeNavigator()
 
@@ -37,12 +34,13 @@ val appNavigator = SlackComposeNavigator()
 fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
   if (koinApp == null) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver))
+    slackComponent = SlackComponent()
   }
   Box(modifier) {
     Navigator(navigator = appNavigator, initialRoute = SlackScreens.OnboardingRoute) {
       this.route(SlackScreens.OnboardingRoute) {
         screen(SlackScreens.GettingStarted) {
-          GettingStartedUI(this)
+          GettingStartedUI(this, slackComponent.provideGettingStartedVM())
         }
         screen(SlackScreens.SkipTypingScreen) {
           SkipTypingUI(this)
@@ -56,16 +54,16 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
       }
       this.route(SlackScreens.DashboardRoute) {
         screen(SlackScreens.Dashboard) {
-          DashboardUI(this)
+          DashboardUI(this, slackComponent.provideDashboardVM(), slackComponent.provideChatScreenVM())
         }
         screen(SlackScreens.CreateChannelsScreen) {
-          SearchCreateChannelUI(this)
+          SearchCreateChannelUI(this, slackComponent.provideSearchChannelsVM())
         }
         screen(SlackScreens.CreateNewChannel) {
-          CreateNewChannelUI(this)
+          CreateNewChannelUI(this, slackComponent.provideCreateChannelVM())
         }
         screen(SlackScreens.CreateNewDM) {
-          NewChatThreadScreen(this)
+          NewChatThreadScreen(this, slackComponent.provideNewChatThreadVM())
         }
       }
     }

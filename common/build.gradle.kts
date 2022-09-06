@@ -1,8 +1,9 @@
 import org.jetbrains.compose.compose
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev770"
+    id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
     id("com.android.library")
     id("com.squareup.sqldelight")
 }
@@ -31,6 +32,20 @@ object Deps {
 kotlin {
     android{
     }
+    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget = when {
+        System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
+        System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64 // available to KT 1.5.30
+        else -> ::iosX64
+    }
+    iosTarget("iOS") {
+        targets.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().forEach{
+            it.binaries.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>()
+                .forEach { lib ->
+                    lib.isStatic = false
+                    lib.linkerOpts.add("-lsqlite3")
+                }
+        }
+    }
     jvm("desktop") {
         compilations.all {
             kotlinOptions.jvmTarget = "11"
@@ -39,13 +54,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.alialbaali.kamel:kamel-image:0.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("com.squareup.sqldelight:runtime:1.5.3")
                 implementation(Deps.Koin.core)
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
-                implementation(compose.preview)
             }
         }
         val commonTest by getting {
@@ -65,6 +79,12 @@ kotlin {
                 api("androidx.core:core-ktx:1.8.0")
             }
         }
+        val iOSMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-darwin:$ktor_version")
+                implementation("com.squareup.sqldelight:native-driver:1.5.3")
+            }
+        }
         val androidTest by getting {
             dependencies {
                 implementation("junit:junit:4.13.2")
@@ -72,9 +92,9 @@ kotlin {
         }
         val desktopMain by getting {
             dependencies {
+                implementation("com.alialbaali.kamel:kamel-image:0.4.0")
                 implementation("com.squareup.sqldelight:sqlite-driver:1.5.3")
                 implementation("io.ktor:ktor-client-java:$ktor_version")
-                implementation("com.alialbaali.kamel:kamel-image:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
                 api(compose.preview)
                 implementation(Deps.Koin.core_jvm)
@@ -87,6 +107,7 @@ kotlin {
 sqldelight {
     database("SlackDB") {
         packageName = "dev.baseio.database"
+        linkSqlite = true
     }
 }
 

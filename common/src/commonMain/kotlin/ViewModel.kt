@@ -2,7 +2,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
+import org.koin.core.component.KoinComponent
 
-open class ViewModel {
+open class ViewModel :KoinComponent {
   val viewModelScope = CoroutineScope(SupervisorJob() +  MainDispatcher())
 }

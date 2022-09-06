@@ -5,14 +5,14 @@ import dev.baseio.slackclone.uichannels.SlackChannelVM
 import androidx.compose.runtime.*
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import org.koin.java.KoinJavaComponent
+import dev.baseio.slackclone.slackComponent
 
 @Composable
 fun SlackDirectMessages(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
   onClickAdd: () -> Unit
 ) {
-  val channelVM: SlackChannelVM by KoinJavaComponent.inject(SlackChannelVM::class.java)
+  val channelVM: SlackChannelVM  = slackComponent.provideSlackChannelVM()
 
   val recent = "DMs"
   val channelsFlow = channelVM.channels.collectAsState()

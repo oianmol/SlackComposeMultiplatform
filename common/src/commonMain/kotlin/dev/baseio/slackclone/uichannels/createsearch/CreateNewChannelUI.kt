@@ -17,13 +17,12 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun CreateNewChannelUI(
   composeNavigator: ComposeNavigator,
+  createChannelVM: CreateChannelVM,
 ) {
-  val createChannelVM: CreateChannelVM by inject(CreateChannelVM::class.java)
 
   val scaffoldState = rememberScaffoldState()
   CreateChannel(scaffoldState, composeNavigator, createChannelVM = createChannelVM)

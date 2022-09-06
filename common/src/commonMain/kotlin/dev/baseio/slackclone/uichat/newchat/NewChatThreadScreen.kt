@@ -20,13 +20,12 @@ import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun NewChatThreadScreen(
   composeNavigator: ComposeNavigator,
+  newChatThread: NewChatThreadVM,
 ) {
-  val newChatThread: NewChatThreadVM by inject(NewChatThreadVM::class.java)
 
   val scaffoldState = rememberScaffoldState()
 

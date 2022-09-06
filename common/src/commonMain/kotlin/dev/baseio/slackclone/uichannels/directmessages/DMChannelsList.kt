@@ -8,13 +8,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.chatcore.views.DMLastMessageItem
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun DMChannelsList(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
+  channelVM: MessageViewModel
 ) {
-  val channelVM: MessageViewModel by inject(MessageViewModel::class.java)
   val channels by channelVM.channels.collectAsState()
   val channelsFlow by channels.collectAsState(emptyList())
   val listState = rememberLazyListState()

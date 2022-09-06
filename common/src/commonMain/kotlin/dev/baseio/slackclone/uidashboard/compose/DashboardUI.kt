@@ -11,7 +11,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -40,16 +39,16 @@ import dev.baseio.slackclone.uidashboard.home.HomeScreenUI
 import dev.baseio.slackclone.uidashboard.home.MentionsReactionsUI
 import dev.baseio.slackclone.uidashboard.home.SearchMessagesUI
 import dev.baseio.slackclone.uidashboard.home.UserProfileUI
-import org.koin.java.KoinJavaComponent.inject
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 
 val homeNavigator = SlackComposeNavigator()
 
 @Composable
-fun DashboardUI(composeNavigator: ComposeNavigator) {
-  val dashboardVM: DashboardVM by inject(DashboardVM::class.java)
+fun DashboardUI(composeNavigator: ComposeNavigator, dashboardVM: DashboardVM,chatScreenVM: ChatScreenVM) {
   val scaffoldState = rememberScaffoldState()
 
-  DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM)
+  DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM,chatScreenVM)
 }
 
 enum class WindowSize { Phones, Tablets, BigTablets, DesktopOne, DesktopTwo }
@@ -71,9 +70,8 @@ private fun DashboardScreenRegular(
   scaffoldState: ScaffoldState,
   composeNavigator: ComposeNavigator,
   dashboardVM: DashboardVM,
+  viewModel: ChatScreenVM
 ) {
-  val viewModel: ChatScreenVM by inject(ChatScreenVM::class.java)
-
   val keyboardController = LocalSoftwareKeyboardController.current
   val lastChannel by dashboardVM.selectedChatChannel.collectAsState()
 
@@ -378,7 +376,7 @@ private fun RowScope.BottomNavItem(
   BottomNavigationItem(
     selectedContentColor = SlackCloneColorProvider.colors.bottomNavSelectedColor,
     unselectedContentColor = SlackCloneColorProvider.colors.bottomNavUnSelectedColor,
-    icon = { Icon(PainterRes.homeTabIcon(), contentDescription = null,Modifier.size(24.dp)) },
+    icon = { Icon(Icons.Default.Home, contentDescription = null,Modifier.size(24.dp)) },
     label = {
       Text(
         screen.name,
