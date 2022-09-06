@@ -19,7 +19,7 @@ class SlackComposeNavigator : ComposeNavigator {
   private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
 
   private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
-  private val navigatorScope = CoroutineScope(Dispatchers.Default)
+  private val navigatorScope = CoroutineScope(Dispatchers.Main)
   override val changePublisher = Channel<Unit>()
 
   override val lastScreen: BackstackScreen?
@@ -62,8 +62,7 @@ class SlackComposeNavigator : ComposeNavigator {
       // if the route has empty screens then remove the route entirely
       backStackRoute.remove(currentRoute.value)
     }
-    val lastRoute = backStackRoute.keys.last() // take the last route and peek-load the last screen
-    backStackRoute[lastRoute]?.peek()?.let {
+    backStackRoute[currentRoute.value]?.peek()?.let {
       currentScreen.value = it
       navigatorScope.launch {
         changePublisher.send(Unit)
@@ -94,6 +93,7 @@ class SlackComposeNavigator : ComposeNavigator {
     if (currentScreen.value == null) {
       currentScreen.value = route.initialScreen
       currentRoute.value = route
+      backStackRoute[currentRoute.value]?.push(route.initialScreen)
     }
     screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
       throw IllegalArgumentException("Screen not found!")
