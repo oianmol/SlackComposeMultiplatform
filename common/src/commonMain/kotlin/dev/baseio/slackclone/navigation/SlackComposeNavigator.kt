@@ -58,10 +58,6 @@ class SlackComposeNavigator : ComposeNavigator {
 
   override fun navigateUp() {
     backStackRoute[currentRoute.value]?.poll()
-    if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
-      // if the route has empty screens then remove the route entirely
-      backStackRoute.remove(currentRoute.value)
-    }
     backStackRoute[currentRoute.value]?.peek()?.let {
       currentScreen.value = it
       navigatorScope.launch {
