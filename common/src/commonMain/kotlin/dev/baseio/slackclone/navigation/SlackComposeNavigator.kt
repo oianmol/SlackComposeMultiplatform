@@ -62,35 +62,31 @@ class SlackComposeNavigator : ComposeNavigator {
     navigationResultMap[navigateChannel.key.plus(backstackScreen.name)] = function
   }
 
-  override var onBackPressed: () -> Unit = {
+  override var whenRouteCanNoLongerNavigateBack: () -> Unit = {
 
-  }
-
-  override fun canNavigateBack(): Boolean {
-    var canNavigateBack = false
-    backStackRoute.forEach { (t, u) ->
-      if (!u.isEmpty()) {
-        canNavigateBack = true
-      }
-    }
-    return canNavigateBack
   }
 
   override fun navigateUp() {
     backStackRoute[currentRoute.value]?.remove(currentScreen.value)
     // now if the current route becomes empty set the current route to the previous route
+    checkWhenWeCantNavigateBack()
+    backStackRoute[currentRoute.value]?.peek()?.let {
+      currentScreen.value = it
+      navigatorScope.launch {
+        changePublisher.send(Unit)
+      }
+    } ?: run {
+      whenRouteCanNoLongerNavigateBack.invoke()
+    }
+  }
+
+  private fun checkWhenWeCantNavigateBack() {
     if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
       currentRoute.value = backStackRoute.keys.toTypedArray()[backStackRoute.size.minus(2)]
       if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
         // if the prev route is also empty then invoke system back press
         // then invoke system close the app
-        onBackPressed.invoke()
-      }
-    }
-    backStackRoute[currentRoute.value]?.peek()?.let {
-      currentScreen.value = it
-      navigatorScope.launch {
-        changePublisher.send(Unit)
+        whenRouteCanNoLongerNavigateBack.invoke()
       }
     }
   }
@@ -137,7 +133,7 @@ open class BackstackScreen(var name: String)
 open class BackstackRoute(var name: String, var initialScreen: BackstackScreen)
 
 interface ComposeNavigator {
-  var onBackPressed: () -> Unit
+  var whenRouteCanNoLongerNavigateBack: () -> Unit
   val lastScreen: BackstackScreen?
   val changePublisher: Channel<Unit>
 
@@ -167,5 +163,4 @@ interface ComposeNavigator {
 
   @Composable
   fun start(route: BackstackRoute)
-  fun canNavigateBack(): Boolean
 }

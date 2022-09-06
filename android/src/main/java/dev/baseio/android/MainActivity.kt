@@ -6,7 +6,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
@@ -37,13 +36,13 @@ class MainActivity : AppCompatActivity() {
           .launchIn(this)
       }
 
-      onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(appNavigator.canNavigateBack()) {
+      onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
           appNavigator.navigateUp()
         }
       })
-      appNavigator.onBackPressed = {
-        onBackPressedDispatcher.onBackPressed()
+      appNavigator.whenRouteCanNoLongerNavigateBack = {
+        finish()
       }
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow
