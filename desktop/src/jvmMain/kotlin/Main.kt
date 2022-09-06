@@ -1,7 +1,9 @@
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -16,9 +18,6 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import dev.baseio.slackclone.App
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.appNavigator
@@ -29,10 +28,17 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.window.WindowDraggableArea
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.window.*
+import kotlinx.coroutines.delay
+
 @ExperimentalComposeUiApi
 fun main() = application {
   val windowState = rememberWindowState()
-  Window(onCloseRequest = ::exitApplication, state = windowState) {
+
+  Window(onCloseRequest = ::exitApplication, state = windowState, undecorated = true) {
     var rememberedComposeWindow by remember(this.window) {
       mutableStateOf(WindowInfo(windowState.size.width, windowState.size.height))
     }
@@ -47,25 +53,76 @@ fun main() = application {
     }
 
     appNavigator.whenRouteCanNoLongerNavigateBack = {
-      this.window.isMinimized = true
+      this@application.exitApplication()
     }
 
-    Content(rememberedComposeWindow)
+    SlackCloneTheme {
+      Column {
+        AppWindowTitleBar(windowState, this@application)
+        Content(rememberedComposeWindow)
+      }
+    }
+
   }
 }
 
 @Composable
 @ExperimentalComposeUiApi
-private fun Content(rememberedComposeWindow: WindowInfo) {
-  SlackCloneTheme {
-    CompositionLocalProvider(
-      LocalWindow provides rememberedComposeWindow
-    ) {
-      Scaffold(floatingActionButton = {
-        FloatingActionButton()
-      }, isFloatingActionButtonDocked = true) {
-        App(sqlDriver = DriverFactory().createDriver())
+private fun FrameWindowScope.AppWindowTitleBar(windowState: WindowState, applicationScope: ApplicationScope) =
+  WindowDraggableArea {
+    Box(Modifier.fillMaxWidth().height(24.dp).background(Color.DarkGray)) {
+      Row {
+        CommonCircleShape(Modifier.clickable {
+          applicationScope.exitApplication()
+        }, Color.Red)
+        CommonCircleShape(Modifier.clickable {
+          this@AppWindowTitleBar.window.isMinimized = true
+        }, Color.Yellow)
+        CommonCircleShape(Modifier.clickable {
+          when (windowState.placement) {
+            WindowPlacement.Fullscreen -> {
+              windowState.placement = WindowPlacement.Floating
+            }
+
+            WindowPlacement.Floating -> {
+              windowState.placement = WindowPlacement.Fullscreen
+            }
+
+            WindowPlacement.Maximized -> {
+              windowState.placement = WindowPlacement.Floating
+            }
+          }
+        }, Color.Green)
       }
+    }
+  }
+
+@ExperimentalComposeUiApi
+@Composable
+private fun CommonCircleShape(modifier: Modifier, color: Color) {
+  var enter by remember { mutableStateOf(false) }
+  val alpha by animateFloatAsState(if (enter) 0.5f else 1f)
+  Box(modifier.padding(4.dp).clip(CircleShape).size(16.dp).background(color.copy(alpha = alpha))
+    .onPointerEvent(PointerEventType.Enter) {
+      enter = true
+    }
+    .onPointerEvent(
+      PointerEventType.Exit
+    ) {
+      enter = false
+    })
+}
+
+@Composable
+@ExperimentalComposeUiApi
+private fun Content(rememberedComposeWindow: WindowInfo) {
+  CompositionLocalProvider(
+    LocalWindow provides rememberedComposeWindow
+  ) {
+    Scaffold(floatingActionButton = {
+      FloatingActionButton()
+    }, isFloatingActionButtonDocked = true) {
+      App(sqlDriver = DriverFactory().createDriver())
     }
   }
 }
@@ -73,8 +130,14 @@ private fun Content(rememberedComposeWindow: WindowInfo) {
 @ExperimentalComposeUiApi
 @Composable
 private fun FloatingActionButton() {
-  var enter by remember { mutableStateOf(false) }
-  val size by animateDpAsState(if(enter) 36.dp else 8.dp)
+  var enter by remember { mutableStateOf(true) }
+  val size by animateDpAsState(if (enter) 36.dp else 8.dp)
+
+  LaunchedEffect(true) {
+    delay(700)
+    enter = false
+  }
+
   FloatingActionButton(modifier = Modifier.size(size).onPointerEvent(PointerEventType.Enter) {
     enter = true
   }.onPointerEvent(PointerEventType.Exit) {
