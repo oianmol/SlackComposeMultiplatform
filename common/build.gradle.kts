@@ -75,6 +75,7 @@ kotlin {
                 implementation("com.squareup.sqldelight:sqlite-driver:1.5.3")
                 implementation("io.ktor:ktor-client-java:$ktor_version")
                 implementation("com.alialbaali.kamel:kamel-image:0.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
                 api(compose.preview)
                 implementation(Deps.Koin.core_jvm)
             }

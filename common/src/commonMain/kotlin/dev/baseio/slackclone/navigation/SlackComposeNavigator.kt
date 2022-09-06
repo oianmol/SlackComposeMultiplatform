@@ -41,8 +41,10 @@ class SlackComposeNavigator : ComposeNavigator {
 
   @Composable
   override fun route(route: BackstackRoute, function: @Composable () -> Unit) {
-    backStackRoute[route] = LinkedList()
-    function()
+    if (!backStackRoute.containsKey(route)) {
+      backStackRoute[route] = LinkedList()
+      function()
+    }
   }
 
   override fun deliverResult(key: NavigationKey, data: Any, screen: BackstackScreen) {
@@ -52,12 +54,39 @@ class SlackComposeNavigator : ComposeNavigator {
     }
   }
 
-  override fun registerForNavigationResult(navigateChannel: NavigationKey,backstackScreen: BackstackScreen, function: (Any) -> Unit) {
+  override fun registerForNavigationResult(
+    navigateChannel: NavigationKey,
+    backstackScreen: BackstackScreen,
+    function: (Any) -> Unit
+  ) {
     navigationResultMap[navigateChannel.key.plus(backstackScreen.name)] = function
   }
 
+  override var onBackPressed: () -> Unit = {
+
+  }
+
+  override fun canNavigateBack(): Boolean {
+    var canNavigateBack = false
+    backStackRoute.forEach { (t, u) ->
+      if (!u.isEmpty()) {
+        canNavigateBack = true
+      }
+    }
+    return canNavigateBack
+  }
+
   override fun navigateUp() {
-    backStackRoute[currentRoute.value]?.poll()
+    backStackRoute[currentRoute.value]?.remove(currentScreen.value)
+    // now if the current route becomes empty set the current route to the previous route
+    if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
+      currentRoute.value = backStackRoute.keys.toTypedArray()[backStackRoute.size.minus(2)]
+      if (backStackRoute[currentRoute.value]?.isEmpty() == true) {
+        // if the prev route is also empty then invoke system back press
+        // then invoke system close the app
+        onBackPressed.invoke()
+      }
+    }
     backStackRoute[currentRoute.value]?.peek()?.let {
       currentScreen.value = it
       navigatorScope.launch {
@@ -66,7 +95,12 @@ class SlackComposeNavigator : ComposeNavigator {
     }
   }
 
-  override fun navigateRoute(route: BackstackRoute) {
+  override fun navigateRoute(route: BackstackRoute, clearRoutes: (BackstackRoute, () -> Unit) -> Unit) {
+    backStackRoute.keys.forEach { backstackRoute ->
+      clearRoutes(backstackRoute) { // if the user clears the onboarding route
+        backStackRoute[backstackRoute]?.clear()
+      }
+    }
     currentRoute.value = route
     currentScreen.value = route.initialScreen
     backStackRoute[currentRoute.value]?.push(route.initialScreen)
@@ -103,6 +137,7 @@ open class BackstackScreen(var name: String)
 open class BackstackRoute(var name: String, var initialScreen: BackstackScreen)
 
 interface ComposeNavigator {
+  var onBackPressed: () -> Unit
   val lastScreen: BackstackScreen?
   val changePublisher: Channel<Unit>
 
@@ -111,7 +146,7 @@ interface ComposeNavigator {
 
   fun navigateUp()
   fun navigateScreen(screenTag: BackstackScreen)
-  fun navigateRoute(route: BackstackRoute)
+  fun navigateRoute(route: BackstackRoute, removeRoute: (BackstackRoute, () -> Unit) -> Unit)
 
   @Composable
   fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit)
@@ -121,11 +156,16 @@ interface ComposeNavigator {
     screen: BackstackScreen
   )
 
-  fun registerForNavigationResult(navigateChannel: NavigationKey,backstackScreen: BackstackScreen, function: (Any) -> Unit)
+  fun registerForNavigationResult(
+    navigateChannel: NavigationKey,
+    backstackScreen: BackstackScreen,
+    function: (Any) -> Unit
+  )
 
   @Composable
   fun route(route: BackstackRoute, function: @Composable () -> Unit)
 
   @Composable
   fun start(route: BackstackRoute)
+  fun canNavigateBack(): Boolean
 }

@@ -2,6 +2,7 @@ package dev.baseio.android
 
 import dev.baseio.slackclone.App
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
+import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.data.DriverFactory
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,6 +37,14 @@ class MainActivity : AppCompatActivity() {
           .launchIn(this)
       }
 
+      onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(appNavigator.canNavigateBack()) {
+        override fun handleOnBackPressed() {
+          appNavigator.navigateUp()
+        }
+      })
+      appNavigator.onBackPressed = {
+        onBackPressedDispatcher.onBackPressed()
+      }
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow
       ) {

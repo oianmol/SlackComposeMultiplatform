@@ -22,36 +22,36 @@ fun CommonInputUI(
 ) {
   val scaffoldState = rememberScaffoldState()
 
-    Scaffold(
-      backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-      contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier,
-      scaffoldState = scaffoldState,
-      snackbarHost = {
-        scaffoldState.snackbarHostState
-      }
-    ) { innerPadding ->
-      Box(modifier = Modifier.padding(innerPadding)) {
-        SlackCloneSurface(
-          color = SlackCloneColorProvider.colors.uiBackground,
+  Scaffold(
+    backgroundColor = SlackCloneColorProvider.colors.uiBackground,
+    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    modifier = Modifier,
+    scaffoldState = scaffoldState,
+    snackbarHost = {
+      scaffoldState.snackbarHostState
+    }
+  ) { innerPadding ->
+    Box(modifier = Modifier.padding(innerPadding)) {
+      SlackCloneSurface(
+        color = SlackCloneColorProvider.colors.uiBackground,
+        modifier = Modifier
+      ) {
+        Column(
           modifier = Modifier
+            .padding(12.dp)
+            .fillMaxHeight()
+            .fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround
         ) {
-          Column(
-            modifier = Modifier
-              .padding(12.dp)
-              .fillMaxHeight()
-              .fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround
-          ) {
-            // Create references for the composables to constrain
-            Spacer(Modifier)
-            Column {
-              TopView(Modifier)
-              SubTitle(modifier = Modifier, subtitleText)
-            }
-            NextButton(modifier = Modifier, composeNavigator)
+          // Create references for the composables to constrain
+          Spacer(Modifier)
+          Column {
+            TopView(Modifier)
+            SubTitle(modifier = Modifier, subtitleText)
           }
+          NextButton(modifier = Modifier, composeNavigator)
         }
       }
+    }
 
   }
 }
@@ -60,7 +60,11 @@ fun CommonInputUI(
 fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
-      composeNavigator.navigateRoute(SlackScreens.DashboardRoute)
+      composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
+        if (it.name == SlackScreens.OnboardingRoute.name) {
+          remove()
+        }
+      })
     },
     modifier
       .fillMaxWidth()
