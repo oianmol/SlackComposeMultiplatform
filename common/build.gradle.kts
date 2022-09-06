@@ -30,22 +30,13 @@ object Deps {
 }
 
 kotlin {
-    android{
-    }
+    android()
     val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget = when {
         System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
         System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64 // available to KT 1.5.30
         else -> ::iosX64
     }
-    iosTarget("iOS") {
-        targets.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().forEach{
-            it.binaries.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>()
-                .forEach { lib ->
-                    lib.isStatic = false
-                    lib.linkerOpts.add("-lsqlite3")
-                }
-        }
-    }
+    iosTarget("iOS") {}
     jvm("desktop") {
         compilations.all {
             kotlinOptions.jvmTarget = "11"
@@ -85,6 +76,7 @@ kotlin {
                 implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
         }
+
         val androidTest by getting {
             dependencies {
                 implementation("junit:junit:4.13.2")
@@ -122,5 +114,14 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+kotlin {
+    targets.withType<KotlinNativeTarget> {
+        binaries.all {
+            // TODO: the current compose binary surprises LLVM, so disable checks for now.
+            freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
+        }
     }
 }

@@ -5,6 +5,7 @@ import org.jetbrains.compose.experimental.dsl.IOSDevices
 
 plugins {
   kotlin("multiplatform")
+  id("com.squareup.sqldelight")
   id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
 }
 

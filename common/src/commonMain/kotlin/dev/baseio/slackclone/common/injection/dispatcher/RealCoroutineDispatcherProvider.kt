@@ -1,10 +1,11 @@
 package dev.baseio.slackclone.common.injection.dispatcher
 
+import MainDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 open class RealCoroutineDispatcherProvider : CoroutineDispatcherProvider {
-  override val main: CoroutineDispatcher by lazy { Dispatchers.Main }
+  override val main: CoroutineDispatcher by lazy { MainDispatcher() }
   override val io: CoroutineDispatcher by lazy {
     //TODO fix for io on Android
     Dispatchers.Default

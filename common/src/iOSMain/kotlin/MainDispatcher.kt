@@ -1,6 +1,17 @@
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.invoke
+import platform.Foundation.NSRunLoop
+import platform.Foundation.performBlock
+import platform.darwin.dispatch_async
+import platform.darwin.dispatch_get_main_queue
+import platform.darwin.dispatch_queue_t
+import kotlin.coroutines.CoroutineContext
 
-actual fun MainDispatcher(): CoroutineDispatcher {
-  return Dispatchers.Main
+actual fun MainDispatcher(): CoroutineDispatcher =  NsQueueDispatcher(dispatch_get_main_queue())
+internal class NsQueueDispatcher(private val dispatchQueue: dispatch_queue_t) : CoroutineDispatcher() {
+  override fun dispatch(context: CoroutineContext, block: Runnable) {
+    dispatch_async(dispatchQueue) { block.run() }
+  }
 }
