@@ -6,7 +6,7 @@ import dev.baseio.database.SlackDB
 
 actual class DriverFactory {
   actual fun createDriver(): SqlDriver {
-    return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also {
+    return JdbcSqliteDriver(url = "jdbc:sqlite:SlackDB.db").also {
       SlackDB.Schema.create(it)
     }
   }

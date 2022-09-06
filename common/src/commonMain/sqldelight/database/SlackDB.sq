@@ -1,4 +1,4 @@
-CREATE TABLE slackChannel(
+CREATE TABLE IF NOT EXISTS slackChannel(
     uid TEXT NOT NULL PRIMARY KEY,
     name TEXT DEFAULT NULL ,
     email TEXT DEFAULT NULL ,
@@ -33,7 +33,7 @@ SELECT * FROM slackMessage AS channelMessage JOIN (SELECT channelId, max(modifie
 deleteAllChannels:
 DELETE FROM slackChannel;
 
-CREATE TABLE slackMessage(
+CREATE TABLE IF NOT EXISTS slackMessage(
     uid TEXT NOT NULL PRIMARY KEY,
     channelId TEXT  DEFAULT NULL ,
     message TEXT DEFAULT NULL ,
@@ -56,7 +56,7 @@ deleteAllMessages:
 DELETE FROM slackMessage;
 
 
-CREATE TABLE slackUser(
+CREATE TABLE IF NOT EXISTS slackUser(
     uid TEXT NOT NULL PRIMARY KEY,
     fName TEXT  DEFAULT NULL ,
     lName TEXT DEFAULT NULL ,
