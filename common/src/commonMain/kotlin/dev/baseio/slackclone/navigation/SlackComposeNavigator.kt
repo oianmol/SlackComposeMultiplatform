@@ -1,10 +1,12 @@
 package dev.baseio.slackclone.navigation
 
+import MainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlin.collections.LinkedHashMap
@@ -18,7 +20,7 @@ class SlackComposeNavigator : ComposeNavigator {
   private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
 
   private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
-  private val navigatorScope = CoroutineScope(Dispatchers.Main)
+  private val navigatorScope = CoroutineScope(SupervisorJob() + MainDispatcher())
   override val changePublisher = Channel<Unit>()
 
   override val lastScreen: BackstackScreen?
@@ -67,7 +69,7 @@ class SlackComposeNavigator : ComposeNavigator {
     backStackRoute[currentRoute.value]?.remove(currentScreen.value)
     // now if the current route becomes empty set the current route to the previous route
     checkWhenWeCantNavigateBack()
-    backStackRoute[currentRoute.value]?.first()?.let {
+    backStackRoute[currentRoute.value]?.firstOrNull()?.let {
       setCurrentScreenAndNotify(it)
     } ?: run {
       whenRouteCanNoLongerNavigateBack.invoke()

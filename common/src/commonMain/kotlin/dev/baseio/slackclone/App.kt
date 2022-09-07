@@ -37,7 +37,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
     slackComponent = SlackComponent()
   }
   Box(modifier) {
-    Navigator(navigator = appNavigator, initialRoute = SlackScreens.DashboardRoute) {
+    Navigator(navigator = appNavigator, initialRoute = SlackScreens.OnboardingRoute) {
       this.route(SlackScreens.OnboardingRoute) {
         screen(SlackScreens.GettingStarted) {
           GettingStartedUI(this, slackComponent.provideGettingStartedVM())

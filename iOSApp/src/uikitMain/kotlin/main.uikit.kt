@@ -65,7 +65,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow!!
       ) {
-        SlackCloneTheme {
+        SlackCloneTheme(isDarkTheme = true) {
           Column {
             // To skip upper part of screen.
             Box(modifier = Modifier.height(48.dp))

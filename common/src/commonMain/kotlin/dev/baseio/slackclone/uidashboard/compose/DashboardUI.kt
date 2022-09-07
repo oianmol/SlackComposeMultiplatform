@@ -84,6 +84,7 @@ private fun DashboardScreenRegular(
   val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
 
 
+  //TODO use the navigation impl and rewrite this logic
   /* BackHandler(enabled = !isChatViewClosed) {
        if (!isChatViewClosed) {
            dashboardVM.isChatViewClosed.value = true
