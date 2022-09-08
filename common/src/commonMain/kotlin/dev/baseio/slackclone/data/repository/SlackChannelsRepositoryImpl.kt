@@ -23,9 +23,9 @@ class SlackChannelsRepositoryImpl(
 
   override fun fetchChannelsPaged(params: String?): Flow<List<DomainLayerChannels.SlackChannel>> {
     val flow = params?.takeIf { it.isNotEmpty() }?.let {
-      slackChannelDao.slackDBQueries.selectAllChannelsByName(params).asFlow().mapToList()
+      slackChannelDao.slackDBQueries.selectAllChannelsByName(params).asFlow().mapToList(coroutineMainDispatcherProvider.default)
     } ?: run {
-      slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList()
+      slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList(coroutineMainDispatcherProvider.default)
     }
     return flow.map {
       it.map { message ->
@@ -39,7 +39,7 @@ class SlackChannelsRepositoryImpl(
   }
 
   override fun fetchChannels(): Flow<List<DomainLayerChannels.SlackChannel>> {
-    return slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList()
+    return slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList(coroutineMainDispatcherProvider.default)
       .map { list -> dbToDomList(list) }
   }
 

@@ -43,6 +43,7 @@ kotlin {
         }
     }
     sourceSets {
+
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
@@ -51,6 +52,12 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+            }
+        }
+        val sqlDriverNativeMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
         }
         val commonTest by getting {
@@ -71,6 +78,7 @@ kotlin {
             }
         }
         val iOSMain by getting {
+            dependsOn(sqlDriverNativeMain)
             dependencies {
                 implementation("io.ktor:ktor-client-darwin:$ktor_version")
                 implementation("com.squareup.sqldelight:native-driver:1.5.3")

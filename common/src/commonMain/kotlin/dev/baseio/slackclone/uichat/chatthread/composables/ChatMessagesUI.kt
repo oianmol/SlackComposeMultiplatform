@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
+import MainDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -23,8 +24,8 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatMessagesUI(viewModel: ChatScreenVM, modifier: Modifier) {
-  val flowState by viewModel.chatMessagesFlow.collectAsState()
-  val messages by flowState.collectAsState(emptyList())
+  val flowState by viewModel.chatMessagesFlow.collectAsState(MainDispatcher())
+  val messages by flowState.collectAsState(emptyList(),MainDispatcher())
   val listState = rememberLazyListState()
 
   LazyColumn(state = listState, reverseLayout = true, modifier = modifier) {

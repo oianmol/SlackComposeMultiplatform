@@ -37,9 +37,7 @@ fun SlackDragComposableView(
         Animatable(viewOffset(isChatViewClosed, chatScreenOffset))
     }
 
-    val coroutineScope = rememberCoroutineScope(getContext = {
-        MainDispatcher()
-    })
+    val coroutineScope = rememberCoroutineScope()
 
     InitialOffsetsSideEffect(
         coroutineScope,

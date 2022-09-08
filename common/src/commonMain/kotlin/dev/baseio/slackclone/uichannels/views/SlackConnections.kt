@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichannels.views
 
+import MainDispatcher
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import androidx.compose.runtime.*
@@ -13,8 +14,8 @@ fun SlackConnections(
 ) {
 
   val recent = "Connections"
-  val channelsFlow = channelVM.channels.collectAsState()
-  val channels by channelsFlow.value.collectAsState(emptyList())
+  val channelsFlow = channelVM.channels.collectAsState(MainDispatcher())
+  val channels by channelsFlow.value.collectAsState(emptyList(),MainDispatcher())
 
   LaunchedEffect(key1 = Unit) {
     channelVM.allChannels()

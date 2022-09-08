@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uidashboard.compose
 
+import MainDispatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -44,39 +45,20 @@ import androidx.compose.material.icons.filled.Home
 
 val homeNavigator = SlackComposeNavigator()
 
-@Composable
-fun DashboardUI(composeNavigator: ComposeNavigator, dashboardVM: DashboardVM,chatScreenVM: ChatScreenVM) {
-  val scaffoldState = rememberScaffoldState()
-
-  DashboardScreenRegular(scaffoldState, composeNavigator, dashboardVM,chatScreenVM)
-}
-
-enum class WindowSize { Phones, Tablets, BigTablets, DesktopOne, DesktopTwo }
-
-fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
-  windowDpSize.width < 0.dp ->
-    throw IllegalArgumentException("Dp value cannot be negative")
-
-  windowDpSize.width < 600.dp -> WindowSize.Phones
-  windowDpSize.width < 840.dp -> WindowSize.Tablets
-  windowDpSize.width < 960.dp -> WindowSize.BigTablets
-  windowDpSize.width < 1024.dp -> WindowSize.DesktopOne
-  else -> WindowSize.DesktopTwo
-}
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun DashboardScreenRegular(
-  scaffoldState: ScaffoldState,
+fun DashboardUI(
   composeNavigator: ComposeNavigator,
   dashboardVM: DashboardVM,
   viewModel: ChatScreenVM
 ) {
+  val scaffoldState = rememberScaffoldState()
+
   val keyboardController = LocalSoftwareKeyboardController.current
-  val lastChannel by dashboardVM.selectedChatChannel.collectAsState()
+  val lastChannel by dashboardVM.selectedChatChannel.collectAsState(MainDispatcher())
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
-  val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState()
+  val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(MainDispatcher())
   val size = getWindowSizeClass(LocalWindow.current)
   val screenWidth = LocalWindow.current.width
   val sideNavWidth = screenWidth * 0.8f
@@ -226,7 +208,19 @@ private fun DashboardScreenRegular(
     }
   }
 
+}
 
+enum class WindowSize { Phones, Tablets, BigTablets, DesktopOne, DesktopTwo }
+
+fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
+  windowDpSize.width < 0.dp ->
+    throw IllegalArgumentException("Dp value cannot be negative")
+
+  windowDpSize.width < 600.dp -> WindowSize.Phones
+  windowDpSize.width < 840.dp -> WindowSize.Tablets
+  windowDpSize.width < 960.dp -> WindowSize.BigTablets
+  windowDpSize.width < 1024.dp -> WindowSize.DesktopOne
+  else -> WindowSize.DesktopTwo
 }
 
 @Composable
@@ -377,7 +371,7 @@ private fun RowScope.BottomNavItem(
   BottomNavigationItem(
     selectedContentColor = SlackCloneColorProvider.colors.bottomNavSelectedColor,
     unselectedContentColor = SlackCloneColorProvider.colors.bottomNavUnSelectedColor,
-    icon = { Icon(Icons.Default.Home, contentDescription = null,Modifier.size(24.dp)) },
+    icon = { Icon(Icons.Default.Home, contentDescription = null, Modifier.size(24.dp)) },
     label = {
       Text(
         screen.name,

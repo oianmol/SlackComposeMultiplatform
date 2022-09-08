@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
+import MainDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -65,7 +66,7 @@ private fun ListChannels(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
-        val channelCount by searchChannelsVM.channelCount.collectAsState()
+        val channelCount by searchChannelsVM.channelCount.collectAsState(MainDispatcher())
         SearchAppBar(composeNavigator, channelCount)
       },
       snackbarHost = {
@@ -104,8 +105,8 @@ private fun ListAllChannels(
   searchChannelsVM: SearchChannelsVM,
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit
 ) {
-  val channels by searchChannelsVM.channels.collectAsState()
-  val channelsFlow by channels.collectAsState(emptyList())
+  val channels by searchChannelsVM.channels.collectAsState(MainDispatcher())
+  val channelsFlow by channels.collectAsState(emptyList(),MainDispatcher())
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -159,7 +160,7 @@ fun SlackChannelHeader(title: String) {
 
 @Composable
 private fun SearchChannelsTF(searchChannelsVM: SearchChannelsVM) {
-  val searchChannel by searchChannelsVM.search.collectAsState()
+  val searchChannel by searchChannelsVM.search.collectAsState(MainDispatcher())
 
   TextField(
     value = searchChannel,

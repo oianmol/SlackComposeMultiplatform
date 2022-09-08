@@ -49,7 +49,6 @@ kotlin {
   }
 
   sourceSets {
-
     val uikitMain by creating {
       dependencies {
         implementation(project(":common"))

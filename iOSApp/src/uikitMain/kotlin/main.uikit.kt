@@ -4,17 +4,23 @@
  */
 
 // Use `xcodegen` first, then `open ./ComposeMinesweeper.xcodeproj` and then Run button in XCode.
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
+import com.squareup.sqldelight.db.SqlDriver
+import database.SlackDBQueries
+import dev.baseio.database.SlackDB
 import kotlinx.cinterop.*
 import platform.UIKit.*
 import platform.Foundation.*
@@ -22,6 +28,7 @@ import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.appNavigator
+import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.data.DriverFactory
 
@@ -62,15 +69,12 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
       appNavigator.whenRouteCanNoLongerNavigateBack = {
 
       }
+      val driver = DriverFactory().createDriver(SlackDB.Schema) as SqlDriver
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow!!
       ) {
         SlackCloneTheme(isDarkTheme = true) {
-          Column {
-            // To skip upper part of screen.
-            Box(modifier = Modifier.height(48.dp))
-            App(sqlDriver = DriverFactory().createDriver())
-          }
+          App(sqlDriver = driver)
         }
 
       }

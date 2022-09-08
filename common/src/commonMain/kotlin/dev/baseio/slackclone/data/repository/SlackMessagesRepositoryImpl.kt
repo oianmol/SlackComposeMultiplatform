@@ -17,7 +17,7 @@ class SlackMessagesRepositoryImpl constructor(
   private val coroutineMainDispatcherProvider: CoroutineDispatcherProvider
 ) : MessagesRepository {
   override fun fetchMessages(params: String?): Flow<List<DomainLayerMessages.SlackMessage>> {
-    val list = slackMessageDao.slackDBQueries.selectAllMessagesByUserId(params!!).asFlow().mapToList()
+    val list = slackMessageDao.slackDBQueries.selectAllMessagesByUserId(params!!).asFlow().mapToList(coroutineMainDispatcherProvider.default)
     return list.map { it -> it.map { entityMapper.mapToDomain(it) } }
   }
 
