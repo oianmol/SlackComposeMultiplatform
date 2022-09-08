@@ -8,18 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
 import com.squareup.sqldelight.db.SqlDriver
-import database.SlackDBQueries
 import dev.baseio.database.SlackDB
 import kotlinx.cinterop.*
 import platform.UIKit.*
@@ -55,31 +48,45 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
     _window = window
   }
 
+  override fun application(
+    application: UIApplication,
+    supportedInterfaceOrientationsForWindow: UIWindow?
+  ): UIInterfaceOrientationMask {
+    return UIInterfaceOrientationMaskAll
+  }
+
   override fun application(application: UIApplication, didFinishLaunchingWithOptions: Map<Any?, *>?): Boolean {
     window = UIWindow(frame = UIScreen.mainScreen.bounds)
-    window!!.rootViewController = Application("SlackComposeiOS") {
-
-      val rememberedComposeWindow by remember(this.window) {
-        val windowInfo = this.window?.frame?.useContents {
-          WindowInfo(this.size.width.dp, this.size.height.dp)
-        }
-        mutableStateOf(windowInfo)
-      }
-
-      appNavigator.whenRouteCanNoLongerNavigateBack = {
-
-      }
-      val driver = DriverFactory().createDriver(SlackDB.Schema) as SqlDriver
-      CompositionLocalProvider(
-        LocalWindow provides rememberedComposeWindow!!
-      ) {
-        SlackCloneTheme(isDarkTheme = true) {
-          App(sqlDriver = driver)
-        }
-
-      }
-    }
+    window!!.rootViewController = SlackApp(window!!)
     window!!.makeKeyAndVisible()
     return true
+  }
+}
+
+fun SlackApp(window: UIWindow): UIViewController {
+  return Application("SlackComposeiOS") {
+
+    val rememberedComposeWindow by remember(window) {
+      val windowInfo = window.frame.useContents {
+        WindowInfo(this.size.width.dp, this.size.height.dp)
+      }
+      mutableStateOf(windowInfo)
+    }
+
+    appNavigator.whenRouteCanNoLongerNavigateBack = {
+
+    }
+    val driver = DriverFactory().createDriver(SlackDB.Schema) as SqlDriver
+    CompositionLocalProvider(
+      LocalWindow provides rememberedComposeWindow
+    ) {
+      SlackCloneTheme(isDarkTheme = true) {
+        Column {
+          Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
+          App(sqlDriver = driver)
+        }
+      }
+
+    }
   }
 }
