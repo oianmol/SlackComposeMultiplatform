@@ -1,18 +1,18 @@
 package dev.baseio.slackclone.navigation
 
+import MainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class SlackComposeNavigator : ComposeNavigator {
-  private var backStackRoute: LinkedHashMap<BackstackRoute, Deque<BackstackScreen>> =
+  private var backStackRoute: LinkedHashMap<BackstackRoute, ArrayDeque<BackstackScreen>> =
     LinkedHashMap()
   private var navigationResultMap = LinkedHashMap<String, (Any) -> Unit>()
 
@@ -20,7 +20,7 @@ class SlackComposeNavigator : ComposeNavigator {
   private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
 
   private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
-  private val navigatorScope = CoroutineScope(Dispatchers.Main)
+  private val navigatorScope = CoroutineScope(SupervisorJob() + MainDispatcher())
   override val changePublisher = Channel<Unit>()
 
   override val lastScreen: BackstackScreen?
@@ -43,7 +43,7 @@ class SlackComposeNavigator : ComposeNavigator {
   @Composable
   override fun route(route: BackstackRoute, function: @Composable () -> Unit) {
     if (!backStackRoute.containsKey(route)) {
-      backStackRoute[route] = LinkedList()
+      backStackRoute[route] = ArrayDeque()
       function()
     }
   }
@@ -69,7 +69,7 @@ class SlackComposeNavigator : ComposeNavigator {
     backStackRoute[currentRoute.value]?.remove(currentScreen.value)
     // now if the current route becomes empty set the current route to the previous route
     checkWhenWeCantNavigateBack()
-    backStackRoute[currentRoute.value]?.peek()?.let {
+    backStackRoute[currentRoute.value]?.firstOrNull()?.let {
       setCurrentScreenAndNotify(it)
     } ?: run {
       whenRouteCanNoLongerNavigateBack.invoke()
@@ -106,7 +106,7 @@ class SlackComposeNavigator : ComposeNavigator {
 
 
   override fun navigateScreen(screenTag: BackstackScreen) {
-    backStackRoute[currentRoute.value]?.push(screenTag)
+    backStackRoute[currentRoute.value]?.add(screenTag)
     setCurrentScreenAndNotify(screenTag)
   }
 
@@ -115,7 +115,7 @@ class SlackComposeNavigator : ComposeNavigator {
     if (currentScreen.value == null) {
       currentRoute.value = route
       currentScreen.value = route.initialScreen
-      backStackRoute[currentRoute.value]?.push(route.initialScreen)
+      backStackRoute[currentRoute.value]?.add(route.initialScreen)
     }
     screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
       throw IllegalArgumentException("Screen not found!")

@@ -2,8 +2,6 @@ package dev.baseio.slackclone.data.mapper
 
 import database.SlackMessage
 import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
-import java.util.*
-
 class SlackMessageMapper constructor() : EntityMapper<DomainLayerMessages.SlackMessage, SlackMessage> {
   override fun mapToDomain(entity: SlackMessage): DomainLayerMessages.SlackMessage {
     return DomainLayerMessages.SlackMessage(

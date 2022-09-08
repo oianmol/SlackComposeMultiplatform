@@ -21,11 +21,9 @@ import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
-fun GettingStartedUI(composeNavigator: ComposeNavigator) {
-  val gettingStartedVM: GettingStartedVM by inject(GettingStartedVM::class.java)
+fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM ) {
   val scaffoldState = rememberScaffoldState()
   val showSlackAnim by gettingStartedVM.showSlackAnim
 

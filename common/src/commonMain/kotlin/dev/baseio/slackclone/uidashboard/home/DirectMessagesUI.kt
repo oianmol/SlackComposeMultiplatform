@@ -15,6 +15,7 @@ import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
+import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackclone.uichannels.directmessages.DMChannelsList
 
 @Composable
@@ -28,7 +29,7 @@ fun DirectMessagesUI(onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
       Spacer(modifier = Modifier.height(8.dp))
       JumpToText()
       Spacer(modifier = Modifier.height(12.dp))
-      DMChannelsList(onItemClick)
+      DMChannelsList(onItemClick, slackComponent.provideMessageViewModel())
     }
   }
 }

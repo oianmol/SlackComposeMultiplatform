@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.appNavigator
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         LocalWindow provides rememberedComposeWindow
       ) {
         SlackCloneTheme {
-          App(sqlDriver = DriverFactory(this@MainActivity).createDriver())
+          App(sqlDriver = DriverFactory(this@MainActivity).createDriver(SlackDB.Schema))
         }
       }
 

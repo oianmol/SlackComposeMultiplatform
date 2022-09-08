@@ -32,6 +32,7 @@ import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.*
+import dev.baseio.database.SlackDB
 import kotlinx.coroutines.delay
 
 @ExperimentalComposeUiApi
@@ -122,7 +123,7 @@ private fun Content(rememberedComposeWindow: WindowInfo) {
     Scaffold(floatingActionButton = {
       FloatingActionButton()
     }, isFloatingActionButtonDocked = true) {
-      App(sqlDriver = DriverFactory().createDriver())
+      App(sqlDriver = DriverFactory().createDriver(SlackDB.Schema))
     }
   }
 }

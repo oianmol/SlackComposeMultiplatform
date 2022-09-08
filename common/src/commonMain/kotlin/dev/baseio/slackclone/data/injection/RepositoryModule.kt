@@ -20,6 +20,6 @@ val repositoryModule = module {
   }
   single<UsersRepository> { SlackUserRepository(get(SlackUserRandomUser), get()) }
   single<MessagesRepository> { SlackMessagesRepositoryImpl(get(), get(SlackMessageMessage), get()) }
-  single<ChannelLastMessageRepository> { SlackChannelLastMessageRepository(get(), get(SlackMessageMessage), get(SlackChannelChannel)) }
+  single<ChannelLastMessageRepository> { SlackChannelLastMessageRepository(get(), get(SlackMessageMessage), get(SlackChannelChannel),get()) }
 }
 

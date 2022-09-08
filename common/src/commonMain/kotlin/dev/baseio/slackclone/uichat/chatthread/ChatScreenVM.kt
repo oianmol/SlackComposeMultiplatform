@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.datetime.Clock
 
 class ChatScreenVM constructor(
   private val useCaseFetchMessages: UseCaseFetchMessages,
   private val useCaseSendMessage: UseCaseSendMessage
-) : ViewModel() {
+) : ViewModel(){
   var channel: UiLayerChannels.SlackChannel? = null
   var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SlackMessage>>>(emptyFlow())
   var message = MutableStateFlow("")
@@ -30,13 +30,13 @@ class ChatScreenVM constructor(
     if (search.isNotEmpty() && channel?.uuid != null) {
       viewModelScope.launch {
         val message = DomainLayerMessages.SlackMessage(
-          UUID.randomUUID().toString(),
+          Clock.System.now().toEpochMilliseconds().toString(),
           channel!!.uuid!!,
           search,
           channel!!.uuid!!,
           "SlackUser",
-          System.currentTimeMillis(),
-          System.currentTimeMillis(),
+          Clock.System.now().toEpochMilliseconds(),
+          Clock.System.now().toEpochMilliseconds(),
         )
         useCaseSendMessage.perform(message)
       }

@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
+import MainDispatcher
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,13 +18,12 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun CreateNewChannelUI(
   composeNavigator: ComposeNavigator,
+  createChannelVM: CreateChannelVM,
 ) {
-  val createChannelVM: CreateChannelVM by inject(CreateChannelVM::class.java)
 
   val scaffoldState = rememberScaffoldState()
   CreateChannel(scaffoldState, composeNavigator, createChannelVM = createChannelVM)
@@ -56,7 +56,7 @@ private fun CreateChannel(
 
 @Composable
 private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.createChannelState.collectAsState()
+  val searchChannel by createChannelVM.createChannelState.collectAsState(MainDispatcher())
 
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
@@ -147,7 +147,7 @@ private fun Name() {
 
 @Composable
 private fun NameField(createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.createChannelState.collectAsState()
+  val searchChannel by createChannelVM.createChannelState.collectAsState(MainDispatcher())
 
   TextField(
     value = searchChannel.name ?: "",

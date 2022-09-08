@@ -12,6 +12,7 @@ import dev.baseio.slackclone.domain.repository.ChannelsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 
 class SlackChannelsRepositoryImpl(
   private val slackChannelDao: SlackDB,
@@ -22,9 +23,9 @@ class SlackChannelsRepositoryImpl(
 
   override fun fetchChannelsPaged(params: String?): Flow<List<DomainLayerChannels.SlackChannel>> {
     val flow = params?.takeIf { it.isNotEmpty() }?.let {
-      slackChannelDao.slackDBQueries.selectAllChannelsByName(params).asFlow().mapToList()
+      slackChannelDao.slackDBQueries.selectAllChannelsByName(params).asFlow().mapToList(coroutineMainDispatcherProvider.default)
     } ?: run {
-      slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList()
+      slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList(coroutineMainDispatcherProvider.default)
     }
     return flow.map {
       it.map { message ->
@@ -38,7 +39,7 @@ class SlackChannelsRepositoryImpl(
   }
 
   override fun fetchChannels(): Flow<List<DomainLayerChannels.SlackChannel>> {
-    return slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList()
+    return slackChannelDao.slackDBQueries.selectAllChannels().asFlow().mapToList(coroutineMainDispatcherProvider.default)
       .map { list -> dbToDomList(list) }
   }
 
@@ -57,7 +58,7 @@ class SlackChannelsRepositoryImpl(
           it.login,
           it.name,
           it.email,
-          System.currentTimeMillis(), System.currentTimeMillis(), 0L, 0L, 1L, 0L, it.picture, 1L
+           Clock.System.now().toEpochMilliseconds(),  Clock.System.now().toEpochMilliseconds(), 0L, 0L, 1L, 0L, it.picture, 1L
         )
       }
     }

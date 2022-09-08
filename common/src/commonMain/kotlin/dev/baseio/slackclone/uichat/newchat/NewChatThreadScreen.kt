@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichat.newchat
 
+import MainDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,13 +21,12 @@ import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun NewChatThreadScreen(
   composeNavigator: ComposeNavigator,
+  newChatThread: NewChatThreadVM,
 ) {
-  val newChatThread: NewChatThreadVM by inject(NewChatThreadVM::class.java)
 
   val scaffoldState = rememberScaffoldState()
 
@@ -78,8 +78,8 @@ private fun SearchContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllUsers(newChatThread: NewChatThreadVM, composeNavigator: ComposeNavigator) {
-  val channels by newChatThread.users.collectAsState()
-  val channelsFlow by channels.collectAsState(emptyList())
+  val channels by newChatThread.users.collectAsState(MainDispatcher())
+  val channelsFlow by channels.collectAsState(emptyList(),MainDispatcher())
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -122,7 +122,7 @@ fun SlackChannelHeader(title: String) {
 
 @Composable
 private fun SearchUsersTF(newChatThread: NewChatThreadVM) {
-  val searchChannel by newChatThread.search.collectAsState()
+  val searchChannel by newChatThread.search.collectAsState(MainDispatcher())
 
   TextField(
     value = searchChannel,

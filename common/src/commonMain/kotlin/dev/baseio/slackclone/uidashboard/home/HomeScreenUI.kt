@@ -21,6 +21,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
+import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackclone.uichannels.views.*
 
 @Composable
@@ -58,12 +59,12 @@ fun HomeScreenUI(
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        })
+        }, slackComponent.provideSlackChannelVM())
         SlackConnections({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        })
+        }, slackComponent.provideSlackChannelVM())
       }
     }
 

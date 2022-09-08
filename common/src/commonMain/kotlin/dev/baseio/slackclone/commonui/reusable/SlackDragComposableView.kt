@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.commonui.reusable
 
+import MainDispatcher
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
