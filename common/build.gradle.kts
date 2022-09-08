@@ -69,6 +69,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(Deps.Koin.android)
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
                 implementation("com.squareup.sqldelight:android-driver:1.5.3")
                 implementation("io.coil-kt:coil-compose:2.2.0")
                 api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
@@ -80,6 +82,10 @@ kotlin {
         val iOSMain by getting {
             dependsOn(sqlDriverNativeMain)
             dependencies {
+                // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core-iosx64
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
+
                 implementation("io.ktor:ktor-client-darwin:$ktor_version")
                 implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
