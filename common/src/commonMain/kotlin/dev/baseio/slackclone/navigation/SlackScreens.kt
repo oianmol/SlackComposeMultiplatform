@@ -15,7 +15,7 @@ class SlackScreens {
   object CreateNewChannel : BackstackScreen("CreateNewChannel")
   object CreateNewDM : BackstackScreen("CreateNewDM")
 
-  object HomeRoute : BackstackRoute("HomeRoute", initialScreen = You)
+  object HomeRoute : BackstackRoute("HomeRoute", initialScreen = Home)
   object Home : BackstackScreen("Home")
   object DMs : BackstackScreen("DMs")
   object Mentions :

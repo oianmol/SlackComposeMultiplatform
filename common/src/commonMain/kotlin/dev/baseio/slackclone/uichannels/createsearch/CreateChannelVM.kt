@@ -18,7 +18,7 @@ class CreateChannelVM constructor(
   ViewModel() {
 
   var createChannelState =
-    MutableStateFlow(DomainLayerChannels.SlackChannel(isOneToOne = false, avatarUrl = null))
+    MutableStateFlow(DomainLayerChannels.SlackChannel(isOneToOne = false, avatarUrl = null, name = "***"))
 
   fun createChannel(composeNavigator: ComposeNavigator) {
     viewModelScope.launch {
