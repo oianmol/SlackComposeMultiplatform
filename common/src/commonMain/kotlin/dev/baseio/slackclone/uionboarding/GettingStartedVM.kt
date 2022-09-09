@@ -11,10 +11,6 @@ class GettingStartedVM : ViewModel() {
   var isStartAnimation = mutableStateOf(false)
   var showSlackAnim = mutableStateOf(true)
 
-  init {
-    animate()
-  }
-
   suspend fun endAnimation() {
     showSlackAnim.value = false
     delay(250)

@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
-import kotlinx.coroutines.delay
 
 
 val loaderYellow = Color(226, 179, 75)
@@ -34,25 +33,29 @@ fun SlackAnimation(gettingStartedVM: GettingStartedVM) {
       .fillMaxSize()
   ) {
 
-    val isStartAnimation by gettingStartedVM.isStartAnimation
+    val shouldStartLogoAnimation by gettingStartedVM.isStartAnimation
+
+    LaunchedEffect(true) {
+      gettingStartedVM.animate()
+    }
 
     val animatedRotateLogo by animateFloatAsState(
-      targetValue = if (isStartAnimation) 0f else 360f,
+      targetValue = if (shouldStartLogoAnimation) 0f else 360f,
       tween(durationMillis = SlackAnimSpec.ANIM_DURATION)
     )
 
     val animatedMoveLogo by animateDpAsState(
-      targetValue = if (isStartAnimation) (-120).dp else 0.dp,
+      targetValue = if (shouldStartLogoAnimation) (-120).dp else 0.dp,
       tween(SlackAnimSpec.ANIM_DURATION)
     )
 
-    SKTextLoader(Modifier.align(Alignment.Center), isStartAnimation)
+    SKTextLoader(Modifier.align(Alignment.Center), shouldStartLogoAnimation)
 
     SKFourColorLoader(
       Modifier.align(Alignment.Center),
       animatedRotateLogo,
       animatedMoveLogo,
-      isStartAnimation
+      shouldStartLogoAnimation
     )
 
   }

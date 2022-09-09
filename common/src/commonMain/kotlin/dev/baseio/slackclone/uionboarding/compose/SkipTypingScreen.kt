@@ -17,33 +17,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackclone.uidashboard.compose.WindowSize
+import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 
 @Composable
 fun SkipTypingUI(composeNavigator: ComposeNavigator) {
   val scaffoldState = rememberScaffoldState()
+  val size = getWindowSizeClass(LocalWindow.current)
+
   Scaffold(
     backgroundColor = SlackCloneColor,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
     modifier = Modifier, scaffoldState = scaffoldState,
     topBar = {
       SlackSurfaceAppBar(
-        title = {
-
-        },
+        title = {},
         navigationIcon = {
-          IconButton(onClick = {
-            composeNavigator.navigateUp()
-          }) {
-            Icon(
-              imageVector = Icons.Filled.Clear,
-              contentDescription = "Clear",
-              modifier = Modifier.padding(start = 8.dp), tint = Color.White
-            )
-          }
+          ClearBackIcon(composeNavigator)
         },
         backgroundColor = SlackCloneColor,
         elevation = 0.dp
@@ -59,38 +54,83 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
         modifier = Modifier
           .padding(28.dp)
       ) {
-        Column(
-          verticalArrangement = Arrangement.SpaceAround,
-          horizontalAlignment = Alignment.CenterHorizontally,
-          modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
-        ) {
-          val painter = PainterRes.gettingStarted()
-          Image(
-            modifier = Modifier.weight(1f, fill = false)
-              .aspectRatio(painter.intrinsicSize.height / painter.intrinsicSize.width)
-              .fillMaxWidth(),
-            painter = painter,
-            contentDescription = null,
-            contentScale = ContentScale.Fit
-          )
-          TitleSubtitleText()
-          Spacer(Modifier.padding(8.dp))
-          Column {
-            EmailMeMagicLink(composeNavigator)
-            Box(modifier = Modifier.height(12.dp))
-            IWillSignInManually(composeNavigator)
+        when (size) {
+          WindowSize.Phones -> SkipTypingPhone(composeNavigator)
+          WindowSize.Tablets, WindowSize.BigTablets, WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
+            SkipTypingLarge(composeNavigator)
           }
-
         }
-
       }
     }
 
   }
 
 
+}
+
+@Composable
+private fun SkipTypingLarge(composeNavigator: ComposeNavigator) {
+  Row(
+    Modifier.fillMaxSize(),
+    horizontalArrangement = Arrangement.Center,
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Image(
+      modifier = Modifier.weight(1f, fill = true),
+      painter = PainterRes.gettingStarted(),
+      contentDescription = null,
+      contentScale = ContentScale.Fit
+    )
+    Column(
+      verticalArrangement = Arrangement.SpaceAround,
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.weight(1f, fill = true).fillMaxHeight()
+    ) {
+      TitleSubtitleText()
+      Spacer(Modifier.padding(8.dp))
+      Column {
+        EmailMeMagicLink(composeNavigator)
+        Box(modifier = Modifier.height(12.dp))
+        IWillSignInManually(composeNavigator)
+      }
+    }
+  }
+
+}
+
+@Composable
+private fun SkipTypingPhone(composeNavigator: ComposeNavigator) {
+  Column(
+    verticalArrangement = Arrangement.SpaceAround,
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = Modifier.fillMaxSize()
+  ) {
+    Image(
+      painter = PainterRes.gettingStarted(),
+      contentDescription = null,
+      contentScale = ContentScale.Fit
+    )
+    TitleSubtitleText()
+    Spacer(Modifier.padding(8.dp))
+    Column {
+      EmailMeMagicLink(composeNavigator)
+      Box(modifier = Modifier.height(12.dp))
+      IWillSignInManually(composeNavigator)
+    }
+  }
+}
+
+@Composable
+private fun ClearBackIcon(composeNavigator: ComposeNavigator) {
+  IconButton(onClick = {
+    composeNavigator.navigateUp()
+  }) {
+    Icon(
+      imageVector = Icons.Filled.Clear,
+      contentDescription = "Clear",
+      modifier = Modifier.padding(start = 8.dp), tint = Color.White
+    )
+  }
 }
 
 @Composable
@@ -107,7 +147,7 @@ fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
   ) {
     Text(
       text = "Email me a magic link",
-      style = SlackCloneTypography.subtitle2.copy(color = Color.White)
+      style = SlackCloneTypography.subtitle1.copy(color = Color.White)
     )
   }
 }
@@ -125,7 +165,7 @@ private fun IWillSignInManually(composeNavigator: ComposeNavigator) {
   ) {
     Text(
       text = "I'll sign in manually",
-      style = SlackCloneTypography.subtitle2.copy(color = SlackCloneColor)
+      style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColor)
     )
   }
 }
@@ -136,16 +176,14 @@ private fun TitleSubtitleText(modifier: Modifier = Modifier) {
     text = buildAnnotatedString {
       withStyle(
         style = SpanStyle(
-          fontWeight = FontWeight.Bold,
-          fontSize = SlackCloneTypography.h6.fontSize, color = Color.White
+          fontSize = SlackCloneTypography.h5.fontSize, color = Color.White, fontWeight = FontWeight.Bold
         )
       ) {
         append("Want to skip the typing ?\n\n")
       }
       withStyle(
         style = SpanStyle(
-          fontWeight = FontWeight.Normal,
-          fontSize = SlackCloneTypography.subtitle2.fontSize, color = Color.White
+          fontSize = SlackCloneTypography.h6.fontSize, color = SlackLogoYellow, fontWeight = FontWeight.Bold
         )
       ) {
         append("We can email you a magic sign-in link that adds all your workspaces at once")

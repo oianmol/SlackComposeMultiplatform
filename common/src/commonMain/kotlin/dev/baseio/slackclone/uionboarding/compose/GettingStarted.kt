@@ -17,15 +17,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackclone.uidashboard.compose.WindowSize
+import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
 
 @Composable
-fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM ) {
+fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM) {
   val scaffoldState = rememberScaffoldState()
   val showSlackAnim by gettingStartedVM.showSlackAnim
+  val size = getWindowSizeClass(LocalWindow.current)
 
   Scaffold(
     backgroundColor = SlackCloneColor,
@@ -40,24 +44,18 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         modifier = Modifier
           .padding(28.dp)
       ) {
-
-
         if (showSlackAnim) {
           SlackAnimation(gettingStartedVM)
         } else {
           AnimatedVisibility(visible = !showSlackAnim) {
-            Column(
-              verticalArrangement = Arrangement.SpaceAround,
-              horizontalAlignment = Alignment.CenterHorizontally,
-              modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth()
-            ) {
-              IntroText(modifier = Modifier.padding(top = 12.dp),gettingStartedVM)
-              CenterImage()
-              Spacer(Modifier.padding(8.dp))
-              GetStartedButton(composeNavigator,gettingStartedVM)
+            when (size) {
+              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
+
+              WindowSize.Tablets, WindowSize.BigTablets, WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
+                LargeScreenLayout(gettingStartedVM, composeNavigator)
+              }
             }
+
           }
         }
       }
@@ -67,16 +65,77 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
 }
 
 @Composable
-private fun ColumnScope.CenterImage() {
+private fun LargeScreenLayout(
+  gettingStartedVM: GettingStartedVM,
+  composeNavigator: ComposeNavigator
+) {
+  val density = LocalDensity.current
+
+  Row(
+    Modifier.fillMaxSize(),
+    horizontalArrangement = Arrangement.Center,
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    CenterImage(Modifier.padding(24.dp).weight(1f, fill = true), gettingStartedVM)
+    Column(
+      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceAround,
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      Spacer(Modifier.padding(8.dp))
+      IntroText(modifier = Modifier.padding(top = 12.dp), gettingStartedVM, {
+        IntroEnterTransitionVertical(density)
+      }) {
+        IntroExitTransitionVertical()
+      }
+      Spacer(Modifier.padding(8.dp))
+      GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
+        GetStartedExitTransVertical()
+      })
+      Spacer(Modifier.padding(8.dp))
+    }
+  }
+}
+
+@Composable
+private fun PhoneLayout(
+  gettingStartedVM: GettingStartedVM,
+  composeNavigator: ComposeNavigator
+) {
+  val density = LocalDensity.current
+  Column(
+    verticalArrangement = Arrangement.SpaceAround,
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = Modifier.fillMaxSize()
+  ) {
+    IntroText(modifier = Modifier.fillMaxWidth().padding(top = 12.dp), gettingStartedVM, {
+      IntroEnterTransitionHorizontal(density)
+    }) {
+      IntroExitTransitionHorizontal()
+    }
+    CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
+    Spacer(Modifier.padding(8.dp))
+    GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
+      GetStartedExitTransHorizontal()
+    })
+  }
+}
+
+@Composable
+private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedVM) {
   val painter = PainterRes.gettingStarted()
-  Image(
-    modifier = Modifier.weight(1f, fill = false)
-      .aspectRatio(painter.intrinsicSize.height / painter.intrinsicSize.width)
-      .fillMaxWidth(),
-    painter = painter,
-    contentDescription = null,
-    contentScale = ContentScale.Fit
-  )
+  val expanded by gettingStartedVM.introTextExpanded
+  AnimatedVisibility(
+    visible = expanded, enter = ImageEnterTransition(),
+    exit = ImageExitTrans()
+  ) {
+    Image(
+      modifier = modifier,
+      painter = painter,
+      contentDescription = null,
+      contentScale = ContentScale.Fit
+    )
+  }
+
 }
 
 @Composable
@@ -91,14 +150,16 @@ private fun ImageEnterTransition() = expandIn(
 )
 
 @Composable
-private fun GetStartedButton(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM) {
+private fun GetStartedButton(
+  composeNavigator: ComposeNavigator,
+  gettingStartedVM: GettingStartedVM, enterAnim: @Composable () -> EnterTransition,
+  exitAnim: @Composable () -> ExitTransition
+) {
   val expanded by gettingStartedVM.introTextExpanded
 
-  val density = LocalDensity.current
-
   AnimatedVisibility(
-    visible = expanded, enter = GetStartedEnterTransition(density),
-    exit = GetStartedExitTrans()
+    visible = expanded, enter = enterAnim(),
+    exit = exitAnim()
   ) {
     Button(
       onClick = {
@@ -111,17 +172,33 @@ private fun GetStartedButton(composeNavigator: ComposeNavigator, gettingStartedV
     ) {
       Text(
         text = "Get started",
-        style = SlackCloneTypography.subtitle2.copy(color = SlackCloneColor)
+        style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColor)
       )
     }
   }
 }
 
 @Composable
-private fun GetStartedExitTrans() = slideOutVertically() + shrinkVertically() + fadeOut()
+private fun GetStartedExitTransHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
 
 @Composable
-private fun GetStartedEnterTransition(density: Density) =
+private fun GetStartedEnterTransitionHorizontal(density: Density) =
+  slideInHorizontally {
+    // Slide in from 40 dp from the bottom.
+    with(density) { +5680.dp.roundToPx() }
+  } + expandHorizontally(
+    // Expand from the top.
+    expandFrom = Alignment.Start
+  ) + fadeIn(
+    // Fade in with the initial alpha of 0.3f.
+    initialAlpha = 0.3f
+  )
+
+@Composable
+private fun GetStartedExitTransVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
+
+@Composable
+private fun GetStartedEnterTransitionVertical(density: Density) =
   slideInVertically {
     // Slide in from 40 dp from the bottom.
     with(density) { +5680.dp.roundToPx() }
@@ -134,14 +211,17 @@ private fun GetStartedEnterTransition(density: Density) =
   )
 
 @Composable
-private fun IntroText(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedVM) {
+private fun IntroText(
+  modifier: Modifier = Modifier,
+  gettingStartedVM: GettingStartedVM,
+  enterAnim: @Composable () -> EnterTransition,
+  exitAnim: @Composable () -> ExitTransition
+) {
   val expanded by gettingStartedVM.introTextExpanded
 
-  val density = LocalDensity.current
-
   AnimatedVisibility(
-    visible = expanded, enter = IntroEnterTransition(density),
-    exit = IntroExitTransition()
+    visible = expanded, enter = enterAnim(),
+    exit = exitAnim()
   ) {
     Text(
       text = buildAnnotatedString {
@@ -150,14 +230,7 @@ private fun IntroText(modifier: Modifier = Modifier, gettingStartedVM: GettingSt
             fontWeight = FontWeight.Bold, color = Color.White
           )
         ) {
-          append("Picture this: a\n")
-        }
-        withStyle(
-          style = SpanStyle(
-            fontWeight = FontWeight.Bold, color = Color.White
-          )
-        ) {
-          append("messaging app,\n")
+          append("Picture this: a messaging app,")
         }
         withStyle(
           style = SpanStyle(
@@ -165,11 +238,10 @@ private fun IntroText(modifier: Modifier = Modifier, gettingStartedVM: GettingSt
             fontWeight = FontWeight.Bold
           )
         ) {
-          append("but built for\nwork.")
+          append(" but built for work.")
         }
       },
-      textAlign = TextAlign.Left,
-      modifier = modifier.fillMaxWidth(),
+      modifier = modifier,
       style = SlackCloneTypography.h4
     )
   }
@@ -177,15 +249,30 @@ private fun IntroText(modifier: Modifier = Modifier, gettingStartedVM: GettingSt
 }
 
 @Composable
-private fun IntroExitTransition() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
+private fun IntroExitTransitionHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
 
 @Composable
-private fun IntroEnterTransition(density: Density) = slideInHorizontally {
+private fun IntroEnterTransitionHorizontal(density: Density) = slideInHorizontally {
   // Slide in from 12580 dp from the left.
   with(density) { -12580.dp.roundToPx() }
 } + expandHorizontally(
   // Expand from the top.
   expandFrom = Alignment.Start
+) + fadeIn(
+  // Fade in with the initial alpha of 0.3f.
+  initialAlpha = 0.3f
+)
+
+@Composable
+private fun IntroExitTransitionVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
+
+@Composable
+private fun IntroEnterTransitionVertical(density: Density) = slideInVertically {
+  // Slide in from 12580 dp from the left.
+  with(density) { -12580.dp.roundToPx() }
+} + expandVertically(
+  // Expand from the top.
+  expandFrom = Alignment.Top
 ) + fadeIn(
   // Fade in with the initial alpha of 0.3f.
   initialAlpha = 0.3f
