@@ -2,17 +2,25 @@ package dev.baseio.slackclone.uionboarding.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.LocalWindow
+import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackclone.uidashboard.compose.WindowSize
+import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 
 @Composable
 fun CommonInputUI(
@@ -21,6 +29,7 @@ fun CommonInputUI(
   subtitleText: String
 ) {
   val scaffoldState = rememberScaffoldState()
+  val size = getWindowSizeClass(LocalWindow.current)
 
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
@@ -29,6 +38,18 @@ fun CommonInputUI(
     scaffoldState = scaffoldState,
     snackbarHost = {
       scaffoldState.snackbarHostState
+    }, floatingActionButton = {
+      if (size != WindowSize.Phones) {
+        FloatingActionButton(onClick = {
+          navigateDashboard(composeNavigator)
+        }, backgroundColor = Color.White) {
+          Icon(
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = null,
+            tint = SlackCloneColor
+          )
+        }
+      }
     }
   ) { innerPadding ->
     Box(modifier = Modifier.padding(innerPadding)) {
@@ -39,8 +60,7 @@ fun CommonInputUI(
         Column(
           modifier = Modifier
             .padding(12.dp)
-            .fillMaxHeight()
-            .fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround
+            .fillMaxSize(), verticalArrangement = Arrangement.SpaceAround
         ) {
           // Create references for the composables to constrain
           Spacer(Modifier)
@@ -48,7 +68,11 @@ fun CommonInputUI(
             TopView(Modifier)
             SubTitle(modifier = Modifier, subtitleText)
           }
-          NextButton(modifier = Modifier, composeNavigator)
+          if (size == WindowSize.Phones) {
+            NextButton(modifier = Modifier, composeNavigator)
+          } else {
+            Spacer(Modifier)
+          }
         }
       }
     }
@@ -60,11 +84,7 @@ fun CommonInputUI(
 fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator) {
   Button(
     onClick = {
-      composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
-        if (it.name == SlackScreens.OnboardingRoute.name) {
-          remove()
-        }
-      })
+      navigateDashboard(composeNavigator)
     },
     modifier
       .fillMaxWidth()
@@ -79,6 +99,14 @@ fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator
       style = SlackCloneTypography.subtitle2.copy(color = SlackCloneColorProvider.colors.buttonTextColor)
     )
   }
+}
+
+private fun navigateDashboard(composeNavigator: ComposeNavigator) {
+  composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
+    if (it.name == SlackScreens.OnboardingRoute.name) {
+      remove()
+    }
+  })
 }
 
 @Composable

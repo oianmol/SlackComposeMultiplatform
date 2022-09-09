@@ -4,6 +4,8 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +15,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,18 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
     contentColor = SlackCloneColorProvider.colors.textSecondary,
     modifier = Modifier.fillMaxSize(), scaffoldState = scaffoldState, snackbarHost = {
       scaffoldState.snackbarHostState
+    }, floatingActionButton = {
+      if (size != WindowSize.Phones) {
+        FloatingActionButton(onClick = {
+          skipTypingNavigate(composeNavigator)
+        }, backgroundColor = Color.White) {
+          Icon(
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = null,
+            tint = SlackCloneColor
+          )
+        }
+      }
     }
   ) { innerPadding ->
     Box(modifier = Modifier.padding(innerPadding)) {
@@ -49,10 +62,10 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         } else {
           AnimatedVisibility(visible = !showSlackAnim) {
             when (size) {
-              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
+              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator, size)
 
               WindowSize.Tablets, WindowSize.BigTablets, WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
-                LargeScreenLayout(gettingStartedVM, composeNavigator)
+                LargeScreenLayout(gettingStartedVM, composeNavigator, size)
               }
             }
 
@@ -67,7 +80,8 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
 @Composable
 private fun LargeScreenLayout(
   gettingStartedVM: GettingStartedVM,
-  composeNavigator: ComposeNavigator
+  composeNavigator: ComposeNavigator,
+  size: WindowSize
 ) {
   val density = LocalDensity.current
 
@@ -88,10 +102,12 @@ private fun LargeScreenLayout(
         IntroExitTransitionVertical()
       }
       Spacer(Modifier.padding(8.dp))
-      GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
-        GetStartedExitTransVertical()
-      })
-      Spacer(Modifier.padding(8.dp))
+      if (size == WindowSize.Phones) {
+        GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
+          GetStartedExitTransVertical()
+        })
+        Spacer(Modifier.padding(8.dp))
+      }
     }
   }
 }
@@ -99,7 +115,8 @@ private fun LargeScreenLayout(
 @Composable
 private fun PhoneLayout(
   gettingStartedVM: GettingStartedVM,
-  composeNavigator: ComposeNavigator
+  composeNavigator: ComposeNavigator,
+  size: WindowSize
 ) {
   val density = LocalDensity.current
   Column(
@@ -163,7 +180,7 @@ private fun GetStartedButton(
   ) {
     Button(
       onClick = {
-        composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
+        skipTypingNavigate(composeNavigator)
       },
       Modifier
         .fillMaxWidth()
@@ -176,6 +193,10 @@ private fun GetStartedButton(
       )
     }
   }
+}
+
+private fun skipTypingNavigate(composeNavigator: ComposeNavigator) {
+  composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
 }
 
 @Composable
