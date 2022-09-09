@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 private val LightColorPalette = SlackCloneColorPalette(
   brand = SlackCloneColor,
   accent = SlackCloneColor,
-  uiBackground = Color.White,
+  uiBackground = Color.LightGray.copy(alpha = 0.2f),
   onUiBackground = Color.Black.copy(alpha = 0.2f),
   textPrimary = Color.Black,
   textSecondary = Color.DarkGray,

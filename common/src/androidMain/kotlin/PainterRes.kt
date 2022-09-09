@@ -6,7 +6,4 @@ import org.example.common.R
 actual object PainterRes {
   @Composable
   actual fun gettingStarted() = painterResource(R.drawable.gettingstarted)
-
-  @Composable
-  actual fun homeTabIcon() = painterResource(R.drawable.ic_home)
 }

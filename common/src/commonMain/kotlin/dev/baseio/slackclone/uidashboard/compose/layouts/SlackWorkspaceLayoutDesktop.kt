@@ -24,9 +24,13 @@ fun SlackWorkspaceLayoutDesktop(
   onCreateChannelRequest: () -> Unit = {},
   composeNavigator: ComposeNavigator
 ) {
-  Scaffold(floatingActionButton = {
-    FloatingDM(composeNavigator, onItemClick)
-  }, modifier = modifier, backgroundColor = SlackCloneColorProvider.colors.uiBackground) {
+  Scaffold(
+    backgroundColor = SlackCloneColorProvider.colors.uiBackground,
+    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    floatingActionButton = {
+      FloatingDM(composeNavigator, onItemClick)
+    }, modifier = modifier
+  ) {
     SlackCloneSurface(
       color = SlackCloneColorProvider.colors.uiBackground,
       modifier = Modifier.padding(it)

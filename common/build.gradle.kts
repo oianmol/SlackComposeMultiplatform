@@ -69,7 +69,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(Deps.Koin.android)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
                 implementation("com.squareup.sqldelight:android-driver:1.5.3")
                 implementation("io.coil-kt:coil-compose:2.2.0")

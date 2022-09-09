@@ -22,7 +22,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 
 @Composable
 fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier) {
-  Surface(modifier = modifier, color = SlackCloneColorProvider.colors.uiBackground) {
+  Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
     var selected by remember { mutableStateOf(1) }
     Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
       Column(horizontalAlignment = Alignment.CenterHorizontally) {
