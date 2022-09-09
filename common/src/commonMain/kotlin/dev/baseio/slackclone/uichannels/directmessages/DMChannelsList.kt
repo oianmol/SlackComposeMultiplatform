@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uichannels.directmessages
 
-import MainDispatcher
+import mainDispatcher
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -15,8 +15,8 @@ fun DMChannelsList(
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
   channelVM: MessageViewModel
 ) {
-  val channels by channelVM.channels.collectAsState(MainDispatcher())
-  val channelsFlow by channels.collectAsState(emptyList(),MainDispatcher())
+  val channels by channelVM.channels.collectAsState(mainDispatcher)
+  val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
   val listState = rememberLazyListState()
 
   LaunchedEffect(key1 = Unit) {

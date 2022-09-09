@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import MainDispatcher
+import mainDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -36,16 +36,16 @@ fun SearchCreateChannelUI(
 
   ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM, { slackChannel: Any ->
     val channel = slackChannel as UiLayerChannels.SlackChannel
-    composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
     composeNavigator.navigateUp()
+    composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
   }) {
     composeNavigator.registerForNavigationResult(
       NavigationKey.NavigateChannel,
       SlackScreens.CreateChannelsScreen
     ) { slackChannel: Any ->
       val channel = slackChannel as UiLayerChannels.SlackChannel
-      composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
       composeNavigator.navigateUp()
+      composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
     }
     composeNavigator.navigateScreen(SlackScreens.CreateNewChannel)
   }
@@ -66,7 +66,7 @@ private fun ListChannels(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
-        val channelCount by searchChannelsVM.channelCount.collectAsState(MainDispatcher())
+        val channelCount by searchChannelsVM.channelCount.collectAsState(mainDispatcher)
         SearchAppBar(composeNavigator, channelCount)
       },
       snackbarHost = {
@@ -105,8 +105,8 @@ private fun ListAllChannels(
   searchChannelsVM: SearchChannelsVM,
   onItemClick: (UiLayerChannels.SlackChannel) -> Unit
 ) {
-  val channels by searchChannelsVM.channels.collectAsState(MainDispatcher())
-  val channelsFlow by channels.collectAsState(emptyList(),MainDispatcher())
+  val channels by searchChannelsVM.channels.collectAsState(mainDispatcher)
+  val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -160,7 +160,7 @@ fun SlackChannelHeader(title: String) {
 
 @Composable
 private fun SearchChannelsTF(searchChannelsVM: SearchChannelsVM) {
-  val searchChannel by searchChannelsVM.search.collectAsState(MainDispatcher())
+  val searchChannel by searchChannelsVM.search.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel,

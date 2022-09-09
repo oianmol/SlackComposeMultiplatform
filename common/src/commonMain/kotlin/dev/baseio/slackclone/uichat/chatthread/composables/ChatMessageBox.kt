@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
-import MainDispatcher
+import mainDispatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
@@ -43,7 +42,7 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
 
 @Composable
 fun ChatOptions(viewModel: ChatScreenVM, modifier: Modifier = Modifier) {
-  val search by viewModel.message.collectAsState(MainDispatcher())
+  val search by viewModel.message.collectAsState(mainDispatcher)
 
   Row(
     modifier
@@ -83,7 +82,7 @@ private fun MessageTFRow(
   modifier: Modifier
 ) {
 
-  val search by viewModel.message.collectAsState(MainDispatcher())
+  val search by viewModel.message.collectAsState(mainDispatcher)
   Column {
     Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
     Row(
@@ -113,7 +112,7 @@ private fun MessageTFRow(
 
 @Composable
 fun CollapseExpandButton(viewModel: ChatScreenVM) {
-  val isExpanded by viewModel.chatBoxState.collectAsState(MainDispatcher())
+  val isExpanded by viewModel.chatBoxState.collectAsState(mainDispatcher)
   IconButton(
     onClick = {
       viewModel.switchChatBoxState()

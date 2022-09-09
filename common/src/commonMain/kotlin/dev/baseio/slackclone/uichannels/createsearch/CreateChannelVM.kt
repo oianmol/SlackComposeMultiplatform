@@ -24,12 +24,12 @@ class CreateChannelVM constructor(
     viewModelScope.launch {
       if (createChannelState.value.name?.isNotEmpty() == true) {
         val channel = useCaseCreateChannel.perform(createChannelState.value)
+        composeNavigator.navigateUp()
         composeNavigator.deliverResult(
           NavigationKey.NavigateChannel,
           channelMapper.mapToPresentation(channel!!),
           SlackScreens.CreateChannelsScreen
         )
-        composeNavigator.navigateUp()
       }
     }
   }

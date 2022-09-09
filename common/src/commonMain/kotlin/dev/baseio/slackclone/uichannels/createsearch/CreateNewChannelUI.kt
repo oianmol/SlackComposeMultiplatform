@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import MainDispatcher
+import mainDispatcher
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -56,7 +56,7 @@ private fun CreateChannel(
 
 @Composable
 private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.createChannelState.collectAsState(MainDispatcher())
+  val searchChannel by createChannelVM.createChannelState.collectAsState(mainDispatcher)
 
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
@@ -147,7 +147,7 @@ private fun Name() {
 
 @Composable
 private fun NameField(createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.createChannelState.collectAsState(MainDispatcher())
+  val searchChannel by createChannelVM.createChannelState.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel.name ?: "",

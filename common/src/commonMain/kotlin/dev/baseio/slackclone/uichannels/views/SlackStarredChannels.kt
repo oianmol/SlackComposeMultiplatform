@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uichannels.views
 
-import MainDispatcher
+import mainDispatcher
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import androidx.compose.runtime.*
@@ -16,8 +16,8 @@ fun SlackStarredChannels(
   val channelVM: SlackChannelVM = slackComponent.provideSlackChannelVM()
 
   val recent = "Starred"
-  val channelsFlow = channelVM.channels.collectAsState(MainDispatcher())
-  val channels by channelsFlow.value.collectAsState(emptyList(),MainDispatcher())
+  val channelsFlow = channelVM.channels.collectAsState(mainDispatcher)
+  val channels by channelsFlow.value.collectAsState(emptyList(),mainDispatcher)
 
   LaunchedEffect(key1 = Unit) {
     channelVM.allChannels()

@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uichat.newchat
 
-import MainDispatcher
+import mainDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -78,8 +78,8 @@ private fun SearchContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllUsers(newChatThread: NewChatThreadVM, composeNavigator: ComposeNavigator) {
-  val channels by newChatThread.users.collectAsState(MainDispatcher())
-  val channelsFlow by channels.collectAsState(emptyList(),MainDispatcher())
+  val channels by newChatThread.users.collectAsState(mainDispatcher)
+  val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -122,7 +122,7 @@ fun SlackChannelHeader(title: String) {
 
 @Composable
 private fun SearchUsersTF(newChatThread: NewChatThreadVM) {
-  val searchChannel by newChatThread.search.collectAsState(MainDispatcher())
+  val searchChannel by newChatThread.search.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel,

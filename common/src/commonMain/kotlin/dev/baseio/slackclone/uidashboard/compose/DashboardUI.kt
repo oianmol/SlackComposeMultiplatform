@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.uidashboard.compose
 
-import MainDispatcher
+import mainDispatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -55,10 +55,10 @@ fun DashboardUI(
   val scaffoldState = rememberScaffoldState()
 
   val keyboardController = LocalSoftwareKeyboardController.current
-  val lastChannel by dashboardVM.selectedChatChannel.collectAsState(MainDispatcher())
+  val lastChannel by dashboardVM.selectedChatChannel.collectAsState(mainDispatcher)
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
-  val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(MainDispatcher())
+  val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(mainDispatcher)
   val size = getWindowSizeClass(LocalWindow.current)
   val screenWidth = LocalWindow.current.width
   val sideNavWidth = screenWidth * 0.8f
