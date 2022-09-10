@@ -2,10 +2,10 @@ package dev.baseio.slackclone.uichat.chatthread
 
 import ViewModel
 
-import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
-import dev.baseio.slackclone.domain.usecases.chat.UseCaseFetchMessages
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.domain.usecases.chat.UseCaseSendMessage
+import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.domain.usecases.chat.UseCaseFetchMessages
+import dev.baseio.slackdomain.domain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow

@@ -2,8 +2,8 @@ package dev.baseio.slackclone.uidashboard.compose
 
 import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.domain.usecases.channels.UseCaseCreateChannels
-import dev.baseio.slackclone.domain.usecases.channels.UseCaseFetchUsers
+import dev.baseio.slackdomain.domain.usecases.channels.UseCaseCreateChannels
+import dev.baseio.slackdomain.domain.usecases.channels.UseCaseFetchUsers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

@@ -23,16 +23,16 @@ import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.data.DriverFactory
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.window.WindowDraggableArea
-import androidx.compose.ui.draw.blur
+import androidx.compose.material.FabPosition
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.*
 import dev.baseio.database.SlackDB
+import dev.baseio.slackdata.DriverFactory
 import kotlinx.coroutines.delay
 
 @ExperimentalComposeUiApi
@@ -122,7 +122,7 @@ private fun Content(rememberedComposeWindow: WindowInfo) {
   ) {
     Scaffold(floatingActionButton = {
       FloatingActionButton()
-    }, isFloatingActionButtonDocked = true) {
+    }, isFloatingActionButtonDocked = true, floatingActionButtonPosition = FabPosition.Center) {
       App(sqlDriver = DriverFactory().createDriver(SlackDB.Schema))
     }
   }

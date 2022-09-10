@@ -6,10 +6,6 @@ import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
-import dev.baseio.slackclone.common.injection.dispatcherModule
-import dev.baseio.slackclone.data.injection.dataMappersModule
-import dev.baseio.slackclone.data.injection.repositoryModule
-import dev.baseio.slackclone.data.injection.useCaseModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.injection.SlackComponent
 import dev.baseio.slackclone.navigation.*
@@ -21,6 +17,10 @@ import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
+import dev.baseio.slackdata.injection.dataMappersModule
+import dev.baseio.slackdata.injection.dispatcherModule
+import dev.baseio.slackdata.injection.repositoryModule
+import dev.baseio.slackdata.injection.useCaseModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module

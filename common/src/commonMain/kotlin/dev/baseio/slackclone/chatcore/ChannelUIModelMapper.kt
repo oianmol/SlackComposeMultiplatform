@@ -1,8 +1,8 @@
 package dev.baseio.slackclone.chatcore
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.domain.mappers.UiModelMapper
-import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.domain.mappers.UiModelMapper
+import dev.baseio.slackdomain.domain.model.channel.DomainLayerChannels
 
 class ChannelUIModelMapper constructor() :
   UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel> {

@@ -18,8 +18,8 @@ import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedMonthDate
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

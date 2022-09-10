@@ -2,10 +2,9 @@ package dev.baseio.slackclone.chatcore.injection
 
 import dev.baseio.slackclone.chatcore.ChannelUIModelMapper
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.data.injection.SlackChannelChannel
-import dev.baseio.slackclone.domain.mappers.UiModelMapper
-import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
-import dev.baseio.slackclone.domain.model.users.DomainLayerUsers
+import dev.baseio.slackdomain.domain.mappers.UiModelMapper
+import dev.baseio.slackdomain.domain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.domain.model.users.DomainLayerUsers
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.QualifierValue
 import org.koin.dsl.module

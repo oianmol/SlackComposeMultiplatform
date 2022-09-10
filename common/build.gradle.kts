@@ -12,7 +12,6 @@ group = "dev.baseio.slackclone"
 version = "1.0"
 
 val ktor_version = "2.1.0"
-val DECOMPOSE = "1.0.0-alpha-04"
 
 object Versions {
   const val koin = "3.1.4"
@@ -29,6 +28,12 @@ object Deps {
 
 }
 
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+
 kotlin {
   android()
   iosArm64()
@@ -43,18 +48,13 @@ kotlin {
 
     val commonMain by getting {
       dependencies {
+        implementation("dev.baseio.slackclone:slackdata:1.0.0")
         implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
         implementation("com.squareup.sqldelight:runtime:1.5.3")
         implementation(Deps.Koin.core)
         api(compose.runtime)
         api(compose.foundation)
         api(compose.material)
-      }
-    }
-    val sqlDriverNativeMain by creating {
-      dependsOn(commonMain)
-      dependencies {
-        implementation("com.squareup.sqldelight:native-driver:1.5.3")
       }
     }
     val commonTest by getting {
@@ -66,40 +66,36 @@ kotlin {
     val androidMain by getting {
       dependencies {
         implementation(Deps.Koin.android)
+        implementation("dev.baseio.slackclone:slackdata-android:1.0.0")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
         implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
         implementation("com.squareup.sqldelight:android-driver:1.5.3")
         implementation("io.coil-kt:coil-compose:2.2.0")
-        api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
         implementation("io.ktor:ktor-client-android:$ktor_version")
+        api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
         api("androidx.appcompat:appcompat:1.5.0")
         api("androidx.core:core-ktx:1.8.0")
       }
     }
     val iosArm64Main by getting {
-      dependsOn(sqlDriverNativeMain)
       dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+        implementation("dev.baseio.slackclone:slackdata-iosarm64:1.0.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
       }
     }
     val iosSimulatorArm64Main by getting {
-      dependsOn(sqlDriverNativeMain)
-
       dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+        implementation("dev.baseio.slackclone:slackdata-iossimulatorarm64:1.0.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
       }
     }
     val iosX64Main by getting {
-      dependsOn(sqlDriverNativeMain)
-
       dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+        implementation("dev.baseio.slackclone:slackdata-iosx64:1.0.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
       }
     }
 
@@ -110,9 +106,9 @@ kotlin {
     }
     val desktopMain by getting {
       dependencies {
-        implementation("com.alialbaali.kamel:kamel-image:0.4.0")
-        implementation("com.squareup.sqldelight:sqlite-driver:1.5.3")
+        implementation("dev.baseio.slackclone:slackdata-jvm:1.0.0")
         implementation("io.ktor:ktor-client-java:$ktor_version")
+        implementation("com.alialbaali.kamel:kamel-image:0.4.0")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
         api(compose.preview)
         implementation(Deps.Koin.core_jvm)
@@ -121,14 +117,6 @@ kotlin {
     val desktopTest by getting
   }
 }
-
-sqldelight {
-  database("SlackDB") {
-    packageName = "dev.baseio.database"
-    linkSqlite = true
-  }
-}
-
 
 android {
   compileSdk = 32

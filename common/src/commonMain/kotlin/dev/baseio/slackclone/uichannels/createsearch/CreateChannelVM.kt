@@ -2,12 +2,12 @@ package dev.baseio.slackclone.uichannels.createsearch
 
 import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.domain.mappers.UiModelMapper
-import dev.baseio.slackclone.domain.model.channel.DomainLayerChannels
-import dev.baseio.slackclone.domain.usecases.channels.UseCaseCreateChannel
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.NavigationKey
 import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackdomain.domain.mappers.UiModelMapper
+import dev.baseio.slackdomain.domain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.domain.usecases.channels.UseCaseCreateChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 

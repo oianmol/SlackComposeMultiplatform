@@ -18,7 +18,7 @@ import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
 import kotlinx.datetime.Clock
 
 @Composable

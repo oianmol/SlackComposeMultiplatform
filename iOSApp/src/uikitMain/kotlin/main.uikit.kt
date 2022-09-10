@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
+import dev.baseio.slackdata.DriverFactory
 import kotlinx.cinterop.*
 import platform.UIKit.*
 import platform.Foundation.*
@@ -23,7 +24,6 @@ import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.data.DriverFactory
 
 fun main() {
   val args = emptyArray<String>()

@@ -9,7 +9,7 @@ plugins {
   id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
 }
 
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 val ktor_version = "2.1.0"
 
 repositories {
@@ -62,9 +62,15 @@ kotlin {
     }
     val uikitX64Main by getting {
       dependsOn(uikitMain)
+      dependencies {
+        implementation("dev.baseio.slackclone:slackdata-iosx64:1.0.0")
+      }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
+      dependencies {
+        implementation("dev.baseio.slackclone:slackdata-iosarm64:1.0.0")
+      }
     }
   }
 }
@@ -85,7 +91,7 @@ compose.experimental {
       }
       connectedDevice("Device") {
         //Usage: ./gradlew iosDeployDeviceRelease
-        this.teamId="***"
+        this.teamId = "***"
       }
     }
   }

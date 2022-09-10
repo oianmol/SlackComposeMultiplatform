@@ -14,7 +14,7 @@ import dev.baseio.slackclone.common.extensions.formattedTime
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.domain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
