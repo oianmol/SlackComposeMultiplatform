@@ -30,7 +30,6 @@ object Deps {
 
 repositories {
   mavenCentral()
-  mavenLocal()
 }
 
 
@@ -48,7 +47,7 @@ kotlin {
 
     val commonMain by getting {
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata:v1.0.0-test")
         implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
         implementation("com.squareup.sqldelight:runtime:1.5.3")
         implementation(Deps.Koin.core)
@@ -66,7 +65,7 @@ kotlin {
     val androidMain by getting {
       dependencies {
         implementation(Deps.Koin.android)
-        implementation("dev.baseio.slackclone:slackdata-android:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-android:v1.0.0-test")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
         implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
         implementation("com.squareup.sqldelight:android-driver:1.5.3")
@@ -80,21 +79,21 @@ kotlin {
     val iosArm64Main by getting {
       dependencies {
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("dev.baseio.slackclone:slackdata-iosarm64:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-iosarm64:v1.0.0-test")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
       }
     }
     val iosSimulatorArm64Main by getting {
       dependencies {
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("dev.baseio.slackclone:slackdata-iossimulatorarm64:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-iossimulatorarm64:v1.0.0-test")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
       }
     }
     val iosX64Main by getting {
       dependencies {
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("dev.baseio.slackclone:slackdata-iosx64:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-iosx64:v1.0.0-test")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
       }
     }
@@ -106,7 +105,7 @@ kotlin {
     }
     val desktopMain by getting {
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-jvm:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-jvm:v1.0.0-test")
         implementation("io.ktor:ktor-client-java:$ktor_version")
         implementation("com.alialbaali.kamel:kamel-image:0.4.0")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")

@@ -9,12 +9,11 @@ version = "1.0"
 
 repositories {
     jcenter()
-    mavenLocal()
 }
 
 dependencies {
     implementation(project(":common"))
-    implementation("dev.baseio.slackclone:slackdata-android:1.0.0")
+    implementation("dev.baseio.slackclone:slackdata-android:v1.0.0-test")
     implementation("androidx.activity:activity-compose:1.5.1")
 }
 

@@ -20,7 +20,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(project(":common"))
-                api("dev.baseio.slackclone:slackdata-jvm:1.0.0")
+                api("dev.baseio.slackclone:slackdata-jvm:v1.0.0-test")
                 implementation(compose.desktop.currentOs)
             }
         }

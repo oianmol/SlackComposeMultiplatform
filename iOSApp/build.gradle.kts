@@ -13,7 +13,6 @@ version = "1.0.0"
 val ktor_version = "2.1.0"
 
 repositories {
-  mavenLocal()
   mavenCentral()
   maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
   google()
@@ -63,13 +62,13 @@ kotlin {
     val uikitX64Main by getting {
       dependsOn(uikitMain)
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-iosx64:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-iosx64:v1.0.0-test")
       }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-iosarm64:1.0.0")
+        implementation("dev.baseio.slackclone:slackdata-iosarm64:v1.0.0-test")
       }
     }
   }

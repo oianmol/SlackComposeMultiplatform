@@ -4,7 +4,6 @@ buildscript {
         jcenter()
         google()
         mavenCentral()
-        mavenLocal()
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
@@ -16,15 +15,21 @@ buildscript {
 group = "dev.baseio.slackclone"
 version = "1.0"
 
+object GithubRepo {
+    val name: String? = System.getenv("GITHUB_REPOSITORY")
+    val path: String = "https://www.github.com/$name"
+    val packages: String = "https://maven.pkg.github.com/$name"
+    val ref: String? = System.getenv("GITHUB_REF")
+}
+
 allprojects {
     repositories {
-        maven {
-            name = "slackdata"
-            url = uri("https://maven.pkg.github.com/anmol92verma/slack-data")
-            credentials(PasswordCredentials)
-        }
+        repositories.maven {
+            name = "github"
+            url = project.uri(GithubRepo.packages)
+            credentials(PasswordCredentials::class)
+        }.takeIf { GithubRepo.name != null }
         google()
-        mavenLocal()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
