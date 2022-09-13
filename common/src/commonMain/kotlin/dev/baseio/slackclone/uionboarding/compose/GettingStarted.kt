@@ -64,7 +64,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
             when (size) {
               WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator, size)
 
-              WindowSize.Tablets, WindowSize.BigTablets, WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
+              else -> {
                 LargeScreenLayout(gettingStartedVM, composeNavigator, size)
               }
             }

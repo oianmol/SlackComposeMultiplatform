@@ -37,10 +37,12 @@ fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator) {
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
     Column(
       modifier = Modifier
-        .fillMaxHeight()
+        .fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween
     ) {
-      WorkspacesBar()
-      LazyColumn(Modifier.fillMaxSize()) {
+      LazyColumn {
+        item {
+          WorkspacesBar()
+        }
         items(workspaces) {
           Column {
             Workspace(workspace = it)

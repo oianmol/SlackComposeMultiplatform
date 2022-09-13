@@ -85,7 +85,7 @@ fun DashboardUI(
 
   BoxWithConstraints {
     when (size) {
-      WindowSize.Phones -> {
+      WindowSize.Phones, WindowSize.Tablets -> {
         SlackDragComposableView(
           isLeftNavOpen = isLeftNavOpen,
           isChatViewClosed = checkChatViewClosed(lastChannel, isChatViewClosed),
@@ -127,7 +127,7 @@ fun DashboardUI(
         }
       }
 
-      WindowSize.Tablets, WindowSize.BigTablets -> {
+      WindowSize.BigTablets, WindowSize.DesktopOne -> {
         SlackDualPaneLayoutView(
           leftViewComposable = {
             SideNavigation(
@@ -164,7 +164,7 @@ fun DashboardUI(
 
       }
 
-      WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
+      else -> {
         val onItemClick = { channel: Any ->
           dashboardVM.selectedChatChannel.value = channel as UiLayerChannels.SKChannel
           dashboardVM.isChatViewClosed.value = false
@@ -217,9 +217,9 @@ fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
     throw IllegalArgumentException("Dp value cannot be negative")
 
   windowDpSize.width < 600.dp -> WindowSize.Phones
-  windowDpSize.width < 840.dp -> WindowSize.Tablets
-  windowDpSize.width < 960.dp -> WindowSize.BigTablets
-  windowDpSize.width < 1024.dp -> WindowSize.DesktopOne
+  windowDpSize.width < 960.dp -> WindowSize.Tablets
+  windowDpSize.width < 1024.dp -> WindowSize.BigTablets
+  windowDpSize.width < 1366.dp -> WindowSize.DesktopOne
   else -> WindowSize.DesktopTwo
 }
 

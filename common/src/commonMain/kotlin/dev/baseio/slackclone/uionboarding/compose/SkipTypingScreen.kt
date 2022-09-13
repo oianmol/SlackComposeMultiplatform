@@ -56,7 +56,7 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
       ) {
         when (size) {
           WindowSize.Phones -> SkipTypingPhone(composeNavigator)
-          WindowSize.Tablets, WindowSize.BigTablets, WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
+          else -> {
             SkipTypingLarge(composeNavigator)
           }
         }
