@@ -7,11 +7,13 @@ import dev.baseio.slackclone.uichannels.directmessages.MessageViewModel
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.compose.DashboardVM
+import dev.baseio.slackclone.uidashboard.compose.SideNavVM
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class SlackComponent : KoinComponent {
+  fun provideSideNavVM(): SideNavVM = get()
   fun provideGettingStartedVM(): GettingStartedVM = get()
   fun provideDashboardVM(): DashboardVM = get()
   fun provideChatScreenVM(): ChatScreenVM = get()

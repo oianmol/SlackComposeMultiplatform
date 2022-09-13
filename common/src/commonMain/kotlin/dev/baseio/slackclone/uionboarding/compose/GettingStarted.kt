@@ -90,9 +90,8 @@ private fun LargeScreenLayout(
     horizontalArrangement = Arrangement.Center,
     verticalAlignment = Alignment.CenterVertically
   ) {
-    CenterImage(Modifier.padding(24.dp).weight(1f, fill = true), gettingStartedVM)
     Column(
-      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceAround,
+      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(), verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Spacer(Modifier.padding(8.dp))
@@ -109,6 +108,7 @@ private fun LargeScreenLayout(
         Spacer(Modifier.padding(8.dp))
       }
     }
+    CenterImage(Modifier.padding(24.dp).weight(1f, fill = true), gettingStartedVM)
   }
 }
 
@@ -263,7 +263,7 @@ private fun IntroText(
         }
       },
       modifier = modifier,
-      style = SlackCloneTypography.h4
+      style = SlackCloneTypography.h3
     )
   }
 
