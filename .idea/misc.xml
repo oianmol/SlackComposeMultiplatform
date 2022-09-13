@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../.gradle/caches/transforms-3/8a107a747f591fd75c0b25bde8750ac7/transformed/coil-base-2.2.0/res/drawable/ic_100tb.xml" value="0.3494791666666667" />
+        <entry key="android/src/main/res/drawable/ic_circle.xml" value="0.2785" />
+        <entry key="android/src/main/res/drawable/splash_image.xml" value="0.2785" />
+        <entry key="android/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.212" />
       </map>
     </option>
   </component>
