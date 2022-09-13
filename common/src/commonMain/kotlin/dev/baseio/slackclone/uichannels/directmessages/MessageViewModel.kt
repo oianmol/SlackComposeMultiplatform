@@ -3,29 +3,29 @@ package dev.baseio.slackclone.uichannels.directmessages
 import ViewModel
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackdomain.domain.mappers.UiModelMapper
-import dev.baseio.slackdomain.domain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
-import dev.baseio.slackdomain.domain.usecases.channels.UseCaseFetchChannelsWithLastMessage
+import dev.baseio.slackdomain.mappers.UiModelMapper
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannelsWithLastMessage
 import kotlinx.coroutines.flow.*
 
 class MessageViewModel constructor(
   private val useCaseFetchChannels: UseCaseFetchChannelsWithLastMessage,
-  private val channelPresentationMapper: UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>,
+  private val channelPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,
 ) : ViewModel() {
 
 
   val channels = MutableStateFlow(fetchFlow())
 
   fun refresh() {
-    channels.value = useCaseFetchChannels.performStreaming(null)
+    channels.value = useCaseFetchChannels.performStreamingNullable(null)
   }
 
-  fun fetchFlow(): Flow<List<DomainLayerMessages.LastMessage>> {
-    return useCaseFetchChannels.performStreaming(null)
+  fun fetchFlow(): Flow<List<DomainLayerMessages.SKLastMessage>> {
+    return useCaseFetchChannels.performStreamingNullable(null)
   }
 
-  fun mapToUI(channel: DomainLayerChannels.SlackChannel): UiLayerChannels.SlackChannel {
+  fun mapToUI(channel: DomainLayerChannels.SKChannel): UiLayerChannels.SKChannel {
     return channelPresentationMapper.mapToPresentation(channel)
   }
 

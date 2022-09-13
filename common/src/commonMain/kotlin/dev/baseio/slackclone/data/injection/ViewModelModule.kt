@@ -13,7 +13,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
   single { GettingStartedVM() }
-  single { DashboardVM(get(), get()) }
+  single { DashboardVM(get()) }
   single { ChatScreenVM(get(), get()) }
   single { CreateChannelVM(get(), get(SlackChannelUiLayerChannels)) }
   single { NewChatThreadVM(get(), get(SlackChannelUiLayerChannels)) }

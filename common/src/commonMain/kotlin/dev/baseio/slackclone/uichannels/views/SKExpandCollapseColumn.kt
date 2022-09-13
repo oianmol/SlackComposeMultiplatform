@@ -21,9 +21,9 @@ import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 @Composable
 fun SKExpandCollapseColumn(
   expandCollapseModel: ExpandCollapseModel,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
   onExpandCollapse: (isChecked: Boolean) -> Unit,
-  channels: List<UiLayerChannels.SlackChannel>,
+  channels: List<UiLayerChannels.SKChannel>,
   onClickAdd: () -> Unit
 ) {
   Column(
@@ -56,8 +56,8 @@ fun SKExpandCollapseColumn(
 @Composable
 private fun ColumnScope.ChannelsList(
   expandCollapseModel: ExpandCollapseModel,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
-  channels: List<UiLayerChannels.SlackChannel>
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
+  channels: List<UiLayerChannels.SKChannel>
 ) {
   AnimatedVisibility(visible = expandCollapseModel.isOpen) {
     Column {

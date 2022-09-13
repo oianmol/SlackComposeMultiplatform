@@ -1,16 +1,16 @@
 package dev.baseio.slackclone.chatcore.injection
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackdomain.domain.mappers.UiModelMapper
-import dev.baseio.slackdomain.domain.model.users.DomainLayerUsers
+import dev.baseio.slackdomain.mappers.UiModelMapper
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 class UserChannelUiMapper constructor():
-  UiModelMapper<DomainLayerUsers.SlackUser, UiLayerChannels.SlackChannel> {
-  override fun mapToPresentation(model: DomainLayerUsers.SlackUser): UiLayerChannels.SlackChannel {
+  UiModelMapper<DomainLayerUsers.SKUser, UiLayerChannels.SKChannel> {
+  override fun mapToPresentation(model: DomainLayerUsers.SKUser): UiLayerChannels.SKChannel {
     TODO("Not yet implemented")
   }
 
-  override fun mapToDomain(modelItem: UiLayerChannels.SlackChannel): DomainLayerUsers.SlackUser {
+  override fun mapToDomain(modelItem: UiLayerChannels.SKChannel): DomainLayerUsers.SKUser {
     TODO("Not yet implemented")
   }
 }

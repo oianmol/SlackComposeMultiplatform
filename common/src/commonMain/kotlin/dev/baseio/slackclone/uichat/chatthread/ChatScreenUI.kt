@@ -1,32 +1,29 @@
 package dev.baseio.slackclone.uichat.chatthread
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
-import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.uichat.chatthread.composables.ChatScreenContent
 
 @Composable
 fun ChatScreenUI(
   modifier: Modifier,
-  slackChannel: UiLayerChannels.SlackChannel,
+  SKChannel: UiLayerChannels.SKChannel,
   onBackClick: () -> Unit,
   viewModel: ChatScreenVM
 ) {
   val scaffoldState = rememberScaffoldState()
   SideEffect {
-    viewModel.requestFetch(slackChannel)
+    viewModel.requestFetch(SKChannel)
   }
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
@@ -37,7 +34,7 @@ fun ChatScreenUI(
       scaffoldState.snackbarHostState
     },
     topBar = {
-      ChatAppBar(onBackClick, slackChannel)
+      ChatAppBar(onBackClick, SKChannel)
     }
   ) { innerPadding ->
     Box(
@@ -52,7 +49,7 @@ fun ChatScreenUI(
 
 
 @Composable
-private fun ChatAppBar(onBackClick: () -> Unit, slackChannel: UiLayerChannels.SlackChannel) {
+private fun ChatAppBar(onBackClick: () -> Unit, SKChannel: UiLayerChannels.SKChannel) {
   SlackSurfaceAppBar(backgroundColor = SlackCloneColorProvider.colors.appBarColor) {
     IconButton(onClick = { onBackClick() }) {
       Icon(
@@ -68,7 +65,7 @@ private fun ChatAppBar(onBackClick: () -> Unit, slackChannel: UiLayerChannels.Sl
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       SlackChannelItem(
-        slackChannel = slackChannel,
+        slackChannel = SKChannel,
         textColor = SlackCloneColorProvider.colors.appBarTextTitleColor
       ) {}
     }

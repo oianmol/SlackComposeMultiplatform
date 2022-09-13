@@ -18,8 +18,8 @@ import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
 import dev.baseio.slackdata.injection.dataMappersModule
+import dev.baseio.slackdata.injection.dataSourceModule
 import dev.baseio.slackdata.injection.dispatcherModule
-import dev.baseio.slackdata.injection.repositoryModule
 import dev.baseio.slackdata.injection.useCaseModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -75,6 +75,6 @@ fun initKoin(slackDB: SlackDB): KoinApplication {
   return startKoin {
     modules(module {
       single { slackDB }
-    }, repositoryModule, dataMappersModule, useCaseModule, viewModelModule, uiModelMapperModule, dispatcherModule)
+    }, dataSourceModule, dataMappersModule, useCaseModule, viewModelModule, uiModelMapperModule, dispatcherModule)
   }
 }

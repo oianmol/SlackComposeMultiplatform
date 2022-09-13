@@ -6,14 +6,16 @@ import org.jetbrains.compose.experimental.dsl.IOSDevices
 plugins {
   kotlin("multiplatform")
   id("com.squareup.sqldelight")
-  id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
+  id("org.jetbrains.compose") version "1.2.0-alpha01-dev774"
 }
 
 version = "1.0.0"
 val ktor_version = "2.1.0"
+val slackDataVersion: String by project
 
 repositories {
   mavenCentral()
+  mavenLocal()
   maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
   google()
 }
@@ -62,13 +64,13 @@ kotlin {
     val uikitX64Main by getting {
       dependsOn(uikitMain)
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-iosx64:v1.0.0-test")
+        implementation("dev.baseio.slackclone:slackdata-iosx64:${slackDataVersion}")
       }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-iosarm64:v1.0.0-test")
+        implementation("dev.baseio.slackclone:slackdata-iosarm64:${slackDataVersion}")
       }
     }
   }

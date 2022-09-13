@@ -19,7 +19,7 @@ import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackclone.uichannels.directmessages.DMChannelsList
 
 @Composable
-fun DirectMessagesUI(onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
+fun DirectMessagesUI(onItemClick: (UiLayerChannels.SKChannel) -> Unit) {
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()

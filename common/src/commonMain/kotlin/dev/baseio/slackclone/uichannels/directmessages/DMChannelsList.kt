@@ -12,7 +12,7 @@ import dev.baseio.slackclone.chatcore.views.DMLastMessageItem
 
 @Composable
 fun DMChannelsList(
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
   channelVM: MessageViewModel
 ) {
   val channels by channelVM.channels.collectAsState(mainDispatcher)

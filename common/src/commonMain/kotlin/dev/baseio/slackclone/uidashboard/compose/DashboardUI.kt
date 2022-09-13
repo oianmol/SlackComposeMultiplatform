@@ -107,7 +107,7 @@ fun DashboardUI(
             lastChannel?.let { slackChannel ->
               ChatScreenUI(
                 modifier = chatViewModifier,
-                slackChannel = slackChannel,
+                SKChannel = slackChannel,
                 onBackClick = { dashboardVM.isChatViewClosed.value = true },
                 viewModel = viewModel
               )
@@ -139,7 +139,7 @@ fun DashboardUI(
             lastChannel?.let { slackChannel ->
               ChatScreenUI(
                 modifier = chatViewModifier,
-                slackChannel = slackChannel,
+                SKChannel = slackChannel,
                 onBackClick = {
                   dashboardVM.isChatViewClosed.value = true
                   dashboardVM.selectedChatChannel.value = null
@@ -166,7 +166,7 @@ fun DashboardUI(
 
       WindowSize.DesktopOne, WindowSize.DesktopTwo -> {
         val onItemClick = { channel: Any ->
-          dashboardVM.selectedChatChannel.value = channel as UiLayerChannels.SlackChannel
+          dashboardVM.selectedChatChannel.value = channel as UiLayerChannels.SKChannel
           dashboardVM.isChatViewClosed.value = false
         }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = {
@@ -179,7 +179,7 @@ fun DashboardUI(
               NavigationKey.NavigateChannel,
               SlackScreens.Dashboard
             ) {
-              onItemClick(it as UiLayerChannels.SlackChannel)
+              onItemClick(it as UiLayerChannels.SKChannel)
             }
             composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
           }, composeNavigator)
@@ -187,7 +187,7 @@ fun DashboardUI(
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
               modifier = contentModifier,
-              slackChannel = slackChannel,
+              SKChannel = slackChannel,
               onBackClick = {
                 dashboardVM.isChatViewClosed.value = true
                 dashboardVM.selectedChatChannel.value = null
@@ -240,7 +240,7 @@ private fun SlackDualPaneLayoutView(
 }
 
 private fun checkChatViewClosed(
-  lastChannel: UiLayerChannels.SlackChannel?,
+  lastChannel: UiLayerChannels.SKChannel?,
   isChatViewClosed: Boolean
 ) = lastChannel == null || isChatViewClosed
 
@@ -250,7 +250,7 @@ private fun DashboardScaffold(
   scaffoldState: ScaffoldState,
   modifier: Modifier,
   appBarIconClick: () -> Unit,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
   composeNavigator: ComposeNavigator,
 ) {
   Box(modifier) {
@@ -285,7 +285,7 @@ private fun DashboardScaffold(
                       NavigationKey.NavigateChannel,
                       SlackScreens.Dashboard
                     ) {
-                      onItemClick(it as UiLayerChannels.SlackChannel)
+                      onItemClick(it as UiLayerChannels.SKChannel)
                     }
                     composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
                   })
@@ -314,11 +314,11 @@ private fun DashboardScaffold(
 }
 
 @Composable
-fun FloatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayerChannels.SlackChannel) -> Unit) {
+fun FloatingDM(composeNavigator: ComposeNavigator, onItemClick: (UiLayerChannels.SKChannel) -> Unit) {
   FloatingActionButton(onClick = {
     composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel, SlackScreens.Dashboard) {
       composeNavigator.navigateUp()
-      onItemClick(it as UiLayerChannels.SlackChannel)
+      onItemClick(it as UiLayerChannels.SKChannel)
     }
     composeNavigator.navigateScreen(SlackScreens.CreateNewDM)
   }, backgroundColor = Color.White) {

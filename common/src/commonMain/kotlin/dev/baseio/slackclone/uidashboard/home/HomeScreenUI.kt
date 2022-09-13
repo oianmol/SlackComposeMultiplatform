@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -27,7 +26,7 @@ import dev.baseio.slackclone.uichannels.views.*
 @Composable
 fun HomeScreenUI(
   appBarIconClick: () -> Unit,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
   onCreateChannelRequest: () -> Unit = {}
 ) {
   SlackCloneSurface(

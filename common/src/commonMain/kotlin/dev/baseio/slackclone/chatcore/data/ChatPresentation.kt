@@ -1,10 +1,10 @@
 package dev.baseio.slackclone.chatcore.data
 
 interface UiLayerChannels {
-  data class SlackChannel(
+  data class SKChannel(
     val name: String?,
     val isPrivate: Boolean?,
-    val uuid: String?,
+    val uuid: String,
     val createdDate: Long?,
     val modifiedDate: Long?,
     val isMuted: Boolean?,

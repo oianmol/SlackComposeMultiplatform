@@ -8,7 +8,7 @@ import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 
 @Composable
 fun SlackConnections(
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
   onClickAdd: () -> Unit,
   channelVM: SlackChannelVM
 ) {

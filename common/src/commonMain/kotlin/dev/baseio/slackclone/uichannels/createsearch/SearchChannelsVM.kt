@@ -2,10 +2,10 @@ package dev.baseio.slackclone.uichannels.createsearch
 
 import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackdomain.domain.mappers.UiModelMapper
-import dev.baseio.slackdomain.domain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.domain.usecases.channels.UseCaseFetchChannelCount
-import dev.baseio.slackdomain.domain.usecases.channels.UseCaseSearchChannel
+import dev.baseio.slackdomain.mappers.UiModelMapper
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannelCount
+import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class SearchChannelsVM constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
   private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
-  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>
+  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>
 ) : ViewModel() {
 
   val search = MutableStateFlow("")

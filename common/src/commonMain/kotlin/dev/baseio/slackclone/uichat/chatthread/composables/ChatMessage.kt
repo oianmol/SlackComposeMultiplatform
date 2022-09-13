@@ -14,11 +14,11 @@ import dev.baseio.slackclone.common.extensions.formattedTime
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ChatMessage(message: DomainLayerMessages.SlackMessage) {
+fun ChatMessage(message: DomainLayerMessages.SKMessage) {
   ListItem(icon = {
     SlackImageBox(Modifier.size(48.dp), imageUrl = "http://placekitten.com/200/300")
   }, modifier = Modifier.padding(2.dp), secondaryText = {
@@ -29,7 +29,7 @@ fun ChatMessage(message: DomainLayerMessages.SlackMessage) {
 }
 
 @Composable
-fun ChatMedia(message: DomainLayerMessages.SlackMessage) {
+fun ChatMedia(message: DomainLayerMessages.SKMessage) {
   Column {
     Text(
       message.message,
@@ -42,7 +42,7 @@ fun ChatMedia(message: DomainLayerMessages.SlackMessage) {
 }
 
 @Composable
-fun ChatUserDateTime(message: DomainLayerMessages.SlackMessage) {
+fun ChatUserDateTime(message: DomainLayerMessages.SKMessage) {
   Row(verticalAlignment = Alignment.CenterVertically) {
     Text(
       message.createdBy + " \uD83C\uDF34",

@@ -35,7 +35,7 @@ fun SearchCreateChannelUI(
   val scaffoldState = rememberScaffoldState()
 
   ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM, { slackChannel: Any ->
-    val channel = slackChannel as UiLayerChannels.SlackChannel
+    val channel = slackChannel as UiLayerChannels.SKChannel
     composeNavigator.navigateUp()
     composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
   }) {
@@ -43,7 +43,7 @@ fun SearchCreateChannelUI(
       NavigationKey.NavigateChannel,
       SlackScreens.CreateChannelsScreen
     ) { slackChannel: Any ->
-      val channel = slackChannel as UiLayerChannels.SlackChannel
+      val channel = slackChannel as UiLayerChannels.SKChannel
       composeNavigator.navigateUp()
       composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
     }
@@ -85,7 +85,7 @@ private fun ListChannels(
 private fun SearchContent(
   innerPadding: PaddingValues,
   searchChannelsVM: SearchChannelsVM,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit
 ) {
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
@@ -103,7 +103,7 @@ private fun SearchContent(
 @Composable
 private fun ListAllChannels(
   searchChannelsVM: SearchChannelsVM,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit
 ) {
   val channels by searchChannelsVM.channels.collectAsState(mainDispatcher)
   val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
@@ -134,9 +134,9 @@ fun canDrawHeader(lastDrawnChannel: String?, name: String?): Boolean {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SlackChannelListItem(slackChannel: UiLayerChannels.SlackChannel) {
+fun SlackChannelListItem(SKChannel: UiLayerChannels.SKChannel) {
   Column {
-    SlackChannelItem(slackChannel) {
+    SlackChannelItem(SKChannel) {
 
     }
     Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)

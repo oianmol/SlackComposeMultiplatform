@@ -19,7 +19,7 @@ import dev.baseio.slackclone.common.extensions.formattedMonthDate
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
-import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -58,7 +58,7 @@ fun ChatMessagesUI(viewModel: ChatScreenVM, modifier: Modifier) {
 
 private fun isLastMessage(
   messageIndex: Int,
-  messages: List<DomainLayerMessages.SlackMessage>
+  messages: List<DomainLayerMessages.SKMessage>
 ) = messageIndex == messages.size.minus(1)
 
 @Composable

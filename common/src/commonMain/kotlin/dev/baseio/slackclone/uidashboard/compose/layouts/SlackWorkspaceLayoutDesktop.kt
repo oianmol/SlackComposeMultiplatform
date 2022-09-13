@@ -20,7 +20,7 @@ import dev.baseio.slackclone.uidashboard.home.ThreadsTile
 @Composable
 fun SlackWorkspaceLayoutDesktop(
   modifier: Modifier = Modifier,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
   onCreateChannelRequest: () -> Unit = {},
   composeNavigator: ComposeNavigator
 ) {

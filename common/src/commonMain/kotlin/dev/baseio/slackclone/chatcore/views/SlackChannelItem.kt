@@ -18,14 +18,14 @@ import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackdomain.domain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import kotlinx.datetime.Clock
 
 @Composable
 fun SlackChannelItem(
-  slackChannel: UiLayerChannels.SlackChannel,
+  slackChannel: UiLayerChannels.SKChannel,
   textColor: Color = SlackCloneColorProvider.colors.textPrimary,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit
 ) {
   when (slackChannel.isOneToOne) {
     true -> {
@@ -39,8 +39,8 @@ fun SlackChannelItem(
 
 @Composable
 private fun GroupChannelItem(
-  slackChannel: UiLayerChannels.SlackChannel,
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit
+  slackChannel: UiLayerChannels.SKChannel,
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit
 ) {
   SlackListItem(
     icon = if (slackChannel.isPrivate == true) Icons.Default.Lock else Icons.Default.MailOutline,
@@ -53,8 +53,8 @@ private fun GroupChannelItem(
 
 @Composable
 private fun DirectMessageChannel(
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
-  slackChannel: UiLayerChannels.SlackChannel,
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
+  slackChannel: UiLayerChannels.SKChannel,
   textColor: Color
 ) {
   Row(
@@ -72,9 +72,9 @@ private fun DirectMessageChannel(
 
 @Composable
 fun DMLastMessageItem(
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit,
-  slackChannel: UiLayerChannels.SlackChannel,
-  slackMessage: DomainLayerMessages.SlackMessage,
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
+  slackChannel: UiLayerChannels.SKChannel,
+  slackMessage: DomainLayerMessages.SKMessage,
 ) {
   Row(
     modifier = Modifier
@@ -107,7 +107,7 @@ fun DMLastMessageItem(
 
 
 @Composable
-private fun ChannelMessage(slackMessage: DomainLayerMessages.SlackMessage, textSecondary: Color) {
+private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
   Text(
     text = slackMessage.message,
     style = SlackCloneTypography.subtitle1.copy(
@@ -134,7 +134,7 @@ fun RelativeTime(createdDate: Long) {
 
 @Composable
 private fun ChannelText(
-  slackChannel: UiLayerChannels.SlackChannel,
+  slackChannel: UiLayerChannels.SKChannel,
   textColor: Color
 ) {
   Text(

@@ -3,11 +3,12 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev755"
+    id("org.jetbrains.compose") version "1.2.0-alpha01-dev774"
 }
 
 group = "dev.baseio.slackclone"
 version = "1.0"
+val slackDataVersion: String by project
 
 kotlin {
     jvm {
@@ -20,7 +21,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(project(":common"))
-                api("dev.baseio.slackclone:slackdata-jvm:v1.0.0-test")
+                api("dev.baseio.slackclone:slackdata-jvm:${slackDataVersion}")
                 implementation(compose.desktop.currentOs)
             }
         }

@@ -9,7 +9,7 @@ import dev.baseio.slackclone.slackComponent
 
 @Composable
 fun SlackRecentChannels(
-  onItemClick: (UiLayerChannels.SlackChannel) -> Unit = {},
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
   onClickAdd: () -> Unit
 ) {
   val channelVM: SlackChannelVM  = slackComponent.provideSlackChannelVM()

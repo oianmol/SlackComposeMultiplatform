@@ -2,37 +2,37 @@ package dev.baseio.slackclone.uichannels
 
 import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackdomain.domain.mappers.UiModelMapper
-import dev.baseio.slackdomain.domain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.domain.usecases.channels.UseCaseFetchChannels
+import dev.baseio.slackdomain.mappers.UiModelMapper
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannels
 import kotlinx.coroutines.flow.*
 
 class SlackChannelVM constructor(
   private val ucFetchChannels: UseCaseFetchChannels,
-  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SlackChannel, UiLayerChannels.SlackChannel>
+  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>
 ) : ViewModel() {
 
-  val channels = MutableStateFlow<Flow<List<UiLayerChannels.SlackChannel>>>(emptyFlow())
+  val channels = MutableStateFlow<Flow<List<UiLayerChannels.SKChannel>>>(emptyFlow())
 
   fun allChannels() {
-    channels.value = ucFetchChannels.performStreaming(null).map { channels ->
+    channels.value = ucFetchChannels.performStreamingNullable(null).map { channels ->
       domSlackToPresentation(channels)
     }
   }
 
   fun loadDirectMessageChannels() {
-    channels.value = ucFetchChannels.performStreaming(null).map { channels ->
+    channels.value = ucFetchChannels.performStreamingNullable(null).map { channels ->
       domSlackToPresentation(channels,)
     }
   }
 
   fun loadStarredChannels() {
-    channels.value = ucFetchChannels.performStreaming(null).map { channels ->
+    channels.value = ucFetchChannels.performStreamingNullable(null).map { channels ->
       domSlackToPresentation(channels)
     }
   }
 
-  private fun domSlackToPresentation(channels: List<DomainLayerChannels.SlackChannel>) =
+  private fun domSlackToPresentation(channels: List<DomainLayerChannels.SKChannel>) =
     channels.map { channel ->
       chatPresentationMapper.mapToPresentation(channel)
     }
