@@ -65,13 +65,15 @@ fun DashboardUI(
   val sideNavPxValue = with(LocalDensity.current) { sideNavWidth.toPx() }
   val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
 
-
-  //TODO use the navigation impl and rewrite this logic
-  /* BackHandler(enabled = !isChatViewClosed) {
-       if (!isChatViewClosed) {
-           dashboardVM.isChatViewClosed.value = true
-       }
-   }*/
+  if (!isChatViewClosed) {
+    composeNavigator.observeWhenBackPressedFor(SlackScreens.Dashboard) {
+      if (!isChatViewClosed) {
+        dashboardVM.isChatViewClosed.value = true
+      }
+    }
+  } else {
+    composeNavigator.removeObserverForBackPress(SlackScreens.Dashboard)
+  }
 
 
   SideEffect {

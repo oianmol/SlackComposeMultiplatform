@@ -14,6 +14,7 @@ class SlackComposeNavigator : ComposeNavigator {
   private var backStackRoute: LinkedHashMap<BackstackRoute, ArrayDeque<BackstackScreen>> =
     LinkedHashMap()
   private var navigationResultMap = LinkedHashMap<String, (Any) -> Unit>()
+  private val backPressObserver = HashMap<BackstackScreen, () -> Unit>()
 
   private val currentRoute: MutableState<BackstackRoute?> = mutableStateOf(null)
   private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
@@ -54,6 +55,14 @@ class SlackComposeNavigator : ComposeNavigator {
     }
   }
 
+  override fun observeWhenBackPressedFor(screen: BackstackScreen, function: () -> Unit) {
+    backPressObserver[screen] = function
+  }
+
+  override fun removeObserverForBackPress(screen: BackstackScreen) {
+    backPressObserver.remove(screen)
+  }
+
   override fun registerForNavigationResult(
     navigateChannel: NavigationKey,
     backstackScreen: BackstackScreen,
@@ -65,6 +74,15 @@ class SlackComposeNavigator : ComposeNavigator {
   override var whenRouteCanNoLongerNavigateBack: () -> Unit = {}
 
   override fun navigateUp() {
+    // this handles backPressObserver
+    currentScreen.value?.let {
+      if (backPressObserver.containsKey(it)) {
+        backPressObserver[it]?.invoke()
+        backPressObserver.remove(it)
+        return
+      }
+    }
+
     backStackRoute[currentRoute.value]?.remove(currentScreen.value)
     // now if the current route becomes empty set the current route to the previous route
     checkWhenWeCantNavigateBack()
@@ -158,4 +176,6 @@ interface ComposeNavigator {
 
   @Composable
   fun start(route: BackstackRoute)
+  fun observeWhenBackPressedFor(screen: BackstackScreen, function: () -> Unit)
+  fun removeObserverForBackPress(screen: BackstackScreen)
 }

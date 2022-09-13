@@ -34,7 +34,7 @@ fun HomeScreenUI(
     modifier = Modifier.fillMaxSize()
   ) {
     Column() {
-      SlackMMTopAppBar(appBarIconClick)
+      SlackWorkspaceTopAppBar(appBarIconClick)
       Column(Modifier.verticalScroll(rememberScrollState())) {
         JumpToText()
         ThreadsTile()
@@ -97,7 +97,7 @@ fun JumpToText() {
 }
 
 @Composable
-private fun SlackMMTopAppBar(appBarIconClick: () -> Unit) {
+private fun SlackWorkspaceTopAppBar(appBarIconClick: () -> Unit) {
   SlackSurfaceAppBar(
     title = {
       Text(text = "mutualmobile", style = SlackCloneTypography.h5.copy(color = Color.White))
