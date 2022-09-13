@@ -2,6 +2,11 @@
 
 ### This is a jetpack compose Slack Client Clone written in Kotlin Multiplatform following clean architecture principles.
 
+Depends on SlackData Multiplatform library.
+
+https://github.com/anmol92verma/slackdata
+
+
 Video Demo for JVM Desktop with Responsive UI
 
 https://user-images.githubusercontent.com/4393101/188278261-4553ea2b-e80f-4515-be85-e2eba646930b.mp4
