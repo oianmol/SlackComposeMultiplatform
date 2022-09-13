@@ -2,10 +2,12 @@ package dev.baseio.slackclone.uidashboard.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Colors
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -43,9 +45,11 @@ fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator) {
         item {
           WorkspacesBar()
         }
-        items(workspaces) {
-          Column {
-            Workspace(workspace = it)
+        items(workspaces) { skWorkspace ->
+          Column(Modifier.clickable {
+            viewModel.select(skWorkspace)
+          }) {
+            Workspace(workspace = skWorkspace)
             Spacer(modifier = Modifier.padding(8.dp))
           }
         }
@@ -80,7 +84,7 @@ fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
         .padding(8.dp)
         .fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
-      OrganizationLogo(workspace.picUrl)
+      OrganizationLogo(workspace.picUrl,workspace.lastSelected)
       Box(Modifier.weight(1f)) {
         OrganizationDetails(workspace)
       }
@@ -119,13 +123,13 @@ fun OrganizationDetails(workspace: DomainLayerWorkspaces.SKWorkspace) {
 }
 
 @Composable
-fun OrganizationLogo(picUrl: String?) {
+fun OrganizationLogo(picUrl: String?, lastSelected: Boolean) {
   Box(
     Modifier
       .size(68.dp)
       .border(
         width = 3.dp,
-        color = SlackCloneColorProvider.colors.textPrimary,
+        color = if(lastSelected) SlackCloneColorProvider.colors.textPrimary else Color.Transparent,
         shape = RoundedCornerShape(12.dp)
       )
       .padding(8.dp)

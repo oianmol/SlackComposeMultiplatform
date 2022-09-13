@@ -5,6 +5,7 @@ import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceWorkspace
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class SideNavVM(private val skDataSourceWorkspaces: SKDataSourceWorkspaces) : ViewModel() {
   var workspacesFlow = MutableStateFlow(flow())
@@ -12,5 +13,11 @@ class SideNavVM(private val skDataSourceWorkspaces: SKDataSourceWorkspaces) : Vi
 
   fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
     return skDataSourceWorkspaces.fetchWorkspaces()
+  }
+
+  fun select(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
+    viewModelScope.launch {
+      skDataSourceWorkspaces.setLastSelected(skWorkspace)
+    }
   }
 }
