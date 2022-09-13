@@ -28,7 +28,7 @@ class SearchChannelsVM constructor(
     }
   }
 
-  private fun flow(search: String) = ucFetchChannels.performStreaming(search).map { channels ->
+  private fun flow(search: String) = ucFetchChannels.performStreamingNullable(search).map { channels ->
     channels.map { channel ->
       chatPresentationMapper.mapToPresentation(channel)
     }

@@ -24,18 +24,7 @@ fun CreateNewChannelUI(
   composeNavigator: ComposeNavigator,
   createChannelVM: CreateChannelVM,
 ) {
-
   val scaffoldState = rememberScaffoldState()
-  CreateChannel(scaffoldState, composeNavigator, createChannelVM = createChannelVM)
-
-}
-
-@Composable
-private fun CreateChannel(
-  scaffoldState: ScaffoldState,
-  composeNavigator: ComposeNavigator,
-  createChannelVM: CreateChannelVM,
-) {
   Box {
     Scaffold(
       backgroundColor = SlackCloneColorProvider.colors.uiBackground,

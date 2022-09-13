@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
+import dev.baseio.FakeDataPreloader
 import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelModule
@@ -21,6 +22,8 @@ import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.dataSourceModule
 import dev.baseio.slackdata.injection.dispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -35,6 +38,10 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
   if (koinApp == null) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver))
     slackComponent = SlackComponent()
+    GlobalScope.launch {
+      // dirty! just for sample demo
+      koinApp?.koin?.get<FakeDataPreloader>()?.preload()
+    }
   }
 
   Box(modifier) {
@@ -75,6 +82,7 @@ fun initKoin(slackDB: SlackDB): KoinApplication {
   return startKoin {
     modules(module {
       single { slackDB }
+      single { FakeDataPreloader(get(), get(), get(), get()) }
     }, dataSourceModule, dataMappersModule, useCaseModule, viewModelModule, uiModelMapperModule, dispatcherModule)
   }
 }
