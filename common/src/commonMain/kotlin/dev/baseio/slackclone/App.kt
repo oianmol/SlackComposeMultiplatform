@@ -18,10 +18,7 @@ import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
-import dev.baseio.slackdata.injection.dataMappersModule
-import dev.baseio.slackdata.injection.dataSourceModule
-import dev.baseio.slackdata.injection.dispatcherModule
-import dev.baseio.slackdata.injection.useCaseModule
+import dev.baseio.slackdata.injection.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
@@ -82,7 +79,7 @@ fun initKoin(slackDB: SlackDB): KoinApplication {
   return startKoin {
     modules(module {
       single { slackDB }
-      single { FakeDataPreloader(get(), get(), get(), get()) }
+      single { FakeDataPreloader(get(), get(), get(), get(SlackUserChannelQualifier),get(SlackChannelChannelQualifier),get()) }
     }, dataSourceModule, dataMappersModule, useCaseModule, viewModelModule, uiModelMapperModule, dispatcherModule)
   }
 }

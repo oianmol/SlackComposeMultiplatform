@@ -17,7 +17,7 @@ val viewModelModule = module {
   single { HomeScreenVM(get()) }
   single { GettingStartedVM() }
   single { SideNavVM(get()) }
-  single { DashboardVM(get()) }
+  single { DashboardVM() }
   single { ChatScreenVM(get(), get()) }
   single { CreateChannelVM(get(), get(), get(SlackChannelUiLayerChannels)) }
   single { NewChatThreadVM(get(), get(SlackChannelUiLayerChannels), get()) }

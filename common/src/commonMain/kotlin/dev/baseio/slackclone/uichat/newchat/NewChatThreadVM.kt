@@ -24,10 +24,8 @@ class NewChatThreadVM constructor(
   var users = MutableStateFlow(flow(""))
 
   private fun flow(search: String) =
-    flow<DomainLayerWorkspaces.SKWorkspace> {
-      useCaseGetSelectedWorkspace.perform()
-    }.flatMapConcat {
-      ucFetchChannels.performStreaming(UseCaseChannelRequest(it.uuid, search)).map { channels ->
+    useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapConcat {
+      ucFetchChannels.performStreaming(UseCaseChannelRequest(it!!.uuid, search)).map { channels ->
         channels.map { channel ->
           chatPresentationMapper.mapToPresentation(channel)
         }

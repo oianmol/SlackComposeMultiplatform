@@ -25,8 +25,6 @@ class CreateChannelVM constructor(
       DomainLayerChannels.SKChannel(
         isOneToOne = false,
         avatarUrl = null,
-        name = "***",
-        uuid = Clock.System.now().toEpochMilliseconds().toString(),
         workspaceId = ""
       )
     )

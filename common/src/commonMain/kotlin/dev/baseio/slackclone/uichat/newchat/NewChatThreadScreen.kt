@@ -132,7 +132,7 @@ private fun SearchUsersTF(newChatThread: NewChatThreadVM) {
     textStyle = textStyleFieldPrimary(),
     placeholder = {
       Text(
-        text = "search_channel_conv",
+        text = "Search Channels",
         style = textStyleFieldSecondary(),
         textAlign = TextAlign.Start
       )
@@ -182,7 +182,7 @@ private fun SearchAppBar(composeNavigator: ComposeNavigator) {
 @Composable
 private fun SearchNavTitle() {
   Text(
-    text = "new_message",
+    text = "New Message",
     style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
   )
 }
