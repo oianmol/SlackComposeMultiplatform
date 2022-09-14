@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
+import dev.baseio.slackclone.data.injection.AllChatsQualifier
+import dev.baseio.slackclone.data.injection.RecentChatsQualifier
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackclone.uichannels.views.*
@@ -60,12 +62,7 @@ fun SlackWorkspaceLayoutDesktop(
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        }, channelVM = slackComponent.provideSlackChannelVM())
-        SlackConnections({
-          onItemClick(it)
-        }, onClickAdd = {
-          onCreateChannelRequest()
-        }, channelVM = slackComponent.provideSlackChannelVM())
+        })
       }
     }
   }

@@ -19,10 +19,6 @@ fun DMChannelsList(
   val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
   val listState = rememberLazyListState()
 
-  LaunchedEffect(key1 = Unit) {
-    channelVM.refresh()
-  }
-
   LazyColumn(state = listState) {
     for (channelIndex in 0 until channelsFlow.size) {
       val channel = channelsFlow.get(channelIndex)!!

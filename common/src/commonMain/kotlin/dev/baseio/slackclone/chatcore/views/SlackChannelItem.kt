@@ -88,8 +88,8 @@ fun DMLastMessageItem(
     SlackListItem(icon = {
       SlackOnlineBox(
         imageUrl = slackChannel.pictureUrl ?: "",
-        parentModifier = Modifier.size(48.dp),
-        imageModifier = Modifier.size(40.dp)
+        parentModifier = Modifier.size(38.dp),
+        imageModifier = Modifier.size(30.dp)
       )
     }, center = {
       Column(it) {
@@ -110,12 +110,12 @@ fun DMLastMessageItem(
 private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
   Text(
     text = slackMessage.message,
-    style = SlackCloneTypography.subtitle1.copy(
+    style = SlackCloneTypography.caption.copy(
       color = textSecondary.copy(
         alpha = 0.8f
       ),
     ), modifier = Modifier
-      .padding(start = 8.dp, top = 4.dp),
+      .padding(start = 4.dp, top = 4.dp),
     maxLines = 2,
     overflow = TextOverflow.Ellipsis
   )
@@ -139,12 +139,12 @@ private fun ChannelText(
 ) {
   Text(
     text = "${slackChannel.name}",
-    style = SlackCloneTypography.subtitle1.copy(
+    style = SlackCloneTypography.subtitle2.copy(
       color = textColor.copy(
         alpha = 0.8f
       )
     ), modifier = Modifier
-      .padding(8.dp), maxLines = 1,
+      .padding(4.dp), maxLines = 1,
     overflow = TextOverflow.Ellipsis
   )
 }
