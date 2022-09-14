@@ -33,7 +33,7 @@ import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator) {
+fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator, onClose: () -> Unit) {
   val viewModel: SideNavVM = slackComponent.provideSideNavVM()
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
@@ -48,6 +48,7 @@ fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator) {
         items(workspaces) { skWorkspace ->
           Column(Modifier.clickable {
             viewModel.select(skWorkspace)
+            onClose()
           }) {
             Workspace(workspace = skWorkspace)
             Spacer(modifier = Modifier.padding(8.dp))
@@ -84,7 +85,7 @@ fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
         .padding(8.dp)
         .fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
-      OrganizationLogo(workspace.picUrl,workspace.lastSelected)
+      OrganizationLogo(workspace.picUrl, workspace.lastSelected)
       Box(Modifier.weight(1f)) {
         OrganizationDetails(workspace)
       }
@@ -129,7 +130,7 @@ fun OrganizationLogo(picUrl: String?, lastSelected: Boolean) {
       .size(68.dp)
       .border(
         width = 3.dp,
-        color = if(lastSelected) SlackCloneColorProvider.colors.textPrimary else Color.Transparent,
+        color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary else Color.Transparent,
         shape = RoundedCornerShape(12.dp)
       )
       .padding(8.dp)

@@ -8,6 +8,7 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.compose.DashboardVM
 import dev.baseio.slackclone.uidashboard.compose.SideNavVM
+import dev.baseio.slackclone.uidashboard.home.HomeScreenVM
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -22,4 +23,5 @@ class SlackComponent : KoinComponent {
   fun provideSlackChannelVM(): SlackChannelVM = get()
   fun provideMessageViewModel(): MessageViewModel = get()
   fun provideSearchChannelsVM(): SearchChannelsVM = get()
+  fun provideHomeScreenVM(): HomeScreenVM = get()
 }

@@ -7,25 +7,32 @@ import dev.baseio.slackclone.navigation.NavigationKey
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdomain.mappers.UiModelMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
+import dev.baseio.slackdomain.usecases.channels.UseCaseChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
+import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
+import kotlinx.coroutines.flow.*
 
 class NewChatThreadVM constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
-  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>
+  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,
+  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace
 ) :
   ViewModel() {
 
   val search = MutableStateFlow("")
   var users = MutableStateFlow(flow(""))
 
-  private fun flow(search: String) = ucFetchChannels.performStreamingNullable(search).map { channels ->
-    channels.map { channel ->
-      chatPresentationMapper.mapToPresentation(channel)
+  private fun flow(search: String) =
+    flow<DomainLayerWorkspaces.SKWorkspace> {
+      useCaseGetSelectedWorkspace.perform()
+    }.flatMapConcat {
+      ucFetchChannels.performStreaming(UseCaseChannelRequest(it.uuid, search)).map { channels ->
+        channels.map { channel ->
+          chatPresentationMapper.mapToPresentation(channel)
+        }
+      }
     }
-  }?: emptyFlow()
 
   fun search(newValue: String) {
     search.value = newValue
@@ -33,11 +40,11 @@ class NewChatThreadVM constructor(
   }
 
   fun navigate(channel: UiLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
-     composeNavigator.deliverResult(
-       NavigationKey.NavigateChannel,
-       channel,
-       SlackScreens.Dashboard
-     )
+    composeNavigator.deliverResult(
+      NavigationKey.NavigateChannel,
+      channel,
+      SlackScreens.Dashboard
+    )
   }
 
 

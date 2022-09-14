@@ -103,7 +103,9 @@ fun DashboardUI(
             SideNavigation(
               modifier = sideNavModifier.width(sideNavWidth),
               composeNavigator = composeNavigator
-            )
+            ) {
+                isLeftNavOpen = false
+            }
           },
           rightViewComposable = { chatViewModifier ->
             lastChannel?.let { slackChannel ->
@@ -135,7 +137,9 @@ fun DashboardUI(
             SideNavigation(
               modifier = it,
               composeNavigator = composeNavigator
-            )
+            ){
+              isLeftNavOpen = false
+            }
           },
           rightViewComposable = { chatViewModifier ->
             lastChannel?.let { slackChannel ->

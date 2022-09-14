@@ -4,6 +4,7 @@ import ViewModel
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.usecases.channels.UseCaseChannelRequest
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,7 @@ import kotlinx.datetime.Clock
 class ChatScreenVM constructor(
   private val useCaseFetchMessages: UseCaseFetchMessages,
   private val useCaseSendMessage: UseCaseSendMessage
-) : ViewModel(){
+) : ViewModel() {
   var channel: UiLayerChannels.SKChannel? = null
   var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
   var message = MutableStateFlow("")
@@ -23,7 +24,8 @@ class ChatScreenVM constructor(
 
   fun requestFetch(SKChannel: UiLayerChannels.SKChannel) {
     this.channel = SKChannel
-    chatMessagesFlow.value = useCaseFetchMessages.performStreaming(SKChannel.uuid)
+    chatMessagesFlow.value =
+      useCaseFetchMessages.performStreaming(UseCaseChannelRequest(SKChannel.workspaceId, SKChannel.uuid))
   }
 
   fun sendMessage(search: String) {
@@ -31,6 +33,7 @@ class ChatScreenVM constructor(
       viewModelScope.launch {
         val message = DomainLayerMessages.SKMessage(
           Clock.System.now().toEpochMilliseconds().toString(),
+          channel!!.workspaceId,
           channel!!.uuid,
           search,
           channel!!.uuid,

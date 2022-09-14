@@ -9,6 +9,7 @@ class ChannelUIModelMapper :
   override fun mapToPresentation(model: DomainLayerChannels.SKChannel): UiLayerChannels.SKChannel {
     return UiLayerChannels.SKChannel(
       model.name,
+      model.workspaceId,
       model.isPrivate,
       model.uuid!!,
       model.createdDate,

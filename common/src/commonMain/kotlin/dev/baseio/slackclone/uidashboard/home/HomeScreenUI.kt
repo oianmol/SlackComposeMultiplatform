@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackclone.uichannels.views.*
+import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
 fun HomeScreenUI(
@@ -29,12 +32,15 @@ fun HomeScreenUI(
   onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
   onCreateChannelRequest: () -> Unit = {}
 ) {
+  val homeScreenVM = slackComponent.provideHomeScreenVM()
+  val selectedWorkspace by homeScreenVM.lastSelectedWorkspace.value.collectAsState(null)
+
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
   ) {
     Column() {
-      SlackWorkspaceTopAppBar(appBarIconClick)
+      SlackWorkspaceTopAppBar(appBarIconClick, selectedWorkspace)
       Column(Modifier.verticalScroll(rememberScrollState())) {
         JumpToText()
         ThreadsTile()
@@ -97,26 +103,29 @@ fun JumpToText() {
 }
 
 @Composable
-private fun SlackWorkspaceTopAppBar(appBarIconClick: () -> Unit) {
+private fun SlackWorkspaceTopAppBar(
+  appBarIconClick: () -> Unit,
+  selectedWorkspace: DomainLayerWorkspaces.SKWorkspace?
+) {
   SlackSurfaceAppBar(
     title = {
-      Text(text = "mutualmobile", style = SlackCloneTypography.h5.copy(color = Color.White))
+      Text(text = selectedWorkspace?.name ?: "NA", style = SlackCloneTypography.h5.copy(color = Color.White))
     },
     navigationIcon = {
-      MMImageButton(appBarIconClick)
+      WorkspaceImageButton(appBarIconClick, selectedWorkspace)
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
   )
 }
 
 @Composable
-fun MMImageButton(appBarIconClick: () -> Unit) {
+fun WorkspaceImageButton(appBarIconClick: () -> Unit, selectedWorkspace: DomainLayerWorkspaces.SKWorkspace?) {
   IconButton(onClick = {
     appBarIconClick()
   }) {
     SlackImageBox(
       Modifier.size(38.dp),
-      "https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"
+      selectedWorkspace?.picUrl ?: "https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"
     )
   }
 }
