@@ -36,7 +36,10 @@ class CreateChannelVM constructor(
       if (createChannelState.value.name?.isNotEmpty() == true) {
         val lastSelectedWorkspace = useCaseGetSelectedWorkspace.perform()
         lastSelectedWorkspace?.let {
-          createChannelState.value = createChannelState.value.copy(workspaceId = lastSelectedWorkspace.uuid)
+          createChannelState.value = createChannelState.value.copy(
+            workspaceId = lastSelectedWorkspace.uuid,
+            uuid = "${createChannelState.value.name}_${lastSelectedWorkspace.uuid}"
+          )
           val channel = useCaseCreateChannel.perform(createChannelState.value)
           composeNavigator.navigateUp()
           composeNavigator.deliverResult(
