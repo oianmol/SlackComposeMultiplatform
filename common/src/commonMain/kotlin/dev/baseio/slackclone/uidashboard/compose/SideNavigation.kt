@@ -73,7 +73,7 @@ private fun SideNavFooter(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
+private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
   Box(
     Modifier.background(
       color = if (workspace.lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
@@ -85,7 +85,9 @@ fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
         .padding(8.dp)
         .fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
-      OrganizationLogo(workspace.picUrl, workspace.lastSelected)
+      OrganizationLogo(
+        picUrl = workspace.picUrl, lastSelected = workspace.lastSelected
+      )
       Box(Modifier.weight(1f)) {
         OrganizationDetails(workspace)
       }
@@ -124,19 +126,22 @@ fun OrganizationDetails(workspace: DomainLayerWorkspaces.SKWorkspace) {
 }
 
 @Composable
-fun OrganizationLogo(picUrl: String?, lastSelected: Boolean) {
+fun OrganizationLogo(
+  modifierParent: Modifier = Modifier.size(68.dp),
+  modifierChild: Modifier = Modifier.size(64.dp),
+  picUrl: String?,
+  lastSelected: Boolean
+) {
   Box(
-    Modifier
-      .size(68.dp)
+    modifierParent
       .border(
         width = 3.dp,
         color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary else Color.Transparent,
         shape = RoundedCornerShape(12.dp)
       )
-      .padding(8.dp)
   ) {
     SlackImageBox(
-      Modifier.size(64.dp),
+      modifierChild.align(Alignment.Center),
       picUrl ?: "https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"
     )
   }
