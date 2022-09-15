@@ -29,12 +29,11 @@ import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.slackComponent
+
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator, onClose: () -> Unit) {
-  val viewModel: SideNavVM = slackComponent.provideSideNavVM()
+fun SideNavigation(modifier: Modifier, composeNavigator: ComposeNavigator, viewModel: SideNavVM, onClose: () -> Unit) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
     Column(

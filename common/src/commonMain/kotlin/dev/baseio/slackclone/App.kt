@@ -8,78 +8,95 @@ import dev.baseio.FakeDataPreloader
 import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelModule
-import dev.baseio.slackclone.injection.SlackComponent
 import dev.baseio.slackclone.navigation.*
 import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
 import dev.baseio.slackdata.injection.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import kotlinx.coroutines.withContext
 import org.koin.core.KoinApplication
+import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 
-lateinit var slackComponent: SlackComponent
-var koinApp: KoinApplication? = null
 val appNavigator = SlackComposeNavigator()
 
 @Composable
 fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
-  if (koinApp == null) {
-    koinApp = initKoin(SlackDB.invoke(sqlDriver))
-    slackComponent = SlackComponent()
-    GlobalScope.launch {
-      // dirty! just for sample demo
-      koinApp?.koin?.get<FakeDataPreloader>()?.preload()
-    }
+  val koinApp by remember { mutableStateOf(initKoin(SlackDB.invoke(sqlDriver))) }
+  LaunchedEffect(true) {
+    koinApp.koin.get<FakeDataPreloader>().preload()
   }
 
   Box(modifier) {
     Navigator(navigator = appNavigator, initialRoute = SlackScreens.OnboardingRoute) {
       this.route(SlackScreens.OnboardingRoute) {
         screen(SlackScreens.GettingStarted) {
-          GettingStartedUI(this, slackComponent.provideGettingStartedVM())
+          val gettingStartedVM = scope.get<GettingStartedVM>()
+          GettingStartedUI(this@Navigator, gettingStartedVM)
         }
         screen(SlackScreens.SkipTypingScreen) {
-          SkipTypingUI(this)
+          SkipTypingUI(this@Navigator)
         }
         screen(SlackScreens.WorkspaceInputUI) {
-          WorkspaceInputUI(this)
+          WorkspaceInputUI(this@Navigator)
         }
         screen(SlackScreens.EmailAddressInputUI) {
-          EmailAddressInputUI(this)
+          EmailAddressInputUI(this@Navigator)
         }
       }
       this.route(SlackScreens.DashboardRoute) {
         screen(SlackScreens.Dashboard) {
-          DashboardUI(this, slackComponent.provideDashboardVM(), slackComponent.provideChatScreenVM())
+          DashboardUI(this@Navigator, scope.get(), scope.get())
         }
         screen(SlackScreens.CreateChannelsScreen) {
-          SearchCreateChannelUI(this, slackComponent.provideSearchChannelsVM())
+          SearchCreateChannelUI(this@Navigator, scope.get())
         }
         screen(SlackScreens.CreateNewChannel) {
-          CreateNewChannelUI(this, slackComponent.provideCreateChannelVM())
+          CreateNewChannelUI(this@Navigator, scope.get())
         }
         screen(SlackScreens.CreateNewDM) {
-          NewChatThreadScreen(this, slackComponent.provideNewChatThreadVM())
+          NewChatThreadScreen(this@Navigator, scope.get())
         }
       }
     }
   }
 }
 
+@OptIn(KoinInternalApi::class)
 fun initKoin(slackDB: SlackDB): KoinApplication {
   return startKoin {
-    modules(module {
-      single { slackDB }
-      single { FakeDataPreloader(get(), get(), get(), get(SlackUserChannelQualifier),get(SlackChannelChannelQualifier),get()) }
-    }, dataSourceModule, dataMappersModule, useCaseModule, viewModelModule, uiModelMapperModule, dispatcherModule)
+    modules(
+      appModule(slackDB),
+      dataSourceModule,
+      dataMappersModule,
+      useCaseModule,
+      viewModelModule,
+      uiModelMapperModule,
+      dispatcherModule
+    )
   }
 }
+
+fun appModule(slackDB: SlackDB) =
+  module {
+    single { slackDB }
+    single {
+      FakeDataPreloader(
+        get(),
+        get(),
+        get(),
+        get(SlackUserChannelQualifier),
+        get(SlackChannelChannelQualifier),
+        get()
+      )
+    }
+  }

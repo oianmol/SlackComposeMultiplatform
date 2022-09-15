@@ -22,13 +22,12 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
-import dev.baseio.slackclone.slackComponent
+
 import dev.baseio.slackclone.uidashboard.compose.*
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier) {
-  val viewModel: SideNavVM = slackComponent.provideSideNavVM()
+fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavVM) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
 
   Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {

@@ -14,6 +14,6 @@ fun Navigator(
 }
 
 @Composable
-fun ComposeNavigator.screen(screenTag: BackstackScreen, content: @Composable () -> Unit) {
+fun ComposeNavigator.screen(screenTag: BackstackScreen, content: @Composable BackstackScreen.() -> Unit) {
   this.registerScreen(screenTag, content)
 }

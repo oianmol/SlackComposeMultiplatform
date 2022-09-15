@@ -10,9 +10,12 @@ import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.data.injection.AllChatsQualifier
+import dev.baseio.slackclone.data.injection.DirectChatsQualifier
 import dev.baseio.slackclone.data.injection.RecentChatsQualifier
+import dev.baseio.slackclone.data.injection.StarredChatsQualifier
+import dev.baseio.slackclone.navigation.BackstackScreen
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.slackComponent
+
 import dev.baseio.slackclone.uichannels.views.*
 import dev.baseio.slackclone.uidashboard.compose.WorkspacesBar
 import dev.baseio.slackclone.uidashboard.compose.FloatingDM
@@ -20,7 +23,7 @@ import dev.baseio.slackclone.uidashboard.home.JumpToText
 import dev.baseio.slackclone.uidashboard.home.ThreadsTile
 
 @Composable
-fun SlackWorkspaceLayoutDesktop(
+fun BackstackScreen.SlackWorkspaceLayoutDesktop(
   modifier: Modifier = Modifier,
   onItemClick: (UiLayerChannels.SKChannel) -> Unit,
   onCreateChannelRequest: () -> Unit = {},
@@ -47,22 +50,22 @@ fun SlackWorkspaceLayoutDesktop(
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        })
+        },scope.get(RecentChatsQualifier))
         SlackStarredChannels({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        })
+        },scope.get(StarredChatsQualifier))
         SlackDirectMessages({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        })
+        },scope.get(DirectChatsQualifier))
         SlackAllChannels({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        })
+        }, scope.get(AllChatsQualifier))
       }
     }
   }

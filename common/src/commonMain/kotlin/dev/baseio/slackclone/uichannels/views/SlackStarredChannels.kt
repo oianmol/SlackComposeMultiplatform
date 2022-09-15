@@ -8,18 +8,18 @@ import androidx.compose.runtime.*
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.data.injection.RecentChatsQualifier
 import dev.baseio.slackclone.data.injection.StarredChatsQualifier
-import dev.baseio.slackclone.slackComponent
+
 
 @Composable
 fun SlackStarredChannels(
   onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
-  onClickAdd: () -> Unit
+  onClickAdd: () -> Unit,
+  channelVM: SlackChannelVM
 ) {
-  val channelVM: SlackChannelVM = slackComponent.provideSlackChannelVM(StarredChatsQualifier)
 
   val recent = "Starred"
   val channelsFlow = channelVM.channels.collectAsState(mainDispatcher)
-  val channels by channelsFlow.value.collectAsState(emptyList(),mainDispatcher)
+  val channels by channelsFlow.value.collectAsState(emptyList(), mainDispatcher)
 
   LaunchedEffect(key1 = Unit) {
     channelVM.loadStarredChannels()

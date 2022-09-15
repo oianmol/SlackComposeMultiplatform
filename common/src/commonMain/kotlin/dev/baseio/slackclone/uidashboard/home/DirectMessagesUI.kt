@@ -15,11 +15,11 @@ import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.slackComponent
 import dev.baseio.slackclone.uichannels.directmessages.DMChannelsList
+import dev.baseio.slackclone.uichannels.directmessages.MessageViewModel
 
 @Composable
-fun DirectMessagesUI(onItemClick: (UiLayerChannels.SKChannel) -> Unit) {
+fun DirectMessagesUI(onItemClick: (UiLayerChannels.SKChannel) -> Unit, channelVM: MessageViewModel) {
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
@@ -29,7 +29,7 @@ fun DirectMessagesUI(onItemClick: (UiLayerChannels.SKChannel) -> Unit) {
       Spacer(modifier = Modifier.height(8.dp))
       JumpToText()
       Spacer(modifier = Modifier.height(12.dp))
-      DMChannelsList(onItemClick, slackComponent.provideMessageViewModel())
+      DMChannelsList(onItemClick, channelVM)
     }
   }
 }

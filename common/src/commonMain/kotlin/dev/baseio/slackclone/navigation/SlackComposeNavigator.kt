@@ -1,13 +1,18 @@
 package dev.baseio.slackclone.navigation
 
+import ViewModel
 import mainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.koin.core.component.*
+import org.koin.core.qualifier.TypeQualifier
+import org.koin.core.scope.Scope
 import kotlin.collections.LinkedHashMap
 
 class SlackComposeNavigator : ComposeNavigator {
@@ -19,7 +24,7 @@ class SlackComposeNavigator : ComposeNavigator {
   private val currentRoute: MutableState<BackstackRoute?> = mutableStateOf(null)
   private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
 
-  private val screenProviders = mutableMapOf<BackstackScreen, @Composable () -> Unit>()
+  private val screenProviders = mutableMapOf<BackstackScreen, @Composable BackstackScreen.() -> Unit>()
   private val navigatorScope = CoroutineScope(SupervisorJob() + mainDispatcher)
   override val changePublisher = Channel<Unit>()
 
@@ -35,7 +40,7 @@ class SlackComposeNavigator : ComposeNavigator {
     }
 
   @Composable
-  override fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit) {
+  override fun registerScreen(screenTag: BackstackScreen, screen: @Composable BackstackScreen.() -> Unit) {
     screenProviders[screenTag] = screen
   }
 
@@ -84,6 +89,7 @@ class SlackComposeNavigator : ComposeNavigator {
     }
 
     backStackRoute[currentRoute.value]?.remove(currentScreen.value)
+    currentScreen.value?.close()
     // now if the current route becomes empty set the current route to the previous route
     checkWhenWeCantNavigateBack()
     backStackRoute[currentRoute.value]?.lastOrNull()?.let {
@@ -114,11 +120,18 @@ class SlackComposeNavigator : ComposeNavigator {
   override fun navigateRoute(route: BackstackRoute, clearRoutes: (BackstackRoute, () -> Unit) -> Unit) {
     backStackRoute.keys.forEach { backstackRoute ->
       clearRoutes(backstackRoute) { // if the user clears the onboarding route
-        backStackRoute[backstackRoute]?.clear()
+        closeAndClearScreens(backstackRoute)
       }
     }
     currentRoute.value = route
     navigateScreen(route.initialScreen)
+  }
+
+  private fun closeAndClearScreens(backstackRoute: BackstackRoute) {
+    backStackRoute[backstackRoute]?.forEach {
+      it.close()
+    }
+    backStackRoute[backstackRoute]?.clear()
   }
 
 
@@ -134,16 +147,24 @@ class SlackComposeNavigator : ComposeNavigator {
       currentScreen.value = route.initialScreen
       backStackRoute[currentRoute.value]?.add(route.initialScreen)
     }
-    screenProviders[currentScreen.value]?.invoke() ?: kotlin.run {
+    screenProviders[currentScreen.value]?.invoke(currentScreen.value!!) ?: kotlin.run {
       throw IllegalArgumentException("Screen not found!")
     }
   }
-
-
 }
 
-open class BackstackScreen(var name: String)
-open class BackstackRoute(var name: String, var initialScreen: BackstackScreen)
+open class BackstackScreen(var name: String) : KoinScopeComponent {
+  override val scope: Scope by lazy {
+    // TODO check if we can get rid of TypeQualifier(BackstackScreen::class)
+    getKoin().createScope(getScopeId(), TypeQualifier(BackstackScreen::class), this)
+  }
+
+  fun close() {
+    scope.close() // don't forget to close current scope
+  }
+}
+
+abstract class BackstackRoute(var name: String, var initialScreen: BackstackScreen)
 
 interface ComposeNavigator {
   var whenRouteCanNoLongerNavigateBack: () -> Unit
@@ -158,7 +179,7 @@ interface ComposeNavigator {
   fun navigateRoute(route: BackstackRoute, removeRoute: (BackstackRoute, () -> Unit) -> Unit)
 
   @Composable
-  fun registerScreen(screenTag: BackstackScreen, screen: @Composable () -> Unit)
+  fun registerScreen(screenTag: BackstackScreen, screen: @Composable BackstackScreen.() -> Unit)
   fun deliverResult(
     key: NavigationKey,
     data: Any,

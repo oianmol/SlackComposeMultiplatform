@@ -47,7 +47,7 @@ val homeNavigator = SlackComposeNavigator()
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DashboardUI(
+fun BackstackScreen.DashboardUI(
   composeNavigator: ComposeNavigator,
   dashboardVM: DashboardVM,
   viewModel: ChatScreenVM
@@ -102,7 +102,8 @@ fun DashboardUI(
           leftViewComposable = { sideNavModifier ->
             SideNavigation(
               modifier = sideNavModifier.width(sideNavWidth),
-              composeNavigator = composeNavigator
+              composeNavigator = composeNavigator,
+              scope.get()
             ) {
                 isLeftNavOpen = false
             }
@@ -136,7 +137,8 @@ fun DashboardUI(
           leftViewComposable = {
             SideNavigation(
               modifier = it,
-              composeNavigator = composeNavigator
+              composeNavigator = composeNavigator,
+              scope.get()
             ){
               isLeftNavOpen = false
             }
@@ -176,7 +178,7 @@ fun DashboardUI(
           dashboardVM.isChatViewClosed.value = false
         }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = {
-          SlackSideBarLayoutDesktop(it)
+          SlackSideBarLayoutDesktop(it,scope.get())
         }, workSpaceAndChannels = {
           SlackWorkspaceLayoutDesktop(it, onItemClick = {
             onItemClick(it)
@@ -297,7 +299,7 @@ private fun DashboardScaffold(
                   })
               }
               screen(SlackScreens.DMs) {
-                DirectMessagesUI(onItemClick = onItemClick)
+                DirectMessagesUI(onItemClick = onItemClick, scope.get())
               }
               screen(SlackScreens.Mentions) {
                 MentionsReactionsUI()
@@ -306,7 +308,7 @@ private fun DashboardScaffold(
                 SearchMessagesUI()
               }
               screen(SlackScreens.You) {
-                UserProfileUI(this)
+                UserProfileUI(this@Navigator)
               }
             }
           }

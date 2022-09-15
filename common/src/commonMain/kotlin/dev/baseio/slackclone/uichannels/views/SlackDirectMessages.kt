@@ -6,17 +6,14 @@ import dev.baseio.slackclone.uichannels.SlackChannelVM
 import androidx.compose.runtime.*
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackclone.data.injection.DirectChatsQualifier
-import dev.baseio.slackclone.data.injection.RecentChatsQualifier
-import dev.baseio.slackclone.slackComponent
+
 
 @Composable
 fun SlackDirectMessages(
   onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
-  onClickAdd: () -> Unit
+  onClickAdd: () -> Unit,
+  channelVM: SlackChannelVM
 ) {
-  val channelVM: SlackChannelVM  = slackComponent.provideSlackChannelVM(DirectChatsQualifier)
-
   val recent = "DMs"
   val channelsFlow = channelVM.channels.collectAsState(mainDispatcher)
   val channels by channelsFlow.value.collectAsState(emptyList(),mainDispatcher)

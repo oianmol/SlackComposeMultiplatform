@@ -1,6 +1,7 @@
 package dev.baseio.slackclone.data.injection
 
 import dev.baseio.slackclone.chatcore.injection.SlackChannelUiLayerChannels
+import dev.baseio.slackclone.navigation.BackstackScreen
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.SearchChannelsVM
@@ -14,24 +15,38 @@ import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.QualifierValue
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.ext.getFullName
 
 val viewModelModule = module {
-  single { HomeScreenVM(get()) }
-  single { GettingStartedVM() }
-  single { SideNavVM(get()) }
-  single { DashboardVM() }
-  single { ChatScreenVM(get(), get()) }
-  single { CreateChannelVM(get(), get(), get(SlackChannelUiLayerChannels)) }
-  single { NewChatThreadVM(get(), get(SlackChannelUiLayerChannels), get()) }
-
-  single(qualifier = RecentChatsQualifier) { SlackChannelVM(get(), get(SlackChannelUiLayerChannels), get(), get()) }
-  single(qualifier = StarredChatsQualifier) { SlackChannelVM(get(), get(SlackChannelUiLayerChannels), get(), get()) }
-  single(qualifier = DirectChatsQualifier) { SlackChannelVM(get(), get(SlackChannelUiLayerChannels), get(), get()) }
-  single(qualifier = AllChatsQualifier) { SlackChannelVM(get(), get(SlackChannelUiLayerChannels), get(), get()) }
-
-  single { MessageViewModel(get(), get(SlackChannelUiLayerChannels), get()) }
-  single { SearchChannelsVM(get(), get(), get(SlackChannelUiLayerChannels), get()) }
+  scope<BackstackScreen> {
+    scoped {
+      HomeScreenVM(getKoin().get())
+    }
+    scoped { GettingStartedVM() }
+    scoped { SideNavVM(getKoin().get()) }
+    scoped { DashboardVM() }
+    scoped {
+      ChatScreenVM(getKoin().get(), getKoin().get())
+    }
+    scoped {
+      CreateChannelVM(getKoin().get(), getKoin().get(), getKoin().get(SlackChannelUiLayerChannels))
+    }
+    scoped {
+      NewChatThreadVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
+    }
+    scoped {
+      MessageViewModel(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
+    }
+    scoped {
+      SearchChannelsVM(getKoin().get(), getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
+    }
+    scoped(qualifier = RecentChatsQualifier) { SlackChannelVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get(), getKoin().get()) }
+    scoped(qualifier = StarredChatsQualifier) { SlackChannelVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get(), getKoin().get()) }
+    scoped(qualifier = DirectChatsQualifier) { SlackChannelVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get(), getKoin().get()) }
+    scoped(qualifier = AllChatsQualifier) { SlackChannelVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get(), getKoin().get()) }
+  }
 }
 
 
