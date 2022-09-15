@@ -263,7 +263,7 @@ private fun IntroText(
         }
       },
       modifier = modifier,
-      style = SlackCloneTypography.h3
+      style = SlackCloneTypography.h4
     )
   }
 

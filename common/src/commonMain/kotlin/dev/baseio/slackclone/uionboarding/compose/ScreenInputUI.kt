@@ -11,7 +11,7 @@ fun EmailAddressInputUI(composeNavigator: ComposeNavigator) {
     { modifier ->
       EmailInputView(modifier)
     },
-    "We\\'ll send you an email that\\'ll instantly sign you in."
+    "We will send you an email that will instantly sign you in."
   )
 }
 

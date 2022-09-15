@@ -41,7 +41,7 @@ fun SlackListItem(
     )
     Text(
       text = title,
-      style = SlackCloneTypography.subtitle1.copy(
+      style = SlackCloneTypography.subtitle2.copy(
         color = SlackCloneColorProvider.colors.textPrimary.copy(
           alpha = 0.8f
         )

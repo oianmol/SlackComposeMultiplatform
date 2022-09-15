@@ -26,7 +26,7 @@ val viewModelModule = module {
     }
     scoped { GettingStartedVM() }
     scoped { SideNavVM(getKoin().get()) }
-    scoped { DashboardVM() }
+    scoped { DashboardVM(get()) }
     scoped {
       ChatScreenVM(getKoin().get(), getKoin().get())
     }

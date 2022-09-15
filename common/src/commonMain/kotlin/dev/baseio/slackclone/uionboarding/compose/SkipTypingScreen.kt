@@ -82,15 +82,15 @@ private fun SkipTypingLarge(composeNavigator: ComposeNavigator) {
       contentScale = ContentScale.Fit
     )
     Column(
-      verticalArrangement = Arrangement.SpaceAround,
+      verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.weight(1f, fill = true).fillMaxHeight()
+      modifier = Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight()
     ) {
       TitleSubtitleText()
-      Spacer(Modifier.padding(8.dp))
+      Spacer(Modifier.height(12.dp))
       Column {
         EmailMeMagicLink(composeNavigator)
-        Box(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         IWillSignInManually(composeNavigator)
       }
     }

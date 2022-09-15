@@ -56,6 +56,7 @@ fun BackstackScreen.DashboardUI(
 
   val keyboardController = LocalSoftwareKeyboardController.current
   val lastChannel by dashboardVM.selectedChatChannel.collectAsState(mainDispatcher)
+  val selectedWorkspace by dashboardVM.selectedWorkspace.collectAsState(mainDispatcher)
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
   val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(mainDispatcher)
@@ -105,7 +106,7 @@ fun BackstackScreen.DashboardUI(
               composeNavigator = composeNavigator,
               scope.get()
             ) {
-                isLeftNavOpen = false
+              isLeftNavOpen = false
             }
           },
           rightViewComposable = { chatViewModifier ->
@@ -139,7 +140,7 @@ fun BackstackScreen.DashboardUI(
               modifier = it,
               composeNavigator = composeNavigator,
               scope.get()
-            ){
+            ) {
               isLeftNavOpen = false
             }
           },
@@ -178,7 +179,7 @@ fun BackstackScreen.DashboardUI(
           dashboardVM.isChatViewClosed.value = false
         }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = {
-          SlackSideBarLayoutDesktop(it,scope.get())
+          SlackSideBarLayoutDesktop(it, scope.get())
         }, workSpaceAndChannels = {
           SlackWorkspaceLayoutDesktop(it, onItemClick = {
             onItemClick(it)
