@@ -159,7 +159,7 @@ open class BackstackScreen(var name: String) : KoinScopeComponent {
     getKoin().createScope(getScopeId(), TypeQualifier(BackstackScreen::class), this)
   }
 
-  fun close() {
+  open fun close() {
     scope.close() // don't forget to close current scope
   }
 }

@@ -3,6 +3,7 @@ package dev.baseio.slackclone.uionboarding
 import ViewModel
 import androidx.compose.runtime.mutableStateOf
 import dev.baseio.slackclone.uionboarding.compose.SlackAnimSpec
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -25,5 +26,10 @@ class GettingStartedVM : ViewModel() {
       delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(800))
       endAnimation()
     }
+  }
+
+  override fun onClear() {
+    super.onClear()
+    viewModelScope.cancel()
   }
 }

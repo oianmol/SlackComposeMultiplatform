@@ -1,12 +1,21 @@
 package dev.baseio.slackclone.navigation
 
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
+
 class SlackScreens {
 
   object OnboardingRoute : BackstackRoute("OnboardingRoute", GettingStarted)
-  object GettingStarted : BackstackScreen("gettingStarted")
+  object GettingStarted : BackstackScreen("gettingStarted") {
+    override fun close() {
+      scope.get<GettingStartedVM>().onClear()
+      super.close()
+    }
+  }
+
   object SkipTypingScreen : BackstackScreen("SkipTypingUI")
   object EmailAddressInputUI : BackstackScreen("EmailAddressInputUI")
   object WorkspaceInputUI : BackstackScreen("WorkspaceInputUI")
+
   // DashboardNavigation
   object DashboardRoute : BackstackRoute("DashboardNavigation", Dashboard)
   object Dashboard : BackstackScreen("Dashboard")
