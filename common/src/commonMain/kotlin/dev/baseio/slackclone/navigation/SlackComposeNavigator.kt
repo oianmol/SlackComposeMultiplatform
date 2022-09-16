@@ -5,6 +5,7 @@ import mainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import dev.baseio.slackclone.koinApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
@@ -98,8 +99,13 @@ class SlackComposeNavigator : ComposeNavigator {
     }
   }
 
-  private fun setCurrentScreenAndNotify(screen: BackstackScreen) {
+  fun setBackstackScreen(screen: BackstackScreen) {
     currentScreen.value = screen
+    screen.create()
+  }
+
+  private fun setCurrentScreenAndNotify(screen: BackstackScreen) {
+    setBackstackScreen(screen)
     navigatorScope.launch {
       changePublisher.send(Unit)
     }
@@ -143,7 +149,7 @@ class SlackComposeNavigator : ComposeNavigator {
   override fun start(route: BackstackRoute) {
     if (currentScreen.value == null) {
       currentRoute.value = route
-      currentScreen.value = route.initialScreen
+      setBackstackScreen(route.initialScreen)
       backStackRoute[currentRoute.value]?.add(route.initialScreen)
     }
     screenProviders[currentScreen.value]?.invoke(currentScreen.value!!) ?: kotlin.run {
@@ -153,11 +159,19 @@ class SlackComposeNavigator : ComposeNavigator {
 }
 
 open class BackstackScreen(var name: String) : KoinScopeComponent {
-  override val scope: Scope by lazy { createScope(this) }
+  override lateinit var scope: Scope
+
+  fun create() {
+    if (::scope.isInitialized) {
+      return
+    }
+    scope = createScope(this)
+  }
 
   open fun close() {
     if (scope.isNotClosed()) {
-      scope.close() // don't forget to close current scope
+      scope.close() //clear old dependencies ForEx: ViewModels
+      scope = createScope(this)
     }
   }
 }
