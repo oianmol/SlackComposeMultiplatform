@@ -40,6 +40,12 @@ val viewModelModule = module {
     slackChannelVMScoped()
   }
 
+  scope<SlackScreens.CreateNewDM>{
+    scoped {
+      NewChatThreadVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
+    }
+  }
+
   scope<SlackScreens.CreateChannelsScreen> {
     scoped {
       SearchChannelsVM(getKoin().get(), getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
@@ -60,9 +66,7 @@ val viewModelModule = module {
       ChatScreenVM(getKoin().get(), getKoin().get())
     }
 
-    scoped {
-      NewChatThreadVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
-    }
+
 
     slackChannelVMScoped()
   }
