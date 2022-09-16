@@ -5,7 +5,6 @@ import mainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
@@ -154,13 +153,12 @@ class SlackComposeNavigator : ComposeNavigator {
 }
 
 open class BackstackScreen(var name: String) : KoinScopeComponent {
-  override val scope: Scope by lazy {
-    // TODO check if we can get rid of TypeQualifier(BackstackScreen::class)
-    getKoin().createScope(getScopeId(), TypeQualifier(BackstackScreen::class), this)
-  }
+  override val scope: Scope by lazy { createScope(this) }
 
   open fun close() {
-    scope.close() // don't forget to close current scope
+    if (scope.isNotClosed()) {
+      scope.close() // don't forget to close current scope
+    }
   }
 }
 
