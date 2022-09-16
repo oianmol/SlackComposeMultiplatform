@@ -105,7 +105,6 @@ private fun MessageTFRow(
         mentionText = mentionText,
         onSpanUpdate = { text, spans, range ->
           spanInfoList = spans
-          viewModel.message.value = TextFieldValue(text, selection = range)
           spanInfoList.firstOrNull { infos ->
             range.intersects(infos.range) || range.end == infos.range.end
           }?.let { infos ->
