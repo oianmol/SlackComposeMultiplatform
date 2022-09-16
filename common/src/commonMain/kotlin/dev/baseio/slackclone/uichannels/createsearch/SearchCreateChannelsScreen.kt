@@ -59,25 +59,23 @@ private fun ListChannels(
   onItemClick: (Any) -> Unit,
   newChannel: () -> Unit
 ) {
-  Box {
-    Scaffold(
-      backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-      contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier,
-      scaffoldState = scaffoldState,
-      topBar = {
-        val channelCount by searchChannelsVM.channelCount.collectAsState(mainDispatcher)
-        SearchAppBar(composeNavigator, channelCount)
-      },
-      snackbarHost = {
-        scaffoldState.snackbarHostState
-      },
-      floatingActionButton = {
-        NewChannelFAB(newChannel)
-      }
-    ) { innerPadding ->
-      SearchContent(innerPadding, searchChannelsVM, onItemClick)
+  Scaffold(
+    backgroundColor = SlackCloneColorProvider.colors.uiBackground,
+    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    modifier = Modifier,
+    scaffoldState = scaffoldState,
+    topBar = {
+      val channelCount by searchChannelsVM.channelCount.collectAsState(mainDispatcher)
+      SearchAppBar(composeNavigator, channelCount)
+    },
+    snackbarHost = {
+      scaffoldState.snackbarHostState
+    },
+    floatingActionButton = {
+      NewChannelFAB(newChannel)
     }
+  ) { innerPadding ->
+    SearchContent(innerPadding, searchChannelsVM, onItemClick)
   }
 }
 
@@ -106,7 +104,7 @@ private fun ListAllChannels(
   onItemClick: (UiLayerChannels.SKChannel) -> Unit
 ) {
   val channels by searchChannelsVM.channels.collectAsState(mainDispatcher)
-  val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
+  val channelsFlow by channels.collectAsState(emptyList(), mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null

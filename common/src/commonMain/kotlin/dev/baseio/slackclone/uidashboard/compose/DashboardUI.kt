@@ -180,9 +180,9 @@ fun BackstackScreen.DashboardUI(
         }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = {
           SlackSideBarLayoutDesktop(it, scope.get())
-        }, workSpaceAndChannels = {
-          SlackWorkspaceLayoutDesktop(it, onItemClick = {
-            onItemClick(it)
+        }, workSpaceAndChannels = { modifier ->
+          SlackWorkspaceLayoutDesktop(modifier, onItemClick = { skChannel ->
+            onItemClick(skChannel)
           }, onCreateChannelRequest = {
             composeNavigator.registerForNavigationResult(
               NavigationKey.NavigateChannel,
