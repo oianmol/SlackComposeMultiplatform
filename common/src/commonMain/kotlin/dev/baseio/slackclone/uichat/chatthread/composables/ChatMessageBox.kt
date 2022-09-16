@@ -10,9 +10,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
@@ -76,6 +78,7 @@ fun ChatOptions(viewModel: ChatScreenVM, modifier: Modifier = Modifier) {
 
 private fun chatOptionIconSize() = Modifier.size(20.dp)
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MessageTFRow(
   viewModel: ChatScreenVM,
@@ -101,7 +104,21 @@ private fun MessageTFRow(
         decorationBox = { innerTextField ->
           ChatTFPlusPlaceHolder(search, Modifier, innerTextField, viewModel)
         },
-        modifier = Modifier.weight(1f)
+        modifier = Modifier.weight(1f).onKeyEvent { event: KeyEvent ->
+          when {
+            eventIsEnter(event) -> {
+              viewModel.sendMessage(search)
+              return@onKeyEvent true
+            }
+
+            event.isShiftPressed && event.key == Key.Enter -> {
+              //allow next line
+              return@onKeyEvent true
+            }
+
+            else -> false
+          }
+        }
       )
 
       SendMessageButton(viewModel, search)
@@ -109,6 +126,10 @@ private fun MessageTFRow(
   }
 
 }
+
+@OptIn(ExperimentalComposeUiApi::class)
+private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type == KeyEventType.KeyUp &&
+    event.key == Key.Enter
 
 @Composable
 fun CollapseExpandButton(viewModel: ChatScreenVM) {

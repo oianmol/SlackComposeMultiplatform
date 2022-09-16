@@ -34,6 +34,7 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            modules("java.sql")
             packageName = "jvm"
             packageVersion = "1.0.0"
         }

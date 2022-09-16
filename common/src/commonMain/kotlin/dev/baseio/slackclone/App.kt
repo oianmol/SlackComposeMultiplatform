@@ -28,12 +28,15 @@ import org.koin.dsl.module
 
 
 val appNavigator = SlackComposeNavigator()
+var koinApp: KoinApplication? = null
 
 @Composable
 fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
-  val koinApp by remember { mutableStateOf(initKoin(SlackDB.invoke(sqlDriver))) }
+  if (koinApp == null) {
+    koinApp = initKoin(SlackDB.invoke(sqlDriver))
+  }
   LaunchedEffect(true) {
-    koinApp.koin.get<FakeDataPreloader>().preload()
+    koinApp?.koin?.get<FakeDataPreloader>()?.preload()
   }
 
   Box(modifier) {
@@ -71,7 +74,6 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
   }
 }
 
-@OptIn(KoinInternalApi::class)
 fun initKoin(slackDB: SlackDB): KoinApplication {
   return startKoin {
     modules(
