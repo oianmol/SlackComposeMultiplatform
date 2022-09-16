@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedTime
+import dev.baseio.slackclone.commonui.reusable.MentionsText
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
@@ -31,12 +32,14 @@ fun ChatMessage(message: DomainLayerMessages.SKMessage) {
 @Composable
 fun ChatMedia(message: DomainLayerMessages.SKMessage) {
   Column {
-    Text(
-      message.message,
-      style = SlackCloneTypography.subtitle2.copy(
+    MentionsText(
+      modifier = Modifier,
+      message.message, style = SlackCloneTypography.subtitle2.copy(
         color = SlackCloneColorProvider.colors.textSecondary
-      ), modifier = Modifier.padding(4.dp)
-    )
+      )
+    ) {
+
+    }
   }
 
 }

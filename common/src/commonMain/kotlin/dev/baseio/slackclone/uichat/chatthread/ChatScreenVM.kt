@@ -1,6 +1,7 @@
 package dev.baseio.slackclone.uichat.chatthread
 
 import ViewModel
+import androidx.compose.ui.text.input.TextFieldValue
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
@@ -19,7 +20,7 @@ class ChatScreenVM constructor(
 ) : ViewModel() {
   var channel: UiLayerChannels.SKChannel? = null
   var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
-  var message = MutableStateFlow("")
+  var message = MutableStateFlow(TextFieldValue())
   var chatBoxState = MutableStateFlow(BoxState.Expanded)
 
   fun requestFetch(SKChannel: UiLayerChannels.SKChannel) {
@@ -43,7 +44,7 @@ class ChatScreenVM constructor(
         )
         useCaseSendMessage.perform(message)
       }
-      message.value = ""
+      message.value = TextFieldValue()
       chatBoxState.value = BoxState.Collapsed
     }
   }

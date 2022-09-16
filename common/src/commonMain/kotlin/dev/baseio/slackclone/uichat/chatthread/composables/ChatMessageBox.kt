@@ -15,7 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.commonui.reusable.MentionsTextField
+import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.BoxState
@@ -71,7 +74,7 @@ fun ChatOptions(viewModel: ChatScreenVM, modifier: Modifier = Modifier) {
       }
     }
     Box(Modifier.padding(end = 8.dp)) {
-      SendMessageButton(viewModel = viewModel, search = search)
+      SendMessageButton(viewModel = viewModel, search = search.text)
     }
   }
 }
@@ -85,29 +88,46 @@ private fun MessageTFRow(
   modifier: Modifier
 ) {
 
-  val search by viewModel.message.collectAsState(mainDispatcher)
+  val mentionText by viewModel.message.collectAsState(mainDispatcher)
+  var spanInfoList by remember {
+    mutableStateOf(listOf<SpanInfos>())
+  }
+  var currentlyEditing by remember {
+    mutableStateOf<SpanInfos?>(null)
+  }
+
   Column {
     Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
     Row(
       modifier
     ) {
-      BasicTextField(
-        value = search,
-        maxLines = 4,
-        cursorBrush = SolidColor(SlackCloneColorProvider.colors.textPrimary),
-        onValueChange = {
+      MentionsTextField(
+        mentionText = mentionText,
+        onSpanUpdate = { text, spans, range ->
+          spanInfoList = spans
+          viewModel.message.value = TextFieldValue(text, selection = range)
+          spanInfoList.firstOrNull { infos ->
+            range.intersects(infos.range) || range.end == infos.range.end
+          }?.let { infos ->
+            currentlyEditing = infos
+          } ?: kotlin.run {
+            currentlyEditing = null
+          }
+        }, onValueChange = {
           viewModel.message.value = it
         },
+        maxLines = 4,
+        cursorBrush = SolidColor(SlackCloneColorProvider.colors.textPrimary),
         textStyle = SlackCloneTypography.subtitle1.copy(
           color = SlackCloneColorProvider.colors.textPrimary,
         ),
         decorationBox = { innerTextField ->
-          ChatTFPlusPlaceHolder(search, Modifier, innerTextField, viewModel)
+          ChatTFPlusPlaceHolder(mentionText.text, Modifier, innerTextField, viewModel)
         },
         modifier = Modifier.weight(1f).onKeyEvent { event: KeyEvent ->
           when {
             eventIsEnter(event) -> {
-              viewModel.sendMessage(search)
+              viewModel.sendMessage(mentionText.text)
               return@onKeyEvent true
             }
 
@@ -121,7 +141,7 @@ private fun MessageTFRow(
         }
       )
 
-      SendMessageButton(viewModel, search)
+      SendMessageButton(viewModel, mentionText.text)
     }
   }
 
