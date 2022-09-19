@@ -18,7 +18,9 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 fun SlackOnlineBox(
   imageUrl: String,
   parentModifier: Modifier = Modifier.size(34.dp),
-  imageModifier: Modifier = Modifier.size(28.dp)
+  imageModifier: Modifier = Modifier.size(28.dp),
+  onlineIndicator:Modifier = Modifier.size(12.dp),
+  onlineIndicatorParent:Modifier = Modifier.size(14.dp)
 ) {
   Box(parentModifier) {
     SlackImageBox(
@@ -28,15 +30,12 @@ fun SlackOnlineBox(
     SlackCloneSurface(
       shape = CircleShape,
       border = BorderStroke(3.dp, color = SlackCloneColorProvider.colors.uiBackground),
-      modifier = Modifier.align(Alignment.BottomEnd)
-        .size(14.dp)
+      modifier = onlineIndicatorParent.align(Alignment.BottomEnd),
     ) {
       Box(
-        modifier = Modifier
-          .size(12.dp)
+        modifier = onlineIndicator
           .clip(CircleShape)
           .background(Color.Green)
-
       )
     }
   }

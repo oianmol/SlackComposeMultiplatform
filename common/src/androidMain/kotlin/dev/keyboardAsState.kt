@@ -1,18 +1,18 @@
-package dev.baseio.slackclone.commonui.keyboard
+package dev
 
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Rect
 import android.view.ViewTreeObserver
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 
-sealed class Keyboard {
-  data class Opened(var height: Int) : Keyboard()
-  object Closed : Keyboard()
-}
-
 @Composable
-fun keyboardAsState(): State<Keyboard> {
-  val keyboardState = remember { mutableStateOf<Keyboard>(Keyboard.Closed) }
+actual fun keyboardAsState(): State<Keyboard> {
+  val resources = LocalContext.current.resources
+  val keyboardState =
+    remember { mutableStateOf(if (isHardwareKeyboardAvailable(resources)) Keyboard.HardwareKeyboard else Keyboard.Closed) }
   val view = LocalView.current
   DisposableEffect(view) {
     val onGlobalListener = ViewTreeObserver.OnGlobalLayoutListener {
@@ -34,4 +34,8 @@ fun keyboardAsState(): State<Keyboard> {
   }
 
   return keyboardState
+}
+
+private fun isHardwareKeyboardAvailable(resources: Resources): Boolean {
+  return resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS
 }

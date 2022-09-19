@@ -62,17 +62,16 @@ fun SlackListItem(
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SlackListItem(
+  modifier: Modifier = Modifier.padding(8.dp),
   icon: @Composable () -> Unit,
   center: @Composable (Modifier) -> Unit,
   trailingItem: @Composable () -> Unit ? = {},
   onItemClick: () -> Unit = {}
 ) {
   Row(
-    modifier = Modifier
-      .padding(8.dp)
+    modifier = modifier
       .clickable {
         onItemClick()
       }, verticalAlignment = Alignment.CenterVertically
@@ -80,8 +79,7 @@ fun SlackListItem(
     icon()
 
     center(Modifier
-      .weight(1f)
-      .padding(8.dp))
+      .weight(1f))
 
     trailingItem()
   }

@@ -20,8 +20,8 @@ fun DMChannelsList(
   val listState = rememberLazyListState()
 
   LazyColumn(state = listState) {
-    for (channelIndex in 0 until channelsFlow.size) {
-      val channel = channelsFlow.get(channelIndex)!!
+    for (channelIndex in channelsFlow.indices) {
+      val channel = channelsFlow[channelIndex]
 
       item {
         DMLastMessageItem({

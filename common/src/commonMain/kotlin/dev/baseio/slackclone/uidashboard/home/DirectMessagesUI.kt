@@ -24,7 +24,7 @@ fun DirectMessagesUI(onItemClick: (UiLayerChannels.SKChannel) -> Unit, channelVM
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
   ) {
-    Column() {
+    Column {
       DMTopAppBar()
       Spacer(modifier = Modifier.height(8.dp))
       JumpToText()

@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
@@ -31,6 +33,7 @@ fun SlackChannelItem(
     true -> {
       DirectMessageChannel(onItemClick, slackChannel, textColor)
     }
+
     else -> {
       GroupChannelItem(slackChannel, onItemClick)
     }
@@ -78,21 +81,29 @@ fun DMLastMessageItem(
 ) {
   Row(
     modifier = Modifier
-      .padding(start = 8.dp, bottom = 4.dp)
+      .padding(4.dp)
       .fillMaxWidth()
       .clickable {
         onItemClick(slackChannel)
       }, verticalAlignment = Alignment.CenterVertically
   ) {
+    SlackListItem(modifier = Modifier, icon = {
+      if (slackChannel.isOneToOne == false) {
+        Box(Modifier.size(24.dp)) {
+          Text(text = "#", style = textStyleFieldSecondary(), modifier = Modifier.align(Alignment.Center))
+        }
+      } else {
+        SlackOnlineBox(
+          imageUrl = slackChannel.pictureUrl ?: "",
+          parentModifier = Modifier.size(24.dp),
+          imageModifier = Modifier.size(20.dp),
+          onlineIndicator = Modifier.size(10.dp),
+          onlineIndicatorParent = Modifier.size(12.dp)
+        )
+      }
 
-    SlackListItem(icon = {
-      SlackOnlineBox(
-        imageUrl = slackChannel.pictureUrl ?: "",
-        parentModifier = Modifier.size(38.dp),
-        imageModifier = Modifier.size(30.dp)
-      )
     }, center = {
-      Column(it) {
+      Column(it.padding(4.dp)) {
         ChannelText(slackChannel, SlackCloneColorProvider.colors.textPrimary)
         ChannelMessage(slackMessage, SlackCloneColorProvider.colors.textSecondary)
       }
@@ -105,6 +116,12 @@ fun DMLastMessageItem(
   }
 }
 
+@Composable
+private fun textStyleFieldSecondary() = SlackCloneTypography.subtitle2.copy(
+  color = SlackCloneColorProvider.colors.textSecondary,
+  fontWeight = FontWeight.Normal,
+  textAlign = TextAlign.Start
+)
 
 @Composable
 private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
@@ -115,7 +132,7 @@ private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSeco
         alpha = 0.8f
       ),
     ), modifier = Modifier
-      .padding(start = 4.dp, top = 4.dp),
+      .padding(4.dp),
     maxLines = 2,
     overflow = TextOverflow.Ellipsis
   )
@@ -125,7 +142,7 @@ private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSeco
 fun RelativeTime(createdDate: Long) {
   Text(
     calculateTimeAgoByTimeGranularity
-      (Clock.System.now().toEpochMilliseconds(), createdDate) ?: "$createdDate",
+      (Clock.System.now().toEpochMilliseconds(), createdDate),
     style = SlackCloneTypography.caption.copy(
       color = SlackCloneColorProvider.colors.textSecondary
     ), modifier = Modifier.padding(4.dp)

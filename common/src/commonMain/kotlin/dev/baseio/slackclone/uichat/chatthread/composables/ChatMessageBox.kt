@@ -12,20 +12,32 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import dev.Keyboard
 import dev.baseio.slackclone.commonui.reusable.MentionsTextField
 import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.keyboardAsState
 
 @Composable
 fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
+  val keyboard by keyboardAsState()
+  var focusState by remember { mutableStateOf<FocusState?>(null) }
+  val focusRequester = FocusRequester()
+
+  LaunchedEffect(true){
+    focusRequester.requestFocus()
+  }
 
   Column(
     modifier.background(SlackCloneColorProvider.colors.uiBackground),
@@ -35,12 +47,16 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
       viewModel,
       modifier = Modifier.padding(
         start = 4.dp
+      ).onFocusChanged { newFocusState ->
+        focusState = newFocusState
+      }.focusRequester(focusRequester)
+    )
+    if (keyboard is Keyboard.Opened || focusState?.hasFocus == true) {
+      ChatOptions(
+        viewModel,
+        Modifier
       )
-    )
-    ChatOptions(
-      viewModel,
-      Modifier
-    )
+    }
   }
 
 }
@@ -87,6 +103,7 @@ private fun MessageTFRow(
   viewModel: ChatScreenVM,
   modifier: Modifier
 ) {
+  val keyboard by keyboardAsState()
 
   val mentionText by viewModel.message.collectAsState(mainDispatcher)
   var spanInfoList by remember {
@@ -139,8 +156,7 @@ private fun MessageTFRow(
           }
         }
       )
-
-      SendMessageButton(viewModel, mentionText.text)
+      CollapseExpandButton(viewModel)
     }
   }
 

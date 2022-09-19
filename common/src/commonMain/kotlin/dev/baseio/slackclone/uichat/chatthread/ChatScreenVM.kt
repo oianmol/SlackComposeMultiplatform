@@ -38,7 +38,7 @@ class ChatScreenVM constructor(
           channel!!.uuid,
           search,
           channel!!.uuid,
-          "SlackUser",
+          "Joe Donovan",
           Clock.System.now().toEpochMilliseconds(),
           Clock.System.now().toEpochMilliseconds(),
         )
@@ -50,9 +50,11 @@ class ChatScreenVM constructor(
   }
 
   fun switchChatBoxState() {
-    chatBoxState.value =
-      if (chatBoxState.value == BoxState.Collapsed) BoxState.Expanded else BoxState.Collapsed
-
+    chatBoxState.value = chatBoxState.value.toggle()
   }
 
+}
+
+private fun BoxState.toggle(): BoxState {
+  return if (this == BoxState.Collapsed) BoxState.Expanded else BoxState.Collapsed
 }

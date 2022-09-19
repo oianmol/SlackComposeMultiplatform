@@ -11,9 +11,24 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import mainDispatcher
 
 @Composable
 fun ChatScreenContent(viewModel: ChatScreenVM) {
+  val checkBoxState by viewModel.chatBoxState.collectAsState(mainDispatcher)
+  val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
+    1f
+  } else {
+    0f
+  }
+
+  val change by animateFloatAsState(
+    manualExpandValue,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioLowBouncy,
+      stiffness = Spring.StiffnessMediumLow
+    )
+  )
   Box(
     modifier = Modifier
       .fillMaxHeight()

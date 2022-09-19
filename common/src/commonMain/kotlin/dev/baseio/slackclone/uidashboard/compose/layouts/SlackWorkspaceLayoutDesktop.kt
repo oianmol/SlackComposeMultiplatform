@@ -1,6 +1,8 @@
 package dev.baseio.slackclone.uidashboard.compose.layouts
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -40,7 +42,7 @@ fun BackstackScreen.SlackWorkspaceLayoutDesktop(
       color = SlackCloneColorProvider.colors.uiBackground,
       modifier = Modifier.padding(it)
     ) {
-      Column {
+      Column(Modifier.verticalScroll(rememberScrollState())) {
         WorkspacesBar()
         JumpToText()
         Spacer(modifier = Modifier.height(8.dp))
