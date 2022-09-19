@@ -3,15 +3,9 @@ package dev.baseio.slackclone.commonui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 
 private val LightColorPalette = SlackCloneColorPalette(
   brand = SlackCloneColor,
@@ -67,6 +61,7 @@ fun SlackCloneTheme(
   content: @Composable () -> Unit
 ) {
   val colors = if (isDarkTheme) DarkColorPalette else LightColorPalette
+  PlatformSideEffects.PlatformColors(colors.appBarColor,colors.appBarColor)
 
   ProvideSlackCloneColors(colors) {
     MaterialTheme(

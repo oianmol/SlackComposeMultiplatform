@@ -29,6 +29,7 @@ import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 fun SkipTypingUI(composeNavigator: ComposeNavigator) {
   val scaffoldState = rememberScaffoldState()
   val size = getWindowSizeClass(LocalWindow.current)
+  PlatformSideEffects.SkipTypingScreen()
 
   Scaffold(
     backgroundColor = SlackCloneColor,

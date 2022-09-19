@@ -81,7 +81,7 @@ fun DMLastMessageItem(
 ) {
   Row(
     modifier = Modifier
-      .padding(4.dp)
+      .padding(horizontal = 4.dp)
       .fillMaxWidth()
       .clickable {
         onItemClick(slackChannel)
@@ -156,7 +156,7 @@ private fun ChannelText(
 ) {
   Text(
     text = "${slackChannel.name}",
-    style = SlackCloneTypography.subtitle2.copy(
+    style = SlackCloneTypography.caption.copy(
       color = textColor.copy(
         alpha = 0.8f
       )

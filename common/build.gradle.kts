@@ -67,6 +67,7 @@ kotlin {
     val androidMain by getting {
       dependencies {
         implementation(Deps.Koin.android)
+        implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
         implementation("dev.baseio.slackclone:slackdata-android:${slackDataVersion}")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
         implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
@@ -74,8 +75,8 @@ kotlin {
         implementation("io.coil-kt:coil-compose:2.2.0")
         implementation("io.ktor:ktor-client-android:$ktor_version")
         api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-        api("androidx.appcompat:appcompat:1.5.0")
-        api("androidx.core:core-ktx:1.8.0")
+        api("androidx.appcompat:appcompat:1.5.1")
+        api("androidx.core:core-ktx:1.9.0")
       }
     }
     val iosArm64Main by getting {
@@ -118,11 +119,11 @@ kotlin {
 }
 
 android {
-  compileSdk = 32
+  compileSdk = 33
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   defaultConfig {
     minSdk = 24
-    targetSdk = 32
+    targetSdk = 33
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_1_8

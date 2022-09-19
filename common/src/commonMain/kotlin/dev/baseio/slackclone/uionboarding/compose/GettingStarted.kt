@@ -31,6 +31,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
   val scaffoldState = rememberScaffoldState()
   val showSlackAnim by gettingStartedVM.showSlackAnim
   val size = getWindowSizeClass(LocalWindow.current)
+  PlatformSideEffects.GettingStartedScreen()
 
   Scaffold(
     backgroundColor = SlackCloneColor,
@@ -62,7 +63,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         } else {
           AnimatedVisibility(visible = !showSlackAnim) {
             when (size) {
-              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator, size)
+              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
 
               else -> {
                 LargeScreenLayout(gettingStartedVM, composeNavigator, size)
@@ -115,8 +116,7 @@ private fun LargeScreenLayout(
 @Composable
 private fun PhoneLayout(
   gettingStartedVM: GettingStartedVM,
-  composeNavigator: ComposeNavigator,
-  size: WindowSize
+  composeNavigator: ComposeNavigator
 ) {
   val density = LocalDensity.current
   Column(
