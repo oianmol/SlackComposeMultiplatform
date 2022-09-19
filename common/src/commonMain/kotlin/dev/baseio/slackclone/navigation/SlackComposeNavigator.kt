@@ -1,17 +1,13 @@
 package dev.baseio.slackclone.navigation
-
-import ViewModel
 import mainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import dev.baseio.slackclone.koinApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.koin.core.component.*
-import org.koin.core.qualifier.TypeQualifier
 import org.koin.core.scope.Scope
 import kotlin.collections.LinkedHashMap
 
@@ -146,7 +142,7 @@ class SlackComposeNavigator : ComposeNavigator {
   }
 
   @Composable
-  override fun start(route: BackstackRoute) {
+  override fun presentRoute(route: BackstackRoute) {
     if (currentScreen.value == null) {
       currentRoute.value = route
       setBackstackScreen(route.initialScreen)
@@ -208,7 +204,7 @@ interface ComposeNavigator {
   fun route(route: BackstackRoute, function: @Composable () -> Unit)
 
   @Composable
-  fun start(route: BackstackRoute)
+  fun presentRoute(route: BackstackRoute)
   fun observeWhenBackPressedFor(screen: BackstackScreen, function: () -> Unit)
   fun removeObserverForBackPress(screen: BackstackScreen)
 }
