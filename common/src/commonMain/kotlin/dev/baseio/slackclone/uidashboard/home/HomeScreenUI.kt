@@ -29,6 +29,7 @@ import dev.baseio.slackclone.data.injection.StarredChatsQualifier
 import dev.baseio.slackclone.navigation.BackstackScreen
 
 import dev.baseio.slackclone.uichannels.views.*
+import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
@@ -37,9 +38,10 @@ fun BackstackScreen.HomeScreenUI(
   onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
   onCreateChannelRequest: () -> Unit = {}
 ) {
-  val homeScreenVM : HomeScreenVM = scope.get()
+  val homeScreenVM: HomeScreenVM = scope.get()
   val selectedWorkspace by homeScreenVM.lastSelectedWorkspace.value.collectAsState(null)
-
+  val colors = SlackCloneColorProvider.colors
+  PlatformSideEffects.PlatformColors(colors.appBarColor, colors.uiBackground)
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
@@ -54,17 +56,17 @@ fun BackstackScreen.HomeScreenUI(
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        },scope.get(RecentChatsQualifier))
+        }, scope.get(RecentChatsQualifier))
         SlackStarredChannels({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        },scope.get(StarredChatsQualifier))
+        }, scope.get(StarredChatsQualifier))
         SlackDirectMessages({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        },scope.get(DirectChatsQualifier))
+        }, scope.get(DirectChatsQualifier))
         SlackAllChannels({
           onItemClick(it)
         }, onClickAdd = {
