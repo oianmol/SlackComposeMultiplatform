@@ -22,9 +22,10 @@ fun ChatScreenUI(
   viewModel: ChatScreenVM
 ) {
   val scaffoldState = rememberScaffoldState()
-  SideEffect {
+  LaunchedEffect(SKChannel) {
     viewModel.requestFetch(SKChannel)
   }
+
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
@@ -37,12 +38,10 @@ fun ChatScreenUI(
       ChatAppBar(onBackClick, SKChannel)
     }
   ) { innerPadding ->
-    Box(
+    ChatScreenContent(
       modifier = Modifier
-        .padding(innerPadding)
-    ) {
-      ChatScreenContent(viewModel)
-    }
+        .padding(innerPadding), viewModel
+    )
   }
 
 }

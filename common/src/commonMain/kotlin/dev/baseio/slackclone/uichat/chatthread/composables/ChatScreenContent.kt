@@ -14,12 +14,12 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import mainDispatcher
 
 @Composable
-fun ChatScreenContent(viewModel: ChatScreenVM) {
+fun ChatScreenContent(modifier: Modifier,viewModel: ChatScreenVM) {
   val checkBoxState by viewModel.chatBoxState.collectAsState(mainDispatcher)
   val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
     1f
   } else {
-    0.12f
+    0f
   }
 
   val change by animateFloatAsState(
@@ -29,15 +29,14 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
       stiffness = Spring.StiffnessMediumLow
     )
   )
-  Box(
-    modifier = Modifier
+  Column (
+    modifier = modifier
       .fillMaxHeight()
       .fillMaxWidth()
   ) {
     ChatMessagesUI(
       viewModel,
-      Modifier.fillMaxSize()
-        .padding(bottom = 100.dp)
+      Modifier.weight(1f)
     )
     ChatMessageBox(
       viewModel,
@@ -45,7 +44,7 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
         if (checkBoxState == BoxState.Expanded) Modifier.fillMaxHeight(change).fillMaxWidth()
         else
           Modifier
-      ).align(Alignment.BottomCenter)
+      )
         .animateDrag({
           viewModel.chatBoxState.value = BoxState.Expanded
         }) {

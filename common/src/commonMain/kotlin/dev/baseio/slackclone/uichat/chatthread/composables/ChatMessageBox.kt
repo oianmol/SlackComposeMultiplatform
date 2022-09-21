@@ -54,7 +54,9 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
         focusState = newFocusState
       }.focusRequester(focusRequester)
     )
-    AnimatedVisibility(keyboard is Keyboard.Opened || keyboard is Keyboard.HardwareKeyboard || focusState?.hasFocus == true) {
+    AnimatedVisibility(keyboard is Keyboard.Opened ||
+        keyboard is Keyboard.HardwareKeyboard ||
+        focusState?.hasFocus == true) {
       ChatOptions(
         viewModel,
         Modifier
@@ -160,9 +162,7 @@ private fun MessageTFRow(
           }
         }
       )
-      if (keyboard is Keyboard.HardwareKeyboard || keyboard is Keyboard.Opened) {
-        CollapseExpandButton(viewModel)
-      }
+      CollapseExpandButton(viewModel)
     }
   }
 
