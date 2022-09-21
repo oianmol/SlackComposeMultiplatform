@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
+import androidx.compose.animation.AnimatedVisibility
 import mainDispatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -35,8 +36,10 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
   var focusState by remember { mutableStateOf<FocusState?>(null) }
   val focusRequester = FocusRequester()
 
-  LaunchedEffect(true){
-    focusRequester.requestFocus()
+  LaunchedEffect(true) {
+    if (keyboard is Keyboard.HardwareKeyboard) {
+      focusRequester.requestFocus()
+    }
   }
 
   Column(
@@ -51,12 +54,13 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
         focusState = newFocusState
       }.focusRequester(focusRequester)
     )
-    if (keyboard is Keyboard.Opened || focusState?.hasFocus == true) {
+    AnimatedVisibility(keyboard is Keyboard.Opened || keyboard is Keyboard.HardwareKeyboard || focusState?.hasFocus == true) {
       ChatOptions(
         viewModel,
         Modifier
       )
     }
+
   }
 
 }
@@ -156,7 +160,9 @@ private fun MessageTFRow(
           }
         }
       )
-      CollapseExpandButton(viewModel)
+      if (keyboard is Keyboard.HardwareKeyboard || keyboard is Keyboard.Opened) {
+        CollapseExpandButton(viewModel)
+      }
     }
   }
 

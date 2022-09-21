@@ -19,7 +19,7 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
   val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
     1f
   } else {
-    0f
+    0.12f
   }
 
   val change by animateFloatAsState(
@@ -36,11 +36,16 @@ fun ChatScreenContent(viewModel: ChatScreenVM) {
   ) {
     ChatMessagesUI(
       viewModel,
-      Modifier.fillMaxSize().padding(bottom = 100.dp)
+      Modifier.fillMaxSize()
+        .padding(bottom = 100.dp)
     )
     ChatMessageBox(
       viewModel,
-      Modifier.align(Alignment.BottomCenter)
+      Modifier.then(
+        if (checkBoxState == BoxState.Expanded) Modifier.fillMaxHeight(change).fillMaxWidth()
+        else
+          Modifier
+      ).align(Alignment.BottomCenter)
         .animateDrag({
           viewModel.chatBoxState.value = BoxState.Expanded
         }) {

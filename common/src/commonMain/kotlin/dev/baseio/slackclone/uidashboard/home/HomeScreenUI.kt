@@ -40,8 +40,6 @@ fun BackstackScreen.HomeScreenUI(
 ) {
   val homeScreenVM: HomeScreenVM = scope.get()
   val selectedWorkspace by homeScreenVM.lastSelectedWorkspace.value.collectAsState(null)
-  val colors = SlackCloneColorProvider.colors
-  PlatformSideEffects.PlatformColors(colors.appBarColor, colors.uiBackground)
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()

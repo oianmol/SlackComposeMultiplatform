@@ -21,7 +21,7 @@ class ChatScreenVM constructor(
   var channel: UiLayerChannels.SKChannel? = null
   var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
   var message = MutableStateFlow(TextFieldValue())
-  var chatBoxState = MutableStateFlow(BoxState.Expanded)
+  var chatBoxState = MutableStateFlow(BoxState.Collapsed)
 
   fun requestFetch(SKChannel: UiLayerChannels.SKChannel) {
     this.channel = SKChannel

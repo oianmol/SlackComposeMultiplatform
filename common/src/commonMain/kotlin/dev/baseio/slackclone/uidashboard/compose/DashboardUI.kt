@@ -42,6 +42,7 @@ import dev.baseio.slackclone.uidashboard.home.SearchMessagesUI
 import dev.baseio.slackclone.uidashboard.home.UserProfileUI
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 
 val homeNavigator = SlackComposeNavigator()
 
@@ -53,6 +54,10 @@ fun BackstackScreen.DashboardUI(
   viewModel: ChatScreenVM
 ) {
   val scaffoldState = rememberScaffoldState()
+
+  val colors = SlackCloneColorProvider.colors
+  PlatformSideEffects.PlatformColors(colors.appBarColor, colors.uiBackground)
+
 
   val keyboardController = LocalSoftwareKeyboardController.current
   val lastChannel by dashboardVM.selectedChatChannel.collectAsState(mainDispatcher)
