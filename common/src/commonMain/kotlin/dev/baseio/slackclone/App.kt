@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
-import dev.baseio.FakeDataPreloader
 import dev.baseio.database.SlackDB
+import dev.baseio.getWorkspaces
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.*
@@ -19,10 +19,8 @@ import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
 import dev.baseio.slackdata.injection.*
-import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.core.KoinApplication
-import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -36,7 +34,12 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver))
   }
   LaunchedEffect(true) {
-    koinApp?.koin?.get<FakeDataPreloader>()?.preload()
+    getWorkspaces().collectLatest {
+      it.workspacesList.forEach {
+        println("${it.name} ${it.domain} ${it.uuid}")
+
+      }
+    }
   }
 
   Box(modifier) {
@@ -91,14 +94,4 @@ fun initKoin(slackDB: SlackDB): KoinApplication {
 fun appModule(slackDB: SlackDB) =
   module {
     single { slackDB }
-    single {
-      FakeDataPreloader(
-        get(),
-        get(),
-        get(),
-        get(SlackUserChannelQualifier),
-        get(SlackChannelChannelQualifier),
-        get()
-      )
-    }
   }

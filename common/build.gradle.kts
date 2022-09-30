@@ -67,6 +67,7 @@ kotlin {
     val androidMain by getting {
       dependencies {
         implementation(Deps.Koin.android)
+        api(project(":generate-proto"))
         implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
         implementation("dev.baseio.slackclone:slackdata-android:${slackDataVersion}")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
@@ -106,6 +107,7 @@ kotlin {
     }
     val desktopMain by getting {
       dependencies {
+        api(project(":generate-proto"))
         implementation("dev.baseio.slackclone:slackdata-jvm:${slackDataVersion}")
         implementation("io.ktor:ktor-client-java:$ktor_version")
         implementation("com.alialbaali.kamel:kamel-image:0.4.0")

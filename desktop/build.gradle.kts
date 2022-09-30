@@ -20,8 +20,10 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
+                implementation("io.grpc:grpc-netty-shaded:1.47.0")
                 implementation(project(":common"))
-                api("dev.baseio.slackclone:slackdata-jvm:${slackDataVersion}")
+                api(project(":generate-proto"))
+                implementation("dev.baseio.slackclone:slackdata-jvm:${slackDataVersion}")
                 implementation(compose.desktop.currentOs)
             }
         }
