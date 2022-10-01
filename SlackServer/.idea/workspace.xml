@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="fix: FakeDataPreloader">
+      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/ChannelsDataSource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/Database.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/MessagesDataSource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/UsersDataSource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/WorkspaceDataSource.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/impl/ChannelsDataSourceImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/impl/MessagesDataSourceImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/impl/UsersDataSourceImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/impl/WorkspaceDataSourceImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/ChannelService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/FakeDataPreloader.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/MessagingService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/sqldelight/database/slackschema.sq" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/androidMain/kotlin/dev/baseio/slackdata/DriverFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/androidMain/kotlin/dev/baseio/slackdomain/util/TimeUnit.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/GrpcCalls.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/MainDispatcher.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/ViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/DriverFactory.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/RealCoroutineDispatcherProvider.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/channels/SKDataSourceChannelsImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/channels/SKDataSourceCreateChannelsImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/channels/SlackSKDataSourceChannelLastMessage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/messages/SlackSKDataSourceMessagesImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/users/SKDataSourceCreateUsersImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/users/SKDataSourceUsersImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/workspaces/SKDataSourceCreateWorkspacesImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/workspaces/SKDataSourceWorkspacesImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DataMappersModule.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DataSourceModule.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DispatcherModule.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/UseCaseModule.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/local/FlowQuery.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/EntityMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackChannelMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackMessageMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackUserChannelMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackUserMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackWorkspaceMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/CoroutineDispatcherProvider.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/SafeResult.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKDataSourceChannelLastMessage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKDataSourceChannels.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKDataSourceCreateChannels.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/messages/SKDataSourceMessages.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/users/SKDataSourceCreateUsers.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/users/SKDataSourceUsers.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/workspaces/SKDataSourceCreateWorkspaces.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/workspaces/SKDataSourceWorkspaces.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/remote/workspaces/SKRemoteWorkspaces.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/mappers/DomainModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/channel/SKChannel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/message/SKMessage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/users/SKUser.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/workspaces/SKWorkspace.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/BaseUseCase.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseCreateChannel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseCreateOneToOneChannel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFetchChannelCount.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFetchChannels.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFetchChannelsWithLastMessage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFetchRecentChannels.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFetchUsers.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseGetChannel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseSearchChannel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/chat/UseCaseFetchMessages.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/chat/UseCaseSendMessage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/workspaces/UseCaseGetSelectedWorkspace.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/util/TimeUnit.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/sqldelight/database/SlackDB.sq" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../generate-proto/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../protos/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../protos/src/main/proto/hello.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../android/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../common/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/desktopMain/kotlin/PainterRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/PainterRes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/desktopMain/kotlin/dev/baseio/slackclone/commonui/reusable/SlackImageBox.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/baseio/slackclone/commonui/reusable/SlackImageBox.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/desktopMain/kotlin/dev/baseio/slackclone/uionboarding/compose/PlatformSideEffects.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/baseio/slackclone/uionboarding/compose/PlatformSideEffects.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/desktopMain/kotlin/dev/keyboardAsState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/keyboardAsState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../desktop/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../desktop/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../iOSApp/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../iOSApp/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../settings.gradle.kts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/..">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/..">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SlackServer" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="SqlDelight File" />
+        <option value="SqlDelight Table" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="KotlinMultiplatform" KONAN_HOME="$USER_HOME$/.konan/kotlin-native-prebuilt-macos-x86_64-1.7.10" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2FLujdaMBxcgp1GCYfSSPoPsdlh" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/anmolverma/Desktop/SlackJetpackCompose/SlackServer",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/sqldelight/database" />
+      <recent name="$PROJECT_DIR$/src/main/sqldelight/dev/baseio" />
+    </key>
+    <key name="CreateKotlinClassDialog.RecentsKey">
+      <recent name="dev.baseio.slackserver.data.impl" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Kotlin.MainKt">
+    <configuration name="SlackServer [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SlackServer [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SlackServer [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="/Users/anmolverma/Desktop/SlackData [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/.." />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MainKt" />
+      <module name="SlackServer.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.SlackServer [clean]" />
+        <item itemvalue="Gradle.SlackServer [build]" />
+        <item itemvalue="Gradle.SlackServer [jar]" />
+        <item itemvalue="Gradle./Users/anmolverma/Desktop/SlackData [build]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="" />
+      <created>1664283821814</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1664283821814</updated>
+      <workItem from="1664283823253" duration="554000" />
+      <workItem from="1664284399690" duration="64000" />
+      <workItem from="1664284471187" duration="3368000" />
+      <workItem from="1664295989114" duration="11849000" />
+      <workItem from="1664530117997" duration="1859000" />
+      <workItem from="1664539586477" duration="2675000" />
+      <workItem from="1664547096643" duration="946000" />
+      <workItem from="1664548051968" duration="3806000" />
+      <workItem from="1664552234603" duration="7196000" />
+      <workItem from="1664628038059" duration="219000" />
+    </task>
+    <task id="LOCAL-00001" summary="setup sqldelight and gRPC service!">
+      <created>1664372471497</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1664372471497</updated>
+    </task>
+    <task id="LOCAL-00002" summary="added services">
+      <created>1664542198548</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1664542198548</updated>
+    </task>
+    <task id="LOCAL-00003" summary="tested streaming of workspaces!">
+      <created>1664548560342</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1664548560342</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add: MessagingService">
+      <created>1664549887436</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1664549887436</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update: MessagingService, add query params in request">
+      <created>1664550578336</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1664550578336</updated>
+    </task>
+    <task id="LOCAL-00006" summary="update: MessagesDataSourceImpl.kt allow saving">
+      <created>1664550715204</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1664550715204</updated>
+    </task>
+    <task id="LOCAL-00007" summary="update: MessagingService.kt works like a charm">
+      <created>1664551847132</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1664551847132</updated>
+    </task>
+    <task id="LOCAL-00008" summary="update: rename request to SKWorkspaceChannelRequest">
+      <created>1664552603075</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1664552603075</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fix: FakeDataPreloader">
+      <created>1664556855448</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1664556855448</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="setup sqldelight and gRPC service!" />
+    <MESSAGE value="added services" />
+    <MESSAGE value="tested streaming of workspaces!" />
+    <MESSAGE value="add: MessagingService" />
+    <MESSAGE value="update: MessagingService, add query params in request" />
+    <MESSAGE value="update: MessagesDataSourceImpl.kt allow saving" />
+    <MESSAGE value="update: MessagingService.kt works like a charm" />
+    <MESSAGE value="update: rename request to SKWorkspaceChannelRequest" />
+    <MESSAGE value="fix: FakeDataPreloader" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: FakeDataPreloader" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt</url>
+          <line>39</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/ChannelService.kt</url>
+          <line>37</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

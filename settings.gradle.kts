@@ -13,10 +13,6 @@ rootProject.name = "SlackJetpackCompose"
 
 include(":generate-proto")
 include(":protos")
-
-project(":generate-proto").projectDir = file("../slackdata/generate-proto")
-project(":protos").projectDir = file("../slackdata/protos")
-
 include(":android")
 include(":desktop")
 include(":common")

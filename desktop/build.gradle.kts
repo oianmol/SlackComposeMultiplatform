@@ -23,7 +23,6 @@ kotlin {
                 implementation("io.grpc:grpc-netty-shaded:1.47.0")
                 implementation(project(":common"))
                 api(project(":generate-proto"))
-                implementation("dev.baseio.slackclone:slackdata-jvm:${slackDataVersion}")
                 implementation(compose.desktop.currentOs)
             }
         }

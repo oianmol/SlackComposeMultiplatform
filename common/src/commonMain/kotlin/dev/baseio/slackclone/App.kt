@@ -19,7 +19,12 @@ import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
 import dev.baseio.slackdata.injection.*
+import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceCreateWorkspaces
+import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceWorkspaces
+import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -34,12 +39,19 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver))
   }
   LaunchedEffect(true) {
-    getWorkspaces().collectLatest {
-      it.workspacesList.forEach {
-        println("${it.name} ${it.domain} ${it.uuid}")
-
+    getWorkspaces().onEach { kmskWorkspaces ->
+      koinApp?.koin?.get<SKDataSourceCreateWorkspaces>()?.apply {
+        saveWorkspaces(kmskWorkspaces.workspacesList.map { workspace ->
+          DomainLayerWorkspaces.SKWorkspace(
+            workspace.uuid,
+            workspace.name,
+            workspace.domain,
+            workspace.picUrl,
+            workspace.lastSelected
+          )
+        })
       }
-    }
+    }.launchIn(this)
   }
 
   Box(modifier) {

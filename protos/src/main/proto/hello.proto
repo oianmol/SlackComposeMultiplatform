@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package dev.baseio.slackdata.protos;
+
+option java_multiple_files = true;
+
+message SKMessage {
+  string uuid = 1;
+  string workspaceId = 2;
+  string channelId = 3;
+  string text = 4;
+  string receiver = 5;
+  string sender = 6;
+  int64 createdDate = 7;
+  int64 modifiedDate = 8;
+}
+
+message SKLastMessage {
+  SKChannel channel = 1;
+  SKMessage lastMessage = 2;
+}
+
+message SKWorkspace {
+  string uuid = 1;
+  string name = 2;
+  string domain = 3;
+  string picUrl = 4;
+  bool lastSelected = 5;
+}
+
+message SKUser {
+  string uuid = 1;
+  string workspaceId = 2;
+  string gender = 3;
+  string name = 4;
+  string location = 5;
+  string email = 6;
+  string username = 7;
+  int64 userSince = 8;
+  string phone = 9;
+  string avatarUrl = 10;
+}
+
+message SKChannel {
+  string uuid = 1;
+  string workspaceId = 2;
+  string name = 3;
+  int64 createdDate = 4;
+  int64 modifiedDate = 5;
+  bool isMuted = 6;
+  bool isPrivate = 7;
+  bool isStarred = 8;
+  bool isShareOutSide = 9;
+  bool isOneToOne = 10;
+  string avatarUrl = 11;
+}
+
+message SKWorkspaces {
+  repeated SKWorkspace workspaces = 1;
+}
+
+message SKUsers {
+  repeated SKUser users = 1;
+}
+
+message SKChannels {
+  repeated SKChannel channels = 1;
+}
+
+message SKMessages{
+  repeated SKMessage messages = 1;
+}
+
+message SKWorkspaceChannelRequest{
+  string workspaceId = 1;
+  string channelId = 2;
+}
+
+message SKChannelRequest{
+  string workspaceId = 1;
+}
+
+message Empty {}
+
+service WorkspaceService {
+  rpc getWorkspaces(Empty) returns (stream SKWorkspaces);
+  rpc saveWorkspace(SKWorkspace) returns (SKWorkspace);
+}
+
+service ChannelsService{
+  rpc getChannels(SKChannelRequest) returns (stream SKChannels);
+  rpc saveChannel(SKChannel) returns (SKChannel);
+}
+
+service MessagesService{
+  rpc getMessages(SKWorkspaceChannelRequest) returns (stream SKMessages);
+  rpc saveMessage(SKMessage) returns (SKMessage);
+}
+
+service UsersService{
+  rpc getUsers(SKWorkspaceChannelRequest) returns (stream SKUsers);
+  rpc saveUser(SKUser) returns (SKUser);
+}

@@ -12,9 +12,9 @@
             <option value="$PROJECT_DIR$/android" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/desktop" />
+            <option value="$PROJECT_DIR$/generate-proto" />
             <option value="$PROJECT_DIR$/iOSApp" />
-            <option value="$PROJECT_DIR$/../slackdata/generate-proto" />
-            <option value="$PROJECT_DIR$/../slackdata/protos" />
+            <option value="$PROJECT_DIR$/protos" />
           </set>
         </option>
       </GradleProjectSettings>

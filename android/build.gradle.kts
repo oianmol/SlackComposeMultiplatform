@@ -15,7 +15,6 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
-    implementation("dev.baseio.slackclone:slackdata-android:${slackDataVersion}")
     implementation("androidx.activity:activity-compose:1.5.1")
     implementation("androidx.core:core-splashscreen:1.0.0")
 }

@@ -64,13 +64,11 @@ kotlin {
     val uikitX64Main by getting {
       dependsOn(uikitMain)
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-iosx64:${slackDataVersion}")
       }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
       dependencies {
-        implementation("dev.baseio.slackclone:slackdata-iosarm64:${slackDataVersion}")
       }
     }
   }
