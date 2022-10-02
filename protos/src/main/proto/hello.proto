@@ -71,6 +71,17 @@ message SKMessages{
   repeated SKMessage messages = 1;
 }
 
+message SKAuthUser {
+  string email = 1;
+  string password = 2;
+  SKUser user = 3;
+}
+
+message SKAuthResult{
+  string token = 1;
+  string refreshToken = 2;
+}
+
 message SKWorkspaceChannelRequest{
   string workspaceId = 1;
   string channelId = 2;
@@ -100,4 +111,11 @@ service MessagesService{
 service UsersService{
   rpc getUsers(SKWorkspaceChannelRequest) returns (stream SKUsers);
   rpc saveUser(SKUser) returns (SKUser);
+}
+
+service AuthService {
+  rpc register(SKAuthUser) returns (SKAuthResult);
+  rpc login(SKAuthUser) returns (SKAuthResult);
+  rpc resetPassword(SKAuthUser) returns (SKUser);
+  rpc forgotPassword(SKAuthUser) returns (SKUser);
 }

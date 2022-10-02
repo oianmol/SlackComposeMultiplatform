@@ -27,6 +27,10 @@ dependencies {
   implementation("com.squareup.sqldelight:jdbc-driver:$sqldelightVersion")
   implementation("com.squareup.sqldelight:coroutines-extensions:$sqldelightVersion")
   implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+  runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+  runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
+  implementation("at.favre.lib:bcrypt:0.9.0")
+
   // Hikari JDBC connection pool
   implementation("com.zaxxer:HikariCP:5.0.1")
 
@@ -35,12 +39,7 @@ dependencies {
   implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
   implementation("mysql:mysql-connector-java:8.0.30")
   implementation("com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.7.0")
-  kotlin.sourceSets.getByName("main")
-    .kotlin
-    .srcDir(projectDir
-      .resolve("build/generated/source/proto/main/kotlin")
-      .canonicalPath)
-  //grpckt ?
+
 
 }
 

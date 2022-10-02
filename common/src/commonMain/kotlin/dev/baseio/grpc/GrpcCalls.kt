@@ -1,4 +1,4 @@
-package dev.baseio
+package dev.baseio.grpc
 
 
 import dev.baseio.slackdata.protos.*

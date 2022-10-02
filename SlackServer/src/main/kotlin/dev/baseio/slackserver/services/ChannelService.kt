@@ -3,10 +3,11 @@ package dev.baseio.slackserver.services
 import database.SkChannel
 import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.ChannelsDataSource
+import dev.baseio.slackserver.services.interceptors.AUTH_CONTEXT_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.UUID
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class ChannelService(
@@ -16,6 +17,7 @@ class ChannelService(
   ChannelsServiceGrpcKt.ChannelsServiceCoroutineImplBase(coroutineContext) {
 
   override suspend fun saveChannel(request: SKChannel): SKChannel {
+    val clientId = AUTH_CONTEXT_KEY.get()
     return channelsDataSource.insertChannel(request.toDBChannel()).toGRPC()
   }
 

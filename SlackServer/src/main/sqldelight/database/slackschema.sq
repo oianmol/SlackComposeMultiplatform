@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS skWorkspace(
     uuid TEXT NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     domain TEXT NOT NULL,
     picUrl TEXT,
     lastSelected INT,
@@ -17,7 +17,7 @@ INSERT INTO skWorkspace(uuid,name,domain,picUrl,lastSelected) VALUES (?, ?,?,?,?
 
 
 CREATE TABLE IF NOT EXISTS skChannel(
-        uuid TEXT NOT NULL,
+       uuid TEXT NOT NULL,
        workspaceId TEXT NOT NULL,
        name TEXT NOT NULL,
        createdDate INT NOT NULL,
@@ -73,6 +73,13 @@ CREATE TABLE IF NOT EXISTS skUser(
     avatarUrl TEXT  NOT NULL
 );
 
+getUser:
+SELECT * FROM skUser WHERE uuid=:userId;
+
+getUserWithEmailAndWorkspaceId:
+SELECT * FROM skUser WHERE email=:email AND workspaceId=:workspaceId;
+
+
 insertUser:
 INSERT INTO skUser(uuid,workspaceId,gender,name,location,email,username,userSince,phone,avatarUrl) VALUES (?,?,?,?,?,?,?,?,?,?);
 
@@ -81,3 +88,17 @@ SELECT * FROM skUser WHERE workspaceId=:workspaceid ORDER BY name DESC ;
 
 deleteAllUsers:
 DELETE FROM skUser;
+
+CREATE TABLE IF NOT EXISTS skUserPassword(
+uuid TEXT NOT NULL,
+userId TEXT NOT NULL UNIQUE ,
+password TEXT NOT NULL,
+PRIMARY KEY (uuid),
+FOREIGN KEY (userId) REFERENCES skUser(uuid)
+);
+
+insertAuth:
+INSERT INTO skUserPassword(uuid,userId,password) VALUES (?,?,?);
+
+getAuth:
+SELECT * FROM skUserPassword WHERE userId=:userId;
