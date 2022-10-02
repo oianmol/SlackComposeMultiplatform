@@ -146,7 +146,7 @@
       <recent name="dev.baseio.slackserver.data.impl" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.SlackServer [run]">
+  <component name="RunManager" selected="Gradle.SlackServer [build]">
     <configuration name="SlackServer [:generate-proto:build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -249,10 +249,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.SlackServer [build]" />
         <item itemvalue="Gradle.SlackServer [run]" />
         <item itemvalue="Gradle.SlackServer [clean]" />
         <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.SlackServer [build]" />
         <item itemvalue="Gradle.SlackServer [:generate-proto:build]" />
       </list>
     </recent_temporary>

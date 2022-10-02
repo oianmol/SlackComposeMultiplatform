@@ -4,6 +4,7 @@ import database.SkUser
 import dev.baseio.slackdata.protos.AuthServiceGrpcKt
 import dev.baseio.slackdata.protos.SKAuthResult
 import dev.baseio.slackdata.protos.SKAuthUser
+import dev.baseio.slackdata.protos.SKStatus
 import dev.baseio.slackserver.data.AuthDataSource
 import dev.baseio.slackserver.services.interceptors.USER_ID
 import dev.baseio.slackserver.services.interceptors.WORKSPACE_ID
@@ -41,7 +42,17 @@ class AuthService(
   }
 
   override suspend fun login(request: SKAuthUser): SKAuthResult {
-    return skAuthResult(authDataSource.login(request.email, request.password, request.user.workspaceId))
+    authDataSource.login(request.email, request.password, request.user.workspaceId)?.let {
+      return skAuthResult(it)
+    }
+    return SKAuthResult
+      .newBuilder()
+      .setStatus(
+        SKStatus.newBuilder()
+          .setMessage("User not found for the workspace!")
+          .build()
+      )
+      .build()
   }
 
   private fun skAuthResult(generatedUser: SkUser?): SKAuthResult {

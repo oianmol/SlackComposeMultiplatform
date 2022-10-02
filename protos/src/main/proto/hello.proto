@@ -77,9 +77,15 @@ message SKAuthUser {
   SKUser user = 3;
 }
 
+message SKStatus{
+  string message = 1;
+  string statusCode = 2;
+}
+
 message SKAuthResult{
   string token = 1;
   string refreshToken = 2;
+  SKStatus status = 3;
 }
 
 message SKWorkspaceChannelRequest{
