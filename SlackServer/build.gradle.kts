@@ -26,7 +26,7 @@ dependencies {
   implementation("com.squareup.sqldelight:runtime-jvm:$sqldelightVersion")
   implementation("com.squareup.sqldelight:jdbc-driver:$sqldelightVersion")
   implementation("com.squareup.sqldelight:coroutines-extensions:$sqldelightVersion")
-
+  implementation("io.jsonwebtoken:jjwt-api:0.11.5")
   // Hikari JDBC connection pool
   implementation("com.zaxxer:HikariCP:5.0.1")
 
