@@ -48,7 +48,7 @@ fun SkUser.toGrpc(): SKUser {
 
 fun SKUser.toDBUser(userId: String = UUID.randomUUID().toString()): SkUser {
   return SkUser(
-    this.uuid ?: userId,
+    this.uuid.takeIf { !it.isNullOrEmpty() } ?: userId,
     this.workspaceId,
     this.gender,
     this.name,

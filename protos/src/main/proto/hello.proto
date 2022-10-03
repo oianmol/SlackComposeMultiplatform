@@ -99,9 +99,14 @@ message SKChannelRequest{
 
 message Empty {}
 
+message SKFindWorkspacesRequest{
+  string email = 1;
+}
+
 service WorkspaceService {
   rpc getWorkspaces(Empty) returns (stream SKWorkspaces);
   rpc saveWorkspace(SKWorkspace) returns (SKWorkspace);
+  rpc findWorkspacesForEmail(SKFindWorkspacesRequest) returns(SKWorkspaces);
 }
 
 service ChannelsService{

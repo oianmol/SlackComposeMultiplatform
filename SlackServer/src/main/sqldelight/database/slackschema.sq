@@ -61,17 +61,25 @@ SELECT * FROM skMessage WHERE workspaceId=:workspaceId AND channelId=:channelId 
 
 
 CREATE TABLE IF NOT EXISTS skUser(
-    uuid TEXT NOT NULL PRIMARY KEY,
-    workspaceId TEXT NOT NULL ,
-    gender TEXT DEFAULT NULL,
-    name TEXT NOT NULL,
-    location TEXT DEFAULT NULL,
-    email TEXT NOT NULL,
+   uuid TEXT NOT NULL PRIMARY KEY,
+   workspaceId TEXT NOT NULL ,
+   gender TEXT DEFAULT NULL,
+   name TEXT NOT NULL,
+   location TEXT DEFAULT NULL,
+   email TEXT NOT NULL,
    username TEXT NOT NULL,
    userSince INTEGER NOT NULL,
    phone TEXT NOT NULL,
-    avatarUrl TEXT  NOT NULL
+   avatarUrl TEXT  NOT NULL
 );
+
+findWorkspacesForEmailId:
+SELECT skWorkspace.uuid,skWorkspace.lastSelected,skWorkspace.picUrl,skWorkspace.domain,skWorkspace.name FROM skUser LEFT JOIN skWorkspace ON
+skUser.workspaceId=skWorkspace.uuid
+WHERE skUser.email=:email;
+
+findUserByEmail:
+SELECT * FROM skUser WHERE email=:email;
 
 getUser:
 SELECT * FROM skUser WHERE uuid=:userId;

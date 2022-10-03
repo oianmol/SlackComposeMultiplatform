@@ -38,7 +38,7 @@ fun SKChannel.toDBChannel(
   channelId: String = UUID.randomUUID().toString()
 ): SkChannel {
   return SkChannel(
-    this.uuid ?: channelId,
+    this.uuid.takeIf { !it.isNullOrEmpty() } ?: channelId,
     this.workspaceId ?: workspaceId,
     this.name,
     createdDate.toInt(),

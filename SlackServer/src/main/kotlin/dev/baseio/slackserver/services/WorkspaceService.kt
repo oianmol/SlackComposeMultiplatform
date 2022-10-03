@@ -1,5 +1,6 @@
 package dev.baseio.slackserver.services
 
+import database.FindWorkspacesForEmailId
 import database.SkWorkspace
 import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.WorkspaceDataSource
@@ -13,6 +14,21 @@ class WorkspaceService(
   private val workspaceDataSource: WorkspaceDataSource
 ) :
   WorkspaceServiceGrpcKt.WorkspaceServiceCoroutineImplBase(coroutineContext) {
+
+  override suspend fun findWorkspacesForEmail(request: SKFindWorkspacesRequest): SKWorkspaces {
+    val workspaces = workspaceDataSource.findWorkspacesForEmail(request.email)
+    return SKWorkspaces.newBuilder()
+      .addAllWorkspaces(workspaces.map { workspace ->
+        sKWorkspace {
+          uuid = workspace.uuid ?: ""
+          lastSelected = workspace.lastSelected == 1
+          picUrl = workspace.picUrl ?: ""
+          domain = workspace.domain ?: ""
+          name = workspace.name ?: ""
+        }
+      })
+      .build()
+  }
 
   override suspend fun saveWorkspace(request: SKWorkspace): SKWorkspace {
     return workspaceDataSource
@@ -46,9 +62,9 @@ fun SkWorkspace.toGRPC(): SKWorkspace {
     .build()
 }
 
-fun SKWorkspace.toDBWorkspace(workspaceId:String = UUID.randomUUID().toString()): SkWorkspace {
+fun SKWorkspace.toDBWorkspace(workspaceId: String = UUID.randomUUID().toString()): SkWorkspace {
   return SkWorkspace(
-    this.uuid ?: workspaceId,
+    this.uuid.takeIf { !it.isNullOrEmpty() } ?: workspaceId,
     this.name,
     this.domain,
     this.picUrl,

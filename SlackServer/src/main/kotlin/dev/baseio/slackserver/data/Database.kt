@@ -9,7 +9,7 @@ import java.io.File
 
 object Database {
   private val connectionUrl: String by lazy {
-    val url = System.getenv("connection") ?: "jdbc:h2:mem:slackDb"
+    val url = System.getenv("connection") ?: "jdbc:h2:file:./slackdb"
     // If this is a local h2 database, ensure the directories exist
     if (url.startsWith("jdbc:h2:file:")) {
       val dbFile = File(url.removePrefix("jdbc:h2:file:")).absoluteFile

@@ -39,7 +39,17 @@ dependencies {
   implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
   implementation("mysql:mysql-connector-java:8.0.30")
   implementation("com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.7.0")
-
+  /*kotlin.sourceSets.getByName("main")
+    .kotlin
+    .srcDirs(projectDir.parentFile
+      .resolve("generate-proto/build/generated/source/proto/main/kotlin")
+      .canonicalPath,projectDir.parentFile
+      .resolve("generate-proto/build/generated/source/proto/main/grpckt")
+      .canonicalPath,projectDir.parentFile
+      .resolve("generate-proto/build/generated/source/proto/main/grpc")
+      .canonicalPath,projectDir.parentFile
+      .resolve("generate-proto/build/generated/source/proto/main/java")
+      .canonicalPath)*/
 
 }
 
