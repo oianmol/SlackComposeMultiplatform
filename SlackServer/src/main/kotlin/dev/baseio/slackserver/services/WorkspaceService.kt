@@ -15,6 +15,20 @@ class WorkspaceService(
 ) :
   WorkspaceServiceGrpcKt.WorkspaceServiceCoroutineImplBase(coroutineContext) {
 
+  override suspend fun findWorkspaceForName(request: SKFindWorkspacesRequest): SKWorkspace {
+    return workspaceDataSource.findWorkspaceForName(request.name)?.let { workspace ->
+      sKWorkspace {
+        uuid = workspace.uuid ?: ""
+        lastSelected = workspace.lastSelected == 1
+        picUrl = workspace.picUrl ?: ""
+        domain = workspace.domain ?: ""
+        name = workspace.name ?: ""
+      }
+    } ?: kotlin.run {
+      sKWorkspace { }
+    }
+  }
+
   override suspend fun findWorkspacesForEmail(request: SKFindWorkspacesRequest): SKWorkspaces {
     val workspaces = workspaceDataSource.findWorkspacesForEmail(request.email)
     return SKWorkspaces.newBuilder()

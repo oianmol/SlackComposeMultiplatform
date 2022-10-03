@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="add: SKStatus for grpc call.">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="update: allow finding workspaces for email id!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/Database.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/Database.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/WorkspaceDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/WorkspaceDataSource.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/impl/WorkspaceDataSourceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/data/impl/WorkspaceDataSourceImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/ChannelService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/ChannelService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/sqldelight/database/slackschema.sq" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/sqldelight/database/slackschema.sq" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../protos/src/main/proto/hello.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/src/main/proto/hello.proto" afterDir="false" />
@@ -253,8 +248,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.SlackServer [run]" />
-        <item itemvalue="Gradle.SlackServer [clean]" />
         <item itemvalue="Gradle.SlackServer [build]" />
+        <item itemvalue="Gradle.SlackServer [clean]" />
         <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.SlackServer [:generate-proto:build]" />
       </list>
@@ -283,7 +278,7 @@
       <workItem from="1664692249479" duration="4022000" />
       <workItem from="1664715281083" duration="251000" />
       <workItem from="1664716786856" duration="2417000" />
-      <workItem from="1664721651217" duration="3032000" />
+      <workItem from="1664721651217" duration="5526000" />
     </task>
     <task id="LOCAL-00001" summary="setup sqldelight and gRPC service!">
       <created>1664372471497</created>
@@ -362,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664719402901</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="update: allow finding workspaces for email id!">
+      <created>1664768901944</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1664768901944</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -391,7 +393,8 @@
     <MESSAGE value="fix: FakeDataPreloader" />
     <MESSAGE value="add: jwt token with login/registration" />
     <MESSAGE value="add: SKStatus for grpc call." />
-    <option name="LAST_COMMIT_MESSAGE" value="add: SKStatus for grpc call." />
+    <MESSAGE value="update: allow finding workspaces for email id!" />
+    <option name="LAST_COMMIT_MESSAGE" value="update: allow finding workspaces for email id!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -438,7 +441,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt</url>
-          <line>65</line>
+          <line>79</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
       </breakpoints>

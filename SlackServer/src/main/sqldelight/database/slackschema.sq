@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS skWorkspace(
     PRIMARY KEY (uuid)
 );
 
+findWorkspaceByName:
+SELECT * FROM skWorkspace WHERE name = LOWER(:name);
+
 selectAllWorkspaces:
 SELECT *
 FROM skWorkspace;
