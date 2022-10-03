@@ -20,14 +20,49 @@ val grpcChannel by lazy {
 val workspacesStub by lazy {
   KMWorkspaceServiceStub(grpcChannel)
 }
+
 val channelsStub by lazy {
   KMChannelsServiceStub(grpcChannel)
 }
+
+val authStub by lazy {
+  KMAuthServiceStub(grpcChannel)
+}
+
 val usersStub by lazy {
   KMUsersServiceStub(grpcChannel)
 }
+
 val messagingStub by lazy {
   KMMessagesServiceStub(grpcChannel)
+}
+
+suspend fun register(kmskAuthUser: KMSKAuthUser): KMSKAuthResult {
+  return authStub.register(kmskAuthUser)
+}
+
+suspend fun forgotPassword(kmskAuthUser: KMSKAuthUser): KMSKUser {
+  return authStub.forgotPassword(kmskAuthUser)
+}
+
+suspend fun resetPassword(kmskAuthUser: KMSKAuthUser): KMSKUser {
+  return authStub.resetPassword(kmskAuthUser)
+}
+
+suspend fun findWorkspaceByName(name: String): KMSKWorkspace {
+  return workspacesStub.findWorkspaceForName(kmSKFindWorkspacesRequest {
+    this.name = name
+  })
+}
+
+suspend fun findWorkspacesForEmail(email: String): KMSKWorkspaces {
+  return workspacesStub.findWorkspacesForEmail(kmSKFindWorkspacesRequest {
+    this.email = email
+  })
+}
+
+suspend fun login(kmskAuthUser: KMSKAuthUser): KMSKAuthResult {
+  return authStub.login(kmskAuthUser)
 }
 
 fun getWorkspaces(token: String? = null): Flow<KMSKWorkspaces> {

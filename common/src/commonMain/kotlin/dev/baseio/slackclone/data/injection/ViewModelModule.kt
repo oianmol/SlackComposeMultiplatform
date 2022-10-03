@@ -13,6 +13,8 @@ import dev.baseio.slackclone.uidashboard.compose.DashboardVM
 import dev.baseio.slackclone.uidashboard.compose.SideNavVM
 import dev.baseio.slackclone.uidashboard.home.HomeScreenVM
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.QualifierValue
@@ -30,6 +32,17 @@ val viewModelModule = module {
   scope<SlackScreens.GettingStarted> {
     scoped { GettingStartedVM() }
   }
+  scope<SlackScreens.WorkspaceInputUI> {
+    scoped {
+      WorkspaceInputVM()
+    }
+  }
+  scope<SlackScreens.EmailAddressInputUI> {
+    scoped {
+      EmailInputVM()
+    }
+  }
+
   scope<SlackScreens.DMs> {
     scoped {
       MessageViewModel(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())

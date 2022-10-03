@@ -3,7 +3,6 @@ package dev.baseio.slackclone.uionboarding.compose
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,9 +15,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 
 @Composable
-fun WorkspaceInputView(modifier: Modifier) {
+fun WorkspaceInputView(modifier: Modifier, workspaceInputVM: WorkspaceInputVM) {
   Column(
     modifier = modifier
       .fillMaxWidth()
@@ -38,7 +38,7 @@ fun WorkspaceInputView(modifier: Modifier) {
       horizontalArrangement = Arrangement.Start
     ) {
       TextHttps()
-      WorkspaceTF()
+      WorkspaceTF(workspaceInputVM)
       TextSlackCom()
     }
   }
@@ -72,12 +72,14 @@ private fun TextSlackCom() {
 
 
 @Composable
-private fun WorkspaceTF() {
-  var workspace by remember { mutableStateOf("") }
+private fun WorkspaceTF(workspaceInputVM: WorkspaceInputVM) {
+  val workspace by workspaceInputVM.workspace.collectAsState()
 
   BasicTextField(
     value = workspace,
-    onValueChange = { newEmail -> workspace = newEmail },
+    onValueChange = { newEmail ->
+      workspaceInputVM.workspace.value = newEmail
+    },
     textStyle = textStyleField(),
     singleLine = true,
     modifier = Modifier

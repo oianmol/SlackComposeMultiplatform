@@ -49,7 +49,7 @@ class AuthService(
       .newBuilder()
       .setStatus(
         SKStatus.newBuilder()
-          .setMessage("User not found for the workspace!")
+          .setInformation("User not found for the workspace!")
           .build()
       )
       .build()

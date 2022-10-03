@@ -5,7 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
-import dev.baseio.getWorkspaces
+import dev.baseio.grpc.getWorkspaces
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.*
@@ -18,11 +18,11 @@ import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
+import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.injection.*
 import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceCreateWorkspaces
-import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceWorkspaces
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.core.KoinApplication
@@ -65,10 +65,12 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
           SkipTypingUI(this@Navigator)
         }
         screen(SlackScreens.WorkspaceInputUI) {
-          WorkspaceInputUI(this@Navigator)
+          val workspaceInputVM = scope.get<WorkspaceInputVM>()
+          WorkspaceInputUI(this@Navigator, workspaceInputVM)
         }
         screen(SlackScreens.EmailAddressInputUI) {
-          EmailAddressInputUI(this@Navigator)
+          val emailInputVM = scope.get<EmailInputVM>()
+          EmailAddressInputUI(this@Navigator,emailInputVM)
         }
       }
       this.route(SlackScreens.DashboardRoute) {

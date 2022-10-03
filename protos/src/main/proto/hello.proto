@@ -78,7 +78,7 @@ message SKAuthUser {
 }
 
 message SKStatus{
-  string message = 1;
+  string information = 1;
   string statusCode = 2;
 }
 
