@@ -1,5 +1,7 @@
 package dev.baseio.slackclone.uionboarding.compose
 
+import PainterRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.navigation.ComposeNavigator
@@ -37,7 +40,7 @@ fun EmailAddressInputUI(composeNavigator: ComposeNavigator, emailInputVM: EmailI
         is EmailInputVM.UiState.Workspaces -> {
           val workspacesState = (uiState as EmailInputVM.UiState.Workspaces)
           workspacesState.selectedWorkspace?.let { kmskWorkspace ->
-            WorkspaceFoundView(
+            WorkspaceLoginView(
               modifier,
               kmskWorkspace,
               workspacesState.email,
@@ -62,7 +65,8 @@ fun EmailAddressInputUI(composeNavigator: ComposeNavigator, emailInputVM: EmailI
 
         is EmailInputVM.UiState.Exception -> {
         }
-        EmailInputVM.UiState.LoggedIn ->{
+
+        EmailInputVM.UiState.LoggedIn -> {
 
         }
       }
@@ -114,14 +118,16 @@ fun WorkspaceInputUI(composeNavigator: ComposeNavigator, workspaceInputVM: Works
 
   CommonInputUI(
     { modifier ->
+      val modifierLoginView = this@CommonInputUI.let{
+        modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+      }
       when (uiState) {
         is WorkspaceInputVM.UiState.Empty -> WorkspaceInputView(modifier, workspaceInputVM)
         is WorkspaceInputVM.UiState.Loading -> LoadingColumn(modifier)
 
         is WorkspaceInputVM.UiState.Workspace -> {
           val uiState = uiState as WorkspaceInputVM.UiState.Workspace
-          WorkspaceFoundView(
-            modifier,
+          WorkspaceLoginView(modifierLoginView,
             uiState.kmskWorkspace,
             uiState.email,
             uiState.password,
@@ -144,9 +150,16 @@ fun WorkspaceInputUI(composeNavigator: ComposeNavigator, workspaceInputVM: Works
 
         }
       }
-
     },
-    "This is the address you use to sign in to Slack"
+    when (uiState) {
+      is WorkspaceInputVM.UiState.Empty -> "This is the address you use to sign in to Slack"
+      is WorkspaceInputVM.UiState.Exception -> (uiState as WorkspaceInputVM.UiState.Exception).throwable.message
+        ?: "Some error occurred!"
+
+      WorkspaceInputVM.UiState.Loading -> "Loading..."
+      WorkspaceInputVM.UiState.LoggedIn -> "Logged In!"
+      is WorkspaceInputVM.UiState.Workspace -> ""
+    }
   ) {
     workspaceInputVM.onNextClick()
   }
@@ -161,7 +174,7 @@ private fun LoadingColumn(modifier: Modifier) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun WorkspaceFoundView(
+fun WorkspaceLoginView(
   modifier: Modifier,
   workspace: KMSKWorkspace,
   email: String?,
@@ -170,23 +183,36 @@ fun WorkspaceFoundView(
   onPasswordChange: (String) -> Unit
 ) {
   Column(
-    modifier.fillMaxSize().wrapContentWidth(),
+    modifier,
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    WorkspaceListItem(workspace)
-    Column(
-      modifier = modifier
-        .fillMaxWidth()
-        .wrapContentWidth()
+    Image(
+      modifier = Modifier.size(128.dp).padding(8.dp),
+      painter = PainterRes.slackLogo(),
+      contentDescription = null
+    )
+    Card(
+      elevation = 4.dp,
+      backgroundColor = SlackCloneColorProvider.colors.uiBackground
     ) {
-      EmailHeading()
-      EmailTF(modifier.fillMaxWidth(), email ?: "", onChange = {
-        onEmailChange(it)
-      })
-      PasswordTF(modifier.fillMaxWidth(), password ?: "", onChange = {
-        onPasswordChange(it)
-      })
+      Column(
+        modifier = Modifier.padding(8.dp)
+      ) {
+        Text("First of all, enter your email address for ${workspace.name}", modifier = Modifier.padding(4.dp))
+        Text(
+          "We suggest using the email address that you use at ${workspace.domain}",
+          modifier = Modifier.padding(4.dp)
+        )
+        EmailHeading()
+        EmailTF(modifier, email ?: "", onChange = {
+          onEmailChange(it)
+        })
+        PasswordHeading()
+        PasswordTF(modifier, password ?: "", onChange = {
+          onPasswordChange(it)
+        })
+      }
     }
   }
 }
@@ -199,9 +225,7 @@ private fun WorkspaceListItem(
   ListItem(Modifier, icon = {
     SlackImageBox(Modifier, kmskWorkspace.picUrl)
   }, secondaryText = {
-    Text("We suggest using the email address that you use at ${kmskWorkspace.domain}")
   }, text = {
-    Text("First of all, enter your email address for ${kmskWorkspace.name}")
   })
 }
 

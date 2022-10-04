@@ -7,4 +7,9 @@ actual object PainterRes {
   actual fun gettingStarted(): Painter {
     return painterResource("images/gettingstarted.png")
   }
+
+  @Composable
+  actual fun slackLogo(): Painter {
+    return painterResource("images/ic_launcher_foreground.png")
+  }
 }

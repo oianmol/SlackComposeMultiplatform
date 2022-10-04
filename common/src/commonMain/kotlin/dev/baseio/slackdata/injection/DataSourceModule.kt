@@ -1,13 +1,13 @@
 package dev.baseio.slackdata.injection
 
-import dev.baseio.slackdata.datasources.channels.SKDataSourceChannelsImpl
-import dev.baseio.slackdata.datasources.channels.SKDataSourceCreateChannelsImpl
-import dev.baseio.slackdata.datasources.channels.SlackSKDataSourceChannelLastMessage
-import dev.baseio.slackdata.datasources.messages.SlackSKDataSourceMessagesImpl
-import dev.baseio.slackdata.datasources.users.SKDataSourceCreateUsersImpl
-import dev.baseio.slackdata.datasources.users.SKDataSourceUsersImpl
-import dev.baseio.slackdata.datasources.workspaces.SKDataSourceCreateWorkspacesImpl
-import dev.baseio.slackdata.datasources.workspaces.SKDataSourceWorkspacesImpl
+import dev.baseio.slackdata.datasources.local.channels.SKDataSourceChannelsImpl
+import dev.baseio.slackdata.datasources.local.channels.SKDataSourceCreateChannelsImpl
+import dev.baseio.slackdata.datasources.local.channels.SlackSKDataSourceChannelLastMessage
+import dev.baseio.slackdata.datasources.local.messages.SlackSKDataSourceMessagesImpl
+import dev.baseio.slackdata.datasources.local.users.SKDataSourceCreateUsersImpl
+import dev.baseio.slackdata.datasources.local.users.SKDataSourceUsersImpl
+import dev.baseio.slackdata.datasources.local.workspaces.SKDataSourceCreateWorkspacesImpl
+import dev.baseio.slackdata.datasources.local.workspaces.SKDataSourceWorkspacesImpl
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannelLastMessage
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannels
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceCreateChannels

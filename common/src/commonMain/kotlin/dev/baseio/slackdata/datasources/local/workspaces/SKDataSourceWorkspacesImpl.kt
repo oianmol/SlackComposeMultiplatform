@@ -1,4 +1,4 @@
-package dev.baseio.slackdata.datasources.workspaces
+package dev.baseio.slackdata.datasources.local.workspaces
 
 import database.SlackWorkspaces
 import dev.baseio.database.SlackDB

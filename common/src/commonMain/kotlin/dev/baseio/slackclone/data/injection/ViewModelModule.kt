@@ -39,7 +39,7 @@ val viewModelModule = module {
   }
   scope<SlackScreens.EmailAddressInputUI> {
     scoped {
-      EmailInputVM()
+      EmailInputVM(getKoin().get(), getKoin().get())
     }
   }
 
@@ -53,7 +53,7 @@ val viewModelModule = module {
     slackChannelVMScoped()
   }
 
-  scope<SlackScreens.CreateNewDM>{
+  scope<SlackScreens.CreateNewDM> {
     scoped {
       NewChatThreadVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
     }

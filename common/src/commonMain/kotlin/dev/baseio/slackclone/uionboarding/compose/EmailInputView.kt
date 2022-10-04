@@ -9,6 +9,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -53,6 +54,17 @@ fun EmailHeading() {
   )
 }
 
+@Composable
+fun PasswordHeading() {
+  Text(
+    text = "Password", style = SlackCloneTypography.caption.copy(
+      color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.7f),
+      fontWeight = FontWeight.Normal,
+      textAlign = TextAlign.Start
+    ), modifier = Modifier.padding(bottom = 4.dp)
+  )
+}
+
 @ExperimentalComposeUiApi
 @Composable
 fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
@@ -77,7 +89,7 @@ fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> 
       },
       placeholder = {
         Text(
-          text = "Your email address",
+          text = "your email address",
           style = textStyleField(),
           textAlign = TextAlign.Start
         )
@@ -114,14 +126,14 @@ fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) 
       textStyle = textStyleField(),
       leadingIcon = {
         Icon(
-          imageVector = Icons.Default.Email,
+          imageVector = Icons.Default.Lock,
           contentDescription = null,
           tint = SlackCloneColorProvider.colors.textPrimary
         )
       },
       placeholder = {
         Text(
-          text = "Your email address",
+          text = "your password",
           style = textStyleField(),
           textAlign = TextAlign.Start
         )

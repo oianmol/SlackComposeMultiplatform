@@ -127,6 +127,7 @@ kotlin {
         implementation(Deps.SqlDelight.androidDriver)
         implementation(Deps.AndroidX.lifecycleViewModelKtx)
         implementation(project(":generate-proto"))
+        implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
         implementation("dev.baseio.grpc:grpc-multiplatform-lib-android:0.2.2")
         implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")

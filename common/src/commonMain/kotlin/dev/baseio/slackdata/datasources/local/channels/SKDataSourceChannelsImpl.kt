@@ -1,4 +1,4 @@
-package dev.baseio.slackdata.datasources.channels
+package dev.baseio.slackdata.datasources.local.channels
 
 import database.SlackChannel
 import dev.baseio.database.SlackDB

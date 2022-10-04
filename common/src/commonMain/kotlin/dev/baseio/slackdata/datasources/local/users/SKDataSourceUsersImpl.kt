@@ -1,4 +1,4 @@
-package dev.baseio.slackdata.datasources.users
+package dev.baseio.slackdata.datasources.local.users
 
 import database.SlackUser
 import dev.baseio.database.SlackDB

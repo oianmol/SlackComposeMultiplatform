@@ -1,4 +1,4 @@
-package dev.baseio.slackdata.datasources.messages
+package dev.baseio.slackdata.datasources.local.messages
 
 import database.SlackMessage
 import dev.baseio.database.SlackDB

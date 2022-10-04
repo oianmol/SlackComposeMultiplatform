@@ -1,11 +1,12 @@
 package dev.baseio.slackclone
 
+import SKKeyValueData
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
-import dev.baseio.grpc.getWorkspaces
+import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.*
@@ -34,12 +35,12 @@ val appNavigator = SlackComposeNavigator()
 var koinApp: KoinApplication? = null
 
 @Composable
-fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
+fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKKeyValueData) {
   if (koinApp == null) {
-    koinApp = initKoin(SlackDB.invoke(sqlDriver))
+    koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
   }
   LaunchedEffect(true) {
-    getWorkspaces().onEach { kmskWorkspaces ->
+    koinApp?.koin?.get<GrpcCalls>()?.getWorkspaces()?.onEach { kmskWorkspaces ->
       koinApp?.koin?.get<SKDataSourceCreateWorkspaces>()?.apply {
         saveWorkspaces(kmskWorkspaces.workspacesList.map { workspace ->
           DomainLayerWorkspaces.SKWorkspace(
@@ -51,7 +52,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
           )
         })
       }
-    }.launchIn(this)
+    }?.launchIn(this)
   }
 
   Box(modifier) {
@@ -70,7 +71,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
         }
         screen(SlackScreens.EmailAddressInputUI) {
           val emailInputVM = scope.get<EmailInputVM>()
-          EmailAddressInputUI(this@Navigator,emailInputVM)
+          EmailAddressInputUI(this@Navigator, emailInputVM)
         }
       }
       this.route(SlackScreens.DashboardRoute) {
@@ -91,10 +92,10 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
   }
 }
 
-fun initKoin(slackDB: SlackDB): KoinApplication {
+fun initKoin(slackDB: SlackDB, skKeyValueData: SKKeyValueData): KoinApplication {
   return startKoin {
     modules(
-      appModule(slackDB),
+      appModule(slackDB, skKeyValueData),
       dataSourceModule,
       dataMappersModule,
       useCaseModule,
@@ -105,7 +106,9 @@ fun initKoin(slackDB: SlackDB): KoinApplication {
   }
 }
 
-fun appModule(slackDB: SlackDB) =
+fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
   module {
     single { slackDB }
+    single { skKeyValueData }
+    single { GrpcCalls(get()) }
   }

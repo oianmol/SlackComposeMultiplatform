@@ -23,7 +23,7 @@ import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 
 @Composable
 fun CommonInputUI(
-  TopView: @Composable (modifier: Modifier) -> Unit,
+  TopView: @Composable ColumnScope.(modifier: Modifier) -> Unit,
   subtitleText: String,
   onNextClick: () -> Unit
 ) {
@@ -64,7 +64,7 @@ fun CommonInputUI(
           // Create references for the composables to constrain
           Spacer(Modifier)
           Column {
-            TopView(Modifier)
+            this@Column.TopView(Modifier)
             SubTitle(modifier = Modifier, subtitleText)
           }
           if (size == WindowSize.Phones) {

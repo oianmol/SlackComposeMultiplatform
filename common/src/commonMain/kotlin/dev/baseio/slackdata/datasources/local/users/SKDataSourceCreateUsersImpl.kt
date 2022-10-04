@@ -1,4 +1,4 @@
-package dev.baseio.slackdata.datasources.users
+package dev.baseio.slackdata.datasources.local.users
 
 import dev.baseio.database.SlackDB
 import dev.baseio.slackdomain.CoroutineDispatcherProvider

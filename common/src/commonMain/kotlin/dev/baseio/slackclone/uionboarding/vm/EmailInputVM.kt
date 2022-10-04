@@ -1,46 +1,58 @@
 package dev.baseio.slackclone.uionboarding.vm
 
 import ViewModel
-import dev.baseio.grpc.findWorkspacesForEmail
-import dev.baseio.grpc.login
 import dev.baseio.slackdata.protos.KMSKWorkspace
 import dev.baseio.slackdata.protos.KMSKWorkspaces
-import dev.baseio.slackdata.protos.kmSKAuthUser
-import dev.baseio.slackdata.protos.kmSKUser
+import dev.baseio.slackdomain.usecases.auth.LoginUseCase
+import dev.baseio.slackdomain.usecases.workspaces.FindWorkspacesUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class EmailInputVM : ViewModel() {
+class EmailInputVM(
+  private val loginUseCase: LoginUseCase,
+  private val findWorkspacesUseCase: FindWorkspacesUseCase
+) :
+  ViewModel() {
   val email = MutableStateFlow("")
+  val uiState = MutableStateFlow<UiState>(UiState.Empty)
 
   private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
     uiState.value = UiState.Exception(throwable)
   }
 
-  val uiState = MutableStateFlow<UiState>(UiState.Empty)
 
   fun onNextPressed() {
     if (uiState.value is UiState.Workspaces) {
-      (uiState.value as UiState.Workspaces).selectedWorkspace?.let { workspace ->
-        viewModelScope.launch(exceptionHandler) {
-          login(kmSKAuthUser {
-            this.email = (uiState.value as UiState.Workspaces).email
-            this.password = (uiState.value as UiState.Workspaces).password
-            this.user = kmSKUser {
-              workspaceId = workspace.uuid
-            }
-          })
-          // TODO save the token to local prefs
-          uiState.value = EmailInputVM.UiState.LoggedIn
-        }
-        return
-      }
+      loginNow()
     }
+    findWorkspaces()
+  }
+
+  private fun findWorkspaces() {
     viewModelScope.launch(exceptionHandler) {
       uiState.value = UiState.Loading
-      val workspaces = findWorkspacesForEmail(email.value)
+      val workspaces = findWorkspacesUseCase.invoke(email.value)
       uiState.value = UiState.Workspaces(workspaces)
+    }
+  }
+
+  private inline fun loginNow() {
+    val workspaceState = (uiState.value as UiState.Workspaces)
+    val email = workspaceState.email
+    val password = workspaceState.password
+    workspaceState.selectedWorkspace?.let { workspace ->
+      val workspaceId = workspace.uuid
+      viewModelScope.launch(exceptionHandler) {
+        uiState.value = UiState.Loading
+        loginUseCase.invoke(
+          email ?: throw Exception("Email cannot be empty"),
+          password ?: throw Exception("Password cannot be empty"),
+          workspaceId
+        )
+        uiState.value = UiState.LoggedIn
+      }
+      return
     }
   }
 
