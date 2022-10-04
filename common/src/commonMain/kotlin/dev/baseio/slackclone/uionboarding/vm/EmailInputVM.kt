@@ -32,7 +32,7 @@ class EmailInputVM(
   private fun findWorkspaces() {
     viewModelScope.launch(exceptionHandler) {
       uiState.value = UiState.Loading
-      val workspaces = findWorkspacesUseCase.invoke(email.value)
+      val workspaces = findWorkspacesUseCase.byEmail(email.value)
       uiState.value = UiState.Workspaces(workspaces)
     }
   }

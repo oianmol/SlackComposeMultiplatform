@@ -1,16 +1,16 @@
 package dev.baseio.slackclone.uionboarding.vm
 
 import ViewModel
-import dev.baseio.grpc.findWorkspaceByName
-import dev.baseio.grpc.login
 import dev.baseio.slackdata.protos.KMSKWorkspace
 import dev.baseio.slackdata.protos.kmSKAuthUser
 import dev.baseio.slackdata.protos.kmSKUser
+import dev.baseio.slackdomain.usecases.auth.LoginUseCase
+import dev.baseio.slackdomain.usecases.workspaces.FindWorkspacesUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class WorkspaceInputVM : ViewModel() {
+class WorkspaceInputVM(private val loginUseCase: LoginUseCase,private val findWorkspacesUseCase: FindWorkspacesUseCase) : ViewModel() {
   val uiState = MutableStateFlow<UiState>(UiState.Empty)
   var workspace = MutableStateFlow("")
 
@@ -23,14 +23,7 @@ class WorkspaceInputVM : ViewModel() {
         val password = (uiState.value as UiState.Workspace).password
         val workspaceIdd = (uiState.value as UiState.Workspace).kmskWorkspace.uuid
         uiState.value = UiState.Loading
-        val onLogin = login(kmSKAuthUser {
-          this.email = email
-          this.password = password
-          this.user = kmSKUser {
-            workspaceId = workspaceIdd
-          }
-        })
-        // TODO save the token to local prefs
+        loginUseCase.invoke(email!!, password!!, workspaceIdd)
         uiState.value = UiState.LoggedIn
       }
     } else {
@@ -38,7 +31,7 @@ class WorkspaceInputVM : ViewModel() {
         uiState.value = UiState.Exception(throwable)
       }) {
         uiState.value = UiState.Loading
-        val name = findWorkspaceByName(workspace.value)
+        val name = findWorkspacesUseCase.byName(workspace.value)
         uiState.value = UiState.Workspace(name)
       }
     }

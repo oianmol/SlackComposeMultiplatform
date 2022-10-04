@@ -8,6 +8,8 @@ import dev.baseio.slackdata.datasources.local.users.SKDataSourceCreateUsersImpl
 import dev.baseio.slackdata.datasources.local.users.SKDataSourceUsersImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKDataSourceCreateWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKDataSourceWorkspacesImpl
+import dev.baseio.slackdata.datasources.remote.auth.AuthNetworkDataSourceImpl
+import dev.baseio.slackdata.datasources.remote.workspaces.WorkspacesNetworkDataSourceImpl
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannelLastMessage
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannels
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceCreateChannels
@@ -16,9 +18,15 @@ import dev.baseio.slackdomain.datasources.local.users.SKDataSourceCreateUsers
 import dev.baseio.slackdomain.datasources.local.users.SKDataSourceUsers
 import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceCreateWorkspaces
 import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceWorkspaces
+import dev.baseio.slackdomain.datasources.remote.auth.AuthNetworkDataSource
+import dev.baseio.slackdomain.datasources.remote.workspaces.WorkspacesNetworkDataSource
 import org.koin.dsl.module
 
 val dataSourceModule = module {
+  single<AuthNetworkDataSource> {
+    AuthNetworkDataSourceImpl(get())
+  }
+  single<WorkspacesNetworkDataSource> { WorkspacesNetworkDataSourceImpl(get()) }
   single<SKDataSourceCreateUsers> {
     SKDataSourceCreateUsersImpl(get(), get())
   }
