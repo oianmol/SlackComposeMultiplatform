@@ -16,6 +16,6 @@ actual class SKKeyValueData(private val context: Context) {
   }
 
   actual fun get(key: String): String? {
-    return sharedPreferences.getString(key)
+    return sharedPreferences.getString(key, null)
   }
 }

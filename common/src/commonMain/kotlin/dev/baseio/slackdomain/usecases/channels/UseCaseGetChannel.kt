@@ -1,13 +1,13 @@
 package dev.baseio.slackdomain.usecases.channels
 
-import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannels
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.BaseUseCase
 
-class UseCaseGetChannel(private val skDataSourceChannels: SKDataSourceChannels) :
+class UseCaseGetChannel(private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels) :
   BaseUseCase<DomainLayerChannels.SKChannel, UseCaseChannelRequest> {
   override suspend fun perform(params: UseCaseChannelRequest): DomainLayerChannels.SKChannel? {
-    return skDataSourceChannels.getChannel(
+    return skLocalDataSourceReadChannels.getChannel(
       UseCaseChannelRequest(
         workspaceId = params.workspaceId,
         uuid = params.uuid

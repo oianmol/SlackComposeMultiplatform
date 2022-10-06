@@ -11,7 +11,7 @@ plugins {
   id("com.squareup.sqldelight")
 
   id("com.google.protobuf") version "0.8.18"
-  id("io.github.timortel.kotlin-multiplatform-grpc-plugin") version "0.2.2"
+  id("dev.baseio.grpc.kotlin-multiplatform-grpc-plugin") version "0.2.2"
 }
 
 group = "dev.baseio.slackclone"
@@ -80,9 +80,6 @@ val slackDataVersion: String by project
 
 kotlin {
   android()
-  iosArm64()
-  iosSimulatorArm64()
-  iosX64()
   jvm {
     compilations.all {
       kotlinOptions.jvmTarget = "11"
@@ -122,13 +119,12 @@ kotlin {
       )
       dependencies {
         implementation(Deps.Koin.android)
-        api(project(":generate-proto"))
+        implementation(project(":generate-proto"))
         implementation(Deps.Kotlinx.coroutines)
         implementation(Deps.SqlDelight.androidDriver)
         implementation(Deps.AndroidX.lifecycleViewModelKtx)
-        implementation(project(":generate-proto"))
         implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
-        implementation("dev.baseio.grpc:grpc-multiplatform-lib-android:0.2.2")
+        api("dev.baseio.grpc:grpc-multiplatform-lib-android-debug:0.2.2")
         implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
         implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
@@ -138,22 +134,6 @@ kotlin {
         api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
         api("androidx.appcompat:appcompat:1.5.1")
         api("androidx.core:core-ktx:1.9.0")
-      }
-    }
-    val iosArm64Main by getting {
-      dependencies {
-        implementation("io.ktor:ktor-client-darwin:$ktor_version")
-      }
-    }
-    val iosSimulatorArm64Main by getting {
-      dependencies {
-        implementation("io.ktor:ktor-client-darwin:$ktor_version")
-      }
-    }
-    val iosX64Main by getting {
-      dependencies {
-        implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
       }
     }
 
@@ -170,8 +150,8 @@ kotlin {
         implementation(Deps.Kotlinx.coroutines)
         implementation(Deps.Kotlinx.JVM.coroutinesSwing)
         implementation(Deps.SqlDelight.jvmDriver)
-        implementation(project(":generate-proto"))
-        implementation("dev.baseio.grpc:grpc-multiplatform-lib-jvm:0.2.2")
+        api(project(":generate-proto"))
+        api("dev.baseio.grpc:grpc-multiplatform-lib-jvm:0.2.2")
         implementation("io.ktor:ktor-client-java:$ktor_version")
         implementation("com.alialbaali.kamel:kamel-image:0.4.0")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
@@ -216,6 +196,9 @@ android {
   defaultConfig {
     minSdk = 24
     targetSdk = 33
+  }
+  packagingOptions {
+    resources.excludes.add("google/protobuf/*.proto")
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_1_8

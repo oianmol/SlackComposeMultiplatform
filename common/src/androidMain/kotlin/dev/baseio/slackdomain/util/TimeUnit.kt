@@ -7,3 +7,7 @@ actual enum class TimeUnit(val javaTimeUnit: java.util.concurrent.TimeUnit) {
   MINUTES(java.util.concurrent.TimeUnit.MINUTES),
   SECONDS(java.util.concurrent.TimeUnit.SECONDS)
 }
+
+actual fun TimeUnit.toMillis(duration: Long): Long {
+  return javaTimeUnit.toMillis(duration)
+}

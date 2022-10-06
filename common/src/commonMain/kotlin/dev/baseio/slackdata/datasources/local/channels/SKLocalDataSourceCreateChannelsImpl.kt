@@ -6,16 +6,16 @@ import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
-import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceCreateChannels
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceCreateChannels
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
-class SKDataSourceCreateChannelsImpl(
+class SKLocalDataSourceCreateChannelsImpl(
   private val slackChannelDao: SlackDB,
   private val SKChannelMapper: EntityMapper<DomainLayerChannels.SKChannel, SlackChannel>,
   private val coroutineMainDispatcherProvider: CoroutineDispatcherProvider
 ) :
-  SKDataSourceCreateChannels {
+  SKLocalDataSourceCreateChannels {
 
   override suspend fun saveChannels(channels: MutableList<DomainLayerChannels.SKChannel>) {
     channels.forEach { skChannel ->

@@ -15,59 +15,63 @@ class EmailInputVM(
 ) :
   ViewModel() {
   val email = MutableStateFlow("")
-  val uiState = MutableStateFlow<UiState>(UiState.Empty)
+  val uiState = MutableStateFlow(UiState())
 
   private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-    uiState.value = UiState.Exception(throwable)
+    uiState.value = uiState.value.copy(throwable = throwable)
   }
 
-
   fun onNextPressed() {
-    if (uiState.value is UiState.Workspaces) {
-      loginNow()
+    if (uiState.value.workspaces != null) {
+      val email = uiState.value.email
+      val password = uiState.value.password
+      uiState.value.selectedWorkspace?.let { workspace ->
+        val workspaceId = workspace.uuid
+        viewModelScope.launch(exceptionHandler) {
+          uiState.value = uiState.value.copy(isLoading = true)
+          loginUseCase.invoke(
+            email ?: throw Exception("Email cannot be empty"),
+            password ?: throw Exception("Password cannot be empty"),
+            workspaceId
+          )
+          uiState.value = uiState.value.copy(isLoading = false, isLoggedIn = true)
+        }
+        return
+      } ?: run {
+        uiState.value =
+          (uiState.value).copy(validationMessage = "Please select a workspace to proceed!")
+        return
+      }
     }
     findWorkspaces()
   }
 
   private fun findWorkspaces() {
     viewModelScope.launch(exceptionHandler) {
-      uiState.value = UiState.Loading
+      uiState.value = uiState.value.copy(isLoading = true)
       val workspaces = findWorkspacesUseCase.byEmail(email.value)
-      uiState.value = UiState.Workspaces(workspaces)
-    }
-  }
-
-  private inline fun loginNow() {
-    val workspaceState = (uiState.value as UiState.Workspaces)
-    val email = workspaceState.email
-    val password = workspaceState.password
-    workspaceState.selectedWorkspace?.let { workspace ->
-      val workspaceId = workspace.uuid
-      viewModelScope.launch(exceptionHandler) {
-        uiState.value = UiState.Loading
-        loginUseCase.invoke(
-          email ?: throw Exception("Email cannot be empty"),
-          password ?: throw Exception("Password cannot be empty"),
-          workspaceId
-        )
-        uiState.value = UiState.LoggedIn
-      }
-      return
+      uiState.value =
+        uiState.value.copy(isInitial = false, isLoading = false, workspaces = workspaces, email = email.value)
     }
   }
 
   fun switchLogin(kmskWorkspace: KMSKWorkspace) {
-    uiState.value = (uiState.value as UiState.Workspaces).copy(selectedWorkspace = kmskWorkspace)
+    uiState.value = (uiState.value).copy(selectedWorkspace = kmskWorkspace)
   }
 
-  sealed class UiState {
-    object Empty : UiState()
-    object Loading : UiState()
-    data class Exception(val throwable: Throwable) : UiState()
-    object LoggedIn : UiState()
-    data class Workspaces(
-      val workspaces: KMSKWorkspaces,
-      var selectedWorkspace: KMSKWorkspace? = null, var email: String? = null, var password: String? = null
-    ) : UiState()
+  fun clearValidationMessage() {
+    uiState.value = uiState.value.copy(validationMessage = null)
   }
+
+  data class UiState(
+    var isInitial: Boolean = true,
+    var isLoading: Boolean? = null,
+    var isLoggedIn: Boolean = false,
+    var throwable: Throwable? = null,
+    val workspaces: KMSKWorkspaces? = null,
+    var selectedWorkspace: KMSKWorkspace? = null,
+    var email: String? = null,
+    var password: String? = null,
+    var validationMessage: String? = null
+  )
 }

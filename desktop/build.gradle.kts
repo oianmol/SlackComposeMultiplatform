@@ -20,7 +20,7 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation("io.grpc:grpc-netty-shaded:1.47.0")
+                implementation("io.grpc:grpc-netty-shaded:1.49.1")
                 implementation(project(":common"))
                 api(project(":generate-proto"))
                 implementation(compose.desktop.currentOs)

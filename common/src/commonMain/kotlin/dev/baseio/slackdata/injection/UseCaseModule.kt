@@ -1,6 +1,5 @@
 package dev.baseio.slackdata.injection
 
-import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannelLastMessage
 import dev.baseio.slackdomain.usecases.auth.LoginUseCase
 import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import dev.baseio.slackdomain.usecases.channels.*
@@ -14,11 +13,11 @@ val useCaseModule = module {
   single { FindWorkspacesUseCase(get()) }
   single { UseCaseFetchRecentChannels(get()) }
   single { UseCaseGetSelectedWorkspace(get()) }
-  single { UseCaseFetchChannels(get()) }
+  single { UseCaseFetchChannels(get(),get(),get()) }
   single { UseCaseFetchChannelsWithLastMessage(get()) }
   single { UseCaseFetchMessages(get()) }
   single { UseCaseSendMessage(get()) }
-  single { UseCaseCreateChannel(get()) }
+  single { UseCaseCreateChannel(get(), get()) }
   single { UseCaseCreateOneToOneChannel(get()) }
   single { UseCaseGetChannel(get()) }
   single { UseCaseFetchChannelCount(get()) }

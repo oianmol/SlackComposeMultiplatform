@@ -22,6 +22,7 @@ import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.injection.*
+import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceCreateWorkspaces
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import kotlinx.coroutines.flow.launchIn
@@ -38,6 +39,11 @@ var koinApp: KoinApplication? = null
 fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKKeyValueData) {
   if (koinApp == null) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
+  }
+  val initialRoute = skKeyValueData.get(AUTH_TOKEN)?.let {
+    SlackScreens.DashboardRoute
+  }?:run{
+    SlackScreens.OnboardingRoute
   }
   LaunchedEffect(true) {
     koinApp?.koin?.get<GrpcCalls>()?.getWorkspaces()?.onEach { kmskWorkspaces ->
@@ -56,7 +62,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
   }
 
   Box(modifier) {
-    Navigator(navigator = appNavigator, initialRoute = SlackScreens.OnboardingRoute) {
+    Navigator(navigator = appNavigator, initialRoute = initialRoute) {
       this.route(SlackScreens.OnboardingRoute) {
         screen(SlackScreens.GettingStarted) {
           val gettingStartedVM = scope.get<GettingStartedVM>()

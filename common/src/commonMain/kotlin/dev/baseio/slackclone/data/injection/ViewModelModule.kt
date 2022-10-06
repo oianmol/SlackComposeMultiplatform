@@ -26,7 +26,7 @@ import org.koin.ext.getFullName
 val viewModelModule = module {
   scope<SlackScreens.Home> {
     scoped {
-      HomeScreenVM(getKoin().get())
+      HomeScreenVM(getKoin().get(),getKoin().get())
     }
   }
   scope<SlackScreens.GettingStarted> {

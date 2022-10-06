@@ -147,7 +147,7 @@ fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
       .height(40.dp),
   ) {
     Text(
-      text = "Email me a magic link",
+      text = "I will use my email address!",
       style = SlackCloneTypography.subtitle1.copy(color = Color.White)
     )
   }

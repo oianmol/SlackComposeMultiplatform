@@ -5,13 +5,13 @@ plugins {
     kotlin("jvm")
 
     id("java")
-    id("com.google.protobuf") version "0.8.18"
+    id("com.google.protobuf") version "0.8.19"
 }
 
 object Versions {
-    const val GRPC = "1.47.0"
-    const val GRPC_KOTLIN = "1.2.1"
-    const val PROTOBUF = "3.20.1"
+    const val GRPC = "1.49.1"
+    const val GRPC_KOTLIN = "1.3.0"
+    const val PROTOBUF = "3.21.6"
 
     const val COROUTINES = "1.6.4"
 }
@@ -22,7 +22,6 @@ repositories {
 
 dependencies {
     protobuf(project(":protos"))
-
     api("com.google.protobuf:protobuf-kotlin:${Versions.PROTOBUF}")
     api("com.google.protobuf:protobuf-java-util:${Versions.PROTOBUF}")
     api("io.grpc:grpc-protobuf:${Versions.GRPC}")
@@ -42,7 +41,7 @@ protobuf {
             artifact = "io.grpc:protoc-gen-grpc-java:${Versions.GRPC}"
         }
         id("grpckt") {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:${Versions.GRPC_KOTLIN}:jdk7@jar"
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:${Versions.GRPC_KOTLIN}:jdk8@jar"
         }
     }
     generateProtoTasks {

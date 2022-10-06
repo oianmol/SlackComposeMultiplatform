@@ -6,18 +6,17 @@ import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdata.local.asFlow
 import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
-import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannels
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseChannelRequest
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
-class SKDataSourceChannelsImpl(
+class SKLocalDataSourceReadChannelsImpl(
   private val slackChannelDao: SlackDB,
   private val SKChannelMapper: EntityMapper<DomainLayerChannels.SKChannel, SlackChannel>,
   private val coroutineMainDispatcherProvider: CoroutineDispatcherProvider
-) : SKDataSourceChannels {
+) : SKLocalDataSourceReadChannels {
 
   override fun fetchChannelsOrByName(workspaceId: String, params: String?): Flow<List<DomainLayerChannels.SKChannel>> {
     val flow = params?.takeIf { it.isNotEmpty() }?.let {
