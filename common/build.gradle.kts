@@ -170,10 +170,6 @@ grpcKotlinMultiplatform {
   protoSourceFolders.set(listOf(projectDir.parentFile.resolve("protos/src/main/proto")))
 }
 
-dependencies {
-  commonMainApi("io.github.timortel:grpc-multiplatform-lib:0.2.2")
-}
-
 kotlin {
   targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
     binaries.all {
