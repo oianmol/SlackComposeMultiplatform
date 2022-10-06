@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="17">
-      <module name="SlackJetpackCompose.generate-proto" target="1.8" />
-      <module name="SlackJetpackCompose.generate-proto.main" target="1.8" />
-      <module name="SlackJetpackCompose.generate-proto.test" target="1.8" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8" />
   </component>
 </project>

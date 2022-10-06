@@ -1,0 +1,34 @@
+prebuilds/fullsdk-linux
+prebuilds/fullsdk-darwin
+out
+*.iml
+.gradle
+*.db
+/local.properties
+/.idea
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/aws.xml
+/.idea/compiler.xml
+/.idea/dataSources.local.xml
+/.idea/dataSources.xml
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
+/.idea/jpa-buddy.xml
+/.idea/kotlinc.xml
+/.idea/misc.xml
+/.idea/uiDesigner.xml
+/.idea/vcs.xml
+
+.DS_Store
+build/
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+# Ignoring the persistant lockfile until kotlin.js vulnerabilities are fixed
+# yarn.lock # but absent yarn.lock leads to inconsistent builds on CI, so let's keep it

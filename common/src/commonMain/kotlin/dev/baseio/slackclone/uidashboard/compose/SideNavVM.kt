@@ -16,7 +16,7 @@ class SideNavVM(
     private set
 
   fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
-    return useCaseFetchWorkspaces.fetchWorkspaces()
+    return useCaseFetchWorkspaces.invoke()
   }
 
   fun select(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
