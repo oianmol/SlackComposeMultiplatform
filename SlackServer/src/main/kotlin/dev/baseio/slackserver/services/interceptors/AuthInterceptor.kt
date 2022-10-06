@@ -30,7 +30,9 @@ class AuthInterceptor : ServerInterceptor {
     val value: String? = metadata?.get(AUTHORIZATION_METADATA_KEY)
     val status: Status = when {
       value == null -> {
-        Status.UNAUTHENTICATED.withDescription("Authorization token is missing")
+        val ctx: Context = Context.current().withValue(AUTH_CONTEXT_KEY, AuthData("",""))
+        return Contexts.interceptCall(ctx, serverCall, metadata, serverCallHandler)
+        //Status.UNAUTHENTICATED.withDescription("Authorization token is missing")
       }
 
       !value.startsWith(BEARER_TYPE) -> {

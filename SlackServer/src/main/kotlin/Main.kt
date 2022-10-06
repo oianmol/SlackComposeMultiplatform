@@ -12,10 +12,10 @@ fun main() {
   val authDataSource = AuthDataSourceImpl(Database.slackDB)
 
   ServerBuilder.forPort(17600)
+    .addService(AuthService(authDataSource = authDataSource))
     .addService(WorkspaceService(workspaceDataSource = workspaceDataSource))
     .addService(ChannelService(channelsDataSource = channelsDataSource))
     .addService(MessagingService(messagesDataSource = messagesDataSource))
-    .addService(AuthService(authDataSource = authDataSource))
     .addService(UserService(usersDataSource = usersDataSource))
     .intercept(AuthInterceptor())
     .build()

@@ -11,7 +11,7 @@ plugins {
   id("com.squareup.sqldelight")
 
   id("com.google.protobuf") version "0.8.18"
-  id("dev.baseio.grpc.kotlin-multiplatform-grpc-plugin") version "0.2.2"
+  id("io.github.timortel.kotlin-multiplatform-grpc-plugin") version "0.2.2"
 }
 
 group = "dev.baseio.slackclone"
@@ -101,7 +101,7 @@ kotlin {
         implementation(Deps.Kotlinx.coroutines)
         implementation(Deps.Koin.core)
         implementation(kotlin("stdlib-common"))
-        api("dev.baseio.grpc:grpc-multiplatform-lib:0.2.2")
+        api("io.github.timortel:grpc-multiplatform-lib:0.2.2")
       }
       kotlin.srcDirs(
         projectDir.resolve("build/generated/source/kmp-grpc/commonMain/kotlin").canonicalPath ,
@@ -124,7 +124,7 @@ kotlin {
         implementation(Deps.SqlDelight.androidDriver)
         implementation(Deps.AndroidX.lifecycleViewModelKtx)
         implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
-        api("dev.baseio.grpc:grpc-multiplatform-lib-android-debug:0.2.2")
+        api("io.github.timortel:grpc-multiplatform-lib-android:0.2.2")
         implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
         implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
@@ -151,7 +151,7 @@ kotlin {
         implementation(Deps.Kotlinx.JVM.coroutinesSwing)
         implementation(Deps.SqlDelight.jvmDriver)
         api(project(":generate-proto"))
-        api("dev.baseio.grpc:grpc-multiplatform-lib-jvm:0.2.2")
+        api("io.github.timortel:grpc-multiplatform-lib-jvm:0.2.2")
         implementation("io.ktor:ktor-client-java:$ktor_version")
         implementation("com.alialbaali.kamel:kamel-image:0.4.0")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
@@ -171,7 +171,7 @@ grpcKotlinMultiplatform {
 }
 
 dependencies {
-  commonMainApi("dev.baseio.grpc:grpc-multiplatform-lib:0.2.2")
+  commonMainApi("io.github.timortel:grpc-multiplatform-lib:0.2.2")
 }
 
 kotlin {
