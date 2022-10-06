@@ -22,7 +22,6 @@ class AuthInterceptor : ServerInterceptor {
     .setSigningKey(JWT_SIGNING_KEY)
     .build()
 
-
   override fun <ReqT, RespT> interceptCall(
     serverCall: ServerCall<ReqT, RespT>?,
     metadata: Metadata?,
@@ -49,6 +48,7 @@ class AuthInterceptor : ServerInterceptor {
           val ctx: Context = Context.current().withValue(AUTH_CONTEXT_KEY, authData)
           return Contexts.interceptCall(ctx, serverCall, metadata, serverCallHandler)
         } catch (e: Exception) {
+          e.printStackTrace()
           Status.UNAUTHENTICATED.withDescription(e.message).withCause(e)
         }
       }

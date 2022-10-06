@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("io.grpc:grpc-netty-shaded:1.47.0")
+  implementation("io.grpc:grpc-netty-shaded:1.49.1")
   implementation(project(":generate-proto"))
   val sqldelightVersion = "1.5.3"
   implementation("com.squareup.sqldelight:runtime-jvm:$sqldelightVersion")

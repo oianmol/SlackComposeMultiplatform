@@ -4,6 +4,8 @@ import database.FindWorkspacesForEmailId
 import database.SkWorkspace
 import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.WorkspaceDataSource
+import io.grpc.Status
+import io.grpc.StatusException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import java.util.UUID
@@ -25,7 +27,7 @@ class WorkspaceService(
         name = workspace.name ?: ""
       }
     } ?: kotlin.run {
-      sKWorkspace { }
+      throw StatusException(Status.NOT_FOUND)
     }
   }
 

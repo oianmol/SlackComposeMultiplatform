@@ -30,4 +30,9 @@ class UsersDataSourceImpl(private val slackCloneDB: SlackCloneDB) : UsersDataSou
       .selectAllUsers(workspaceid = workspaceId)
       .asFlow()
   }
+
+  override fun getUser(userId: String, workspaceId: String): SkUser? {
+    return slackCloneDB.slackschemaQueries.getUserWithIdAndWorkspaceId(userId,workspaceId)
+      .executeAsOneOrNull()
+  }
 }

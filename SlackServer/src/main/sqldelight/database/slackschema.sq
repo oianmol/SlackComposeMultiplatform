@@ -87,6 +87,10 @@ SELECT * FROM skUser WHERE email=:email;
 getUser:
 SELECT * FROM skUser WHERE uuid=:userId;
 
+getUserWithIdAndWorkspaceId:
+SELECT * FROM skUser WHERE uuid=:userId AND workspaceId=:workspaceId;
+
+
 getUserWithEmailAndWorkspaceId:
 SELECT * FROM skUser WHERE email=:email AND workspaceId=:workspaceId;
 

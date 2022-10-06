@@ -12,6 +12,7 @@ import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.compose.DashboardVM
 import dev.baseio.slackclone.uidashboard.compose.SideNavVM
 import dev.baseio.slackclone.uidashboard.home.HomeScreenVM
+import dev.baseio.slackclone.uidashboard.home.UserProfileVM
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
@@ -26,7 +27,12 @@ import org.koin.ext.getFullName
 val viewModelModule = module {
   scope<SlackScreens.Home> {
     scoped {
-      HomeScreenVM(getKoin().get(),getKoin().get())
+      HomeScreenVM(getKoin().get(), getKoin().get())
+    }
+  }
+  scope<SlackScreens.You> {
+    scoped {
+      UserProfileVM(get())
     }
   }
   scope<SlackScreens.GettingStarted> {
@@ -34,7 +40,7 @@ val viewModelModule = module {
   }
   scope<SlackScreens.WorkspaceInputUI> {
     scoped {
-      WorkspaceInputVM(get(),get())
+      WorkspaceInputVM(get(), get())
     }
   }
   scope<SlackScreens.EmailAddressInputUI> {

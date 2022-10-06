@@ -11,4 +11,8 @@ actual class SKKeyValueData {
   actual fun get(key: String): String? {
     return preferences.get(key, null)
   }
+
+  actual fun clear() {
+    preferences.clear()
+  }
 }

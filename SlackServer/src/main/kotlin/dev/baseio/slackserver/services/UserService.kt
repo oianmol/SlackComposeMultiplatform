@@ -3,6 +3,9 @@ package dev.baseio.slackserver.services
 import database.SkUser
 import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.UsersDataSource
+import dev.baseio.slackserver.services.interceptors.AUTH_CONTEXT_KEY
+import io.grpc.Status
+import io.grpc.StatusException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -11,6 +14,13 @@ import kotlin.coroutines.CoroutineContext
 
 class UserService(coroutineContext: CoroutineContext = Dispatchers.IO, private val usersDataSource: UsersDataSource) :
   UsersServiceGrpcKt.UsersServiceCoroutineImplBase(coroutineContext) {
+
+  override suspend fun currentLoggedInUser(request: Empty): SKUser {
+    val authData = AUTH_CONTEXT_KEY.get() ?: throw StatusException(Status.UNAUTHENTICATED)
+    return usersDataSource.getUser(authData.userId, authData.workspaceId)?.toGrpc()
+      ?: throw StatusException(Status.UNAUTHENTICATED)
+  }
+
   override fun getUsers(request: SKWorkspaceChannelRequest): Flow<SKUsers> {
     return usersDataSource.getUsers(request.workspaceId).map {
       val users = it.executeAsList().map { user ->

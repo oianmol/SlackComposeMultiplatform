@@ -35,13 +35,9 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackDesktopLayout
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackSideBarLayoutDesktop
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackWorkspaceLayoutDesktop
-import dev.baseio.slackclone.uidashboard.home.DirectMessagesUI
-import dev.baseio.slackclone.uidashboard.home.HomeScreenUI
-import dev.baseio.slackclone.uidashboard.home.MentionsReactionsUI
-import dev.baseio.slackclone.uidashboard.home.SearchMessagesUI
-import dev.baseio.slackclone.uidashboard.home.UserProfileUI
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import dev.baseio.slackclone.uidashboard.home.*
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 
 val homeNavigator = SlackComposeNavigator()
@@ -314,7 +310,8 @@ private fun DashboardScaffold(
                 SearchMessagesUI()
               }
               screen(SlackScreens.You) {
-                UserProfileUI(this@Navigator)
+                val gettingStartedVM = scope.get<UserProfileVM>()
+                UserProfileUI(this@Navigator, gettingStartedVM)
               }
             }
           }

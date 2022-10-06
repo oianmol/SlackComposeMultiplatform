@@ -18,4 +18,8 @@ actual class SKKeyValueData(private val context: Context) {
   actual fun get(key: String): String? {
     return sharedPreferences.getString(key, null)
   }
+
+  actual fun clear() {
+    sharedPreferences.edit().clear().apply()
+  }
 }

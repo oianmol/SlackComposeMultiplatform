@@ -22,8 +22,10 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,18 +40,24 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
+import dev.baseio.slackdata.protos.KMSKUser
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UserProfileUI(composeNavigator: ComposeNavigator) {
+fun UserProfileUI(composeNavigator: ComposeNavigator, profileVM: UserProfileVM) {
+  val user by profileVM.currentLoggedInUser.collectAsState()
+
+  LaunchedEffect(Unit){
+    profileVM.fetchUserProfile()
+  }
+
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
   ) {
     Column(Modifier.verticalScroll(rememberScrollState())) {
       SearchTopAppBar()
-      UserHeader()
+      UserHeader(user)
       Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
         StatusBox()
       }
@@ -112,16 +120,16 @@ fun SlackListItemTrailingView(
 }
 
 
-
 @Composable
-fun UserHeader() {
+fun UserHeader(user: KMSKUser?) {
   Row(Modifier.padding(12.dp)) {
     SlackImageBox(
       Modifier.size(72.dp),
-      "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no"
+      user?.avatarUrl
+        ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no"
     )
     Column(Modifier.padding(start = 8.dp)) {
-      Text(text = "Anmol Verma", style = SlackCloneTypography.h6.copy(fontWeight = FontWeight.Bold))
+      Text(text = user?.name ?: "Anmol Verma", style = SlackCloneTypography.h6.copy(fontWeight = FontWeight.Bold))
       Spacer(modifier = Modifier.padding(top = 4.dp))
       Text(
         text = "Active",

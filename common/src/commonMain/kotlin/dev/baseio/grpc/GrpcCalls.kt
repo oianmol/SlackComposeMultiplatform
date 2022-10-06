@@ -13,7 +13,7 @@ class GrpcCalls(private val skKeyValueData: SKKeyValueData) {
   companion object {
     const val address = "192.168.1.5"
     const val port = 17600
-    const val AUTHENTICATION_TOKEN_KEY = "token"
+    const val AUTHENTICATION_TOKEN_KEY = "Authorization"
   }
 
   val grpcChannel by lazy {
@@ -43,32 +43,36 @@ class GrpcCalls(private val skKeyValueData: SKKeyValueData) {
     KMMessagesServiceStub(grpcChannel)
   }
 
-  suspend fun register(kmskAuthUser: KMSKAuthUser): KMSKAuthResult {
-    return authStub.register(kmskAuthUser)
+  suspend fun currentLoggedInUser(token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKUser {
+    return usersStub.currentLoggedInUser(kmEmpty { }, fetchToken(token))
   }
 
-  suspend fun forgotPassword(kmskAuthUser: KMSKAuthUser): KMSKUser {
-    return authStub.forgotPassword(kmskAuthUser)
+  suspend fun register(kmskAuthUser: KMSKAuthUser, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKAuthResult {
+    return authStub.register(kmskAuthUser, fetchToken(token))
   }
 
-  suspend fun resetPassword(kmskAuthUser: KMSKAuthUser): KMSKUser {
-    return authStub.resetPassword(kmskAuthUser)
+  suspend fun forgotPassword(kmskAuthUser: KMSKAuthUser, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKUser {
+    return authStub.forgotPassword(kmskAuthUser, fetchToken(token))
   }
 
-  suspend fun findWorkspaceByName(name: String): KMSKWorkspace {
+  suspend fun resetPassword(kmskAuthUser: KMSKAuthUser, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKUser {
+    return authStub.resetPassword(kmskAuthUser, fetchToken(token))
+  }
+
+  suspend fun findWorkspaceByName(name: String, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKWorkspace {
     return workspacesStub.findWorkspaceForName(kmSKFindWorkspacesRequest {
       this.name = name
-    })
+    }, fetchToken(token))
   }
 
-  suspend fun findWorkspacesForEmail(email: String): KMSKWorkspaces {
+  suspend fun findWorkspacesForEmail(email: String, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKWorkspaces {
     return workspacesStub.findWorkspacesForEmail(kmSKFindWorkspacesRequest {
       this.email = email
-    })
+    }, fetchToken(token))
   }
 
-  suspend fun login(kmskAuthUser: KMSKAuthUser): KMSKAuthResult {
-    return authStub.login(kmskAuthUser)
+  suspend fun login(kmskAuthUser: KMSKAuthUser, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKAuthResult {
+    return authStub.login(kmskAuthUser, fetchToken(token))
   }
 
   fun getWorkspaces(token: String? = skKeyValueData.get(AUTH_TOKEN)): Flow<KMSKWorkspaces> {
@@ -104,9 +108,13 @@ class GrpcCalls(private val skKeyValueData: SKKeyValueData) {
   fun fetchToken(token: String?): KMMetadata {
     return KMMetadata().apply {
       if (token != null) {
-        set(AUTHENTICATION_TOKEN_KEY, token)
+        set(AUTHENTICATION_TOKEN_KEY, "Bearer $token")
       }
     }
+  }
+
+  fun clearAuth() {
+    skKeyValueData.clear()
   }
 }
 

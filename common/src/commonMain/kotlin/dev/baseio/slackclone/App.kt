@@ -23,7 +23,7 @@ import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.injection.*
 import dev.baseio.slackdomain.AUTH_TOKEN
-import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceCreateWorkspaces
+import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,12 +42,12 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
   }
   val initialRoute = skKeyValueData.get(AUTH_TOKEN)?.let {
     SlackScreens.DashboardRoute
-  }?:run{
+  } ?: run {
     SlackScreens.OnboardingRoute
   }
   LaunchedEffect(true) {
     koinApp?.koin?.get<GrpcCalls>()?.getWorkspaces()?.onEach { kmskWorkspaces ->
-      koinApp?.koin?.get<SKDataSourceCreateWorkspaces>()?.apply {
+      koinApp?.koin?.get<SKLocalDataSourceWriteWorkspaces>()?.apply {
         saveWorkspaces(kmskWorkspaces.workspacesList.map { workspace ->
           DomainLayerWorkspaces.SKWorkspace(
             workspace.uuid,

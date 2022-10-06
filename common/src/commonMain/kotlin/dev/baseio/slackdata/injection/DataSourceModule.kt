@@ -6,7 +6,7 @@ import dev.baseio.slackdata.datasources.local.channels.SlackSKDataSourceChannelL
 import dev.baseio.slackdata.datasources.local.messages.SlackSKDataSourceMessagesImpl
 import dev.baseio.slackdata.datasources.local.users.SKDataSourceCreateUsersImpl
 import dev.baseio.slackdata.datasources.local.users.SKDataSourceUsersImpl
-import dev.baseio.slackdata.datasources.local.workspaces.SKDataSourceCreateWorkspacesImpl
+import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKDataSourceWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.auth.AuthNetworkDataSourceImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelsImpl
@@ -18,7 +18,7 @@ import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceCreate
 import dev.baseio.slackdomain.datasources.local.messages.SKDataSourceMessages
 import dev.baseio.slackdomain.datasources.local.users.SKDataSourceCreateUsers
 import dev.baseio.slackdomain.datasources.local.users.SKDataSourceUsers
-import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceCreateWorkspaces
+import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.local.workspaces.SKDataSourceWorkspaces
 import dev.baseio.slackdomain.datasources.remote.auth.AuthNetworkDataSource
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannels
@@ -34,8 +34,8 @@ val dataSourceModule = module {
   single<SKDataSourceCreateUsers> {
     SKDataSourceCreateUsersImpl(get(), get())
   }
-  single<SKDataSourceCreateWorkspaces> {
-    SKDataSourceCreateWorkspacesImpl(get(), get())
+  single<SKLocalDataSourceWriteWorkspaces> {
+    SKLocalDataSourceWriteWorkspacesImpl(get(), get())
   }
   single<SKDataSourceWorkspaces> {
     SKDataSourceWorkspacesImpl(get(), get(SlackWorkspaceMapperQualifier), get())

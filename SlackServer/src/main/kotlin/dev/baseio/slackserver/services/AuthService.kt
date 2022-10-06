@@ -1,13 +1,14 @@
 package dev.baseio.slackserver.services
 
 import database.SkUser
-import dev.baseio.slackdata.protos.AuthServiceGrpcKt
-import dev.baseio.slackdata.protos.SKAuthResult
-import dev.baseio.slackdata.protos.SKAuthUser
-import dev.baseio.slackdata.protos.SKStatus
+import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.AuthDataSource
+import dev.baseio.slackserver.data.UsersDataSource
+import dev.baseio.slackserver.services.interceptors.AUTH_CONTEXT_KEY
 import dev.baseio.slackserver.services.interceptors.USER_ID
 import dev.baseio.slackserver.services.interceptors.WORKSPACE_ID
+import io.grpc.Status
+import io.grpc.StatusException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
@@ -22,7 +23,7 @@ import kotlin.coroutines.CoroutineContext
 
 class AuthService(
   coroutineContext: CoroutineContext = Dispatchers.IO,
-  private val authDataSource: AuthDataSource,
+  private val authDataSource: AuthDataSource
 ) :
   AuthServiceGrpcKt.AuthServiceCoroutineImplBase(coroutineContext) {
 
