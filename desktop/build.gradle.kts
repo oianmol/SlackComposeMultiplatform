@@ -8,7 +8,6 @@ plugins {
 
 group = "dev.baseio.slackclone"
 version = "1.0"
-val slackDataVersion: String by project
 
 kotlin {
     jvm {

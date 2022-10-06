@@ -12,9 +12,9 @@
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$/../SlackData/generate-proto" />
-    <file type="web" url="file://$PROJECT_DIR$/../SlackData/protos" />
     <file type="web" url="file://$PROJECT_DIR$" />
+    <file type="web" url="file://$PROJECT_DIR$/../slackdata/generate-proto" />
+    <file type="web" url="file://$PROJECT_DIR$/../slackdata/protos" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
