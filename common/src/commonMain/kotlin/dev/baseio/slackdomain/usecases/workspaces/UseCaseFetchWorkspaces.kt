@@ -16,12 +16,10 @@ class UseCaseFetchWorkspaces(
   private val skLocalDataSourceReadWorkspaces: SKLocalDataSourceReadWorkspaces
 ) {
   operator fun invoke(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
-    return skNetworkDataSourceReadWorkspaces.getWorkspaces().mapLatest { kmSKWorkspaces ->
-      val workspaces = kmSKWorkspaces.workspacesList.map {
-        it.toSKWorkspace().copy(lastSelected = false)
-      }
-      skLocalDataSourceWriteWorkspaces.saveWorkspaces(workspaces)
-    }.flatMapLatest {
+    return skNetworkDataSourceReadWorkspaces.getWorkspaces().flatMapLatest { kmSKWorkspaces ->
+      skLocalDataSourceWriteWorkspaces.saveWorkspaces(kmSKWorkspaces.workspacesList.map {
+        it.toSKWorkspace()
+      })
       skLocalDataSourceReadWorkspaces.fetchWorkspaces()
     }
   }

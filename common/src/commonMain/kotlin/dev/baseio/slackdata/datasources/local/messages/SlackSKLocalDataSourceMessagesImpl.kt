@@ -7,16 +7,16 @@ import dev.baseio.slackdata.local.asFlow
 import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
-import dev.baseio.slackdomain.datasources.local.messages.SKDataSourceMessages
+import dev.baseio.slackdomain.datasources.local.messages.SKLocalDataSourceMessages
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
-class SlackSKDataSourceMessagesImpl constructor(
+class SlackSKLocalDataSourceMessagesImpl constructor(
   private val slackMessageDao: SlackDB,
   private val entityMapper: EntityMapper<DomainLayerMessages.SKMessage, SlackMessage>,
   private val coroutineMainDispatcherProvider: CoroutineDispatcherProvider
-) : SKDataSourceMessages {
-  override fun fetchMessages(workspaceId: String, userId: String): Flow<List<DomainLayerMessages.SKMessage>> {
+) : SKLocalDataSourceMessages {
+  override fun fetchLocalMessages(workspaceId: String, userId: String): Flow<List<DomainLayerMessages.SKMessage>> {
     return slackMessageDao.slackDBQueries.selectAllMessagesByUserId(workspaceId, userId)
       .asFlow()
       .flowOn(coroutineMainDispatcherProvider.io)
@@ -28,7 +28,7 @@ class SlackSKDataSourceMessagesImpl constructor(
       .flowOn(coroutineMainDispatcherProvider.default)
   }
 
-  override suspend fun sendMessage(params: DomainLayerMessages.SKMessage): DomainLayerMessages.SKMessage {
+  override suspend fun saveMessage(params: DomainLayerMessages.SKMessage): DomainLayerMessages.SKMessage {
     return withContext(coroutineMainDispatcherProvider.io) {
       slackMessageDao.slackDBQueries.insertMessage(
         params.uuid,

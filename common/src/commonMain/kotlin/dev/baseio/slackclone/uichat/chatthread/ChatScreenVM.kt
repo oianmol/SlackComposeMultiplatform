@@ -13,10 +13,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import SKKeyValueData
+import dev.baseio.slackdomain.LOGGED_IN_ID
 
 class ChatScreenVM constructor(
   private val useCaseFetchMessages: UseCaseFetchMessages,
-  private val useCaseSendMessage: UseCaseSendMessage
+  private val useCaseSendMessage: UseCaseSendMessage,
+  private val skKeyValueData: SKKeyValueData
 ) : ViewModel() {
   var channel: UiLayerChannels.SKChannel? = null
   var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
@@ -38,7 +41,7 @@ class ChatScreenVM constructor(
           channel!!.uuid,
           search,
           channel!!.uuid,
-          "Joe Donovan",
+          skKeyValueData.get(LOGGED_IN_ID)!!,
           Clock.System.now().toEpochMilliseconds(),
           Clock.System.now().toEpochMilliseconds(),
         )
