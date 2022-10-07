@@ -8,6 +8,8 @@ interface UiLayerChannels {
     val uuid: String,
     val createdDate: Long?,
     val modifiedDate: Long?,
+    val isStarred: Boolean?,
+    val isShareOutside:Boolean?,
     val isMuted: Boolean?,
     val isOneToOne: Boolean?,
     val pictureUrl: String?

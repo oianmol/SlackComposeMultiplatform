@@ -64,7 +64,7 @@ fun SlackCloneTheme(
   PlatformSideEffects.PlatformColors(colors.appBarColor,colors.appBarColor)
 
   ProvideSlackCloneColors(colors) {
-    MaterialTheme(
+    androidx.compose.material.MaterialTheme(
       colors = debugColors(isDarkTheme),
       typography = SlackCloneTypography,
       shapes = SlackCloneShapes,

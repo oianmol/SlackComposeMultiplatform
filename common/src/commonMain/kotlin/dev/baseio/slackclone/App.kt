@@ -1,11 +1,12 @@
 package dev.baseio.slackclone
 
+import SKKeyValueData
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
-import dev.baseio.FakeDataPreloader
 import dev.baseio.database.SlackDB
+import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.*
@@ -18,11 +19,15 @@ import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
 import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
+import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.injection.*
-import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import kotlinx.coroutines.withContext
+import dev.baseio.slackdomain.AUTH_TOKEN
+import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
+import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.core.KoinApplication
-import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -31,16 +36,33 @@ val appNavigator = SlackComposeNavigator()
 var koinApp: KoinApplication? = null
 
 @Composable
-fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
+fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKKeyValueData) {
   if (koinApp == null) {
-    koinApp = initKoin(SlackDB.invoke(sqlDriver))
+    koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
+  }
+  val initialRoute = skKeyValueData.get(AUTH_TOKEN)?.let {
+    SlackScreens.DashboardRoute
+  } ?: run {
+    SlackScreens.OnboardingRoute
   }
   LaunchedEffect(true) {
-    koinApp?.koin?.get<FakeDataPreloader>()?.preload()
+    koinApp?.koin?.get<GrpcCalls>()?.getWorkspaces()?.onEach { kmskWorkspaces ->
+      koinApp?.koin?.get<SKLocalDataSourceWriteWorkspaces>()?.apply {
+        saveWorkspaces(kmskWorkspaces.workspacesList.map { workspace ->
+          DomainLayerWorkspaces.SKWorkspace(
+            workspace.uuid,
+            workspace.name,
+            workspace.domain,
+            workspace.picUrl,
+            workspace.lastSelected
+          )
+        })
+      }
+    }?.launchIn(this)
   }
 
   Box(modifier) {
-    Navigator(navigator = appNavigator, initialRoute = SlackScreens.OnboardingRoute) {
+    Navigator(navigator = appNavigator, initialRoute = initialRoute) {
       this.route(SlackScreens.OnboardingRoute) {
         screen(SlackScreens.GettingStarted) {
           val gettingStartedVM = scope.get<GettingStartedVM>()
@@ -50,10 +72,12 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
           SkipTypingUI(this@Navigator)
         }
         screen(SlackScreens.WorkspaceInputUI) {
-          WorkspaceInputUI(this@Navigator)
+          val workspaceInputVM = scope.get<WorkspaceInputVM>()
+          WorkspaceInputUI(this@Navigator, workspaceInputVM)
         }
         screen(SlackScreens.EmailAddressInputUI) {
-          EmailAddressInputUI(this@Navigator)
+          val emailInputVM = scope.get<EmailInputVM>()
+          EmailAddressInputUI(this@Navigator, emailInputVM)
         }
       }
       this.route(SlackScreens.DashboardRoute) {
@@ -74,10 +98,10 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver) {
   }
 }
 
-fun initKoin(slackDB: SlackDB): KoinApplication {
+fun initKoin(slackDB: SlackDB, skKeyValueData: SKKeyValueData): KoinApplication {
   return startKoin {
     modules(
-      appModule(slackDB),
+      appModule(slackDB, skKeyValueData),
       dataSourceModule,
       dataMappersModule,
       useCaseModule,
@@ -88,17 +112,9 @@ fun initKoin(slackDB: SlackDB): KoinApplication {
   }
 }
 
-fun appModule(slackDB: SlackDB) =
+fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
   module {
     single { slackDB }
-    single {
-      FakeDataPreloader(
-        get(),
-        get(),
-        get(),
-        get(SlackUserChannelQualifier),
-        get(SlackChannelChannelQualifier),
-        get()
-      )
-    }
+    single { skKeyValueData }
+    single { GrpcCalls(get()) }
   }

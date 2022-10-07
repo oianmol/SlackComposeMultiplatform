@@ -9,4 +9,11 @@ actual object PainterRes {
   actual fun gettingStarted(): Painter {
     return rememberVectorPainter(Icons.Default.Home)
   }
+
+  @Composable
+  actual fun slackLogo(): Painter {
+    return rememberVectorPainter(Icons.Default.Home)
+  }
+
+
 }

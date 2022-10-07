@@ -77,14 +77,14 @@ private fun SearchContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllUsers(newChatThread: NewChatThreadVM, composeNavigator: ComposeNavigator) {
-  val channels by newChatThread.users.collectAsState(mainDispatcher)
+private fun ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNavigator) {
+  val channels by viewModel.channelsStream.collectAsState(mainDispatcher)
   val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
-    for (channelIndex in 0 until channelsFlow.size) {
-      val channel = channelsFlow.get(channelIndex)!!
+    for (channelIndex in channelsFlow.indices) {
+      val channel = channelsFlow[channelIndex]
       val newDrawn = channel.name?.first().toString()
       if (canDrawHeader(lastDrawnChannel, newDrawn)) {
         stickyHeader {
@@ -93,7 +93,7 @@ private fun ListAllUsers(newChatThread: NewChatThreadVM, composeNavigator: Compo
       }
       item {
         SlackChannelItem(channel) {
-          newChatThread.navigate(it,composeNavigator)
+          viewModel.createChannel(it,composeNavigator)
         }
       }
       lastDrawnChannel = newDrawn

@@ -16,20 +16,8 @@ buildscript {
 group = "dev.baseio.slackclone"
 version = "1.0"
 
-object GithubRepo {
-    val name: String? = System.getenv("GITHUB_REPOSITORY")?:"anmol92verma/slackdata"
-    val path: String = "https://www.github.com/$name"
-    val packages: String = "https://maven.pkg.github.com/$name"
-    val ref: String? = System.getenv("GITHUB_REF")
-}
-
 allprojects {
     repositories {
-        repositories.maven {
-            name = "github"
-            url = project.uri(GithubRepo.packages)
-            credentials(PasswordCredentials::class)
-        }.takeIf { GithubRepo.name != null }
         google()
         mavenLocal()
         mavenCentral()

@@ -123,7 +123,7 @@ private fun Content(rememberedComposeWindow: WindowInfo) {
     Scaffold(floatingActionButton = {
       FloatingActionButton()
     }, isFloatingActionButtonDocked = true, floatingActionButtonPosition = FabPosition.Center) {
-      App(sqlDriver = DriverFactory().createDriver(SlackDB.Schema))
+      App(sqlDriver = DriverFactory().createDriver(SlackDB.Schema), skKeyValueData = SKKeyValueData())
     }
   }
 }

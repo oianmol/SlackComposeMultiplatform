@@ -8,7 +8,6 @@ plugins {
 
 group = "dev.baseio.slackclone"
 version = "1.0"
-val slackDataVersion: String by project
 
 kotlin {
     jvm {
@@ -20,8 +19,9 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
+                implementation("io.grpc:grpc-netty-shaded:1.49.1")
                 implementation(project(":common"))
-                api("dev.baseio.slackclone:slackdata-jvm:${slackDataVersion}")
+                api(project(":generate-proto"))
                 implementation(compose.desktop.currentOs)
             }
         }

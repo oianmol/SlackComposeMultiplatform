@@ -1,5 +1,6 @@
 package dev.baseio.android
 
+import SKKeyValueData
 import dev.baseio.slackclone.App
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
@@ -49,7 +50,10 @@ class MainActivity : AppCompatActivity() {
         LocalWindow provides rememberedComposeWindow
       ) {
         SlackCloneTheme {
-          App(sqlDriver = DriverFactory(this@MainActivity).createDriver(SlackDB.Schema))
+          App(
+            sqlDriver = DriverFactory(this@MainActivity).createDriver(SlackDB.Schema),
+            skKeyValueData = SKKeyValueData(this)
+          )
         }
       }
 

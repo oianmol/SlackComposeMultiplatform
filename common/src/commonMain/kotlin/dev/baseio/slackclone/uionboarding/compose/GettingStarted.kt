@@ -109,7 +109,7 @@ private fun LargeScreenLayout(
         Spacer(Modifier.padding(8.dp))
       }
     }
-    CenterImage(Modifier.padding(24.dp).weight(1f, fill = true), gettingStartedVM)
+    CenterImage(Modifier.weight(1f, fill = true).padding(24.dp), gettingStartedVM)
   }
 }
 

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +23,9 @@ import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 
 @Composable
 fun CommonInputUI(
-  composeNavigator: ComposeNavigator,
-  TopView: @Composable (modifier: Modifier) -> Unit,
-  subtitleText: String
+  TopView: @Composable ColumnScope.(modifier: Modifier) -> Unit,
+  subtitleText: String,
+  onNextClick: () -> Unit
 ) {
   val scaffoldState = rememberScaffoldState()
   val size = getWindowSizeClass(LocalWindow.current)
@@ -41,7 +40,7 @@ fun CommonInputUI(
     }, floatingActionButton = {
       if (size != WindowSize.Phones) {
         FloatingActionButton(onClick = {
-          navigateDashboard(composeNavigator)
+          onNextClick()
         }, backgroundColor = Color.White) {
           Icon(
             imageVector = Icons.Default.ArrowForward,
@@ -65,11 +64,11 @@ fun CommonInputUI(
           // Create references for the composables to constrain
           Spacer(Modifier)
           Column {
-            TopView(Modifier)
+            this@Column.TopView(Modifier)
             SubTitle(modifier = Modifier, subtitleText)
           }
           if (size == WindowSize.Phones) {
-            NextButton(modifier = Modifier, composeNavigator)
+            NextButton(modifier = Modifier, onNextClick)
           } else {
             Spacer(Modifier)
           }
@@ -81,10 +80,10 @@ fun CommonInputUI(
 }
 
 @Composable
-fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator) {
+fun NextButton(modifier: Modifier = Modifier, onNextClick: () -> Unit) {
   Button(
     onClick = {
-      navigateDashboard(composeNavigator)
+      onNextClick()
     },
     modifier
       .fillMaxWidth()
@@ -101,7 +100,7 @@ fun NextButton(modifier: Modifier = Modifier, composeNavigator: ComposeNavigator
   }
 }
 
-private fun navigateDashboard(composeNavigator: ComposeNavigator) {
+fun navigateDashboard(composeNavigator: ComposeNavigator) {
   composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
     if (it.name == SlackScreens.OnboardingRoute.name) {
       remove()

@@ -11,8 +11,9 @@ pluginManagement {
 }
 rootProject.name = "SlackJetpackCompose"
 
-
+include(":generate-proto")
+include(":protos")
 include(":android")
 include(":desktop")
 include(":common")
-include(":iOSApp")
+//include(":iOSApp")

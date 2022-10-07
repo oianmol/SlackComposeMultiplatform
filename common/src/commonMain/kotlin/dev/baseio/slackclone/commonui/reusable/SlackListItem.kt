@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
@@ -21,6 +22,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 fun SlackListItem(
   icon: ImageVector,
   title: String,
+  textColor:Color = SlackCloneColorProvider.colors.textPrimary,
   trailingItem: ImageVector? = null,
   onItemClick: () -> Unit = {}
 ) {
@@ -34,7 +36,7 @@ fun SlackListItem(
     Icon(
       imageVector = icon,
       contentDescription = null,
-      tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
+      tint = textColor.copy(alpha = 0.4f),
       modifier = Modifier
         .size(28.dp)
         .padding(4.dp)
@@ -42,7 +44,7 @@ fun SlackListItem(
     Text(
       text = title,
       style = SlackCloneTypography.subtitle2.copy(
-        color = SlackCloneColorProvider.colors.textPrimary.copy(
+        color = textColor.copy(
           alpha = 0.8f
         )
       ), modifier = Modifier

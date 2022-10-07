@@ -1,7 +1,6 @@
 package dev.baseio.slackclone.data.injection
 
 import dev.baseio.slackclone.chatcore.injection.SlackChannelUiLayerChannels
-import dev.baseio.slackclone.navigation.BackstackScreen
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
@@ -12,24 +11,41 @@ import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.compose.DashboardVM
 import dev.baseio.slackclone.uidashboard.compose.SideNavVM
 import dev.baseio.slackclone.uidashboard.home.HomeScreenVM
+import dev.baseio.slackclone.uidashboard.home.UserProfileVM
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
-import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
+import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
+import dev.baseio.slackdata.injection.SlackSkUserSkChannel
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.QualifierValue
-import org.koin.core.qualifier.named
 import org.koin.dsl.ScopeDSL
 import org.koin.dsl.module
-import org.koin.ext.getFullName
 
 val viewModelModule = module {
   scope<SlackScreens.Home> {
     scoped {
-      HomeScreenVM(getKoin().get())
+      HomeScreenVM(getKoin().get(), getKoin().get(), getKoin().get())
+    }
+  }
+  scope<SlackScreens.You> {
+    scoped {
+      UserProfileVM(get())
     }
   }
   scope<SlackScreens.GettingStarted> {
     scoped { GettingStartedVM() }
   }
+  scope<SlackScreens.WorkspaceInputUI> {
+    scoped {
+      WorkspaceInputVM(get(), get())
+    }
+  }
+  scope<SlackScreens.EmailAddressInputUI> {
+    scoped {
+      EmailInputVM(getKoin().get(), getKoin().get())
+    }
+  }
+
   scope<SlackScreens.DMs> {
     scoped {
       MessageViewModel(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
@@ -40,9 +56,17 @@ val viewModelModule = module {
     slackChannelVMScoped()
   }
 
-  scope<SlackScreens.CreateNewDM>{
+  scope<SlackScreens.CreateNewDM> {
     scoped {
-      NewChatThreadVM(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
+      NewChatThreadVM(
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(SlackChannelUiLayerChannels),
+        getKoin().get(SlackSkUserSkChannel),
+        getKoin().get(),
+      )
     }
   }
 
@@ -59,14 +83,12 @@ val viewModelModule = module {
   }
 
   scope<SlackScreens.Dashboard> {
-    scoped { SideNavVM(getKoin().get()) }
+    scoped { SideNavVM(getKoin().get(), getKoin().get()) }
     scoped { DashboardVM(get()) }
 
     scoped {
-      ChatScreenVM(getKoin().get(), getKoin().get())
+      ChatScreenVM(getKoin().get(), getKoin().get(), getKoin().get())
     }
-
-
 
     slackChannelVMScoped()
   }

@@ -35,7 +35,7 @@ fun SlackChannelItem(
     }
 
     else -> {
-      GroupChannelItem(slackChannel, onItemClick)
+      GroupChannelItem(slackChannel, onItemClick, textColor)
     }
   }
 }
@@ -43,11 +43,13 @@ fun SlackChannelItem(
 @Composable
 private fun GroupChannelItem(
   slackChannel: UiLayerChannels.SKChannel,
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit
+  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
+  textColor: Color
 ) {
   SlackListItem(
     icon = if (slackChannel.isPrivate == true) Icons.Default.Lock else Icons.Default.MailOutline,
     title = "${slackChannel.name}",
+    textColor = textColor,
     onItemClick = {
       onItemClick(slackChannel)
     }

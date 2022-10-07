@@ -48,7 +48,7 @@ fun ChatMedia(message: DomainLayerMessages.SKMessage) {
 fun ChatUserDateTime(message: DomainLayerMessages.SKMessage) {
   Row(verticalAlignment = Alignment.CenterVertically) {
     Text(
-      message.sender + " \uD83C\uDF34",
+      message.senderName + " \uD83C\uDF34",
       style = SlackCloneTypography.subtitle1.copy(
         fontWeight = FontWeight.Bold,
         color = SlackCloneColorProvider.colors.textPrimary
