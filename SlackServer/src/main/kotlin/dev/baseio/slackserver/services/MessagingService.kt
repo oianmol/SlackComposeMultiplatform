@@ -2,7 +2,8 @@ package dev.baseio.slackserver.services
 
 import database.SkMessage
 import dev.baseio.slackdata.protos.*
-import dev.baseio.slackserver.data.impl.MessagesDataSourceImpl
+import dev.baseio.slackserver.data.MessagesDataSource
+import dev.baseio.slackserver.data.UsersDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -11,7 +12,8 @@ import kotlin.coroutines.CoroutineContext
 
 class MessagingService(
   coroutineContext: CoroutineContext = Dispatchers.IO,
-  private val messagesDataSource: MessagesDataSourceImpl,
+  private val messagesDataSource: MessagesDataSource,
+  private val usersDataSource: UsersDataSource
 ) : MessagesServiceGrpcKt.MessagesServiceCoroutineImplBase(coroutineContext) {
   override suspend fun saveMessage(request: SKMessage): SKMessage {
     return messagesDataSource
@@ -23,15 +25,18 @@ class MessagingService(
     return messagesDataSource.getMessages(workspaceId = request.workspaceId, channelId = request.channelId)
       .map { query ->
         val skMessages = query.executeAsList().map { skMessage ->
-          skMessage.toGrpc()
+          val user = usersDataSource.getUser(skMessage.sender, skMessage.workspaceId)
+          skMessage.toGrpc().copy {
+            senderName = user?.name ?: ""
+          }
         }
         SKMessages.newBuilder()
           .addAllMessages(skMessages)
           .build()
       }.catch { throwable ->
-      throwable.printStackTrace()
-      emit(SKMessages.newBuilder().build())
-    }
+        throwable.printStackTrace()
+        emit(SKMessages.newBuilder().build())
+      }
   }
 }
 

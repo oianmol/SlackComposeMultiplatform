@@ -13,6 +13,7 @@ interface DomainLayerMessages {
     val sender: String,
     val createdDate: Long,
     val modifiedDate: Long,
+    val senderName:String
   )
 
   data class SKLastMessage(

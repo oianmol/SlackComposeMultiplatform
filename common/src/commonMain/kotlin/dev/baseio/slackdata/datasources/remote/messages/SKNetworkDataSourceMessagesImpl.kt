@@ -46,5 +46,6 @@ fun KMSKMessage.toDomainLayerMessage(): DomainLayerMessages.SKMessage {
     sender = params.sender,
     createdDate = params.createdDate,
     modifiedDate = params.modifiedDate,
+    senderName = params.senderName
   )
 }

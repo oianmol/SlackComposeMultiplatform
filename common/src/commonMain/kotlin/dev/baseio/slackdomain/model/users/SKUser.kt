@@ -1,6 +1,9 @@
 package dev.baseio.slackdomain.model.users
 
+import kotlinx.serialization.Serializable
+
 interface DomainLayerUsers {
+  @Serializable
   data class SKUser(
     val uuid: String,
     val workspaceId:String,

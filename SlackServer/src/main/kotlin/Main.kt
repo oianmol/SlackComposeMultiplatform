@@ -15,7 +15,7 @@ fun main() {
     .addService(AuthService(authDataSource = authDataSource))
     .addService(WorkspaceService(workspaceDataSource = workspaceDataSource))
     .addService(ChannelService(channelsDataSource = channelsDataSource))
-    .addService(MessagingService(messagesDataSource = messagesDataSource))
+    .addService(MessagingService(messagesDataSource = messagesDataSource, usersDataSource = usersDataSource))
     .addService(UserService(usersDataSource = usersDataSource))
     .intercept(AuthInterceptor())
     .build()

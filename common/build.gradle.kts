@@ -9,6 +9,7 @@ plugins {
   id("org.jetbrains.compose") version "1.2.0-alpha01-dev774"
   id("com.android.library")
   id("com.squareup.sqldelight")
+  kotlin("plugin.serialization") version "1.7.10"
 
   id("com.google.protobuf") version "0.8.18"
   id("io.github.timortel.kotlin-multiplatform-grpc-plugin") version "0.2.2"
@@ -95,7 +96,7 @@ kotlin {
         api(compose.runtime)
         api(compose.foundation)
         api(compose.material)
-
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
         implementation(Deps.Kotlinx.datetime)
         implementation(Deps.SqlDelight.core)
         implementation(Deps.Kotlinx.coroutines)

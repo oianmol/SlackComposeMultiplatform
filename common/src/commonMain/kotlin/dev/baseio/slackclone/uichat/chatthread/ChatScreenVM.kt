@@ -14,7 +14,10 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import SKKeyValueData
-import dev.baseio.slackdomain.LOGGED_IN_ID
+import dev.baseio.slackdomain.LOGGED_IN_USER
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class ChatScreenVM constructor(
   private val useCaseFetchMessages: UseCaseFetchMessages,
@@ -35,15 +38,17 @@ class ChatScreenVM constructor(
   fun sendMessage(search: String) {
     if (search.isNotEmpty()) {
       viewModelScope.launch {
+        val user = Json.decodeFromString<DomainLayerUsers.SKUser>(skKeyValueData.get(LOGGED_IN_USER)!!)
         val message = DomainLayerMessages.SKMessage(
           Clock.System.now().toEpochMilliseconds().toString(),
           channel!!.workspaceId,
           channel!!.uuid,
           search,
           channel!!.uuid,
-          skKeyValueData.get(LOGGED_IN_ID)!!,
+          user.uuid,
           Clock.System.now().toEpochMilliseconds(),
           Clock.System.now().toEpochMilliseconds(),
+          user.name
         )
         useCaseSendMessage.perform(message)
       }

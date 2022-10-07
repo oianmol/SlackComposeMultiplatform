@@ -37,7 +37,8 @@ class SlackSKDataSourceChannelLastMessage constructor(
             channelsWithLastMessage.receiver_,
             channelsWithLastMessage.sender,
             channelsWithLastMessage.createdDate,
-            channelsWithLastMessage.modifiedDate
+            channelsWithLastMessage.modifiedDate,
+            channelsWithLastMessage.senderName
           )
         DomainLayerMessages.SKLastMessage(
           SKChannelMapper.mapToDomain(channel),
