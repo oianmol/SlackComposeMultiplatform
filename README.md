@@ -2,10 +2,15 @@
 
 ### This is a jetpack compose Slack Client Clone written in Kotlin Multiplatform following clean architecture principles.
 
-Depends on SlackData Multiplatform library.
+Depends on[ gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
 
-https://github.com/anmol92verma/slackdata
-
+-SlackComposeMultiplatformProject
+--android -> Compose multiplatform Desktop
+--common -> Common Compose UI!
+--desktop -> Compose multiplatform Desktop
+--generate-proto -> Generates the java/kotlin files using protobuf and grpc libs
+--protos -> Contains the proto files
+--SlackServer -> the backend server which has the logic for the client app!
 
 Video Demo for JVM Desktop with Responsive UI
 
