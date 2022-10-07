@@ -5,13 +5,14 @@ import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceCreateCh
 import dev.baseio.slackdata.datasources.local.channels.SlackSKDataSourceChannelLastMessage
 import dev.baseio.slackdata.datasources.local.messages.SlackSKLocalDataSourceMessagesImpl
 import dev.baseio.slackdata.datasources.local.users.SKDataSourceCreateUsersImpl
-import dev.baseio.slackdata.datasources.local.users.SKDataSourceUsersImpl
+import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceUsersImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.auth.SKAuthNetworkDataSourceImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceWriteChannelsImpl
 import dev.baseio.slackdata.datasources.remote.messages.SKNetworkDataSourceMessagesImpl
+import dev.baseio.slackdata.datasources.remote.users.SKNetworkDataSourceReadUsersImpl
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannelLastMessage
@@ -19,13 +20,14 @@ import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadCh
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceCreateChannels
 import dev.baseio.slackdomain.datasources.local.messages.SKLocalDataSourceMessages
 import dev.baseio.slackdomain.datasources.local.users.SKDataSourceCreateUsers
-import dev.baseio.slackdomain.datasources.local.users.SKDataSourceUsers
+import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceReadWorkspaces
 import dev.baseio.slackdomain.datasources.remote.auth.SKAuthNetworkDataSource
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannels
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceWriteChannels
 import dev.baseio.slackdomain.datasources.remote.messages.SKNetworkDataSourceMessages
+import dev.baseio.slackdomain.datasources.remote.users.SKNetworkDataSourceReadUsers
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkDataSourceReadWorkspaces
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkDataSourceWriteWorkspaces
 import org.koin.dsl.module
@@ -36,6 +38,9 @@ val dataSourceModule = module {
   }
   single<SKNetworkDataSourceMessages> {
     SKNetworkDataSourceMessagesImpl(get())
+  }
+  single<SKNetworkDataSourceReadUsers> {
+    SKNetworkDataSourceReadUsersImpl(get())
   }
   single<SKNetworkDataSourceReadWorkspaces> { SKNetworkDataSourceReadWorkspacesImpl(get()) }
   single<SKNetworkDataSourceWriteWorkspaces> {
@@ -66,7 +71,7 @@ val dataSourceModule = module {
   single<SKLocalDataSourceReadChannels> {
     SKLocalDataSourceReadChannelsImpl(get(), get(SlackChannelChannelQualifier), get())
   }
-  single<SKDataSourceUsers> { SKDataSourceUsersImpl(get(), get(SlackUserRandomUserQualifier), get()) }
+  single<SKLocalDataSourceUsers> { SKLocalDataSourceUsersImpl(get(), get(SlackUserRandomUserQualifier)) }
   single<SKLocalDataSourceMessages> {
     SlackSKLocalDataSourceMessagesImpl(
       get(),

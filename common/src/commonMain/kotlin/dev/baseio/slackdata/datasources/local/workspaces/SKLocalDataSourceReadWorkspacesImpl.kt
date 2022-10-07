@@ -35,7 +35,7 @@ class SKLocalDataSourceReadWorkspacesImpl(
     }
   }
 
-  override fun lastSelectedWorkspaceAsFlow(): Flow<DomainLayerWorkspaces.SKWorkspace?> {
+  override fun lastSelectedWorkspaceAsFlow(): Flow<DomainLayerWorkspaces.SKWorkspace> {
     return slackDB.slackDBQueries.lastSelected()
       .asFlow()
       .mapToOneNotNull()

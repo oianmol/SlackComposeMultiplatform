@@ -5,26 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="fix: save workspacename in lowercase">
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/users/SKLocalDataSourceUsersImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/remote/users/SKNetworkDataSourceReadUsersImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackUserToChannelMapper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/users/SKLocalDataSourceUsers.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/remote/users/SKNetworkDataSourceReadUsers.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFindChannelById.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/users/UseCaseFetchAndSaveUsers.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/users/UseCaseFetchLocalUsers.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/MessagingService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/MessagingService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../common/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/SKKeyValueData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/SKKeyValueData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/grpc/GrpcCalls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/grpc/GrpcCalls.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/chatcore/views/SlackChannelItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/chatcore/views/SlackChannelItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/commonui/reusable/SlackListItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/commonui/reusable/SlackListItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/chatthread/ChatScreenVM.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/chatthread/ChatScreenVM.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/chatthread/composables/ChatMessage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/chatthread/composables/ChatMessage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/channels/SlackSKDataSourceChannelLastMessage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/channels/SlackSKDataSourceChannelLastMessage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/messages/SlackSKLocalDataSourceMessagesImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/messages/SlackSKLocalDataSourceMessagesImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/remote/messages/SKNetworkDataSourceMessagesImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/remote/messages/SKNetworkDataSourceMessagesImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackMessageMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/SlackMessageMapper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/Constants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/message/SKMessage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/message/SKMessage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/users/SKUser.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/model/users/SKUser.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/auth/LoginUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/auth/LoginUseCase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/sqldelight/database/SlackDB.sq" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/sqldelight/database/SlackDB.sq" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../protos/src/main/proto/hello.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../protos/src/main/proto/hello.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/chatcore/ChannelUIModelMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/chatcore/ChannelUIModelMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/chatcore/data/ChatPresentation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/chatcore/data/ChatPresentation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/data/injection/ViewModelModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/data/injection/ViewModelModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/newchat/NewChatThreadScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/newchat/NewChatThreadScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/newchat/NewChatThreadVM.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uichat/newchat/NewChatThreadVM.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uidashboard/home/HomeScreenVM.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uidashboard/home/HomeScreenVM.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/channels/SKLocalDataSourceCreateChannelsImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/channels/SKLocalDataSourceCreateChannelsImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/channels/SKLocalDataSourceReadChannelsImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/channels/SKLocalDataSourceReadChannelsImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/users/SKDataSourceUsersImpl.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/workspaces/SKLocalDataSourceReadWorkspacesImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/workspaces/SKLocalDataSourceReadWorkspacesImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DataMappersModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DataMappersModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DataSourceModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/DataSourceModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/UseCaseModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/injection/UseCaseModule.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/EntityMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/mapper/EntityMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKLocalDataSourceCreateChannels.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKLocalDataSourceCreateChannels.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKLocalDataSourceReadChannels.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/channels/SKLocalDataSourceReadChannels.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/users/SKDataSourceUsers.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/workspaces/SKLocalDataSourceReadWorkspaces.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/datasources/local/workspaces/SKLocalDataSourceReadWorkspaces.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseCreateChannel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseCreateChannel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdomain/usecases/channels/UseCaseFetchUsers.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/SKKeyValueData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/SKKeyValueData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/baseio/slackdata/DriverFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/baseio/slackdata/DriverFactory.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -269,8 +282,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.SlackServer [run]" />
-        <item itemvalue="Gradle.SlackServer [build]" />
         <item itemvalue="Gradle.SlackServer [clean]" />
+        <item itemvalue="Gradle.SlackServer [build]" />
         <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.SlackServer [:generate-proto:build]" />
       </list>
@@ -306,7 +319,7 @@
       <workItem from="1665048353936" duration="1758000" />
       <workItem from="1665050472538" duration="792000" />
       <workItem from="1665051497449" duration="1434000" />
-      <workItem from="1665057286852" duration="4859000" />
+      <workItem from="1665057286852" duration="6590000" />
     </task>
     <task id="LOCAL-00001" summary="setup sqldelight and gRPC service!">
       <created>1664372471497</created>
@@ -442,7 +455,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt</url>
-          <line>59</line>
+          <line>60</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">

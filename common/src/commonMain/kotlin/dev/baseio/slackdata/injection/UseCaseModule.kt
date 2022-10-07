@@ -4,6 +4,8 @@ import dev.baseio.slackdomain.usecases.auth.LoginUseCase
 import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import dev.baseio.slackdomain.usecases.channels.*
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
+import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
+import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.workspaces.FindWorkspacesUseCase
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
@@ -26,5 +28,7 @@ val useCaseModule = module {
   single { UseCaseGetChannel(get()) }
   single { UseCaseFetchChannelCount(get()) }
   single { UseCaseSearchChannel(get()) }
-  single { UseCaseFetchUsers(get()) }
+  single { UseCaseFetchLocalUsers(get()) }
+  single { UseCaseFindChannelById(get(), get(), get()) }
+  single { UseCaseFetchAndSaveUsers(get(), get(), get()) }
 }

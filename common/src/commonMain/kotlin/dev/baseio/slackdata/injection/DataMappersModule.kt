@@ -19,6 +19,12 @@ val dataMappersModule = module {
   single<EntityMapper<DomainLayerUsers.SKUser, SlackUser>>(qualifier = SlackUserRandomUserQualifier) { SlackUserMapper() }
   single<EntityMapper<DomainLayerChannels.SKChannel, SlackChannel>>(qualifier = SlackChannelChannelQualifier) { SlackChannelMapper() }
   single<EntityMapper<DomainLayerMessages.SKMessage, SlackMessage>>(qualifier = SlackMessageMessageQualifier) { SlackMessageMapper() }
+  single<EntityToMapper<DomainLayerUsers.SKUser, DomainLayerChannels.SKChannel>>(qualifier = SlackSkUserSkChannel) { SlackUserToChannelMapper() }
+}
+
+object SlackSkUserSkChannel : Qualifier{
+  override val value: QualifierValue
+    get() = "SlackSkUserSkChannel"
 }
 
 object SlackWorkspaceMapperQualifier : Qualifier {

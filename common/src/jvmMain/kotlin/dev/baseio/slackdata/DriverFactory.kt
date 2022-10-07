@@ -6,14 +6,14 @@ import java.io.File
 
 actual class DriverFactory {
   actual fun createDriver(schema: SqlDriver.Schema): SqlDriver {
-    val databasePath = File(System.getProperty("java.io.tmpdir"), "ComposeTodoDatabase.db")
+    val databasePath = File(System.getProperty("java.io.tmpdir"), "ComposeTodoDatabas.db")
     return JdbcSqliteDriver(url = "jdbc:sqlite:${databasePath.absolutePath}").also {
       schema.create(it)
     }
   }
 
   actual suspend fun createDriverBlocking(schema: SqlDriver.Schema): SqlDriver {
-    val databasePath = File(System.getProperty("java.io.tmpdir"), "ComposeTodoDatabase.db")
+    val databasePath = File(System.getProperty("java.io.tmpdir"), "ComposeTodoDatabas.db")
     return JdbcSqliteDriver(url = "jdbc:sqlite:${databasePath.absolutePath}").also {
       schema.create(it)
     }

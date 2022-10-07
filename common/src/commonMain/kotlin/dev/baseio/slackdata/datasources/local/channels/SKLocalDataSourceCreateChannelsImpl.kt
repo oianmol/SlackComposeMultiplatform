@@ -43,7 +43,7 @@ class SKLocalDataSourceCreateChannelsImpl(
     }
   }
 
-  override suspend fun saveChannel(params: DomainLayerChannels.SKChannel): DomainLayerChannels.SKChannel? {
+  override suspend fun saveChannel(params: DomainLayerChannels.SKChannel): DomainLayerChannels.SKChannel {
     return withContext(coroutineMainDispatcherProvider.io) {
       slackChannelDao.slackDBQueries.insertChannel(
         params.uuid!!,

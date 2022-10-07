@@ -22,8 +22,9 @@ class UserService(coroutineContext: CoroutineContext = Dispatchers.IO, private v
   }
 
   override fun getUsers(request: SKWorkspaceChannelRequest): Flow<SKUsers> {
+    val authData = AUTH_CONTEXT_KEY.get() ?: throw StatusException(Status.UNAUTHENTICATED)
     return usersDataSource.getUsers(request.workspaceId).map {
-      val users = it.executeAsList().map { user ->
+      val users = it.executeAsList().filter { it.uuid != authData.userId }.map { user ->
         user.toGrpc()
       }
       SKUsers.newBuilder()

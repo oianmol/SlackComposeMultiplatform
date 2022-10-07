@@ -10,7 +10,7 @@ class UseCaseCreateChannel(
   private val skNetworkDataSourceWriteChannels: SKNetworkDataSourceWriteChannels
 ) :
   BaseUseCase<DomainLayerChannels.SKChannel, DomainLayerChannels.SKChannel> {
-  override suspend fun perform(params: DomainLayerChannels.SKChannel): DomainLayerChannels.SKChannel? {
+  override suspend fun perform(params: DomainLayerChannels.SKChannel): DomainLayerChannels.SKChannel {
     val channel = skNetworkDataSourceWriteChannels.createChannel(params)
     return SKLocalDataSourceCreateChannels.saveChannel(channel)
   }

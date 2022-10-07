@@ -33,6 +33,10 @@ class SKLocalDataSourceReadChannelsImpl(
     }
   }
 
+  override fun getChannelById(workspaceId: String,uuid: String): DomainLayerChannels.SKChannel? {
+    return slackChannelDao.slackDBQueries.selectChannelById(workspaceId,uuid).executeAsOneOrNull()?.let { SKChannelMapper.mapToDomain(it) }
+  }
+
   override suspend fun channelCount(workspaceId: String): Long {
     return slackChannelDao.slackDBQueries.countChannels(workspaceId).executeAsOne()
   }

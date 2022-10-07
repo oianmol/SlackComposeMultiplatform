@@ -14,6 +14,8 @@ class ChannelUIModelMapper :
       model.uuid!!,
       model.createdDate,
       model.modifiedDate,
+      model.isStarred,
+      model.isShareOutSide,
       model.isMuted,
       model.isOneToOne,
       model.avatarUrl
@@ -21,6 +23,19 @@ class ChannelUIModelMapper :
   }
 
   override fun mapToDomain(modelItem: UiLayerChannels.SKChannel): DomainLayerChannels.SKChannel {
-    TODO("Not yet implemented")
+    return DomainLayerChannels.SKChannel(
+      modelItem.uuid,
+      modelItem.workspaceId,
+      modelItem.name,
+      modelItem.createdDate,
+      modelItem.modifiedDate,
+      modelItem.isMuted,
+      modelItem.isPrivate,
+      modelItem.isStarred,
+      modelItem.isShareOutside,
+      modelItem.isOneToOne,
+      modelItem.pictureUrl
+
+    )
   }
 }
