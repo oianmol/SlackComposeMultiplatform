@@ -5,6 +5,12 @@
 Depends on[ gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
 
 
+## Architecture
+
+![Architecture](https://user-images.githubusercontent.com/4393101/194482641-9a52c4c8-e609-4fde-9b15-5d44578269b3.png)
+
+
+
 ```
 SlackComposeMultiplatformProject
 │    
