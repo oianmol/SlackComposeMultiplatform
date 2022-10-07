@@ -4,13 +4,25 @@
 
 Depends on[ gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
 
--SlackComposeMultiplatformProject
---android -> Compose multiplatform Desktop
---common -> Common Compose UI!
---desktop -> Compose multiplatform Desktop
---generate-proto -> Generates the java/kotlin files using protobuf and grpc libs
---protos -> Contains the proto files
---SlackServer -> the backend server which has the logic for the client app!
+
+```
+SlackComposeMultiplatformProject
+│    
+│      
+│
+└───platform (Android/Desktop/iOS) = Compose multiplatform Desktop
+│      
+│     
+└───generate-proto = Generates the java/kotlin files using protobuf and grpc libs
+│  
+│     
+│   
+└───protos = Contains the proto files
+│     
+│       
+│   
+└───Slack Server =  the backend server which has the logic for the client app!
+```
 
 Video Demo for JVM Desktop with Responsive UI
 
