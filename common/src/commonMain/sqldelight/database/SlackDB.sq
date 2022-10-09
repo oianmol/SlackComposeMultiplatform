@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS slackWorkspaces(uid TEXT NOT NULL PRIMARY KEY,
 lastSelected:
 SELECT * FROM slackWorkspaces WHERE lastSelected == 1;
 
-markAllNotSelected:
-UPDATE slackWorkspaces SET lastSelected = 0;
+markNotSelected:
+UPDATE slackWorkspaces SET lastSelected = 0 WHERE uid=:param;
 
 setLastSelected:
 UPDATE slackWorkspaces SET lastSelected = 1 WHERE uid = :param;

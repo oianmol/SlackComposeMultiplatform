@@ -1,6 +1,8 @@
 package dev.baseio.slackdata.injection
 
 import dev.baseio.slackdomain.usecases.auth.LoginUseCase
+import dev.baseio.slackdomain.usecases.auth.UseCaseClearAuth
+import dev.baseio.slackdomain.usecases.auth.UseCaseCurrentUser
 import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import dev.baseio.slackdomain.usecases.channels.*
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
@@ -31,4 +33,6 @@ val useCaseModule = module {
   single { UseCaseFetchLocalUsers(get()) }
   single { UseCaseFindChannelById(get(), get(), get()) }
   single { UseCaseFetchAndSaveUsers(get(), get(), get()) }
+  single { UseCaseClearAuth(get()) }
+  single { UseCaseCurrentUser(get()) }
 }

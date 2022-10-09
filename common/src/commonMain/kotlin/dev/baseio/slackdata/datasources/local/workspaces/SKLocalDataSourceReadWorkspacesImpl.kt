@@ -22,8 +22,11 @@ class SKLocalDataSourceReadWorkspacesImpl(
 
   override suspend fun setLastSelected(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
     withContext(coroutineDispatcherProvider.io) {
-      slackDB.slackDBQueries.markAllNotSelected()
+      val oldSelected = slackDB.slackDBQueries.lastSelected().executeAsOneOrNull()
       slackDB.slackDBQueries.setLastSelected(skWorkspace.uuid)
+      oldSelected?.let {
+        slackDB.slackDBQueries.markNotSelected(it.uid)
+      }
     }
   }
 

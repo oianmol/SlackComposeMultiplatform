@@ -29,6 +29,7 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 @Composable
 fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavVM) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
+  val user by viewModel.currentLoggedInUser.collectAsState()
 
   Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
     var selected by remember { mutableStateOf(1) }
@@ -51,7 +52,8 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
         Spacer(Modifier.height(8.dp))
       }
       SlackOnlineBox(
-        "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no",
+        user?.avatarUrl
+          ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no",
         parentModifier = Modifier.size(48.dp),
         imageModifier = Modifier.size(36.dp)
       )

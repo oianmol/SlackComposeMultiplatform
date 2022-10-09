@@ -2,7 +2,7 @@ import java.util.prefs.Preferences
 
 actual class SKKeyValueData {
   private val rootPreferences: Preferences = Preferences.userRoot()
-  private val preferences: Preferences = rootPreferences.node("secrets1")
+  private val preferences: Preferences = rootPreferences.node(System.getProperty("user.home"))
 
   actual fun save(key: String, value: String) {
     preferences.put(key, value)

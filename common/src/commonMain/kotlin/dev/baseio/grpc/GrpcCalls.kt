@@ -11,7 +11,7 @@ import io.github.timortel.kotlin_multiplatform_grpc_lib.KMMetadata
 
 class GrpcCalls(private val skKeyValueData: SKKeyValueData) {
   companion object {
-    const val address = "localhost"
+    const val address = "192.168.1.5"
     const val port = 17600
     const val AUTHENTICATION_TOKEN_KEY = "Authorization"
   }

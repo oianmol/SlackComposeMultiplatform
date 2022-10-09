@@ -29,7 +29,7 @@ val viewModelModule = module {
   }
   scope<SlackScreens.You> {
     scoped {
-      UserProfileVM(get())
+      UserProfileVM(get(), get())
     }
   }
   scope<SlackScreens.GettingStarted> {
@@ -83,7 +83,7 @@ val viewModelModule = module {
   }
 
   scope<SlackScreens.Dashboard> {
-    scoped { SideNavVM(getKoin().get(), getKoin().get()) }
+    scoped { SideNavVM(getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get()) }
     scoped { DashboardVM(get()) }
 
     scoped {

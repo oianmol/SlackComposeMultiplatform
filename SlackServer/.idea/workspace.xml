@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="fix: save workspacename in lowercase">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/grpc/GrpcCalls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/grpc/GrpcCalls.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/workspaces/SKLocalDataSourceReadWorkspacesImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackdata/datasources/local/workspaces/SKLocalDataSourceReadWorkspacesImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/sqldelight/database/SlackDB.sq" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/sqldelight/database/SlackDB.sq" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/SKKeyValueData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/SKKeyValueData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/baseio/slackdata/DriverFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/jvmMain/kotlin/dev/baseio/slackdata/DriverFactory.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,24 +55,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="SlackServer" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="SlackServer" type="f1a62948:ProjectNode" />
-                <item name="generate-proto" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="SlackServer" type="f1a62948:ProjectNode" />
-                <item name="generate-proto" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="SlackServer" type="f1a62948:ProjectNode" />
-                <item name="generate-proto" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
               </path>
