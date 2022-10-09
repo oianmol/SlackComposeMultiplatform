@@ -5,6 +5,7 @@
 Depends on[ gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
 
 I haven't tried running iOS build for some time it depends a lot on the grpc-kmp library support for iOS
+.
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
 There's a specific task to deploy on iPad and iPhones.
 
