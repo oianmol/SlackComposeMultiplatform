@@ -1,31 +1,30 @@
 package dev.baseio.slackclone.uidashboard.compose.layouts
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 
 import dev.baseio.slackclone.uidashboard.compose.*
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavVM) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
@@ -49,6 +48,20 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
         SelectedSideBarIcon(Modifier.clickable {
           selected = 3
         }, Icons.Default.Search, selected == 3)
+
+        if (selected == 4) {
+          AlertDialog(onDismissRequest = {
+            selected = 1
+          }, buttons = {
+            MoreOptionsSideBarDesktop()
+          })
+        }
+
+        SelectedSideBarIcon(
+          Modifier.clickable {
+            selected = 4
+          }, Icons.Default.Add, false
+        )
         Spacer(Modifier.height(8.dp))
       }
       SlackOnlineBox(
@@ -57,6 +70,26 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
         parentModifier = Modifier.size(48.dp),
         imageModifier = Modifier.size(36.dp)
       )
+    }
+  }
+}
+
+@Composable
+private fun MoreOptionsSideBarDesktop() {
+  SlackCloneSurface(
+    modifier = Modifier.shadow(4.dp),
+    shape = RoundedCornerShape(4.dp)
+  ) {
+    Column(Modifier.padding(12.dp)) {
+      Text("Sign in to another workspace", Modifier.padding(10.dp).clickable {
+
+      })
+      Text("Create a new workspace", Modifier.padding(10.dp).clickable {
+
+      })
+      Text("Find workspaces", Modifier.padding(10.dp).clickable {
+
+      })
     }
   }
 }
