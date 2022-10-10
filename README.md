@@ -2,14 +2,19 @@
 
 ### This is a jetpack compose Slack Client Clone written in Kotlin Multiplatform following clean architecture principles.
 
-Depends on[ gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
+Depends on [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
+
+1. Install gRPC library on mavenLocal() once you clone [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP)
+2. Build and install to mavenLocal grpc-multiplatform-lib & plugin module (Note: Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
+3. 
 
 I haven't tried running iOS build for some time it depends a lot on the grpc-kmp library support for iOS
 .
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
 There's a specific task to deploy on iPad and iPhones.
 
-./gradlew iosDeployIPhone8Debug
+`./gradlew iosDeployIPhone8Debug`
+
 Also make sure you use the grpc kmp library from the fork that i created as mentioned above
 
 The android and jvm run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
