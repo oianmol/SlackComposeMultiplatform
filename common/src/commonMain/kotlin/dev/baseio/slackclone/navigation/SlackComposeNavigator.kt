@@ -1,4 +1,5 @@
 package dev.baseio.slackclone.navigation
+
 import mainDispatcher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -118,9 +119,9 @@ class SlackComposeNavigator : ComposeNavigator {
     }
   }
 
-  override fun navigateRoute(route: BackstackRoute, clearRoutes: (BackstackRoute, () -> Unit) -> Unit) {
+  override fun navigateRoute(route: BackstackRoute, removeRoute: (BackstackRoute, () -> Unit) -> Unit) {
     backStackRoute.keys.forEach { backstackRoute ->
-      clearRoutes(backstackRoute) { // if the user clears the onboarding route
+      removeRoute(backstackRoute) { // if the user clears the onboarding route
         closeAndClearScreens(backstackRoute)
       }
     }

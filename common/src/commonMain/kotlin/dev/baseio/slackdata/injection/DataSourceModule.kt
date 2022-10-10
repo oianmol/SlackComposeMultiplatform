@@ -84,6 +84,7 @@ val dataSourceModule = module {
       get(),
       get(SlackMessageMessageQualifier),
       get(SlackChannelChannelQualifier),
+      get(),
       get()
     )
   }

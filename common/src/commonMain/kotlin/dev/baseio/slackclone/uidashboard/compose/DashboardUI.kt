@@ -38,6 +38,7 @@ import dev.baseio.slackclone.uidashboard.compose.layouts.SlackWorkspaceLayoutDes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import dev.baseio.slackclone.uidashboard.home.*
+import dev.baseio.slackclone.uidashboard.vm.DashboardVM
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 
 val homeNavigator = SlackComposeNavigator()

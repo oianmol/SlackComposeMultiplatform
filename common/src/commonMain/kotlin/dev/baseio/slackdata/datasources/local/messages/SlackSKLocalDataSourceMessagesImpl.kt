@@ -39,7 +39,6 @@ class SlackSKLocalDataSourceMessagesImpl constructor(
         params.sender,
         params.createdDate,
         params.modifiedDate,
-        params.senderName
       )
       params
     }

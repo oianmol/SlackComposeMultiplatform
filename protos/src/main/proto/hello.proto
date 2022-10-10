@@ -13,7 +13,7 @@ message SKMessage {
   string sender = 6;
   int64 createdDate = 7;
   int64 modifiedDate = 8;
-  string senderName = 9;
+  SKUser senderInfo = 9;
 }
 
 message SKLastMessage {

@@ -8,6 +8,7 @@ import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
+import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.*
 import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
@@ -45,21 +46,6 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
   } ?: run {
     SlackScreens.OnboardingRoute
   }
-  LaunchedEffect(true) {
-    koinApp?.koin?.get<GrpcCalls>()?.getWorkspaces()?.onEach { kmskWorkspaces ->
-      koinApp?.koin?.get<SKLocalDataSourceWriteWorkspaces>()?.apply {
-        saveWorkspaces(kmskWorkspaces.workspacesList.map { workspace ->
-          DomainLayerWorkspaces.SKWorkspace(
-            workspace.uuid,
-            workspace.name,
-            workspace.domain,
-            workspace.picUrl,
-            workspace.lastSelected
-          )
-        })
-      }
-    }?.launchIn(this)
-  }
 
   Box(modifier) {
     Navigator(navigator = appNavigator, initialRoute = initialRoute) {
@@ -75,6 +61,12 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
           val workspaceInputVM = scope.get<WorkspaceInputVM>()
           WorkspaceInputUI(this@Navigator, workspaceInputVM)
         }
+        screen(SlackScreens.EmailAddressInputUI) {
+          val emailInputVM = scope.get<EmailInputVM>()
+          EmailAddressInputUI(this@Navigator, emailInputVM)
+        }
+      }
+      this.route(SlackScreens.WorkspaceSigninRoute) {
         screen(SlackScreens.EmailAddressInputUI) {
           val emailInputVM = scope.get<EmailInputVM>()
           EmailAddressInputUI(this@Navigator, emailInputVM)
@@ -106,6 +98,7 @@ fun initKoin(slackDB: SlackDB, skKeyValueData: SKKeyValueData): KoinApplication 
       dataMappersModule,
       useCaseModule,
       viewModelModule,
+      viewModelDelegateModule,
       uiModelMapperModule,
       dispatcherModule
     )

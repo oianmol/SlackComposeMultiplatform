@@ -1,4 +1,4 @@
-package dev.baseio.slackclone.uidashboard.compose
+package dev.baseio.slackclone.uidashboard.vm
 
 import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels

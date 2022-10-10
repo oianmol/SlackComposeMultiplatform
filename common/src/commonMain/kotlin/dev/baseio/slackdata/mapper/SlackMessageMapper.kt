@@ -13,8 +13,7 @@ class SlackMessageMapper constructor() : EntityMapper<DomainLayerMessages.SKMess
       entity.receiver_,
       entity.sender,
       entity.createdDate,
-      entity.modifiedDate,
-      entity.senderName
+      entity.modifiedDate
     )
   }
 
@@ -28,7 +27,6 @@ class SlackMessageMapper constructor() : EntityMapper<DomainLayerMessages.SKMess
       model.sender,
       model.createdDate,
       model.modifiedDate,
-      model.senderName
     )
   }
 }

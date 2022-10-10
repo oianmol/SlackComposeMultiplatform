@@ -23,7 +23,7 @@ val useCaseModule = module {
   single { UseCaseGetSelectedWorkspace(get()) }
   single { UseCaseFetchChannels(get(), get(), get()) }
   single { UseCaseFetchChannelsWithLastMessage(get()) }
-  single { UseCaseFetchMessages(get(), get()) }
+  single { UseCaseFetchMessages(get(), get(), get()) }
   single { UseCaseSendMessage(get(), get()) }
   single { UseCaseCreateChannel(get(), get()) }
   single { UseCaseCreateOneToOneChannel(get()) }

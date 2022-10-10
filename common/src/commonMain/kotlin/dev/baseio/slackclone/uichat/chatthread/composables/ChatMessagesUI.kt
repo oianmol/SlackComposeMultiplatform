@@ -29,7 +29,7 @@ fun ChatMessagesUI(viewModel: ChatScreenVM, modifier: Modifier) {
   val listState = rememberLazyListState()
 
   LazyColumn(state = listState, reverseLayout = true, modifier = modifier) {
-    var lastDrawnMessage: String? = null
+    var lastDrawnMessage: String?
     for (messageIndex in messages.indices) {
       val message = messages[messageIndex]
       item {

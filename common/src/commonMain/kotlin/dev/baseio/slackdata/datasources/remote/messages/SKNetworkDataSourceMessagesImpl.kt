@@ -6,6 +6,7 @@ import dev.baseio.slackdata.protos.kmSKMessage
 import dev.baseio.slackdata.protos.kmSKWorkspaceChannelRequest
 import dev.baseio.slackdomain.datasources.remote.messages.SKNetworkDataSourceMessages
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
+import dev.baseio.slackdomain.usecases.auth.toSKUser
 import dev.baseio.slackdomain.usecases.channels.UseCaseChannelRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
@@ -46,6 +47,6 @@ fun KMSKMessage.toDomainLayerMessage(): DomainLayerMessages.SKMessage {
     sender = params.sender,
     createdDate = params.createdDate,
     modifiedDate = params.modifiedDate,
-    senderName = params.senderName
+    senderInfo = params.senderInfo.toSKUser()
   )
 }

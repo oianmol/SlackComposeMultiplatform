@@ -85,7 +85,7 @@ fun EmailAddressInputUI(composeNavigator: ComposeNavigator, emailInputVM: EmailI
     },
     when {
       uiState.isLoading == true -> "Fetching your workspaces..."
-      uiState.isInitial -> "We will find the workspaces that you are signed up for."
+      uiState.isInitial -> "We will find the workspaces that you are signed up for.\nFirst, enter your email\nWe suggest using the email address you use at work."
       uiState.throwable != null -> uiState.throwable!!.message
         ?: "An Unknown error has occurred..."
 

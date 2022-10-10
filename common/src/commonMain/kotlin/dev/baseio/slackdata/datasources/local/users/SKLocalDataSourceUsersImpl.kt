@@ -25,4 +25,28 @@ class SKLocalDataSourceUsersImpl(
         }
       }
   }
+
+  override fun getUser(workspaceId: String, uuid: String): DomainLayerUsers.SKUser? {
+    return slackDB.slackDBQueries.getUser(workspaceId, uuid).executeAsOneOrNull()?.let {
+      mapper.mapToDomain(it)
+    }
+  }
+
+  override fun saveUser(senderInfo: DomainLayerUsers.SKUser?) {
+    senderInfo?.let {
+      slackDB.slackDBQueries.insertUser(
+        it.uuid,
+        it.workspaceId,
+        it.gender,
+        it.name,
+        it.location,
+        it.email,
+        it.username,
+        it.userSince,
+        it.phone,
+        it.avatarUrl
+      )
+    }
+
+  }
 }

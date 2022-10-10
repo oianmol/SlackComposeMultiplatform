@@ -6,6 +6,8 @@ import org.koin.core.annotation.KoinInternalApi
 
 class SlackScreens {
 
+  object WorkspaceSigninRoute : BackstackRoute("WorkspaceSigninRoute", EmailAddressInputUI)
+
   object OnboardingRoute : BackstackRoute("OnboardingRoute", GettingStarted)
   object GettingStarted : BackstackScreen("gettingStarted") {
     override fun close() {

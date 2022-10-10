@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -46,10 +45,6 @@ import dev.baseio.slackdata.protos.KMSKUser
 @Composable
 fun UserProfileUI(composeNavigator: ComposeNavigator, profileVM: UserProfileVM) {
   val user by profileVM.currentLoggedInUser.collectAsState()
-
-  LaunchedEffect(Unit){
-    profileVM.fetchUserProfile()
-  }
 
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,

@@ -102,9 +102,7 @@ fun NextButton(modifier: Modifier = Modifier, onNextClick: () -> Unit) {
 
 fun navigateDashboard(composeNavigator: ComposeNavigator) {
   composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
-    if (it.name == SlackScreens.OnboardingRoute.name) {
-      remove()
-    }
+    remove() // remove all routes!
   })
 }
 

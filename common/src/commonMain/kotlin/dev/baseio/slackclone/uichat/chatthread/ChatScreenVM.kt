@@ -48,7 +48,6 @@ class ChatScreenVM constructor(
           user.uuid,
           Clock.System.now().toEpochMilliseconds(),
           Clock.System.now().toEpochMilliseconds(),
-          user.name
         )
         useCaseSendMessage.perform(message)
       }

@@ -6,9 +6,7 @@ import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceRead
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkDataSourceReadWorkspaces
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.*
 
 class UseCaseFetchWorkspaces(
   private val skNetworkDataSourceReadWorkspaces: SKNetworkDataSourceReadWorkspaces,
@@ -16,7 +14,9 @@ class UseCaseFetchWorkspaces(
   private val skLocalDataSourceReadWorkspaces: SKLocalDataSourceReadWorkspaces
 ) {
   operator fun invoke(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
-    return skNetworkDataSourceReadWorkspaces.getWorkspaces().flatMapLatest { kmSKWorkspaces ->
+    return skNetworkDataSourceReadWorkspaces.getWorkspaces().catch {
+      emitAll(emptyFlow())
+    }.flatMapLatest { kmSKWorkspaces ->
       skLocalDataSourceWriteWorkspaces.saveWorkspaces(kmSKWorkspaces.workspacesList.map {
         it.toSKWorkspace()
       })

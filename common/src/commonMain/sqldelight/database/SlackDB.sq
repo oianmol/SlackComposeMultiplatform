@@ -87,12 +87,11 @@ CREATE TABLE IF NOT EXISTS slackMessage(
     receiver TEXT  NOT NULL ,
     sender TEXT  NOT NULL ,
     createdDate INTEGER  NOT NULL ,
-    modifiedDate INTEGER  NOT NULL,
-    senderName TEXT NOT NULL
+    modifiedDate INTEGER  NOT NULL
 );
 
 insertMessage:
-INSERT OR REPLACE INTO slackMessage(uuid,workspaceId,channelId,message,receiver,sender,createdDate,modifiedDate,senderName) VALUES(?,?,?,?,?,?,?,?,?);
+INSERT OR REPLACE INTO slackMessage(uuid,workspaceId,channelId,message,receiver,sender,createdDate,modifiedDate) VALUES(?,?,?,?,?,?,?,?);
 
 selectAllMessages:
 SELECT * FROM slackMessage WHERE workspaceId=:workspaceId ORDER BY modifiedDate DESC ;
@@ -116,6 +115,9 @@ CREATE TABLE IF NOT EXISTS slackUser(
    phone TEXT NOT NULL,
     avatarUrl TEXT  NOT NULL
 );
+
+getUser:
+SELECT * FROM slackUser WHERE workspaceId=:workspaceId AND uuid=:userid;
 
 insertUser:
 INSERT OR REPLACE INTO slackUser(uuid,workspaceId,gender,name,location,email,username,userSince,phone,avatarUrl) VALUES (?,?,?,?,?,?,?,?,?,?);

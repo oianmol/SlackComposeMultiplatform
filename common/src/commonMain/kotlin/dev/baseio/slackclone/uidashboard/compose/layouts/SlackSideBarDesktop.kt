@@ -14,14 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.reusable.SlackImageBox
+import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
+import dev.baseio.slackclone.navigation.SlackScreens
 
 import dev.baseio.slackclone.uidashboard.compose.*
+import dev.baseio.slackclone.uidashboard.vm.SideNavVM
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -53,7 +54,15 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
           AlertDialog(onDismissRequest = {
             selected = 1
           }, buttons = {
-            MoreOptionsSideBarDesktop()
+            MoreOptionsSideBarDesktop(signIntoWorkspace = {
+              appNavigator.navigateRoute(SlackScreens.WorkspaceSigninRoute, removeRoute = { route, remove ->
+
+              })
+            }, createNewWorkspace = {
+
+            }, findWorkspaces = {
+
+            })
           })
         }
 
@@ -75,20 +84,24 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
 }
 
 @Composable
-private fun MoreOptionsSideBarDesktop() {
+private fun MoreOptionsSideBarDesktop(
+  signIntoWorkspace: () -> Unit,
+  createNewWorkspace: () -> Unit,
+  findWorkspaces: () -> Unit
+) {
   SlackCloneSurface(
     modifier = Modifier.shadow(4.dp),
     shape = RoundedCornerShape(4.dp)
   ) {
     Column(Modifier.padding(12.dp)) {
       Text("Sign in to another workspace", Modifier.padding(10.dp).clickable {
-
+        signIntoWorkspace()
       })
       Text("Create a new workspace", Modifier.padding(10.dp).clickable {
-
+        createNewWorkspace()
       })
       Text("Find workspaces", Modifier.padding(10.dp).clickable {
-
+        findWorkspaces()
       })
     }
   }

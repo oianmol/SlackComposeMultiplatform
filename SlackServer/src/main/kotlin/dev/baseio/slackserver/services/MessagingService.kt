@@ -26,8 +26,12 @@ class MessagingService(
       .map { query ->
         val skMessages = query.executeAsList().map { skMessage ->
           val user = usersDataSource.getUser(skMessage.sender, skMessage.workspaceId)
-          skMessage.toGrpc().copy {
-            senderName = user?.name ?: ""
+          user?.let {
+            skMessage.toGrpc().copy {
+              senderInfo = it.toGrpc()
+            }
+          } ?: run {
+            skMessage.toGrpc()
           }
         }
         SKMessages.newBuilder()

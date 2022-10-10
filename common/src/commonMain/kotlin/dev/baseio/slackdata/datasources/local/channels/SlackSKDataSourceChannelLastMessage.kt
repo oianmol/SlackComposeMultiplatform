@@ -10,6 +10,7 @@ import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.datasources.local.channels.SKDataSourceChannelLastMessage
+import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -17,6 +18,7 @@ class SlackSKDataSourceChannelLastMessage constructor(
   private val slackChannelDao: SlackDB,
   private val messagesMapper: EntityMapper<DomainLayerMessages.SKMessage, SlackMessage>,
   private val SKChannelMapper: EntityMapper<DomainLayerChannels.SKChannel, SlackChannel>,
+  private val skLocalDataSourceUsers: SKLocalDataSourceUsers,
   private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : SKDataSourceChannelLastMessage {
   override fun fetchChannelsWithLastMessage(workspaceId: String): Flow<List<DomainLayerMessages.SKLastMessage>> {
@@ -38,7 +40,6 @@ class SlackSKDataSourceChannelLastMessage constructor(
             channelsWithLastMessage.sender,
             channelsWithLastMessage.createdDate,
             channelsWithLastMessage.modifiedDate,
-            channelsWithLastMessage.senderName
           )
         DomainLayerMessages.SKLastMessage(
           SKChannelMapper.mapToDomain(channel),

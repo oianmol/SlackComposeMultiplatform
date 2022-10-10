@@ -1,6 +1,7 @@
 package dev.baseio.slackdomain.model.message
 
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 
 interface DomainLayerMessages {
@@ -13,7 +14,7 @@ interface DomainLayerMessages {
     val sender: String,
     val createdDate: Long,
     val modifiedDate: Long,
-    val senderName:String
+    var senderInfo: DomainLayerUsers.SKUser? = null
   )
 
   data class SKLastMessage(

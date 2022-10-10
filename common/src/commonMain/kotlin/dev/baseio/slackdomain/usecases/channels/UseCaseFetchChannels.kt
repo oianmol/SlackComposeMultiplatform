@@ -6,10 +6,7 @@ import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceRea
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceWriteChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.BaseUseCase
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.*
 
 class UseCaseFetchChannels(
   private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels,
@@ -23,6 +20,8 @@ class UseCaseFetchChannels(
         skLocalDataSourceWriteChannels.saveChannel(skChannel)
       }
     }.flatMapLatest {
+      skLocalDataSourceReadChannels.fetchChannels(params)
+    }.catch {
       skLocalDataSourceReadChannels.fetchChannels(params)
     }
   }

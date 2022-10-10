@@ -21,7 +21,7 @@ import dev.baseio.slackdomain.model.message.DomainLayerMessages
 @Composable
 fun ChatMessage(message: DomainLayerMessages.SKMessage) {
   ListItem(icon = {
-    SlackImageBox(Modifier.size(48.dp), imageUrl = "http://placekitten.com/200/300")
+    SlackImageBox(Modifier.size(48.dp), imageUrl = message.senderInfo?.avatarUrl ?: "http://placekitten.com/200/300")
   }, modifier = Modifier.padding(2.dp), secondaryText = {
     ChatMedia(message)
   }, text = {
@@ -31,15 +31,13 @@ fun ChatMessage(message: DomainLayerMessages.SKMessage) {
 
 @Composable
 fun ChatMedia(message: DomainLayerMessages.SKMessage) {
-  Column {
-    MentionsText(
-      modifier = Modifier,
-      message.message, style = SlackCloneTypography.subtitle2.copy(
-        color = SlackCloneColorProvider.colors.textSecondary
-      )
-    ) {
+  MentionsText(
+    modifier = Modifier,
+    message.message, style = SlackCloneTypography.subtitle2.copy(
+      color = SlackCloneColorProvider.colors.textSecondary
+    )
+  ) {
 
-    }
   }
 
 }
@@ -48,7 +46,7 @@ fun ChatMedia(message: DomainLayerMessages.SKMessage) {
 fun ChatUserDateTime(message: DomainLayerMessages.SKMessage) {
   Row(verticalAlignment = Alignment.CenterVertically) {
     Text(
-      message.senderName + " \uD83C\uDF34",
+      message.senderInfo?.name + " \uD83C\uDF34",
       style = SlackCloneTypography.subtitle1.copy(
         fontWeight = FontWeight.Bold,
         color = SlackCloneColorProvider.colors.textPrimary

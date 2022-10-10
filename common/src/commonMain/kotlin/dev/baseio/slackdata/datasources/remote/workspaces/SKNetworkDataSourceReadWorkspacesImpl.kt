@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 class SKNetworkDataSourceReadWorkspacesImpl(private val grpcCalls: GrpcCalls) : SKNetworkDataSourceReadWorkspaces {
   override suspend fun findWorkspacesForEmail(email: Email): KMSKWorkspaces {
-    grpcCalls.getWorkspaces()
     return grpcCalls.findWorkspacesForEmail(email)
   }
 
