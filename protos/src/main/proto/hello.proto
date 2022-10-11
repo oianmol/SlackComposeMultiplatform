@@ -98,6 +98,11 @@ message SKChannelRequest{
   string workspaceId = 1;
 }
 
+message SKCreateWorkspaceRequest{
+  SKWorkspace workspace = 1;
+  SKAuthUser user = 2;
+}
+
 message Empty {}
 
 message SKFindWorkspacesRequest{
@@ -107,7 +112,7 @@ message SKFindWorkspacesRequest{
 
 service WorkspaceService {
   rpc getWorkspaces(Empty) returns (stream SKWorkspaces);
-  rpc saveWorkspace(SKWorkspace) returns (SKWorkspace);
+  rpc saveWorkspace(SKCreateWorkspaceRequest) returns (SKAuthResult);
   rpc findWorkspacesForEmail(SKFindWorkspacesRequest) returns(SKWorkspaces);
   rpc findWorkspaceForName(SKFindWorkspacesRequest) returns(SKWorkspace);
 }
