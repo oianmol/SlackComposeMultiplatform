@@ -16,18 +16,12 @@ import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
-import dev.baseio.slackclone.uionboarding.compose.EmailAddressInputUI
-import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
-import dev.baseio.slackclone.uionboarding.compose.SkipTypingUI
-import dev.baseio.slackclone.uionboarding.compose.WorkspaceInputUI
+import dev.baseio.slackclone.uionboarding.compose.*
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.injection.*
 import dev.baseio.slackdomain.AUTH_TOKEN
-import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
-import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -56,6 +50,10 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
         }
         screen(SlackScreens.SkipTypingScreen) {
           SkipTypingUI(this@Navigator)
+        }
+        screen(SlackScreens.CreateWorkspace) {
+          val viewModel = scope.get<WorkspaceCreateVM>()
+          CreateWorkspaceScreen(this@Navigator, viewModel)
         }
         screen(SlackScreens.WorkspaceInputUI) {
           val workspaceInputVM = scope.get<WorkspaceInputVM>()

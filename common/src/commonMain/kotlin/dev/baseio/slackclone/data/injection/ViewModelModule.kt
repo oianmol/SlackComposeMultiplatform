@@ -16,6 +16,7 @@ import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegate
 import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegateImpl
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
+import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.injection.SlackSkUserSkChannel
 import org.koin.core.qualifier.Qualifier
@@ -30,6 +31,11 @@ val viewModelDelegateModule = module {
 }
 
 val viewModelModule = module {
+  scope<SlackScreens.CreateWorkspace>{
+    scoped {
+      WorkspaceCreateVM(getKoin().get())
+    }
+  }
   scope<SlackScreens.Home> {
     scoped {
       HomeScreenVM(getKoin().get(), getKoin().get(), getKoin().get())

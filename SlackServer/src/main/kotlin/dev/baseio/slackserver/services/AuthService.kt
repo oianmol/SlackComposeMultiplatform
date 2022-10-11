@@ -3,12 +3,8 @@ package dev.baseio.slackserver.services
 import database.SkUser
 import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.AuthDataSource
-import dev.baseio.slackserver.data.UsersDataSource
 import dev.baseio.slackserver.services.interceptors.*
-import io.grpc.Status
-import io.grpc.StatusException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import kotlinx.coroutines.Dispatchers

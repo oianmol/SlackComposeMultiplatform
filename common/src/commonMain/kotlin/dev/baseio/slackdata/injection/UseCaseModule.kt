@@ -8,10 +8,7 @@ import dev.baseio.slackdomain.usecases.channels.*
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
-import dev.baseio.slackdomain.usecases.workspaces.FindWorkspacesUseCase
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchWorkspaces
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseSetLastSelectedWorkspace
+import dev.baseio.slackdomain.usecases.workspaces.*
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -35,4 +32,5 @@ val useCaseModule = module {
   single { UseCaseFetchAndSaveUsers(get(), get(), get()) }
   single { UseCaseClearAuth(get()) }
   single { UseCaseCurrentUser(get()) }
+  single { UseCaseCreateWorkspace(get()) }
 }

@@ -15,7 +15,7 @@ class SlackScreens {
       super.close()
     }
   }
-
+  object CreateWorkspace:BackstackScreen("CreateWorkspace")
   object SkipTypingScreen : BackstackScreen("SkipTypingUI")
   object EmailAddressInputUI : BackstackScreen("EmailAddressInputUI")
   object WorkspaceInputUI : BackstackScreen("WorkspaceInputUI")
