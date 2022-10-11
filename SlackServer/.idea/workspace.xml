@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="fix: save workspacename in lowercase">
+    <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="add: save workspace with user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/AuthService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/AuthService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/UserService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uionboarding/compose/GettingStarted.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uionboarding/compose/GettingStarted.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +109,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -131,7 +130,7 @@
       <recent name="dev.baseio.slackserver.data.impl" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.SlackServer [run]">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="SlackServer [:generate-proto:build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -225,10 +224,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.SlackServer [run]" />
         <item itemvalue="Gradle.SlackServer [build]" />
         <item itemvalue="Gradle.SlackServer [clean]" />
-        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.SlackServer [:generate-proto:build]" />
       </list>
     </recent_temporary>
@@ -358,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664773843713</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="add: save workspace with user">
+      <created>1665479389550</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1665479389550</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -389,7 +395,8 @@
     <MESSAGE value="add: SKStatus for grpc call." />
     <MESSAGE value="update: allow finding workspaces for email id!" />
     <MESSAGE value="fix: save workspacename in lowercase" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: save workspacename in lowercase" />
+    <MESSAGE value="add: save workspace with user" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: save workspace with user" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -443,6 +450,21 @@
           <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/MessagingService.kt</url>
           <line>18</line>
           <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt</url>
+          <line>57</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt</url>
+          <line>62</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt</url>
+          <line>52</line>
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
