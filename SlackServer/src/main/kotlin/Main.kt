@@ -13,7 +13,7 @@ fun main() {
 
   ServerBuilder.forPort(17600)
     .addService(AuthService(authDataSource = authDataSource))
-    .addService(WorkspaceService(workspaceDataSource = workspaceDataSource))
+    .addService(WorkspaceService(workspaceDataSource = workspaceDataSource, authDataSouurce = authDataSource))
     .addService(ChannelService(channelsDataSource = channelsDataSource))
     .addService(MessagingService(messagesDataSource = messagesDataSource, usersDataSource = usersDataSource))
     .addService(UserService(usersDataSource = usersDataSource))

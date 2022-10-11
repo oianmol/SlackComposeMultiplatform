@@ -7,6 +7,7 @@
     <list default="true" id="231eca9a-4bad-45b5-bd97-4ee9e884796e" name="Changes" comment="fix: save workspacename in lowercase">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/AuthService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/AuthService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uionboarding/compose/GettingStarted.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../common/src/commonMain/kotlin/dev/baseio/slackclone/uionboarding/compose/GettingStarted.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -225,8 +226,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.SlackServer [run]" />
-        <item itemvalue="Gradle.SlackServer [clean]" />
         <item itemvalue="Gradle.SlackServer [build]" />
+        <item itemvalue="Gradle.SlackServer [clean]" />
         <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.SlackServer [:generate-proto:build]" />
       </list>
@@ -425,7 +426,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/src/main/kotlin/dev/baseio/slackserver/services/WorkspaceService.kt</url>
-          <line>81</line>
+          <line>93</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
