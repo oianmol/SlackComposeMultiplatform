@@ -6,7 +6,7 @@ Depends on [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork 
 
 1. Install gRPC library on mavenLocal() once you clone [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP)
 2. Build and install to mavenLocal grpc-multiplatform-lib & plugin module (Note: Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
-3. 
+3. Import SlackServer in Intellij Idea and run the server.
 
 I haven't tried running iOS build for some time it depends a lot on the grpc-kmp library support for iOS
 .
