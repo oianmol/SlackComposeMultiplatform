@@ -11,7 +11,7 @@ import io.github.timortel.kotlin_multiplatform_grpc_lib.KMMetadata
 
 class GrpcCalls(private val skKeyValueData: SKKeyValueData) {
   companion object {
-    const val address = "192.168.1.5"
+    const val address = "192.168.1.43"
     const val port = 17600
     const val AUTHENTICATION_TOKEN_KEY = "Authorization"
   }
@@ -83,7 +83,7 @@ class GrpcCalls(private val skKeyValueData: SKKeyValueData) {
     return workspacesStub.getWorkspaces(kmEmpty { }, fetchToken(token))
   }
 
-  suspend fun saveWorkspace(workspace: KMSKWorkspace, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKWorkspace {
+  suspend fun saveWorkspace(workspace: KMSKCreateWorkspaceRequest, token: String? = skKeyValueData.get(AUTH_TOKEN)): KMSKAuthResult {
     return workspacesStub.saveWorkspace(workspace, fetchToken(token))
   }
 

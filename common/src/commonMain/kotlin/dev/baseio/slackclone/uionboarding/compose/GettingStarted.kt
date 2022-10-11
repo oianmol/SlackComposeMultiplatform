@@ -151,7 +151,7 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
       }
     },
     modifier = modifier,
-    style = SlackCloneTypography.caption, onClick = {
+    style = SlackCloneTypography.subtitle2, onClick = {
       onClick()
     }
   )

@@ -10,7 +10,6 @@ plugins {
   id("com.android.library")
   id("com.squareup.sqldelight")
   kotlin("plugin.serialization") version "1.7.10"
-
   id("com.google.protobuf") version "0.8.18"
   id("io.github.timortel.kotlin-multiplatform-grpc-plugin") version "0.2.2"
 }
@@ -86,6 +85,9 @@ kotlin {
       kotlinOptions.jvmTarget = "11"
     }
   }
+  iosArm64()
+  iosSimulatorArm64()
+  iosX64()
   sourceSets {
 
     val commonMain by getting {
@@ -107,6 +109,12 @@ kotlin {
       kotlin.srcDirs(
         projectDir.resolve("build/generated/source/kmp-grpc/commonMain/kotlin").canonicalPath ,
       )
+    }
+    val sqlDriverNativeMain by creating {
+      dependsOn(commonMain)
+      dependencies {
+        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+      }
     }
     val commonTest by getting {
       dependencies {
@@ -137,6 +145,33 @@ kotlin {
         api("androidx.core:core-ktx:1.9.0")
       }
     }
+    val iosArm64Main by getting {
+      dependsOn(sqlDriverNativeMain)
+      dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
+        implementation("io.ktor:ktor-client-darwin:$ktor_version")
+        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+      }
+    }
+    val iosSimulatorArm64Main by getting {
+      dependsOn(sqlDriverNativeMain)
+
+      dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4")
+        implementation("io.ktor:ktor-client-darwin:$ktor_version")
+        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+      }
+    }
+    val iosX64Main by getting {
+      dependsOn(sqlDriverNativeMain)
+
+      dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
+        implementation("io.ktor:ktor-client-darwin:$ktor_version")
+        implementation("com.squareup.sqldelight:native-driver:1.5.3")
+      }
+    }
+
 
     val androidTest by getting {
       dependencies {

@@ -51,7 +51,7 @@ val viewModelModule = module {
   }
   scope<SlackScreens.WorkspaceInputUI> {
     scoped {
-      WorkspaceInputVM(get(), get())
+      WorkspaceInputVM(get(), get(),get())
     }
   }
   scope<SlackScreens.EmailAddressInputUI> {
