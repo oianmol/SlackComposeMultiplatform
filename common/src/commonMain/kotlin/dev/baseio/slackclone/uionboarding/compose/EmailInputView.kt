@@ -10,6 +10,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -97,6 +98,50 @@ fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> 
       keyboardOptions = KeyboardOptions.Default.copy(
         autoCorrect = false,
         keyboardType = KeyboardType.Email,
+        imeAction = ImeAction.Done,
+      ),
+      keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+      colors = textFieldColors(),
+      singleLine = true,
+      maxLines = 1
+    )
+  }
+
+
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun NameTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
+  val keyboardController = LocalSoftwareKeyboardController.current
+  Row(
+    modifier = modifier,
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Start
+  ) {
+    TextField(
+      value = value,
+      onValueChange = { newEmail ->
+        onChange(newEmail)
+      },
+      textStyle = textStyleField(),
+      leadingIcon = {
+        Icon(
+          imageVector = Icons.Default.Place,
+          contentDescription = null,
+          tint = SlackCloneColorProvider.colors.textPrimary
+        )
+      },
+      placeholder = {
+        Text(
+          text = "Workspace Name",
+          style = textStyleField(),
+          textAlign = TextAlign.Start
+        )
+      },
+      keyboardOptions = KeyboardOptions.Default.copy(
+        autoCorrect = false,
+        keyboardType = KeyboardType.Text,
         imeAction = ImeAction.Done,
       ),
       keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),

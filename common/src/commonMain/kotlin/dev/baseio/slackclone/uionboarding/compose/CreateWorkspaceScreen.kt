@@ -85,11 +85,15 @@ fun Heading() {
 @Composable
 fun WorkspaceCreateForm(viewModel: WorkspaceCreateVM, composeNavigator: ComposeNavigator) {
   val email by viewModel.emailForm.collectAsState()
+  val name by viewModel.nameForm.collectAsState()
   Column {
     EmailTF(Modifier.padding(8.dp), email) { emailNew ->
       viewModel.emailForm.value = emailNew
     }
-    CreateWorkspaceButton(composeNavigator,viewModel)
+    NameTF(Modifier.padding(8.dp), name) { nameNew ->
+      viewModel.nameForm.value = nameNew
+    }
+    CreateWorkspaceButton(composeNavigator, viewModel)
   }
 
 

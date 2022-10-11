@@ -47,9 +47,13 @@ class WorkspaceService(
   }
 
   override suspend fun saveWorkspace(request: SKWorkspace): SKWorkspace {
-    return workspaceDataSource
-      .saveWorkspace(request.toDBWorkspace())
-      .toGRPC()
+    workspaceDataSource.findWorkspaceForName(request.name)?.let {
+      throw StatusException(Status.ALREADY_EXISTS)
+    } ?: run {
+      return workspaceDataSource
+        .saveWorkspace(request.toDBWorkspace())
+        .toGRPC()
+    }
   }
 
   override fun getWorkspaces(request: Empty): Flow<SKWorkspaces> {
