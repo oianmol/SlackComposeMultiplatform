@@ -6,7 +6,7 @@ import io.github.timortel.kotlin_multiplatform_grpc_plugin.GrpcMultiplatformExte
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev774"
+    id("org.jetbrains.compose") version "1.2.0-beta01"
     id("com.android.library")
     id("com.squareup.sqldelight")
     kotlin("plugin.serialization") version "1.7.10"
@@ -197,8 +197,10 @@ kotlin {
 
 grpcKotlinMultiplatform {
     targetSourcesMap.put(OutputTarget.COMMON, listOf(kotlin.sourceSets.getByName("commonMain")))
-    targetSourcesMap.put(OutputTarget.JVM, listOf(kotlin.sourceSets.getByName("jvmMain")))
-    targetSourcesMap.put(OutputTarget.Android, listOf(kotlin.sourceSets.getByName("androidMain")))
+    targetSourcesMap.put(
+        OutputTarget.JVM,
+        listOf(kotlin.sourceSets.getByName("jvmMain"), kotlin.sourceSets.getByName("androidMain"))
+    )
     targetSourcesMap.put(
         OutputTarget.IOS,
         listOf(

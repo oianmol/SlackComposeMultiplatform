@@ -103,7 +103,9 @@ message SKCreateWorkspaceRequest{
   SKAuthUser user = 2;
 }
 
-message Empty {}
+message Empty {
+  string nothing = 1;
+}
 
 message SKFindWorkspacesRequest{
   string email = 1;

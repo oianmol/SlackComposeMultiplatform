@@ -3,7 +3,6 @@ package dev.baseio.slackdata.mapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import kotlinx.datetime.Clock
-import java.util.UUID
 
 class SlackUserToChannelMapper : EntityToMapper<DomainLayerUsers.SKUser, DomainLayerChannels.SKChannel> {
   override fun mapToDomain1(entity: DomainLayerChannels.SKChannel): DomainLayerUsers.SKUser {

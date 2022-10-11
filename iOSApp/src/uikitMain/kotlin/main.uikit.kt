@@ -83,7 +83,7 @@ fun SlackApp(window: UIWindow): UIViewController {
       SlackCloneTheme(isDarkTheme = true) {
         Column {
           Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
-          App(sqlDriver = driver)
+          App(sqlDriver = driver,skKeyValueData = SKKeyValueData())
         }
       }
 

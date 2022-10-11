@@ -51,7 +51,7 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
         }, Icons.Default.Search, selected == 3)
 
         if (selected == 4) {
-          AlertDialog(onDismissRequest = {
+          /*AlertDialog(onDismissRequest = {
             selected = 1
           }, buttons = {
             MoreOptionsSideBarDesktop(signIntoWorkspace = {
@@ -63,7 +63,7 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
             }, findWorkspaces = {
 
             })
-          })
+          })*/
         }
 
         SelectedSideBarIcon(
