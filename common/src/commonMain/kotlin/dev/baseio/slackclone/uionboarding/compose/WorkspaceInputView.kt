@@ -19,6 +19,8 @@ import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 
 @Composable
 fun WorkspaceInputView(modifier: Modifier, workspaceInputVM: WorkspaceInputVM) {
+  val workspace by workspaceInputVM.workspace.collectAsState()
+
   Column(
     modifier = modifier
       .fillMaxWidth()
@@ -38,14 +40,16 @@ fun WorkspaceInputView(modifier: Modifier, workspaceInputVM: WorkspaceInputVM) {
       horizontalArrangement = Arrangement.Start
     ) {
       TextHttps()
-      WorkspaceTF(workspaceInputVM)
+      WorkspaceTF(workspace) {
+        workspaceInputVM.workspace.value = it
+      }
       TextSlackCom()
     }
   }
 }
 
 @Composable
-private fun TextHttps() {
+fun TextHttps() {
   Text(
     text = "https://",
     style = textStyleField().copy(
@@ -57,7 +61,7 @@ private fun TextHttps() {
 }
 
 @Composable
-private fun TextSlackCom() {
+fun TextSlackCom() {
   Text(
     ".slack.com",
     style = textStyleField().copy(
@@ -72,13 +76,12 @@ private fun TextSlackCom() {
 
 
 @Composable
-private fun WorkspaceTF(workspaceInputVM: WorkspaceInputVM) {
-  val workspace by workspaceInputVM.workspace.collectAsState()
+fun WorkspaceTF(workspace: String,onUpdate:(String)->Unit) {
 
   BasicTextField(
     value = workspace,
     onValueChange = { newEmail ->
-      workspaceInputVM.workspace.value = newEmail
+      onUpdate(newEmail)
     },
     textStyle = textStyleField(),
     singleLine = true,
