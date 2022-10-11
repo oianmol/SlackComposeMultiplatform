@@ -12,17 +12,22 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import SKKeyValueData
 import dev.baseio.slackdata.protos.kmSKUser
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.remote.auth.SKAuthNetworkDataSource
+import kotlinx.coroutines.withContext
 
 class UseCaseCreateWorkspace(private val grpcCalls: GrpcCalls,
                              private val SKAuthNetworkDataSource: SKAuthNetworkDataSource,
-                             private val skKeyValueData: SKKeyValueData) {
+                             private val skKeyValueData: SKKeyValueData,
+                             private val coroutineDispatcherProvider: CoroutineDispatcherProvider) {
     suspend operator fun invoke(email: String, password: String, domain: String) {
-        val result = grpcCalls.saveWorkspace(kmskCreateWorkspaceRequest(email, password, domain))
-        skKeyValueData.save(AUTH_TOKEN, result.token)
-        val user = SKAuthNetworkDataSource.getLoggedInUser().getOrThrow().toSKUser()
-        val json = Json.encodeToString(user)
-        skKeyValueData.save(LOGGED_IN_USER, json)
+        withContext(coroutineDispatcherProvider.io){
+            val result = grpcCalls.saveWorkspace(kmskCreateWorkspaceRequest(email, password, domain))
+            skKeyValueData.save(AUTH_TOKEN, result.token)
+            val user = SKAuthNetworkDataSource.getLoggedInUser().getOrThrow().toSKUser()
+            val json = Json.encodeToString(user)
+            skKeyValueData.save(LOGGED_IN_USER, json)
+        }
     }
 
     private fun kmskCreateWorkspaceRequest(

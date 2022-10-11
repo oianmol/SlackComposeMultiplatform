@@ -33,6 +33,6 @@ val useCaseModule = module {
     single { UseCaseFetchAndSaveUsers(get(), get(), get()) }
     single { UseCaseClearAuth(get()) }
     single { UseCaseCurrentUser(get()) }
-    single { UseCaseCreateWorkspace(get(), get(), get()) }
+    single { UseCaseCreateWorkspace(get(), get(), get(),get()) }
     single { UseCaseRegisterUser(get(),get(),get()) }
 }
