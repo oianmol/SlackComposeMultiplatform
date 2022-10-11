@@ -3,9 +3,8 @@ package dev.baseio.slackclone.uionboarding.compose
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +14,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -38,18 +38,6 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
     contentColor = SlackCloneColorProvider.colors.textSecondary,
     modifier = Modifier.fillMaxSize(), scaffoldState = scaffoldState, snackbarHost = {
       scaffoldState.snackbarHostState
-    }, floatingActionButton = {
-      if (size != WindowSize.Phones) {
-        FloatingActionButton(onClick = {
-          skipTypingNavigate(composeNavigator)
-        }, backgroundColor = Color.White) {
-          Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = null,
-            tint = SlackCloneColor
-          )
-        }
-      }
     }
   ) { innerPadding ->
     Box(modifier = Modifier.padding(innerPadding)) {
@@ -64,9 +52,8 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
           AnimatedVisibility(visible = !showSlackAnim) {
             when (size) {
               WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
-
               else -> {
-                LargeScreenLayout(gettingStartedVM, composeNavigator, size)
+                LargeScreenLayout(gettingStartedVM, composeNavigator)
               }
             }
 
@@ -81,8 +68,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
 @Composable
 private fun LargeScreenLayout(
   gettingStartedVM: GettingStartedVM,
-  composeNavigator: ComposeNavigator,
-  size: WindowSize
+  composeNavigator: ComposeNavigator
 ) {
   val density = LocalDensity.current
 
@@ -92,24 +78,30 @@ private fun LargeScreenLayout(
     verticalAlignment = Alignment.CenterVertically
   ) {
     Column(
-      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(), verticalArrangement = Arrangement.Center,
+      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
+      verticalArrangement = Arrangement.SpaceAround,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      Spacer(Modifier.padding(8.dp))
+      Spacer(Modifier.padding(16.dp))
       IntroText(modifier = Modifier.padding(top = 12.dp), gettingStartedVM, {
         IntroEnterTransitionVertical(density)
       }) {
         IntroExitTransitionVertical()
       }
-      Spacer(Modifier.padding(8.dp))
-      if (size == WindowSize.Phones) {
-        GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
-          GetStartedExitTransVertical()
-        })
-        Spacer(Modifier.padding(8.dp))
-      }
+      Spacer(Modifier.padding(16.dp))
+      GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
+        GetStartedExitTransVertical()
+      })
+
     }
-    CenterImage(Modifier.weight(1f, fill = true).padding(24.dp), gettingStartedVM)
+
+    Column(
+      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      CenterImage(Modifier.padding(24.dp), gettingStartedVM)
+    }
   }
 }
 
@@ -135,6 +127,34 @@ private fun PhoneLayout(
       GetStartedExitTransHorizontal()
     })
   }
+}
+
+@Composable
+private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
+  ClickableText(
+    text = buildAnnotatedString {
+      withStyle(
+        style = SpanStyle(
+          color = Color.White
+        )
+      ) {
+        append("Is your team new to slack ?")
+      }
+
+      withStyle(
+        style = SpanStyle(
+          color = Color.White,
+          textDecoration = TextDecoration.Underline
+        )
+      ) {
+        append(" Create a workspace?")
+      }
+    },
+    modifier = modifier,
+    style = SlackCloneTypography.subtitle2, onClick = {
+      onClick()
+    }
+  )
 }
 
 @Composable
@@ -169,7 +189,8 @@ private fun ImageEnterTransition() = expandIn(
 @Composable
 private fun GetStartedButton(
   composeNavigator: ComposeNavigator,
-  gettingStartedVM: GettingStartedVM, enterAnim: @Composable () -> EnterTransition,
+  gettingStartedVM: GettingStartedVM,
+  enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
   val expanded by gettingStartedVM.introTextExpanded
@@ -178,20 +199,27 @@ private fun GetStartedButton(
     visible = expanded, enter = enterAnim(),
     exit = exitAnim()
   ) {
-    Button(
-      onClick = {
-        skipTypingNavigate(composeNavigator)
-      },
-      Modifier
-        .fillMaxWidth()
-        .height(40.dp),
-      colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-    ) {
-      Text(
-        text = "Get started",
-        style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColor)
-      )
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+      Button(
+        onClick = {
+          skipTypingNavigate(composeNavigator)
+        },
+        Modifier
+          .fillMaxWidth()
+          .height(40.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
+      ) {
+        Text(
+          text = "Sign In to Slack",
+          style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+        )
+      }
+      Spacer(Modifier.padding(8.dp))
+      TeamNewToSlack(Modifier.padding(8.dp)) {
+        composeNavigator.navigateScreen(SlackScreens.CreateWorkspace)
+      }
     }
+
   }
 }
 
@@ -244,27 +272,50 @@ private fun IntroText(
     visible = expanded, enter = enterAnim(),
     exit = exitAnim()
   ) {
-    Text(
-      text = buildAnnotatedString {
-        withStyle(
-          style = SpanStyle(
-            fontWeight = FontWeight.Bold, color = Color.White
-          )
-        ) {
-          append("Picture this: a messaging app,")
-        }
-        withStyle(
-          style = SpanStyle(
-            SlackLogoYellow,
-            fontWeight = FontWeight.Bold
-          )
-        ) {
-          append(" but built for work.")
-        }
-      },
-      modifier = modifier,
-      style = SlackCloneTypography.h4
-    )
+    Column(modifier) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Image(
+          modifier = Modifier.size(128.dp),
+          painter = PainterRes.slackLogo(),
+          contentDescription = null
+        )
+        Text(
+          text = buildAnnotatedString {
+            withStyle(
+              style = SpanStyle(
+                fontWeight = FontWeight.Bold, color = Color.White
+              )
+            ) {
+              append("Slack")
+            }
+          },
+          modifier = Modifier.padding(4.dp),
+          style = SlackCloneTypography.h4
+        )
+      }
+
+      Text(
+        text = buildAnnotatedString {
+          withStyle(
+            style = SpanStyle(
+              fontWeight = FontWeight.Bold, color = Color.White
+            )
+          ) {
+            append("Slack brings the team together")
+          }
+          withStyle(
+            style = SpanStyle(
+              SlackLogoYellow,
+              fontWeight = FontWeight.Bold
+            )
+          ) {
+            append(" wherever you are.")
+          }
+        },
+        style = SlackCloneTypography.h4
+      )
+    }
+
   }
 
 }

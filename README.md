@@ -4,9 +4,12 @@
 
 Depends on [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
 
+Important Points
+
 1. Install gRPC library on mavenLocal() once you clone [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP)
 2. Build and install to mavenLocal grpc-multiplatform-lib & plugin module (Note: Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
-3. 
+3. Import SlackServer in Intellij Idea and run the server.
+4. iOS build fails with ref issue. https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform/issues/11
 
 I haven't tried running iOS build for some time it depends a lot on the grpc-kmp library support for iOS
 .

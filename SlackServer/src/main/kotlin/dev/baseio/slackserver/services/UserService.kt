@@ -62,12 +62,12 @@ fun SKUser.toDBUser(userId: String = UUID.randomUUID().toString()): SkUser {
     this.uuid.takeIf { !it.isNullOrEmpty() } ?: userId,
     this.workspaceId,
     this.gender,
-    this.name,
+    this.name.takeIf { !it.isNullOrEmpty() } ?: this.email.split("@").first(),
     this.location,
     this.email,
-    this.username,
+    this.username.takeIf { !it.isNullOrEmpty() } ?: this.email.split("@").first(),
     this.userSince.toInt(),
     this.phone,
-    this.avatarUrl
+    this.avatarUrl.takeIf { !it.isNullOrEmpty() } ?: "https://picsum.photos/300/300"
   )
 }

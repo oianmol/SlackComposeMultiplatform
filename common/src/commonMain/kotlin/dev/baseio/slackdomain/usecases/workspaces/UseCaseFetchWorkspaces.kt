@@ -25,6 +25,6 @@ class UseCaseFetchWorkspaces(
   }
 }
 
-private fun KMSKWorkspace.toSKWorkspace(): DomainLayerWorkspaces.SKWorkspace {
+fun KMSKWorkspace.toSKWorkspace(): DomainLayerWorkspaces.SKWorkspace {
   return DomainLayerWorkspaces.SKWorkspace(this.uuid, this.name, this.domain, this.picUrl, this.lastSelected)
 }

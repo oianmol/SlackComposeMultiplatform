@@ -3,12 +3,8 @@ package dev.baseio.slackserver.services
 import database.SkUser
 import dev.baseio.slackdata.protos.*
 import dev.baseio.slackserver.data.AuthDataSource
-import dev.baseio.slackserver.data.UsersDataSource
 import dev.baseio.slackserver.services.interceptors.*
-import io.grpc.Status
-import io.grpc.StatusException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import kotlinx.coroutines.Dispatchers
@@ -54,23 +50,26 @@ class AuthService(
       .build()
   }
 
-  private fun skAuthResult(generatedUser: SkUser?): SKAuthResult {
-    val keyBytes =
-      Decoders.BASE64.decode(JWT_SIGNING_KEY)// TODO move this to env variables
-    val key: Key = Keys.hmacShaKeyFor(keyBytes)
-    val jws = jwtTokenFiveDays(generatedUser, key)
-    return SKAuthResult.newBuilder()
-      .setToken(jws) //no refresh token for now
-      .build()
-  }
 
-  private fun jwtTokenFiveDays(generatedUser: SkUser?, key: Key): String? = Jwts.builder()
-    .setClaims(hashMapOf<String, String?>().apply {
-      put(USER_ID, generatedUser?.uuid)
-      put(WORKSPACE_ID, generatedUser?.workspaceId)
-    })
-    .setExpiration(Date.from(Instant.now().plusMillis(TimeUnit.DAYS.toMillis(5))))// valid for 5 days
-    .signWith(key)
-    .compact()
 
+
+
+}
+
+fun jwtTokenFiveDays(generatedUser: SkUser?, key: Key): String? = Jwts.builder()
+  .setClaims(hashMapOf<String, String?>().apply {
+    put(USER_ID, generatedUser?.uuid)
+    put(WORKSPACE_ID, generatedUser?.workspaceId)
+  })
+  .setExpiration(Date.from(Instant.now().plusMillis(TimeUnit.DAYS.toMillis(5))))// valid for 5 days
+  .signWith(key)
+  .compact()
+fun skAuthResult(generatedUser: SkUser?): SKAuthResult {
+  val keyBytes =
+    Decoders.BASE64.decode(JWT_SIGNING_KEY)// TODO move this to env variables
+  val key: Key = Keys.hmacShaKeyFor(keyBytes)
+  val jws = jwtTokenFiveDays(generatedUser, key)
+  return SKAuthResult.newBuilder()
+    .setToken(jws) //no refresh token for now
+    .build()
 }

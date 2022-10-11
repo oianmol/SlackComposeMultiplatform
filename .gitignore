@@ -4,6 +4,7 @@ out
 *.iml
 .gradle
 *.db
+local.properties
 /local.properties
 /.idea
 /.idea/caches
