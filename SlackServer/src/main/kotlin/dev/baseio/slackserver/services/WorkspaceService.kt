@@ -94,8 +94,8 @@ fun SKWorkspace.toDBWorkspace(workspaceId: String = UUID.randomUUID().toString()
     return SkWorkspace(
         this.uuid.takeIf { !it.isNullOrEmpty() } ?: workspaceId,
         this.name,
-        this.domain ?: "$name.slack.com",
-        this.picUrl ?: "https://picsum.photos/300/300",
+        this.domain.takeIf { !it.isNullOrEmpty() } ?: "$name.slack.com",
+        this.picUrl.takeIf { !it.isNullOrEmpty() } ?: "https://picsum.photos/300/300",
         if (this.lastSelected) 1 else 0
     )
 }
