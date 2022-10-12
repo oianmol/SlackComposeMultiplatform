@@ -85,7 +85,7 @@ private fun ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNa
     var lastDrawnChannel: String? = null
     for (channelIndex in channelsFlow.indices) {
       val channel = channelsFlow[channelIndex]
-      val newDrawn = channel.name?.first().toString()
+      val newDrawn = channel.name?.firstOrNull().toString()
       if (canDrawHeader(lastDrawnChannel, newDrawn)) {
         stickyHeader {
           SlackChannelHeader(newDrawn)
