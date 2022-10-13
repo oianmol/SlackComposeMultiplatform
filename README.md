@@ -11,6 +11,7 @@ The project has submodules now
 2. [GenerateProtos](https://github.com/Anmol92verma/slack_multiplatform_generate_protos)
 3. [SlackClientLibrary](https://github.com/Anmol92verma/slack_multiplatform_client_data_lib)
 4. [This project](https://github.com/Anmol92verma/slackcomposemultiplatform)
+5. [Backend Server in Kotlin](https://github.com/Anmol92verma/slack_multiplatform_grpc_server)
 
 1. Install gRPC library on mavenLocal() once you clone [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP)
 2. Build and install to mavenLocal grpc-multiplatform-lib & plugin module (Note: Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
