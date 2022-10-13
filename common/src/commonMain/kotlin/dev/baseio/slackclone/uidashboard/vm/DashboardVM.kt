@@ -1,10 +1,10 @@
 package dev.baseio.slackclone.uidashboard.vm
 
-import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
+import ViewModel
 
 class DashboardVM(private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace) : ViewModel() {
   val selectedChatChannel = MutableStateFlow<UiLayerChannels.SKChannel?>(null)

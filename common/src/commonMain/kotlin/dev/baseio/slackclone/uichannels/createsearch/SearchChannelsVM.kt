@@ -1,21 +1,17 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackdomain.mappers.UiModelMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.channels.UseCaseChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannelCount
 import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-
+import ViewModel
 class SearchChannelsVM constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
   private val useCaseFetchChannelCount: UseCaseFetchChannelCount,

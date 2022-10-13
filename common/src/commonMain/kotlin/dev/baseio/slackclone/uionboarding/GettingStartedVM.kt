@@ -1,12 +1,11 @@
 package dev.baseio.slackclone.uionboarding
 
-import ViewModel
 import androidx.compose.runtime.mutableStateOf
 import dev.baseio.slackclone.uionboarding.compose.SlackAnimSpec
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import ViewModel
 class GettingStartedVM : ViewModel() {
   var introTextExpanded = mutableStateOf(false)
   var isStartAnimation = mutableStateOf(false)

@@ -4,5 +4,7 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/SlackServer/generate-proto" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/SlackServer/protos" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/slack-data-lib/generate-proto" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/slack-data-lib/protos" vcs="Git" />
   </component>
 </project>

@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uichannels
 
-import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackdomain.mappers.UiModelMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
@@ -9,7 +8,7 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannels
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
-
+import ViewModel
 class SlackChannelVM constructor(
   private val ucFetchChannels: UseCaseFetchChannels,
   private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,

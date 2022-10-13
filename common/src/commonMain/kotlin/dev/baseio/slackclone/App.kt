@@ -1,6 +1,5 @@
 package dev.baseio.slackclone
 
-import SKKeyValueData
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import dev.baseio.slackclone.uionboarding.compose.*
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
+import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.injection.*
 import dev.baseio.slackdomain.AUTH_TOKEN
 import org.koin.core.KoinApplication
@@ -107,5 +107,5 @@ fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
   module {
     single { slackDB }
     single { skKeyValueData }
-    single { GrpcCalls(get()) }
+    single { GrpcCalls(skKeyValueData = get()) }
   }

@@ -3,7 +3,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "1.2.0-beta01"
+    id("org.jetbrains.compose") version "1.2.0"
 }
 
 group = "dev.baseio.slackclone"
@@ -21,8 +21,8 @@ kotlin {
             dependencies {
                 implementation("io.grpc:grpc-netty-shaded:1.49.1")
                 implementation(project(":common"))
-                api(project(":generate-proto"))
                 implementation(compose.desktop.currentOs)
+                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-jvm:1.0")
             }
         }
         val jvmTest by getting

@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import ViewModel
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.NavigationKey
@@ -10,9 +9,8 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-
+import ViewModel
 class CreateChannelVM constructor(
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,

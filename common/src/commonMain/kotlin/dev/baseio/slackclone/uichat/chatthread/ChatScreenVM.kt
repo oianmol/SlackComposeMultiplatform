@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uichat.chatthread
 
-import ViewModel
 import androidx.compose.ui.text.input.TextFieldValue
 
 import dev.baseio.slackclone.chatcore.data.UiLayerChannels
@@ -13,11 +12,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import SKKeyValueData
 import dev.baseio.slackdomain.LOGGED_IN_USER
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import ViewModel
+import dev.baseio.slackdata.SKKeyValueData
 
 class ChatScreenVM constructor(
   private val useCaseFetchMessages: UseCaseFetchMessages,

@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uionboarding.vm
 
-import ViewModel
 import dev.baseio.slackdata.protos.KMSKWorkspace
 import dev.baseio.slackdata.protos.KMSKWorkspaces
 import dev.baseio.slackdomain.usecases.auth.LoginUseCase
@@ -8,7 +7,7 @@ import dev.baseio.slackdomain.usecases.workspaces.FindWorkspacesUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-
+import ViewModel
 class EmailInputVM(
   private val loginUseCase: LoginUseCase,
   private val findWorkspacesUseCase: FindWorkspacesUseCase

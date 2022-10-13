@@ -1,12 +1,9 @@
-[submodule "SlackServer/generate-proto"]
-	path = SlackServer/generate-proto
-	url = https://github.com/Anmol92verma/slack_multiplatform_generate_protos.git
-[submodule "SlackServer/protos"]
-	path = SlackServer/protos
-	url = https://github.com/Anmol92verma/slack_multiplatform_protos.git
-[submodule "protos"]
-	path = protos
-	url = https://github.com/Anmol92verma/slack_multiplatform_protos.git
 [submodule "generate-proto"]
 	path = generate-proto
 	url = https://github.com/Anmol92verma/slack_multiplatform_generate_protos.git
+[submodule "protos"]
+	path = protos
+	url = https://github.com/Anmol92verma/slack_multiplatform_protos.git
+[submodule "slack-data-lib"]
+	path = slack-data-lib
+	url = https://github.com/Anmol92verma/slack_multiplatform_client_data_lib.git
