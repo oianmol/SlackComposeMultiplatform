@@ -13,9 +13,10 @@ case $yn in
 		exit 1;;
 esac
 
-cd..
+
 
 echo doing stuff...
+cd ..
 
 echo "<----Cloning gRPC-KMP---->"
 git clone https://github.com/oianmol/gRPC-KMP
