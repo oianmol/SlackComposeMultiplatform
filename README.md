@@ -4,12 +4,12 @@
 
 ### Important Points
 
-1. [Protos](https://github.com/Anmol92verma/slack_multiplatform_protos)
-2. [GenerateProtos](https://github.com/Anmol92verma/slack_multiplatform_generate_protos)
-3. [SlackClientLibrary](https://github.com/Anmol92verma/slack_multiplatform_client_data_lib)
-4. [This project](https://github.com/Anmol92verma/slackcomposemultiplatform)
-5. [Backend Server in Kotlin](https://github.com/Anmol92verma/slack_multiplatform_grpc_server)
-6. [gRPC-KMP Library](https://github.com/Anmol92verma/gRPC-KMP)(Note: On Mac's Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
+1. [Protos](https://github.com/oianmol/slack_multiplatform_protos)
+2. [GenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
+3. [SlackClientLibrary](https://github.com/oianmol/slack_multiplatform_client_data_lib)
+4. [This project](https://github.com/oianmol/slackcomposemultiplatform)
+5. [Backend Server in Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
+6. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)(Note: On Mac's Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
 
 ## Instructions to compile and get running
 
@@ -20,14 +20,14 @@ Prerequisite
 
 then follow the below mentioned steps
 
-1. `git clone https://github.com/Anmol92verma/slack_multiplatform_protos`
-2. `git clone https://github.com/Anmol92verma/slack_multiplatform_generate_protos && cd slack_multiplatform_generate_protos`
+1. `git clone https://github.com/oianmol/slack_multiplatform_protos`
+2. `git clone https://github.com/oianmol/slack_multiplatform_generate_protos && cd slack_multiplatform_generate_protos`
 3. `./gradlew build && ./gradlew publishToMavenLocal`
-4. `git clone https://github.com/Anmol92verma/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib`
+4. `git clone https://github.com/oianmol/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib`
 5. `./gradlew build && ./gradlew publishToMavenLocal`
-6. `git clone https://github.com/Anmol92verma/slack_multiplatform_grpc_server && cd slack_multiplatform_grpc_server`
+6. `git clone https://github.com/oianmol/slack_multiplatform_grpc_server && cd slack_multiplatform_grpc_server`
 7. `./gradlew run` Make sure to update the ipAddress when creating GrpcCalls Instance in SlackComposeMultiplatform
-8. `git clone https://github.com/Anmol92verma/SlackComposeMultiplatform && cd SlackComposeMultiplatform`
+8. `git clone https://github.com/oianmol/SlackComposeMultiplatform && cd SlackComposeMultiplatform`
 9. `./gradlew run` Will run the desktop app!
 
 ## iOS support with gRPC
