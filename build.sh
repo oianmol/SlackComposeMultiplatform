@@ -23,7 +23,7 @@ echo "<----Cloning gRPC-KMP---->"
 git clone https://github.com/oianmol/gRPC-KMP
 cd gRPC-KMP
 ./gradlew grpc-multiplatform-lib:build && ./gradlew grpc-multiplatform-lib:publishToMavenLocal
-./gradlew plugin:build && ./gradlew plugin:publishToMavenLocal
+./gradlew :plugin:build && ./gradlew :plugin:publishToMavenLocal
 
 cd ..
 
