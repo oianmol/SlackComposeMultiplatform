@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "<----Building Slack Multiplatform---->"
+
 echo "Script executed from: ${PWD}"
 BASEDIR=$(dirname $PWD)
 

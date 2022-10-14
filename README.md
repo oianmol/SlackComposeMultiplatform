@@ -15,7 +15,7 @@
 
 Prerequisite
 
-Use the `build.sh` file in the root dir to build everything!
+Use the `build.sh` file in the root dir to build everything! make sure to set the ANDROID_SDK_ROOT path in your ENV 
 
 ## iOS support with gRPC
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
