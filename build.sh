@@ -31,19 +31,19 @@ git clone https://github.com/oianmol/slack_multiplatform_protos
 
 echo "<----Cloning slack_multiplatform_generate_protos---->"
 git clone https://github.com/oianmol/slack_multiplatform_generate_protos
-cd slack_multiplatform_generate_protos
+cd slack_multiplatform_generate_protos || exit
 git submodule update --init --recursive
 echo "<----Building slack_multiplatform_protos---->"
 ./gradlew build && ./gradlew publishToMavenLocal
 
 cd ..
 echo "<----Building slack_multiplatform_client_data_lib---->"
-git clone https://github.com/oianmol/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib
+git clone https://github.com/oianmol/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib || exit
 ./gradlew build && ./gradlew publishToMavenLocal
 
 cd ..
 echo "<----Running slack_multiplatform_grpc_server---->"
-git clone https://github.com/oianmol/slack_multiplatform_grpc_server && cd slack_multiplatform_grpc_server
+git clone https://github.com/oianmol/slack_multiplatform_grpc_server && cd slack_multiplatform_grpc_server || exit
 ./gradlew run
 
 #echo "<----Running SlackComposeMultiplatform Client---->"
