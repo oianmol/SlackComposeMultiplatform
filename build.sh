@@ -29,7 +29,6 @@ cd ..
 echo "<----Cloning slack_multiplatform_protos---->"
 git clone https://github.com/oianmol/slack_multiplatform_protos
 
-cd ..
 echo "<----Cloning slack_multiplatform_generate_protos---->"
 git clone https://github.com/oianmol/slack_multiplatform_generate_protos
 cd slack_multiplatform_generate_protos
