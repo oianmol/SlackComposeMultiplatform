@@ -15,23 +15,7 @@
 
 Prerequisite
 
-1. `git clone https://github.com/oianmol/gRPC-KMP && cd gRPC-KMP`
-2. `./gradlew grpc-multiplatform-lib:build && ./gradlew grpc-multiplatform-lib:publishToMavenLocal`
-3. `./gradlew plugin:build && ./gradlew plugin:publishToMavenLocal`
-
-then follow the below mentioned steps
-
-1. `git clone https://github.com/oianmol/slack_multiplatform_protos`
-2. `git clone https://github.com/oianmol/slack_multiplatform_generate_protos && cd slack_multiplatform_generate_protos`
-3. `git submodule update --init --recursive`
-4. `./gradlew build && ./gradlew publishToMavenLocal`
-6. `cd .. && git clone https://github.com/oianmol/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib`
-7. `./gradlew build && ./gradlew publishToMavenLocal`
-8. `cd .. && git clone https://github.com/oianmol/slack_multiplatform_grpc_server && cd slack_multiplatform_grpc_server`
-9. `./gradlew run` Make sure to update the ipAddress when creating GrpcCalls Instance in SlackComposeMultiplatform
-10. Open New Terminal
-11. `git clone https://github.com/oianmol/SlackComposeMultiplatform && cd SlackComposeMultiplatform`
-12. `./gradlew run` Will run the desktop app!
+Use the `build.sh` file in the root dir to build everything!
 
 ## iOS support with gRPC
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
