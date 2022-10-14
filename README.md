@@ -13,6 +13,13 @@
 
 ## Instructions to compile and get running
 
+Prerequisite
+
+1. `git clone https://github.com/oianmol/gRPC-KMP && cd gRPC-KMP`
+2. `./gradlew build && ./gradlew publishToMavenLocal` -> do this for plugin and multiplatform-lib
+
+then follow the below mentioned steps
+
 1. `git clone https://github.com/Anmol92verma/slack_multiplatform_protos`
 2. `git clone https://github.com/Anmol92verma/slack_multiplatform_generate_protos && cd slack_multiplatform_generate_protos`
 3. `./gradlew build && ./gradlew publishToMavenLocal`
