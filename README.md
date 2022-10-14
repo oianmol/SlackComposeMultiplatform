@@ -12,22 +12,16 @@ The project has submodules now
 3. [SlackClientLibrary](https://github.com/Anmol92verma/slack_multiplatform_client_data_lib)
 4. [This project](https://github.com/Anmol92verma/slackcomposemultiplatform)
 5. [Backend Server in Kotlin](https://github.com/Anmol92verma/slack_multiplatform_grpc_server)
+6. [gRPC-KMP Library](https://github.com/Anmol92verma/gRPC-KMP)(Note: On Mac's Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
 
-1. Install gRPC library on mavenLocal() once you clone [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP)
-2. Build and install to mavenLocal grpc-multiplatform-lib & plugin module (Note: Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
-3. Import SlackServer in Intellij Idea and run the server.
-4. iOS build fails with ref issue. https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform/issues/11
-
-I haven't tried running iOS build for some time it depends a lot on the grpc-kmp library support for iOS
-.
+## iOS support with gRPC
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
-There's a specific task to deploy on iPad and iPhones.
+There's a specific task to deploy on iPad and iPhones, but composeiOS build fails with ref issue. 
+https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform/issues/11
 
 `./gradlew iosDeployIPhone8Debug`
 
-Also make sure you use the grpc kmp library from the fork that i created as mentioned above
-
-The android and jvm run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
+The android and jvm platform run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
 
 ## Architecture
 
