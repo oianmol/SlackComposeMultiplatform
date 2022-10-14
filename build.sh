@@ -40,6 +40,7 @@ echo "<----Building slack_multiplatform_protos---->"
 cd ..
 echo "<----Building slack_multiplatform_client_data_lib---->"
 git clone https://github.com/oianmol/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib || exit
+git submodule update --init --recursive
 ./gradlew build && ./gradlew publishToMavenLocal
 
 cd ..
