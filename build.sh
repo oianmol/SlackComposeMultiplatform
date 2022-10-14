@@ -1,8 +1,21 @@
+#!/bin/bash
 echo "<----Building Slack Multiplatform---->"
+echo "Script executed from: ${PWD}"
+BASEDIR=$(dirname $PWD)
 
-read -p "Please enter the path where you would like to clone: " -r r1
-parent=$(dirname "$r1")
-cd "$parent"
+read -p "Do you want to proceed in $BASEDIR? (yes/no) " yn
+
+case $yn in
+	yes ) echo ok, we will proceed;;
+	no ) echo exiting...;
+		exit;;
+	* ) echo invalid response;
+		exit 1;;
+esac
+
+cd..
+
+echo doing stuff...
 
 echo "<----Cloning gRPC-KMP---->"
 git clone https://github.com/oianmol/gRPC-KMP
