@@ -1,12 +1,9 @@
-# SlackComposeMultiplatform
+# SlackComposeMultiplatform (Experimental & In-Development)
 
-### This is a jetpack compose Slack Client Clone written in Kotlin Multiplatform following clean architecture principles.
+### This is a jetpack compose Slack Client & Server Clone written in Kotlin and for Multiplatform.
 
-Depends on [gRPC-KMP](https://github.com/Anmol92verma/gRPC-KMP) which is a fork for gRPC library by [TimOrtel/GRPC-Kotlin-Multiplatform](https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform)! 
+### Important Points
 
-Important Points
-
-The project has submodules now
 1. [Protos](https://github.com/Anmol92verma/slack_multiplatform_protos)
 2. [GenerateProtos](https://github.com/Anmol92verma/slack_multiplatform_generate_protos)
 3. [SlackClientLibrary](https://github.com/Anmol92verma/slack_multiplatform_client_data_lib)
