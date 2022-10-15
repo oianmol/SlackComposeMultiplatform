@@ -108,9 +108,9 @@ private fun ListAllChannels(
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
-    for (channelIndex in 0 until channelsFlow.size) {
-      val channel = channelsFlow.get(channelIndex)!!
-      val newDrawn = channel.name?.first().toString()
+    for (channelIndex in channelsFlow.indices) {
+      val channel = channelsFlow[channelIndex]
+      val newDrawn = channel.name?.firstOrNull().toString()
       if (canDrawHeader(lastDrawnChannel, newDrawn)) {
         stickyHeader {
           SlackChannelHeader(newDrawn)

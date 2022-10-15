@@ -4,6 +4,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -28,100 +29,102 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavVM) {
-  val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
-  val user by viewModel.currentLoggedInUser.collectAsState()
+    val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
+    val user by viewModel.currentLoggedInUser.collectAsState()
 
-  Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
-    Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
-      Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(4.dp))
-        WorkSpacesDesktop(workspaces, viewModel)
-        Spacer(Modifier.height(4.dp))
-      }
-      SlackOnlineBox(
-        user?.avatarUrl
-          ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no",
-        parentModifier = Modifier.size(48.dp),
-        imageModifier = Modifier.size(36.dp)
-      )
+    Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
+        Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(Modifier.height(4.dp))
+                WorkSpacesDesktop(workspaces, viewModel)
+                Spacer(Modifier.height(4.dp))
+            }
+            SlackOnlineBox(
+                user?.avatarUrl
+                    ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no",
+                parentModifier = Modifier.size(48.dp),
+                imageModifier = Modifier.size(36.dp)
+            )
+        }
     }
-  }
 }
 
 @Composable
 private fun MoreOptionsSideBarDesktop(
-  signIntoWorkspace: () -> Unit,
-  createNewWorkspace: () -> Unit,
-  findWorkspaces: () -> Unit
+    signIntoWorkspace: () -> Unit,
+    createNewWorkspace: () -> Unit,
+    findWorkspaces: () -> Unit
 ) {
-  SlackCloneSurface(
-    modifier = Modifier.shadow(4.dp),
-    shape = RoundedCornerShape(4.dp)
-  ) {
-    Column(Modifier.padding(12.dp)) {
-      Text("Sign in to another workspace", Modifier.padding(10.dp).clickable {
-        signIntoWorkspace()
-      })
-      Text("Create a new workspace", Modifier.padding(10.dp).clickable {
-        createNewWorkspace()
-      })
-      Text("Find workspaces", Modifier.padding(10.dp).clickable {
-        findWorkspaces()
-      })
+    SlackCloneSurface(
+        modifier = Modifier.shadow(4.dp),
+        shape = RoundedCornerShape(4.dp)
+    ) {
+        Column(Modifier.padding(12.dp)) {
+            Text("Sign in to another workspace", Modifier.padding(10.dp).clickable {
+                signIntoWorkspace()
+            })
+            Text("Create a new workspace", Modifier.padding(10.dp).clickable {
+                createNewWorkspace()
+            })
+            Text("Find workspaces", Modifier.padding(10.dp).clickable {
+                findWorkspaces()
+            })
+        }
     }
-  }
 }
 
 @Composable
 private fun WorkSpacesDesktop(
-  workspaces: List<DomainLayerWorkspaces.SKWorkspace>,
-  viewModel: SideNavVM
+    workspaces: List<DomainLayerWorkspaces.SKWorkspace>,
+    viewModel: SideNavVM
 ) {
-  LazyColumn {
-    items(workspaces) { skWorkspace ->
-      Column(Modifier.clickable {
-        viewModel.select(skWorkspace)
-      }) {
-        WorkspaceDesktop(workspace = skWorkspace)
-        Spacer(modifier = Modifier.padding(4.dp))
-      }
+    LazyColumn {
+        itemsIndexed(workspaces) { index, skWorkspace ->
+            Column(Modifier.clickable {
+                viewModel.select(skWorkspace)
+            }) {
+                WorkspaceDesktop(workspace = skWorkspace, index == 0)
+                Spacer(modifier = Modifier.padding(4.dp))
+            }
+        }
     }
-  }
 }
 
 @Composable
-private fun WorkspaceDesktop(workspace: DomainLayerWorkspaces.SKWorkspace) {
-  Box(
-    Modifier.background(
-      color = if (workspace.lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
-      shape = RoundedCornerShape(12.dp)
-    )
-  ) {
-    Row(
-      modifier = Modifier.align(Alignment.Center)
-        .padding(4.dp), horizontalArrangement = Arrangement.Center
+private fun WorkspaceDesktop(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected: Boolean) {
+    Box(
+        Modifier.background(
+            color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
+            shape = RoundedCornerShape(12.dp)
+        )
     ) {
-      OrganizationLogo(
-        Modifier
-          .size(48.dp), Modifier
-          .size(40.dp), workspace.picUrl, workspace.lastSelected
-      )
+        Row(
+            modifier = Modifier.align(Alignment.Center)
+                .padding(4.dp), horizontalArrangement = Arrangement.Center
+        ) {
+            OrganizationLogo(
+                Modifier
+                    .size(48.dp), Modifier
+                    .size(40.dp), workspace.picUrl, lastSelected
+            )
+        }
     }
-  }
 }
 
 @Composable
 private fun SelectedSideBarIcon(modifier: Modifier = Modifier, icon: ImageVector, isSelected: Boolean) {
-  Box(
-    modifier.size(48.dp)
-      .background(
-        if (isSelected) SlackCloneColorProvider.colors.onUiBackground else Color.Transparent,
-        shape = RoundedCornerShape(30)
-      )
-  ) {
-    Icon(
-      icon, contentDescription = null,
-      modifier = Modifier.align(Alignment.Center).size(36.dp), tint = SlackCloneColorProvider.colors.appBarIconColor
-    )
-  }
+    Box(
+        modifier.size(48.dp)
+            .background(
+                if (isSelected) SlackCloneColorProvider.colors.onUiBackground else Color.Transparent,
+                shape = RoundedCornerShape(30)
+            )
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.Center).size(36.dp),
+            tint = SlackCloneColorProvider.colors.appBarIconColor
+        )
+    }
 }
