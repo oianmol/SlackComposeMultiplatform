@@ -22,7 +22,7 @@ class HomeScreenVM(
           // we don't do anything here!
           println(it)
         }.launchIn(viewModelScope)
-        useCaseFetchAndSaveUsers.performStreaming(workspaceId).onEach {
+        useCaseFetchAndSaveUsers.perform(workspaceId).onEach {
           //we will fetch all the users locally here!
           println(it)
         }.launchIn(viewModelScope)

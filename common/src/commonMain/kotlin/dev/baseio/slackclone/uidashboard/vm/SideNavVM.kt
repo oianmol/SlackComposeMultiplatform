@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ViewModel
+import kotlinx.coroutines.flow.emptyFlow
 
 class SideNavVM(
   private val useCaseFetchWorkspaces: UseCaseFetchWorkspaces,
@@ -14,14 +15,18 @@ class SideNavVM(
   private val userProfileDelegate: UserProfileDelegate
 ) : ViewModel(), UserProfileDelegate by userProfileDelegate {
 
-  var workspacesFlow = MutableStateFlow(flow())
+  var workspacesFlow = MutableStateFlow<Flow<List<DomainLayerWorkspaces.SKWorkspace>>>(emptyFlow())
     private set
 
   init {
     getCurrentUser(viewModelScope)
+    viewModelScope.launch {
+      val result = flow()
+      workspacesFlow.value = result
+    }
   }
 
-  fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
+  suspend fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
     return useCaseFetchWorkspaces.invoke()
   }
 
