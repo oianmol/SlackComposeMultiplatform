@@ -107,5 +107,5 @@ fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
   module {
     single { slackDB }
     single { skKeyValueData }
-    single { GrpcCalls(skKeyValueData = get()) }
+    single { GrpcCalls(skKeyValueData = get(), address = "localhost") }
   }

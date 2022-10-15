@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import ViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+
 class CreateChannelVM constructor(
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
@@ -28,19 +30,21 @@ class CreateChannelVM constructor(
     )
 
   fun createChannel(composeNavigator: ComposeNavigator) {
-    viewModelScope.launch {
+    viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+      throwable.printStackTrace()
+    }) {
       if (createChannelState.value.name?.isNotEmpty() == true) {
-        val lastSelectedWorkspace = useCaseGetSelectedWorkspace.perform()
+        val lastSelectedWorkspace = useCaseGetSelectedWorkspace()
         lastSelectedWorkspace?.let {
           createChannelState.value = createChannelState.value.copy(
             workspaceId = lastSelectedWorkspace.uuid,
             uuid = "${createChannelState.value.name}_${lastSelectedWorkspace.uuid}"
           )
-          val channel = useCaseCreateChannel.perform(createChannelState.value)
+          val channel = useCaseCreateChannel(createChannelState.value).getOrThrow()
           composeNavigator.navigateUp()
           composeNavigator.deliverResult(
             NavigationKey.NavigateChannel,
-            channelMapper.mapToPresentation(channel!!),
+            channelMapper.mapToPresentation(channel),
             SlackScreens.CreateChannelsScreen
           )
         }

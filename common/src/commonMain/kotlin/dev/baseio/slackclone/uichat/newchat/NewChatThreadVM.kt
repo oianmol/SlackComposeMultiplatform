@@ -15,61 +15,67 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseFindChannelById
 import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class NewChatThreadVM(
-  private val ucFetchLocalChannels: UseCaseSearchChannel,
-  private val useCaseFetchLocalUsers: UseCaseFetchLocalUsers,
-  private val useCaseCreateChannel: UseCaseCreateChannel,
-  private val useCaseFindChannel: UseCaseFindChannelById,
-  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,
-  private val userChannelMapper: EntityToMapper<DomainLayerUsers.SKUser, DomainLayerChannels.SKChannel>,
-  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace
+    private val ucFetchLocalChannels: UseCaseSearchChannel,
+    private val useCaseFetchLocalUsers: UseCaseFetchLocalUsers,
+    private val useCaseCreateChannel: UseCaseCreateChannel,
+    private val useCaseFindChannel: UseCaseFindChannelById,
+    private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,
+    private val userChannelMapper: EntityToMapper<DomainLayerUsers.SKUser, DomainLayerChannels.SKChannel>,
+    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace
 ) :
-  ViewModel() {
+    ViewModel() {
 
-  val search = MutableStateFlow("")
-  var channelsStream = MutableStateFlow(streamChannels(""))
+    val search = MutableStateFlow("")
+    var channelsStream = MutableStateFlow(streamChannels(""))
+        private set
+    var errorStream = MutableStateFlow<Throwable?>(null)
+        private set
 
-  private fun streamChannels(search: String) =
-    useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapLatest { workspace ->
-      merge(
-        useCaseFetchLocalUsers.performStreaming(workspace!!.uuid)
-          .mapLatest { users ->
-            users.map {
-              userChannelMapper.mapToDomain2(it)
+    private fun streamChannels(search: String) =
+        useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest { workspace ->
+            merge(
+                useCaseFetchLocalUsers.performStreaming(workspace!!.uuid)
+                    .mapLatest { users ->
+                        users.map {
+                            userChannelMapper.mapToDomain2(it)
+                        }
+                    }, ucFetchLocalChannels(
+                    UseCaseChannelRequest(workspaceId = workspace.uuid, search)
+                )
+            ).map { channels ->
+                channels.map { channel ->
+                    chatPresentationMapper.mapToPresentation(channel)
+                }
             }
-          }, ucFetchLocalChannels
-          .performStreaming(
-            UseCaseChannelRequest(workspaceId = workspace.uuid, search)
-          )
-      ).map { channels ->
-        channels.map { channel ->
-          chatPresentationMapper.mapToPresentation(channel)
         }
-      }
+
+    fun search(newValue: String) {
+        search.value = newValue
+        channelsStream.value = streamChannels(newValue)
     }
 
-  fun search(newValue: String) {
-    search.value = newValue
-    channelsStream.value = streamChannels(newValue)
-  }
-
-  private fun navigate(channel: UiLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
-    composeNavigator.deliverResult(
-      NavigationKey.NavigateChannel,
-      channel,
-      SlackScreens.Dashboard
-    )
-  }
-
-  // TODO revisit this might not be the best way.
-  fun createChannel(channel: UiLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
-    viewModelScope.launch {
-      val channelById = useCaseFindChannel.findById(channel.workspaceId, channel.uuid)
-      val newChannel = channelById ?: useCaseCreateChannel.perform(chatPresentationMapper.mapToDomain(channel))
-      navigate(chatPresentationMapper.mapToPresentation(newChannel), composeNavigator)
+    private fun navigate(channel: UiLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
+        composeNavigator.deliverResult(
+            NavigationKey.NavigateChannel,
+            channel,
+            SlackScreens.Dashboard
+        )
     }
-  }
+
+    // TODO revisit this might not be the best way.
+    fun createChannel(channel: UiLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
+        viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+            errorStream.value = throwable
+        }) {
+            val channelById = useCaseFindChannel(channel.workspaceId, channel.uuid)
+            val newChannel =
+                channelById ?: useCaseCreateChannel(chatPresentationMapper.mapToDomain(channel)).getOrThrow()
+            navigate(chatPresentationMapper.mapToPresentation(newChannel), composeNavigator)
+        }
+    }
 }

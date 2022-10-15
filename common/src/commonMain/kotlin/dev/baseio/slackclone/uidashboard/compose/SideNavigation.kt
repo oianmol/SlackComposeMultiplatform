@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -48,12 +49,12 @@ fun SideNavigation(
         item {
           WorkspacesBar()
         }
-        items(workspaces) { skWorkspace ->
+        itemsIndexed(workspaces) { index,skWorkspace ->
           Column(Modifier.clickable {
             viewModel.select(skWorkspace)
             onClose()
           }) {
-            Workspace(workspace = skWorkspace)
+            Workspace(workspace = skWorkspace,index==0)
             Spacer(modifier = Modifier.padding(8.dp))
           }
         }
@@ -76,10 +77,10 @@ private fun SideNavFooter(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
+private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace,lastSelected: Boolean) {
   Box(
     Modifier.background(
-      color = if (workspace.lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
+      color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
       shape = RoundedCornerShape(12.dp)
     )
   ) {
@@ -89,7 +90,7 @@ private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace) {
         .fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
       OrganizationLogo(
-        picUrl = workspace.picUrl, lastSelected = workspace.lastSelected
+        picUrl = workspace.picUrl, lastSelected = lastSelected
       )
       Box(Modifier.weight(1f)) {
         OrganizationDetails(workspace)

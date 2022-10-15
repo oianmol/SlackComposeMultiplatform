@@ -5,12 +5,13 @@ import dev.baseio.slackdomain.mappers.UiModelMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
-import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannels
+import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAllChannels
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
 import ViewModel
+
 class SlackChannelVM constructor(
-  private val ucFetchChannels: UseCaseFetchChannels,
+  private val ucFetchChannels: UseCaseFetchAllChannels,
   private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   private val ucFetchRecentChannels: UseCaseFetchRecentChannels
@@ -19,41 +20,41 @@ class SlackChannelVM constructor(
   val channels = MutableStateFlow<Flow<List<UiLayerChannels.SKChannel>>>(emptyFlow())
 
   fun allChannels() {
-    channels.value = useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapLatest {
+    channels.value = useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
       fetchChannels(it)
     }
   }
 
   fun loadDirectMessageChannels() {
     channels.value =
-      useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapLatest {
+      useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
         fetchChannels(it)
       }
   }
 
   fun loadRecentChannels() {
     channels.value =
-      useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapLatest {
+      useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
         recentChannels(it)
       }
   }
 
   private fun recentChannels(it: DomainLayerWorkspaces.SKWorkspace?) =
-    ucFetchRecentChannels.performStreaming(it!!.uuid).map { channels ->
+    ucFetchRecentChannels(it!!.uuid).map { channels ->
       domSlackToPresentation(channels)
     }
 
 
   fun loadStarredChannels() {
     channels.value =
-      useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapLatest {
+      useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
         fetchChannels(it)
       }
 
   }
 
   private fun fetchChannels(it: DomainLayerWorkspaces.SKWorkspace?) =
-    ucFetchChannels.performStreaming(it!!.uuid).map { channels ->
+    ucFetchChannels(it!!.uuid).map { channels ->
       domSlackToPresentation(channels)
     }
 
