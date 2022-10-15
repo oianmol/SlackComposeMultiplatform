@@ -31,8 +31,8 @@ echo "<----Cloning slack_multiplatform_protos---->"
 git clone https://github.com/oianmol/slack_multiplatform_protos
 
 echo "<----Cloning slack_multiplatform_generate_protos---->"
-git clone https://github.com/oianmol/slack_multiplatform_generate_protos
-cd slack_multiplatform_generate_protos || exit
+git clone https://github.com/oianmol/slack_multiplatform_generate_protos || echo "already exists"
+cd slack_multiplatform_generate_protos || echo "already exists"
 git submodule update --init --recursive
 git submodule update --recursive --remote
 
@@ -41,7 +41,8 @@ echo "<----Building slack_multiplatform_protos---->"
 
 cd ..
 echo "<----Building slack_multiplatform_client_data_lib---->"
-git clone https://github.com/oianmol/slack_multiplatform_client_data_lib && cd slack_multiplatform_client_data_lib || exit
+git clone https://github.com/oianmol/slack_multiplatform_client_data_lib  || echo "already exists"
+cd slack_multiplatform_client_data_lib || echo "already exists"
 git submodule update --init --recursive
 git submodule update --recursive --remote
 
@@ -49,7 +50,10 @@ git submodule update --recursive --remote
 
 cd ..
 echo "<----Running slack_multiplatform_grpc_server---->"
-git clone https://github.com/oianmol/slack_multiplatform_grpc_server && cd slack_multiplatform_grpc_server || exit
+git clone https://github.com/oianmol/slack_multiplatform_grpc_server || echo "already exists"
+cd slack_multiplatform_grpc_server || echo "already exists"
+
+pwd
 ./gradlew run
 
 #echo "<----Running SlackComposeMultiplatform Client---->"
