@@ -32,46 +32,11 @@ fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavV
   val user by viewModel.currentLoggedInUser.collectAsState()
 
   Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
-    var selected by remember { mutableStateOf(1) }
     Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
       Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(4.dp))
         WorkSpacesDesktop(workspaces, viewModel)
         Spacer(Modifier.height(4.dp))
-        SelectedSideBarIcon(Modifier.clickable {
-          selected = 1
-        }, Icons.Default.Home, isSelected = selected == 1)
-        Spacer(Modifier.height(8.dp))
-        SelectedSideBarIcon(Modifier.clickable {
-          selected = 2
-        }, Icons.Default.Email, selected == 2)
-        Spacer(Modifier.height(8.dp))
-        SelectedSideBarIcon(Modifier.clickable {
-          selected = 3
-        }, Icons.Default.Search, selected == 3)
-
-        if (selected == 4) {
-          /*AlertDialog(onDismissRequest = {
-            selected = 1
-          }, buttons = {
-            MoreOptionsSideBarDesktop(signIntoWorkspace = {
-              appNavigator.navigateRoute(SlackScreens.WorkspaceSigninRoute, removeRoute = { route, remove ->
-
-              })
-            }, createNewWorkspace = {
-
-            }, findWorkspaces = {
-
-            })
-          })*/
-        }
-
-        SelectedSideBarIcon(
-          Modifier.clickable {
-            selected = 4
-          }, Icons.Default.Add, false
-        )
-        Spacer(Modifier.height(8.dp))
       }
       SlackOnlineBox(
         user?.avatarUrl
