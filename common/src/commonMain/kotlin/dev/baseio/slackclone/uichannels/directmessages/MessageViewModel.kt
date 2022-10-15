@@ -18,8 +18,8 @@ class MessageViewModel constructor(
   val channels = MutableStateFlow(fetchFlow())
 
   fun fetchFlow(): Flow<List<DomainLayerMessages.SKLastMessage>> {
-    return useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapConcat {
-      useCaseFetchChannels.performStreaming(it!!.uuid)
+    return useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
+      useCaseFetchChannels(it!!.uuid)
     }
 
   }

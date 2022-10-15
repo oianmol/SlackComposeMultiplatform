@@ -12,7 +12,7 @@ class DashboardVM(private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWor
   val isChatViewClosed = MutableStateFlow(true)
 
   init {
-    useCaseGetSelectedWorkspace.performStreaming(Unit).onEach {
+    useCaseGetSelectedWorkspace.invokeFlow().onEach {
       if (selectedWorkspace.value != it) {
         selectedChatChannel.value = null
         isChatViewClosed.value = true

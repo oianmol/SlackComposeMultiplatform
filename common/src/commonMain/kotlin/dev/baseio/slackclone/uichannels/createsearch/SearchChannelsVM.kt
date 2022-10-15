@@ -26,17 +26,17 @@ class SearchChannelsVM constructor(
 
   init {
     viewModelScope.launch {
-      val currentSelectedWorkspaceId = useCaseGetSelectedWorkspace.perform()
+      val currentSelectedWorkspaceId = useCaseGetSelectedWorkspace()
       currentSelectedWorkspaceId?.let {
-        val count = useCaseFetchChannelCount.perform(workspaceId = currentSelectedWorkspaceId.uuid)
+        val count = useCaseFetchChannelCount(workspaceId = currentSelectedWorkspaceId.uuid)
         channelCount.value = count
       }
     }
   }
 
   private fun flow(search: String) =
-    useCaseGetSelectedWorkspace.performStreaming(Unit).flatMapConcat {
-      ucFetchChannels.performStreaming(UseCaseChannelRequest(it!!.uuid, search)).map { channels ->
+    useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
+      ucFetchChannels(UseCaseChannelRequest(it!!.uuid, search)).map { channels ->
         channels.map { channel ->
           chatPresentationMapper.mapToPresentation(channel)
         }
