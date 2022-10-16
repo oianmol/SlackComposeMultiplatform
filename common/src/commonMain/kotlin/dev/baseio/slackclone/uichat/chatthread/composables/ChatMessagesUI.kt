@@ -23,52 +23,56 @@ import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ChatMessagesUI(viewModel: ChatScreenVM, modifier: Modifier) {
-  val flowState by viewModel.chatMessagesFlow.collectAsState(mainDispatcher)
-  val messages by flowState.collectAsState(emptyList(), mainDispatcher)
-  val listState = rememberLazyListState()
+fun ChatMessagesUI(
+    viewModel: ChatScreenVM,
+    modifier: Modifier,
+    alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
+) {
+    val flowState by viewModel.chatMessagesFlow.collectAsState(mainDispatcher)
+    val messages by flowState.collectAsState(emptyList(), mainDispatcher)
+    val listState = rememberLazyListState()
 
-  LazyColumn(state = listState, reverseLayout = true, modifier = modifier) {
-    var lastDrawnMessage: String?
-    for (messageIndex in messages.indices) {
-      val message = messages[messageIndex]
-      item {
-        ChatMessage(message)
-      }
-      lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
-      if (!isLastMessage(messageIndex, messages)) {
-        val nextMessageMonth =
-          messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
-        if (nextMessageMonth != lastDrawnMessage) {
-          stickyHeader {
-            ChatHeader(message.createdDate)
-          }
-        }
-      } else {
-        stickyHeader {
-          ChatHeader(message.createdDate)
-        }
-      }
+    LazyColumn(state = listState, reverseLayout = true, modifier = modifier) {
+        var lastDrawnMessage: String?
+        for (messageIndex in messages.indices) {
+            val message = messages[messageIndex]
+            item {
+                ChatMessage(message, alertLongClick)
+            }
+            lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
+            if (!isLastMessage(messageIndex, messages)) {
+                val nextMessageMonth =
+                    messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
+                if (nextMessageMonth != lastDrawnMessage) {
+                    stickyHeader {
+                        ChatHeader(message.createdDate)
+                    }
+                }
+            } else {
+                stickyHeader {
+                    ChatHeader(message.createdDate)
+                }
+            }
 
+        }
     }
-  }
 }
 
 private fun isLastMessage(
-  messageIndex: Int,
-  messages: List<DomainLayerMessages.SKMessage>
+    messageIndex: Int,
+    messages: List<DomainLayerMessages.SKMessage>
 ) = messageIndex == messages.size.minus(1)
 
 @Composable
 private fun ChatHeader(createdDate: Long) {
-  Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
-    Text(
-      createdDate.calendar().formattedMonthDate(),
-      style = SlackCloneTypography.subtitle2.copy(
-        fontWeight = FontWeight.Bold,
-        color = SlackCloneColorProvider.colors.textPrimary
-      ), modifier = Modifier.padding(4.dp)
-    )
-    Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-  }
+    Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
+        Text(
+            createdDate.calendar().formattedMonthDate(),
+            style = SlackCloneTypography.subtitle2.copy(
+                fontWeight = FontWeight.Bold,
+                color = SlackCloneColorProvider.colors.textPrimary
+            ), modifier = Modifier.padding(4.dp)
+        )
+        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+    }
 }

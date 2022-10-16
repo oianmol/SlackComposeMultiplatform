@@ -22,51 +22,70 @@ import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
 import kotlinx.coroutines.flow.launchIn
 
 class ChatScreenVM constructor(
-    private val useCaseObserveMessages: UseCaseFetchAndUpdateChangeInMessages,
-    private val useCaseFetchMessages: UseCaseFetchMessages,
-    private val useCaseSendMessage: UseCaseSendMessage,
-    private val skKeyValueData: SKKeyValueData
+  private val useCaseObserveMessages: UseCaseFetchAndUpdateChangeInMessages,
+  private val useCaseFetchMessages: UseCaseFetchMessages,
+  private val useCaseSendMessage: UseCaseSendMessage,
+  private val skKeyValueData: SKKeyValueData
 ) : ViewModel() {
-    lateinit var channel: UiLayerChannels.SKChannel
-    var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
-    var message = MutableStateFlow(TextFieldValue())
-    var chatBoxState = MutableStateFlow(BoxState.Collapsed)
+  lateinit var channel: UiLayerChannels.SKChannel
+  var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
+  var message = MutableStateFlow(TextFieldValue())
+  var chatBoxState = MutableStateFlow(BoxState.Collapsed)
+  var alertLongClickSkMessage = MutableStateFlow<DomainLayerMessages.SKMessage?>(null)
+    private set
 
-    fun requestFetch(SKChannel: UiLayerChannels.SKChannel) {
-        this.channel = SKChannel
-        useCaseObserveMessages.invoke(UseCaseChannelRequest(workspaceId = channel.workspaceId, channel.uuid))
-            .launchIn(viewModelScope)
-        chatMessagesFlow.value =
-            useCaseFetchMessages.invoke(UseCaseChannelRequest(SKChannel.workspaceId, SKChannel.uuid))
-    }
+  fun requestFetch(SKChannel: UiLayerChannels.SKChannel) {
+    this.channel = SKChannel
+    useCaseObserveMessages.invoke(UseCaseChannelRequest(workspaceId = channel.workspaceId, channel.uuid))
+      .launchIn(viewModelScope)
+    chatMessagesFlow.value =
+      useCaseFetchMessages.invoke(UseCaseChannelRequest(SKChannel.workspaceId, SKChannel.uuid))
+  }
 
-    fun sendMessage(search: String) {
-        if (search.isNotEmpty()) {
-            viewModelScope.launch {
-                val user = Json.decodeFromString<DomainLayerUsers.SKUser>(skKeyValueData.get(LOGGED_IN_USER)!!)
-                val message = DomainLayerMessages.SKMessage(
-                    Clock.System.now().toEpochMilliseconds().toString(),
-                    channel.workspaceId,
-                    channel.uuid,
-                    search,
-                    channel.uuid,
-                    user.uuid,
-                    Clock.System.now().toEpochMilliseconds(),
-                    Clock.System.now().toEpochMilliseconds(),
-                )
-                useCaseSendMessage.perform(message)
-            }
-            message.value = TextFieldValue()
-            chatBoxState.value = BoxState.Collapsed
-        }
+  fun sendMessage(search: String) {
+    if (search.isNotEmpty()) {
+      viewModelScope.launch {
+        val user = Json.decodeFromString<DomainLayerUsers.SKUser>(skKeyValueData.get(LOGGED_IN_USER)!!)
+        val message = DomainLayerMessages.SKMessage(
+          Clock.System.now().toEpochMilliseconds().toString(),
+          channel.workspaceId,
+          channel.uuid,
+          search,
+          channel.uuid,
+          user.uuid,
+          Clock.System.now().toEpochMilliseconds(),
+          Clock.System.now().toEpochMilliseconds(),
+          isDeleted = false,
+          isSynced = false
+        )
+        useCaseSendMessage(message)
+      }
+      message.value = TextFieldValue()
+      chatBoxState.value = BoxState.Collapsed
     }
+  }
 
-    fun switchChatBoxState() {
-        chatBoxState.value = chatBoxState.value.toggle()
+  fun switchChatBoxState() {
+    chatBoxState.value = chatBoxState.value.toggle()
+  }
+
+  fun alertLongClick(skMessage: DomainLayerMessages.SKMessage) {
+    alertLongClickSkMessage.value = skMessage
+  }
+
+  fun deleteMessage() {
+    viewModelScope.launch {
+      alertLongClickSkMessage.value?.copy(isDeleted = true)?.let { useCaseSendMessage(it) }
+      alertLongClickSkMessage.value = null
     }
+  }
+
+  fun clearLongClickMessageRequest() {
+    alertLongClickSkMessage.value = null
+  }
 
 }
 
 private fun BoxState.toggle(): BoxState {
-    return if (this == BoxState.Collapsed) BoxState.Expanded else BoxState.Collapsed
+  return if (this == BoxState.Collapsed) BoxState.Expanded else BoxState.Collapsed
 }

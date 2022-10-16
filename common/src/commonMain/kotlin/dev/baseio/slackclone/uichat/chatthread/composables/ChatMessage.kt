@@ -1,5 +1,7 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
@@ -17,48 +19,57 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ChatMessage(message: DomainLayerMessages.SKMessage) {
-  ListItem(icon = {
-    SlackImageBox(Modifier.size(48.dp), imageUrl = message.senderInfo?.avatarUrl ?: "http://placekitten.com/200/300")
-  }, modifier = Modifier.padding(2.dp), secondaryText = {
-    ChatMedia(message)
-  }, text = {
-    ChatUserDateTime(message)
-  })
+fun ChatMessage(message: DomainLayerMessages.SKMessage, alertLongClick: (DomainLayerMessages.SKMessage) -> Unit) {
+    ListItem(modifier = Modifier
+        .padding(2.dp)
+        .combinedClickable(enabled = true, onLongClick = {
+            alertLongClick(message)
+        }, onClick = {
+
+        }), icon = {
+        SlackImageBox(
+            Modifier.size(48.dp),
+            imageUrl = message.senderInfo?.avatarUrl ?: "http://placekitten.com/200/300"
+        )
+    }, secondaryText = {
+        ChatMedia(message)
+    }, text = {
+        ChatUserDateTime(message)
+    })
 }
 
 @Composable
 fun ChatMedia(message: DomainLayerMessages.SKMessage) {
-  MentionsText(
-    modifier = Modifier,
-    message.message, style = SlackCloneTypography.subtitle2.copy(
-      color = SlackCloneColorProvider.colors.textSecondary
-    )
-  ) {
+    MentionsText(
+        modifier = Modifier,
+        message.message, style = SlackCloneTypography.subtitle2.copy(
+            color = SlackCloneColorProvider.colors.textSecondary
+        )
+    ) {
 
-  }
+    }
 
 }
 
 @Composable
 fun ChatUserDateTime(message: DomainLayerMessages.SKMessage) {
-  Row(verticalAlignment = Alignment.CenterVertically) {
-    Text(
-      message.senderInfo?.name + " \uD83C\uDF34",
-      style = SlackCloneTypography.subtitle1.copy(
-        fontWeight = FontWeight.Bold,
-        color = SlackCloneColorProvider.colors.textPrimary
-      ), modifier = Modifier.padding(4.dp)
-    )
-    Text(
-      message.createdDate.calendar().formattedTime(),
-      style = SlackCloneTypography.overline.copy(
-        color = SlackCloneColorProvider.colors.textSecondary.copy(alpha = 0.8f)
-      ), modifier = Modifier.padding(4.dp)
-    )
-  }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            message.senderInfo?.name + " \uD83C\uDF34",
+            style = SlackCloneTypography.subtitle1.copy(
+                fontWeight = FontWeight.Bold,
+                color = SlackCloneColorProvider.colors.textPrimary
+            ), modifier = Modifier.padding(4.dp)
+        )
+        Text(
+            message.createdDate.calendar().formattedTime(),
+            style = SlackCloneTypography.overline.copy(
+                color = SlackCloneColorProvider.colors.textSecondary.copy(alpha = 0.8f)
+            ), modifier = Modifier.padding(4.dp)
+        )
+    }
 }
 
 
