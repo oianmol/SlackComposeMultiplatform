@@ -103,7 +103,7 @@ val viewModelModule = module {
 
     scope<SlackScreens.Dashboard> {
         scoped { SideNavVM(getKoin().get(), getKoin().get(), get(), get()) }
-        scoped { DashboardVM(get()) }
+        scoped { DashboardVM(get(),get()) }
 
         scoped {
             ChatScreenVM(getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get())

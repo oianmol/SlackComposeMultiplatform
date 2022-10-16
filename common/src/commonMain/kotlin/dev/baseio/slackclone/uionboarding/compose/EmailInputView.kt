@@ -85,7 +85,7 @@ fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> 
         Icon(
           imageVector = Icons.Default.Email,
           contentDescription = null,
-          tint = SlackCloneColorProvider.colors.textPrimary
+          tint = SlackCloneColorProvider.colors.appBarTextTitleColor
         )
       },
       placeholder = {
@@ -98,50 +98,6 @@ fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> 
       keyboardOptions = KeyboardOptions.Default.copy(
         autoCorrect = false,
         keyboardType = KeyboardType.Email,
-        imeAction = ImeAction.Done,
-      ),
-      keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-      colors = textFieldColors(),
-      singleLine = true,
-      maxLines = 1
-    )
-  }
-
-
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun NameTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
-  val keyboardController = LocalSoftwareKeyboardController.current
-  Row(
-    modifier = modifier,
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Start
-  ) {
-    TextField(
-      value = value,
-      onValueChange = { newEmail ->
-        onChange(newEmail)
-      },
-      textStyle = textStyleField(),
-      leadingIcon = {
-        Icon(
-          imageVector = Icons.Default.Place,
-          contentDescription = null,
-          tint = SlackCloneColorProvider.colors.textPrimary
-        )
-      },
-      placeholder = {
-        Text(
-          text = "Workspace Name",
-          style = textStyleField(),
-          textAlign = TextAlign.Start
-        )
-      },
-      keyboardOptions = KeyboardOptions.Default.copy(
-        autoCorrect = false,
-        keyboardType = KeyboardType.Text,
         imeAction = ImeAction.Done,
       ),
       keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
@@ -173,7 +129,7 @@ fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) 
         Icon(
           imageVector = Icons.Default.Lock,
           contentDescription = null,
-          tint = SlackCloneColorProvider.colors.textPrimary
+          tint = SlackCloneColorProvider.colors.appBarTextTitleColor
         )
       },
       placeholder = {
@@ -202,14 +158,14 @@ fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) 
 @Composable
 private fun textFieldColors() = TextFieldDefaults.textFieldColors(
   backgroundColor = Color.Transparent,
-  cursorColor = SlackCloneColorProvider.colors.textPrimary,
+  cursorColor = SlackCloneColorProvider.colors.appBarTextTitleColor,
   unfocusedIndicatorColor = Color.Transparent,
   focusedIndicatorColor = Color.Transparent
 )
 
 @Composable
 private fun textStyleField() = SlackCloneTypography.h6.copy(
-  color = SlackCloneColorProvider.colors.textPrimary,
+  color = SlackCloneColorProvider.colors.appBarTextTitleColor,
   fontWeight = FontWeight.Normal,
   textAlign = TextAlign.Start
 )

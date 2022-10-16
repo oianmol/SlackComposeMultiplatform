@@ -57,7 +57,7 @@ fun CreateWorkspaceScreen(composeNavigator: ComposeNavigator, viewModel: Workspa
 fun Title(title: String) {
     Text(
         title,
-        style = SlackCloneTypography.h4.copy(
+        style = SlackCloneTypography.h5.copy(
             fontWeight = FontWeight.Bold,
             color = SlackCloneColorProvider.colors.appBarTextTitleColor
         )
@@ -89,15 +89,15 @@ fun WorkspaceCreateForm(viewModel: WorkspaceCreateVM, composeNavigator: ComposeN
     val error by viewModel.error.collectAsState()
     val loading by viewModel.loading.collectAsState()
     Column {
-        EmailTF(Modifier.padding(8.dp), email) { emailNew ->
+        EmailTF(Modifier.padding(4.dp), email) { emailNew ->
             viewModel.email.value = emailNew
         }
-        PasswordTF(Modifier.padding(8.dp), password) { passwordNew ->
+        PasswordTF(Modifier.padding(4.dp), password) { passwordNew ->
             viewModel.password.value = passwordNew
         }
-        WorkspaceView(Modifier.padding(8.dp), name, viewModel)
-        Spacer(Modifier.size(8.dp))
-        ErrorText(Modifier.padding(8.dp), error)
+        WorkspaceView(Modifier.padding(4.dp), name, viewModel)
+        Spacer(Modifier.size(4.dp))
+        ErrorText(Modifier.padding(4.dp), error)
         if (loading) CircularProgressIndicator(color = SlackGreen) else CreateWorkspaceButton(
             composeNavigator,
             viewModel
