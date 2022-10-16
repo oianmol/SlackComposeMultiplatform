@@ -5,17 +5,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,6 +25,7 @@ import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.navigation.ComposeNavigator
+import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uidashboard.vm.SideNavVM
 
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
@@ -60,19 +57,27 @@ fun SideNavigation(
         }
       }
       Spacer(modifier = Modifier.padding(8.dp))
-      SideNavFooter(composeNavigator)
+      SideNavFooter(logout = {
+        viewModel.logout()
+        composeNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
+          remove() // remove all routes!
+        })
+      })
     }
 
   }
 }
 
 @Composable
-private fun SideNavFooter(composeNavigator: ComposeNavigator) {
+private fun SideNavFooter(logout:()->Unit) {
   Column(modifier = Modifier) {
     Divider(color = SlackCloneColorProvider.colors.lineColor)
-    SlackListItem(Icons.Filled.AddCircle, "add_workspace")
-    SlackListItem(Icons.Filled.Settings, "preferences")
-    SlackListItem(Icons.Filled.CheckCircle, "help")
+    SlackListItem(Icons.Filled.AddCircle, "Add Workspace")
+    SlackListItem(Icons.Filled.Settings, "Preferences")
+    SlackListItem(Icons.Filled.CheckCircle, "Help")
+    SlackListItem(Icons.Filled.ExitToApp, "Logout", onItemClick = {
+      logout()
+    })
   }
 }
 

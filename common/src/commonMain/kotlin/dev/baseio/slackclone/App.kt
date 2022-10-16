@@ -52,7 +52,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
           SkipTypingUI(this@Navigator)
         }
         screen(SlackScreens.CreateWorkspace) {
-          val viewModel = scope.get<WorkspaceCreateVM>()
+          val viewModel = scope.get<WorkspaceCreateVM>().apply { navArgs = argMap }
           CreateWorkspaceScreen(this@Navigator, viewModel)
         }
         screen(SlackScreens.WorkspaceInputUI) {

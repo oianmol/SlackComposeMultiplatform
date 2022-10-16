@@ -6,45 +6,53 @@ import org.koin.core.annotation.KoinInternalApi
 
 class SlackScreens {
 
-  object WorkspaceSigninRoute : BackstackRoute("WorkspaceSigninRoute", EmailAddressInputUI)
+    object WorkspaceSigninRoute : BackstackRoute("WorkspaceSigninRoute", EmailAddressInputUI)
 
-  object OnboardingRoute : BackstackRoute("OnboardingRoute", GettingStarted)
-  object GettingStarted : BackstackScreen("gettingStarted") {
-    override fun close() {
-      scope.get<GettingStartedVM>().onClear()
-      super.close()
+    object OnboardingRoute : BackstackRoute("OnboardingRoute", GettingStarted)
+    object GettingStarted : BackstackScreen("gettingStarted") {
+        override fun close() {
+            scope.get<GettingStartedVM>().onClear()
+            super.close()
+        }
     }
-  }
-  object CreateWorkspace:BackstackScreen("CreateWorkspace")
-  object SkipTypingScreen : BackstackScreen("SkipTypingUI")
-  object EmailAddressInputUI : BackstackScreen("EmailAddressInputUI")
-  object WorkspaceInputUI : BackstackScreen("WorkspaceInputUI")
 
-  // DashboardNavigation
-  object DashboardRoute : BackstackRoute("DashboardNavigation", Dashboard)
-  object Dashboard : BackstackScreen("Dashboard")
-  object CreateChannelsScreen : BackstackScreen("CreateChannelsScreen")
-  object CreateNewChannel : BackstackScreen("CreateNewChannel")
-  object CreateNewDM : BackstackScreen("CreateNewDM") {
-    @OptIn(KoinInternalApi::class)
-    override fun close() {
-      scope.get<NewChatThreadVM>().onClear()
-      super.close()
-      val keys = scope.getKoin().instanceRegistry.instances.map {
-        it.key
-      }
-      println(keys)
+    object CreateWorkspace : BackstackScreen("createWorkspace") {
+        const val IS_LOGIN = "isLogin"
+        fun withArgs(isLogin: Boolean): BackstackScreen {
+            argMap[IS_LOGIN] = isLogin
+            return this
+        }
     }
-  }
 
-  object HomeRoute : BackstackRoute("HomeRoute", initialScreen = Home)
-  object Home : BackstackScreen("Home")
-  object DMs : BackstackScreen("DMs")
-  object Mentions : BackstackScreen("Mentions")
-  object Search : BackstackScreen("Search")
-  object You : BackstackScreen("You")
+    object SkipTypingScreen : BackstackScreen("SkipTypingUI")
+    object EmailAddressInputUI : BackstackScreen("EmailAddressInputUI")
+    object WorkspaceInputUI : BackstackScreen("WorkspaceInputUI")
+
+    // DashboardNavigation
+    object DashboardRoute : BackstackRoute("DashboardNavigation", Dashboard)
+    object Dashboard : BackstackScreen("Dashboard")
+    object CreateChannelsScreen : BackstackScreen("CreateChannelsScreen")
+    object CreateNewChannel : BackstackScreen("CreateNewChannel")
+    object CreateNewDM : BackstackScreen("CreateNewDM") {
+        @OptIn(KoinInternalApi::class)
+        override fun close() {
+            scope.get<NewChatThreadVM>().onClear()
+            super.close()
+            val keys = scope.getKoin().instanceRegistry.instances.map {
+                it.key
+            }
+            println(keys)
+        }
+    }
+
+    object HomeRoute : BackstackRoute("HomeRoute", initialScreen = Home)
+    object Home : BackstackScreen("Home")
+    object DMs : BackstackScreen("DMs")
+    object Mentions : BackstackScreen("Mentions")
+    object Search : BackstackScreen("Search")
+    object You : BackstackScreen("You")
 }
 
 sealed class NavigationKey(val key: String) {
-  object NavigateChannel : NavigationKey("navigateChannel")
+    object NavigateChannel : NavigationKey("navigateChannel")
 }

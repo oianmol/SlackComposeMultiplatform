@@ -216,15 +216,15 @@ private fun GetStartedButton(
       }
       Spacer(Modifier.padding(8.dp))
       TeamNewToSlack(Modifier.padding(8.dp)) {
-        composeNavigator.navigateScreen(SlackScreens.CreateWorkspace)
+        composeNavigator.navigateScreen(SlackScreens.CreateWorkspace.withArgs(isLogin = false))
       }
     }
-
   }
 }
 
 private fun skipTypingNavigate(composeNavigator: ComposeNavigator) {
-  composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
+  //composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
+  composeNavigator.navigateScreen(SlackScreens.CreateWorkspace.withArgs(isLogin = true))
 }
 
 @Composable

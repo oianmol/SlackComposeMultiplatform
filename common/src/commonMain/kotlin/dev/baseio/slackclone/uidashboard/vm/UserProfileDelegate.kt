@@ -3,7 +3,7 @@ package dev.baseio.slackclone.uidashboard.vm
 import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdata.protos.KMSKUser
-import dev.baseio.slackdomain.usecases.auth.UseCaseClearAuth
+import dev.baseio.slackdomain.usecases.auth.UseCaseLogout
 import dev.baseio.slackdomain.usecases.auth.UseCaseCurrentUser
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMCode
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMStatusException
@@ -20,7 +20,7 @@ interface UserProfileDelegate {
 
 class UserProfileDelegateImpl(
   private val useCaseCurrentUser: UseCaseCurrentUser,
-  private val useCaseClearAuth: UseCaseClearAuth,
+  private val useCaseClearAuth: UseCaseLogout,
 ) : UserProfileDelegate {
   override val currentLoggedInUser: MutableStateFlow<KMSKUser?> = MutableStateFlow(null)
 

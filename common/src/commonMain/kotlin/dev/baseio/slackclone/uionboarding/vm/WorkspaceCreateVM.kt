@@ -7,8 +7,10 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ViewModel
+import dev.baseio.slackclone.navigation.SlackScreens
 
 class WorkspaceCreateVM(private val useCaseCreateWorkspace: UseCaseCreateWorkspace) : ViewModel() {
+  lateinit var navArgs: HashMap<String, Any>
   val email = MutableStateFlow("")
   val password = MutableStateFlow("")
   val domain = MutableStateFlow("")
@@ -22,9 +24,13 @@ class WorkspaceCreateVM(private val useCaseCreateWorkspace: UseCaseCreateWorkspa
     }) {
       error.value = null
       loading.value = true
-      useCaseCreateWorkspace(email.value, password.value, domain.value)
+      val result = useCaseCreateWorkspace(email.value, password.value, domain.value)
       loading.value = false
       navigateDashboard(composeNavigator)
     }
+  }
+
+  fun isLogin(): Boolean {
+    return navArgs[SlackScreens.CreateWorkspace.IS_LOGIN] == true
   }
 }
