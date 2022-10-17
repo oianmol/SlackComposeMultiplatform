@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.GrpcCalls
-import dev.baseio.slackclone.chatcore.injection.uiModelMapperModule
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.data.injection.viewModelModule
 import dev.baseio.slackclone.navigation.*
@@ -35,6 +34,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
   if (koinApp == null) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
   }
+
   val initialRoute = skKeyValueData.get(AUTH_TOKEN)?.let {
     SlackScreens.DashboardRoute
   } ?: run {
@@ -59,12 +59,6 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
           val workspaceInputVM = scope.get<WorkspaceInputVM>()
           WorkspaceInputUI(this@Navigator, workspaceInputVM)
         }
-        screen(SlackScreens.EmailAddressInputUI) {
-          val emailInputVM = scope.get<EmailInputVM>()
-          EmailAddressInputUI(this@Navigator, emailInputVM)
-        }
-      }
-      this.route(SlackScreens.WorkspaceSigninRoute) {
         screen(SlackScreens.EmailAddressInputUI) {
           val emailInputVM = scope.get<EmailInputVM>()
           EmailAddressInputUI(this@Navigator, emailInputVM)
@@ -97,7 +91,6 @@ fun initKoin(slackDB: SlackDB, skKeyValueData: SKKeyValueData): KoinApplication 
       useCaseModule,
       viewModelModule,
       viewModelDelegateModule,
-      uiModelMapperModule,
       dispatcherModule
     )
   }

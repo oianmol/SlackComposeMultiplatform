@@ -5,14 +5,14 @@ import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import androidx.compose.runtime.*
 
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.data.injection.RecentChatsQualifier
 import dev.baseio.slackclone.data.injection.StarredChatsQualifier
 
 
 @Composable
 fun SlackStarredChannels(
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
   onClickAdd: () -> Unit,
   channelVM: SlackChannelVM
 ) {

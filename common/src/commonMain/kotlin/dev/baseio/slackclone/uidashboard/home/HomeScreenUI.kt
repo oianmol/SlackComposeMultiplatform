@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
@@ -27,15 +26,14 @@ import dev.baseio.slackclone.data.injection.DirectChatsQualifier
 import dev.baseio.slackclone.data.injection.RecentChatsQualifier
 import dev.baseio.slackclone.data.injection.StarredChatsQualifier
 import dev.baseio.slackclone.navigation.BackstackScreen
-
 import dev.baseio.slackclone.uichannels.views.*
-import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
 fun BackstackScreen.HomeScreenUI(
   appBarIconClick: () -> Unit,
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
   onCreateChannelRequest: () -> Unit = {}
 ) {
   val homeScreenVM: HomeScreenVM = scope.get()

@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.data.injection
 
-import dev.baseio.slackclone.chatcore.injection.SlackChannelUiLayerChannels
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
@@ -18,154 +17,156 @@ import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
-import dev.baseio.slackdata.injection.SlackSkUserSkChannel
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.QualifierValue
 import org.koin.dsl.ScopeDSL
 import org.koin.dsl.module
 
 val viewModelDelegateModule = module {
-    single<UserProfileDelegate> {
-        UserProfileDelegateImpl(getKoin().get(), getKoin().get())
-    }
+  single<UserProfileDelegate> {
+    UserProfileDelegateImpl(getKoin().get(), getKoin().get())
+  }
 }
 
 val viewModelModule = module {
-    scope<SlackScreens.CreateWorkspace> {
-        scoped {
-            WorkspaceCreateVM(getKoin().get())
-        }
+  scope<SlackScreens.CreateWorkspace> {
+    scoped {
+      WorkspaceCreateVM(getKoin().get())
     }
-    scope<SlackScreens.Home> {
-        scoped {
-            HomeScreenVM(getKoin().get(), getKoin().get(), getKoin().get())
-        }
+  }
+  scope<SlackScreens.Home> {
+    scoped {
+      HomeScreenVM(
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get()
+      )
     }
-    scope<SlackScreens.You> {
-        scoped {
-            UserProfileVM(get())
-        }
+  }
+  scope<SlackScreens.You> {
+    scoped {
+      UserProfileVM(get())
     }
-    scope<SlackScreens.GettingStarted> {
-        scoped { GettingStartedVM() }
+  }
+  scope<SlackScreens.GettingStarted> {
+    scoped { GettingStartedVM() }
+  }
+  scope<SlackScreens.WorkspaceInputUI> {
+    scoped {
+      WorkspaceInputVM(get(), get(), get())
     }
-    scope<SlackScreens.WorkspaceInputUI> {
-        scoped {
-            WorkspaceInputVM(get(), get(), get())
-        }
+  }
+  scope<SlackScreens.EmailAddressInputUI> {
+    scoped {
+      EmailInputVM(getKoin().get(), getKoin().get())
     }
-    scope<SlackScreens.EmailAddressInputUI> {
-        scoped {
-            EmailInputVM(getKoin().get(), getKoin().get())
-        }
+  }
+
+  scope<SlackScreens.DMs> {
+    scoped {
+      MessageViewModel(getKoin().get(),
+        getKoin().get())
+    }
+  }
+
+  scope<SlackScreens.Home> {
+    slackChannelVMScoped()
+  }
+
+  scope<SlackScreens.CreateNewDM> {
+    scoped {
+      NewChatThreadVM(
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get()
+      )
+    }
+  }
+
+  scope<SlackScreens.CreateChannelsScreen> {
+    scoped {
+      SearchChannelsVM(
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get(),
+        getKoin().get()
+      )
+    }
+  }
+
+  scope<SlackScreens.CreateNewChannel> {
+    scoped {
+      CreateChannelVM(getKoin().get(), getKoin().get())
+    }
+  }
+
+  scope<SlackScreens.Dashboard> {
+    scoped { SideNavVM(getKoin().get(), getKoin().get(), get(), get()) }
+    scoped { DashboardVM(get(), get()) }
+
+    scoped {
+      ChatScreenVM(getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get())
     }
 
-    scope<SlackScreens.DMs> {
-        scoped {
-            MessageViewModel(getKoin().get(), getKoin().get(SlackChannelUiLayerChannels), getKoin().get())
-        }
-    }
-
-    scope<SlackScreens.Home> {
-        slackChannelVMScoped()
-    }
-
-    scope<SlackScreens.CreateNewDM> {
-        scoped {
-            NewChatThreadVM(
-                getKoin().get(),
-                getKoin().get(),
-                getKoin().get(),
-                getKoin().get(),
-                getKoin().get(SlackChannelUiLayerChannels),
-                getKoin().get(SlackSkUserSkChannel),
-                getKoin().get(),
-            )
-        }
-    }
-
-    scope<SlackScreens.CreateChannelsScreen> {
-        scoped {
-            SearchChannelsVM(
-                getKoin().get(),
-                getKoin().get(),
-                getKoin().get(SlackChannelUiLayerChannels),
-                getKoin().get()
-            )
-        }
-    }
-
-    scope<SlackScreens.CreateNewChannel> {
-        scoped {
-            CreateChannelVM(getKoin().get(), getKoin().get(), getKoin().get(SlackChannelUiLayerChannels))
-        }
-    }
-
-    scope<SlackScreens.Dashboard> {
-        scoped { SideNavVM(getKoin().get(), getKoin().get(), get(), get()) }
-        scoped { DashboardVM(get(),get()) }
-
-        scoped {
-            ChatScreenVM(getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get())
-        }
-
-        slackChannelVMScoped()
-    }
+    slackChannelVMScoped()
+  }
 
 }
 
 private fun ScopeDSL.slackChannelVMScoped() {
-    scoped(qualifier = RecentChatsQualifier) {
-        SlackChannelVM(
-            getKoin().get(),
-            getKoin().get(SlackChannelUiLayerChannels),
-            getKoin().get(),
-            getKoin().get()
-        )
-    }
-    scoped(qualifier = StarredChatsQualifier) {
-        SlackChannelVM(
-            getKoin().get(),
-            getKoin().get(SlackChannelUiLayerChannels),
-            getKoin().get(),
-            getKoin().get()
-        )
-    }
-    scoped(qualifier = DirectChatsQualifier) {
-        SlackChannelVM(
-            getKoin().get(),
-            getKoin().get(SlackChannelUiLayerChannels),
-            getKoin().get(),
-            getKoin().get()
-        )
-    }
-    scoped(qualifier = AllChatsQualifier) {
-        SlackChannelVM(
-            getKoin().get(),
-            getKoin().get(SlackChannelUiLayerChannels),
-            getKoin().get(),
-            getKoin().get()
-        )
-    }
+  scoped(qualifier = RecentChatsQualifier) {
+    SlackChannelVM(
+      getKoin().get(),
+      getKoin().get(),
+      getKoin().get()
+    )
+  }
+  scoped(qualifier = StarredChatsQualifier) {
+    SlackChannelVM(
+      getKoin().get(),
+      getKoin().get(),
+      getKoin().get()
+    )
+  }
+  scoped(qualifier = DirectChatsQualifier) {
+    SlackChannelVM(
+      getKoin().get(),
+      getKoin().get(),
+      getKoin().get()
+    )
+  }
+  scoped(qualifier = AllChatsQualifier) {
+    SlackChannelVM(
+      getKoin().get(),
+      getKoin().get(),
+      getKoin().get()
+    )
+  }
 }
 
 
 object RecentChatsQualifier : Qualifier {
-    override val value: QualifierValue
-        get() = "RecentChatsQualifier"
+  override val value: QualifierValue
+    get() = "RecentChatsQualifier"
 }
 
 object StarredChatsQualifier : Qualifier {
-    override val value: QualifierValue
-        get() = "StarredChatsQualifier"
+  override val value: QualifierValue
+    get() = "StarredChatsQualifier"
 }
 
 object DirectChatsQualifier : Qualifier {
-    override val value: QualifierValue
-        get() = "DirectChatsQualifier"
+  override val value: QualifierValue
+    get() = "DirectChatsQualifier"
 }
 
 object AllChatsQualifier : Qualifier {
-    override val value: QualifierValue
-        get() = "AllChatsQualifier"
+  override val value: QualifierValue
+    get() = "AllChatsQualifier"
 }

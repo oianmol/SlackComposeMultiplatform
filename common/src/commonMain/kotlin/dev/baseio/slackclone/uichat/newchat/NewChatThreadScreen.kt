@@ -77,9 +77,8 @@ private fun SearchContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ColumnScope.ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNavigator) {
-    val channels by viewModel.channelsStream.collectAsState(mainDispatcher)
-    val channelsFlow by channels.collectAsState(emptyList(), mainDispatcher)
+private fun ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNavigator) {
+    val channelsFlow by viewModel.channelsStream.collectAsState(mainDispatcher)
     val errorFlow by viewModel.errorStream.collectAsState()
 
     val listState = rememberLazyListState()
@@ -88,7 +87,7 @@ private fun ColumnScope.ListAllUsers(viewModel: NewChatThreadVM, composeNavigato
             var lastDrawnChannel: String? = null
             for (channelIndex in channelsFlow.indices) {
                 val channel = channelsFlow[channelIndex]
-                val newDrawn = channel.name?.firstOrNull().toString()
+                val newDrawn = channel.channelName?.firstOrNull().toString()
                 if (canDrawHeader(lastDrawnChannel, newDrawn)) {
                     stickyHeader {
                         SlackChannelHeader(newDrawn)

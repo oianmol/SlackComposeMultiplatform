@@ -8,7 +8,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.data.injection.AllChatsQualifier
@@ -27,7 +27,7 @@ import dev.baseio.slackclone.uidashboard.home.ThreadsTile
 @Composable
 fun BackstackScreen.SlackWorkspaceLayoutDesktop(
   modifier: Modifier = Modifier,
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
   onCreateChannelRequest: () -> Unit = {},
   composeNavigator: ComposeNavigator
 ) {

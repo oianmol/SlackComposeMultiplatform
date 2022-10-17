@@ -4,15 +4,14 @@ import mainDispatcher
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.chatcore.views.DMLastMessageItem
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @Composable
 fun DMChannelsList(
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
   channelVM: MessageViewModel
 ) {
   val channels by channelVM.channels.collectAsState(mainDispatcher)
@@ -26,7 +25,7 @@ fun DMChannelsList(
       item {
         DMLastMessageItem({
           onItemClick(it)
-        }, channelVM.mapToUI(channel.channel), channel.message)
+        }, channel.channel, channel.message)
       }
     }
   }

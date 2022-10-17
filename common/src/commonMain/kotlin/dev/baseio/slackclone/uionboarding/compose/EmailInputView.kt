@@ -164,7 +164,7 @@ private fun textFieldColors() = TextFieldDefaults.textFieldColors(
 )
 
 @Composable
-private fun textStyleField() = SlackCloneTypography.h6.copy(
+private fun textStyleField() = SlackCloneTypography.subtitle1.copy(
   color = SlackCloneColorProvider.colors.appBarTextTitleColor,
   fontWeight = FontWeight.Normal,
   textAlign = TextAlign.Start

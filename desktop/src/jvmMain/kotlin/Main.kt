@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
 fun main() = application {
   val windowState = rememberWindowState()
 
-  Window(onCloseRequest = ::exitApplication, state = windowState, undecorated = true) {
+  Window(onCloseRequest = ::exitApplication, state = windowState) {
     var rememberedComposeWindow by remember(this.window) {
       mutableStateOf(WindowInfo(windowState.size.width, windowState.size.height))
     }
@@ -59,10 +59,7 @@ fun main() = application {
     }
 
     SlackCloneTheme {
-      Column {
-        AppWindowTitleBar(windowState, this@application)
-        Content(rememberedComposeWindow)
-      }
+      Content(rememberedComposeWindow)
     }
 
   }

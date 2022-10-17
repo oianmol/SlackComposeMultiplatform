@@ -4,13 +4,13 @@ import mainDispatcher
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import androidx.compose.runtime.*
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.data.injection.RecentChatsQualifier
 
 
 @Composable
 fun SlackRecentChannels(
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit = {},
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
   onClickAdd: () -> Unit,
   channelVM: SlackChannelVM
 ) {

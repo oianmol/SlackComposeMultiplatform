@@ -216,13 +216,14 @@ private fun ChatTFPlusPlaceHolder(
   innerTextField: @Composable () -> Unit,
   viewModel: ChatScreenVM
 ) {
+  val channel by viewModel.channelFlow.collectAsState()
   Row(
     modifier
       .padding(16.dp), verticalAlignment = Alignment.CenterVertically
   ) {
     if (search.isEmpty()) {
       Text(
-        text = "Message ${viewModel.channel?.name}",
+        text = "Message ${channel.channelName}",
         style = SlackCloneTypography.subtitle1.copy(
           color = SlackCloneColorProvider.colors.textSecondary,
         ),

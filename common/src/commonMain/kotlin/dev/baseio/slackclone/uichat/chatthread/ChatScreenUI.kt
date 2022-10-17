@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
@@ -17,7 +17,7 @@ import dev.baseio.slackclone.uichat.chatthread.composables.ChatScreenContent
 @Composable
 fun ChatScreenUI(
   modifier: Modifier,
-  SKChannel: UiLayerChannels.SKChannel,
+  SKChannel: DomainLayerChannels.SKChannel,
   onBackClick: () -> Unit,
   viewModel: ChatScreenVM
 ) {
@@ -35,7 +35,7 @@ fun ChatScreenUI(
       scaffoldState.snackbarHostState
     },
     topBar = {
-      ChatAppBar(onBackClick, SKChannel)
+      ChatAppBar(onBackClick, viewModel)
     }
   ) { innerPadding ->
     ChatScreenContent(
@@ -48,7 +48,9 @@ fun ChatScreenUI(
 
 
 @Composable
-private fun ChatAppBar(onBackClick: () -> Unit, SKChannel: UiLayerChannels.SKChannel) {
+private fun ChatAppBar(onBackClick: () -> Unit,viewModel: ChatScreenVM) {
+  val channel by viewModel.channelFlow.collectAsState()
+
   SlackSurfaceAppBar(backgroundColor = SlackCloneColorProvider.colors.appBarColor) {
     IconButton(onClick = { onBackClick() }) {
       Icon(
@@ -64,7 +66,7 @@ private fun ChatAppBar(onBackClick: () -> Unit, SKChannel: UiLayerChannels.SKCha
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       SlackChannelItem(
-        slackChannel = SKChannel,
+        slackChannel = channel,
         textColor = SlackCloneColorProvider.colors.appBarTextTitleColor
       ) {}
     }

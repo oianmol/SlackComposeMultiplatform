@@ -1,28 +1,29 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
-import dev.baseio.slackdomain.mappers.UiModelMapper
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.usecases.channels.UseCaseChannelRequest
+import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannelCount
 import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ViewModel
+import androidx.compose.runtime.snapshotFlow
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+
 class SearchChannelsVM constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
   private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
-  private val chatPresentationMapper: UiModelMapper<DomainLayerChannels.SKChannel, UiLayerChannels.SKChannel>,
-  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace
+  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
+  private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
   val search = MutableStateFlow("")
   val channelCount = MutableStateFlow(0)
-
-  var channels = MutableStateFlow(flow(""))
+  var channels = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
 
   init {
     viewModelScope.launch {
@@ -31,21 +32,18 @@ class SearchChannelsVM constructor(
         val count = useCaseFetchChannelCount(workspaceId = currentSelectedWorkspaceId.uuid)
         channelCount.value = count
       }
-    }
-  }
-
-  private fun flow(search: String) =
-    useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
-      ucFetchChannels(UseCaseChannelRequest(it!!.uuid, search)).map { channels ->
-        channels.map { channel ->
-          chatPresentationMapper.mapToPresentation(channel)
+      search.debounce(250.milliseconds).collectLatest { search ->
+        useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
+          ucFetchChannels(UseCaseWorkspaceChannelRequest(it!!.uuid, search))
         }
+          .flowOn(coroutineDispatcherProvider.io)
+          .onEach {
+            channels.value = it
+          }.flowOn(coroutineDispatcherProvider.main)
+          .launchIn(viewModelScope)
       }
     }
 
-  fun search(newValue: String) {
-    search.value = newValue
-    channels.value = flow(newValue)
   }
 
 }

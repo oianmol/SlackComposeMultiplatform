@@ -31,7 +31,7 @@ fun ChatMessage(message: DomainLayerMessages.SKMessage, alertLongClick: (DomainL
         }), icon = {
         SlackImageBox(
             Modifier.size(48.dp),
-            imageUrl = message.senderInfo?.avatarUrl ?: "http://placekitten.com/200/300"
+            imageUrl = "http://placekitten.com/200/300" // TODO sender image
         )
     }, secondaryText = {
         ChatMedia(message)
@@ -57,7 +57,7 @@ fun ChatMedia(message: DomainLayerMessages.SKMessage) {
 fun ChatUserDateTime(message: DomainLayerMessages.SKMessage) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
-            message.senderInfo?.name + " \uD83C\uDF34",
+            message.sender + " \uD83C\uDF34",
             style = SlackCloneTypography.subtitle1.copy(
                 fontWeight = FontWeight.Bold,
                 color = SlackCloneColorProvider.colors.textPrimary

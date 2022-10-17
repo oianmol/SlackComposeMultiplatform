@@ -45,8 +45,6 @@ fun CreateNewChannelUI(
 
 @Composable
 private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: CreateChannelVM) {
-  val searchChannel by createChannelVM.createChannelState.collectAsState(mainDispatcher)
-
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
       modifier = Modifier.fillMaxSize()
@@ -58,70 +56,12 @@ private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: Crea
         NameField(createChannelVM)
         Divider(color = SlackCloneColorProvider.colors.lineColor)
         Spacer(modifier = Modifier.padding(bottom = 8.dp))
-        PrivateChannel(searchChannel.isPrivate ?: false, createChannelVM)
-        Spacer(modifier = Modifier.padding(bottom = 8.dp))
         Divider(color = SlackCloneColorProvider.colors.lineColor)
-        Spacer(modifier = Modifier.padding(bottom = 8.dp))
-        ShareOutSideOrg(searchChannel.isShareOutSide ?: false, createChannelVM)
         Spacer(modifier = Modifier.padding(bottom = 8.dp))
         Divider(color = SlackCloneColorProvider.colors.lineColor)
       }
     }
   }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun ShareOutSideOrg(
-  isChecked: Boolean,
-  createChannelVM: CreateChannelVM
-) {
-  ListItem(text = {
-    Text(text = "Share Outside", style = textStyleFieldPrimary())
-  }, secondaryText = {
-    Text(
-      text = "Share Outside subtitle",
-      style = textStyleFieldSecondary()
-    )
-  }, trailing = {
-    Checkbox(
-      checked = isChecked, onCheckedChange = {
-        createChannelVM.createChannelState.value = createChannelVM.createChannelState.value.copy(isShareOutSide = it)
-      }, colors = CheckboxDefaults.colors(
-        checkedColor = Color.LightGray,
-        uncheckedColor = Color.LightGray,
-        checkmarkColor = SlackCloneColorProvider.colors.brand,
-      )
-    )
-  })
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun PrivateChannel(
-  isChecked: Boolean,
-  createChannelVM: CreateChannelVM
-) {
-  ListItem(text = {
-    Text(text = "Make Private", style = textStyleFieldPrimary())
-  }, secondaryText = {
-    Text(
-      text = if (isChecked) "make_private_subtitle_checked" else "make_private_subtitle",
-      style = textStyleFieldSecondary()
-    )
-  }, trailing = {
-    Switch(
-      checked = isChecked, onCheckedChange = {
-        createChannelVM.createChannelState.value = createChannelVM.createChannelState.value.copy(isPrivate = it)
-      }, colors = SwitchDefaults.colors(
-        checkedThumbColor = SlackCloneColorProvider.colors.accent,
-        uncheckedThumbColor = Color.LightGray,
-        checkedTrackColor = SlackCloneColorProvider.colors.accent,
-        uncheckedTrackColor = Color.LightGray,
-        checkedTrackAlpha = 0.2f
-      )
-    )
-  }, modifier = Modifier.padding(8.dp))
 }
 
 
@@ -139,7 +79,7 @@ private fun NameField(createChannelVM: CreateChannelVM) {
   val searchChannel by createChannelVM.createChannelState.collectAsState(mainDispatcher)
 
   TextField(
-    value = searchChannel.name ?: "",
+    value = searchChannel.name,
     onValueChange = { newValue ->
       val newId = newValue.replace(" ", "-")
       createChannelVM.createChannelState.value =
@@ -150,7 +90,7 @@ private fun NameField(createChannelVM: CreateChannelVM) {
       Text(text = "#", style = textStyleFieldSecondary())
     },
     trailingIcon = {
-      Text(text = "${80 - (searchChannel.name?.length ?: 0)}", style = textStyleFieldSecondary())
+      Text(text = "${80 - searchChannel.name.length}", style = textStyleFieldSecondary())
     },
     placeholder = {
       Text(

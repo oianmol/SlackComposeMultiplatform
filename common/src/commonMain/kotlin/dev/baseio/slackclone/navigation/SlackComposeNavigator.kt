@@ -174,7 +174,24 @@ open class BackstackScreen(var name: String) : KoinScopeComponent {
     }
 }
 
-abstract class BackstackRoute(var name: String, var initialScreen: BackstackScreen)
+abstract class BackstackRoute(var name: String, var initialScreen: BackstackScreen): KoinScopeComponent {
+    override lateinit var scope: Scope
+
+    fun create() {
+        if (::scope.isInitialized) {
+            return
+        }
+        scope = createScope(this)
+    }
+
+    open fun close() {
+        if (scope.isNotClosed()) {
+            scope.close() //clear old dependencies ForEx: ViewModels
+            scope = createScope(this)
+        }
+    }
+}
+
 
 interface ComposeNavigator {
     var whenRouteCanNoLongerNavigateBack: () -> Unit

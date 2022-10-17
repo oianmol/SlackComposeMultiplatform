@@ -14,27 +14,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.chatcore.data.UiLayerChannels
 import dev.baseio.slackclone.common.extensions.calculateTimeAgoByTimeGranularity
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import kotlinx.datetime.Clock
 
 @Composable
 fun SlackChannelItem(
-  slackChannel: UiLayerChannels.SKChannel,
+  slackChannel: DomainLayerChannels.SKChannel,
   textColor: Color = SlackCloneColorProvider.colors.textPrimary,
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
-  when (slackChannel.isOneToOne) {
-    true -> {
+  when (slackChannel) {
+    is DomainLayerChannels.SKChannel.SkDMChannel -> {
       DirectMessageChannel(onItemClick, slackChannel, textColor)
     }
 
-    else -> {
+    is DomainLayerChannels.SKChannel.SkGroupChannel -> {
       GroupChannelItem(slackChannel, onItemClick, textColor)
     }
   }
@@ -42,13 +42,13 @@ fun SlackChannelItem(
 
 @Composable
 private fun GroupChannelItem(
-  slackChannel: UiLayerChannels.SKChannel,
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
+  slackChannel: DomainLayerChannels.SKChannel.SkGroupChannel,
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
   textColor: Color
 ) {
   SlackListItem(
-    icon = if (slackChannel.isPrivate == true) Icons.Default.Lock else Icons.Default.MailOutline,
-    title = "${slackChannel.name}",
+    icon = Icons.Default.Lock,
+    title = slackChannel.name,
     textColor = textColor,
     onItemClick = {
       onItemClick(slackChannel)
@@ -58,8 +58,8 @@ private fun GroupChannelItem(
 
 @Composable
 private fun DirectMessageChannel(
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
-  slackChannel: UiLayerChannels.SKChannel,
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
+  slackChannel: DomainLayerChannels.SKChannel.SkDMChannel,
   textColor: Color
 ) {
   Row(
@@ -77,8 +77,8 @@ private fun DirectMessageChannel(
 
 @Composable
 fun DMLastMessageItem(
-  onItemClick: (UiLayerChannels.SKChannel) -> Unit,
-  slackChannel: UiLayerChannels.SKChannel,
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
+  slackChannel: DomainLayerChannels.SKChannel,
   slackMessage: DomainLayerMessages.SKMessage,
 ) {
   Row(
@@ -90,18 +90,22 @@ fun DMLastMessageItem(
       }, verticalAlignment = Alignment.CenterVertically
   ) {
     SlackListItem(modifier = Modifier, icon = {
-      if (slackChannel.isOneToOne == false) {
-        Box(Modifier.size(24.dp)) {
-          Text(text = "#", style = textStyleFieldSecondary(), modifier = Modifier.align(Alignment.Center))
+      when (slackChannel) {
+        is DomainLayerChannels.SKChannel.SkGroupChannel -> {
+          Box(Modifier.size(24.dp)) {
+            Text(text = "#", style = textStyleFieldSecondary(), modifier = Modifier.align(Alignment.Center))
+          }
         }
-      } else {
-        SlackOnlineBox(
-          imageUrl = slackChannel.pictureUrl ?: "",
-          parentModifier = Modifier.size(24.dp),
-          imageModifier = Modifier.size(20.dp),
-          onlineIndicator = Modifier.size(10.dp),
-          onlineIndicatorParent = Modifier.size(12.dp)
-        )
+
+        is DomainLayerChannels.SKChannel.SkDMChannel -> {
+          SlackOnlineBox(
+            imageUrl = slackChannel.pictureUrl ?: "",
+            parentModifier = Modifier.size(24.dp),
+            imageModifier = Modifier.size(20.dp),
+            onlineIndicator = Modifier.size(10.dp),
+            onlineIndicatorParent = Modifier.size(12.dp)
+          )
+        }
       }
 
     }, center = {
@@ -153,11 +157,11 @@ fun RelativeTime(createdDate: Long) {
 
 @Composable
 private fun ChannelText(
-  slackChannel: UiLayerChannels.SKChannel,
+  slackChannel: DomainLayerChannels.SKChannel,
   textColor: Color
 ) {
   Text(
-    text = "${slackChannel.name}",
+    text = "${slackChannel.channelName}",
     style = SlackCloneTypography.caption.copy(
       color = textColor.copy(
         alpha = 0.8f
