@@ -68,8 +68,10 @@ val viewModelModule = module {
 
   scope<SlackScreens.DMs> {
     scoped {
-      MessageViewModel(getKoin().get(),
-        getKoin().get())
+      MessageViewModel(
+        getKoin().get(),
+        getKoin().get()
+      )
     }
   }
 

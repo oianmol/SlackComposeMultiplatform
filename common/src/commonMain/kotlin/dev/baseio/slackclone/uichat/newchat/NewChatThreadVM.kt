@@ -10,6 +10,7 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
+import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -19,12 +20,11 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 class NewChatThreadVM(
-  private val ucFetchLocalChannels: UseCaseSearchChannel,
-  private val useCaseFetchLocalUsers: UseCaseFetchLocalUsers,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
   private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  private val useCaseCreateChannel: UseCaseCreateChannel
+  private val useCaseCreateChannel: UseCaseCreateChannel,
+  private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch
 ) :
   ViewModel() {
 
@@ -42,28 +42,11 @@ class NewChatThreadVM(
       }.launchIn(this)
 
       search.collectLatest { search ->
-        useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat { workspace ->
-          combine(
-            useCaseFetchLocalUsers(workspace!!.uuid, search).map {
-              it.map { skUser ->
-                DomainLayerChannels.SKChannel.SkDMChannel(
-                  workId = workspace.uuid,
-                  senderId = "",
-                  receiverId = skUser.uuid,
-                  uuid = "",
-                  deleted = false
-                ).apply {
-                  channelName = skUser.name
-                  pictureUrl = skUser.avatarUrl
-                }
-              }
-            }, ucFetchLocalChannels(
-              UseCaseWorkspaceChannelRequest(workspaceId = workspace.uuid, search)
-            )
-          ) { first, second ->
-            return@combine first + second
-          }
-        }.flowOn(coroutineDispatcherProvider.io)
+        useCaseGetSelectedWorkspace.invokeFlow()
+          .mapNotNull { it }
+          .flatMapConcat { workspace ->
+            useCaseFetchChannelsWithSearch(workspace.uuid, search)
+          }.flowOn(coroutineDispatcherProvider.io)
           .onEach {
             channelsStream.value = it
           }.flowOn(coroutineDispatcherProvider.main)
@@ -88,9 +71,13 @@ class NewChatThreadVM(
     viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
       errorStream.value = throwable
     }) {
-      val result = useCaseCreateChannel.invoke(channel)
-      val channelNew = result.getOrThrow()
-      navigate(channelNew, composeNavigator)
+      channel.channelId.takeIf { it.isNotEmpty() }?.let {
+        navigate(channel, composeNavigator)
+      } ?: run {
+        val result = useCaseCreateChannel.invoke(channel)
+        val channelNew = result.getOrThrow()
+        navigate(channelNew, composeNavigator)
+      }
     }
 
   }
