@@ -16,6 +16,7 @@ import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 
 class ChatScreenVM constructor(
@@ -34,23 +35,27 @@ class ChatScreenVM constructor(
   var alertLongClickSkMessage = MutableStateFlow<DomainLayerMessages.SKMessage?>(null)
     private set
 
+  var parentJob: Job? = null
+
   fun requestFetch(channel: DomainLayerChannels.SKChannel) {
+    parentJob?.cancel()
+    parentJob = Job()
     channelFlow = MutableStateFlow(channel)
     with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
-      viewModelScope.launch {
-        useCaseFetchMessages.invoke(this@with).collectLatest {
-          chatMessagesFlow.value = it
+      viewModelScope.launch(parentJob!!) {
+        useCaseFetchMessages.invoke(this@with).collectLatest { skMessageList ->
+          chatMessagesFlow.value = skMessageList
         }
       }
-      viewModelScope.launch {
-        useCaseChannelMembers.invoke(this@with).collectLatest {
-          channelMembers.value = it
+      viewModelScope.launch(parentJob!!) {
+        useCaseChannelMembers.invoke(this@with).collectLatest { skUserList ->
+          channelMembers.value = skUserList
         }
       }
-      viewModelScope.launch {
+      viewModelScope.launch(parentJob!!) {
         useCaseFetchAndSaveChannelMembers.invoke(this@with)
       }
-      viewModelScope.launch {
+      viewModelScope.launch(parentJob!!) {
         useCaseFetchAndSaveMessages.invoke(this@with)
       }
     }
