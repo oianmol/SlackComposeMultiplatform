@@ -51,7 +51,7 @@ class HomeScreenVM(
 
   private fun observeForUserData(workspaceId: String, user: DomainLayerUsers.SKUser) {
     observeNewMessagesJob = useCaseObserveMessages
-      .invoke(UseCaseWorkspaceChannelRequest(workspaceId = workspaceId, user.uuid))
+      .invoke(UseCaseWorkspaceChannelRequest(workspaceId = workspaceId))
       .launchIn(viewModelScope)
     useCaseObserveUsersJob = useCaseObserveUsers
       .invoke(workspaceId)

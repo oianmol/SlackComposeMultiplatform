@@ -12,6 +12,7 @@ import kotlinx.datetime.Clock
 import ViewModel
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.channels.skUser
+import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
 import kotlinx.coroutines.flow.*
 
@@ -20,6 +21,7 @@ class ChatScreenVM constructor(
   private val useCaseSendMessage: UseCaseSendMessage,
   private val skKeyValueData: SKKeyValueData,
   private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
+  private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages
 ) : ViewModel() {
   lateinit var channelFlow: MutableStateFlow<DomainLayerChannels.SKChannel>
   var chatMessagesFlow = MutableStateFlow<Flow<List<DomainLayerMessages.SKMessage>>>(emptyFlow())
@@ -34,6 +36,9 @@ class ChatScreenVM constructor(
       chatMessagesFlow.value = useCaseFetchMessages.invoke(this)
       viewModelScope.launch {
         useCaseFetchAndSaveChannelMembers.invoke(this@with)
+      }
+      viewModelScope.launch {
+        useCaseFetchAndSaveMessages.invoke(this@with)
       }
     }
   }
