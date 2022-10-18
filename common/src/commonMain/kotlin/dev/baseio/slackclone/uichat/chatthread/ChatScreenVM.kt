@@ -6,16 +6,20 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
+import dev.baseio.slackdomain.usecases.channels.UseCaseInviteUserToChannel
 import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import ViewModel
+import dev.baseio.slackclone.commonui.reusable.MentionsPatterns
+import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 
@@ -25,15 +29,23 @@ class ChatScreenVM constructor(
   private val skKeyValueData: SKKeyValueData,
   private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
   private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
-  private val useCaseChannelMembers: UseCaseGetChannelMembers
+  private val useCaseChannelMembers: UseCaseGetChannelMembers,
+  private val useCaseInviteUserToChannel: UseCaseInviteUserToChannel
 ) : ViewModel() {
   val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
   lateinit var channelFlow: MutableStateFlow<DomainLayerChannels.SKChannel>
   var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
   var message = MutableStateFlow(TextFieldValue())
+
+  var spanInfoList = MutableStateFlow<List<SpanInfos>>(emptyList())
+
   var chatBoxState = MutableStateFlow(BoxState.Collapsed)
   var alertLongClickSkMessage = MutableStateFlow<DomainLayerMessages.SKMessage?>(null)
     private set
+
+  val exceptions = CoroutineExceptionHandler { coroutineContext, throwable ->
+    throwable.printStackTrace()
+  }
 
   var parentJob: Job? = null
 
@@ -42,43 +54,57 @@ class ChatScreenVM constructor(
     parentJob = Job()
     channelFlow = MutableStateFlow(channel)
     with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
-      viewModelScope.launch(parentJob!!) {
+      viewModelScope.launch(parentJob!! + exceptions) {
         useCaseFetchMessages.invoke(this@with).collectLatest { skMessageList ->
           chatMessagesFlow.value = skMessageList
         }
       }
-      viewModelScope.launch(parentJob!!) {
+      viewModelScope.launch(parentJob!! + exceptions) {
         useCaseChannelMembers.invoke(this@with).collectLatest { skUserList ->
           channelMembers.value = skUserList
         }
       }
-      viewModelScope.launch(parentJob!!) {
+      viewModelScope.launch(parentJob!! + exceptions) {
         useCaseFetchAndSaveChannelMembers.invoke(this@with)
       }
-      viewModelScope.launch(parentJob!!) {
+      viewModelScope.launch(parentJob!! + exceptions) {
         useCaseFetchAndSaveMessages.invoke(this@with)
       }
     }
   }
 
-  fun sendMessage(search: String) {
-    if (search.isNotEmpty()) {
-      viewModelScope.launch {
-        val user = skKeyValueData.skUser()
-        val message = DomainLayerMessages.SKMessage(
-          uuid = Clock.System.now().toEpochMilliseconds().toString(),
-          workspaceId = channelFlow.value.workspaceId,
-          channelId = channelFlow.value.channelId,
-          message = search,
-          sender = user.uuid,
-          createdDate = Clock.System.now().toEpochMilliseconds(),
-          modifiedDate = Clock.System.now().toEpochMilliseconds(),
-          isDeleted = false,
-          isSynced = false
-        )
-        useCaseSendMessage(message)
+  fun sendMessage(message: String) {
+    if (message.isNotEmpty()) {
+      val sortedList = spanInfoList.value.takeIf { it.size == 3 }?.sortedBy { it.start }
+      sortedList?.firstOrNull()?.let {
+        if (it.tag == MentionsPatterns.INVITE_TAG) {
+          val user = sortedList[1].spanText.replace("@", "")
+          val channel = sortedList[2].spanText.replace("#", "")
+          viewModelScope.launch {
+            val result = useCaseInviteUserToChannel(user, channel)
+            this@ChatScreenVM.message.value = TextFieldValue("We just invited $user to $channel!")
+            chatBoxState.value = BoxState.Collapsed
+          }
+          return // don't move ahead for sending the message
+        }
       }
-      message.value = TextFieldValue()
+
+      viewModelScope.launch {
+        useCaseSendMessage(
+          DomainLayerMessages.SKMessage(
+            uuid = Clock.System.now().toEpochMilliseconds().toString(),
+            workspaceId = channelFlow.value.workspaceId,
+            channelId = channelFlow.value.channelId,
+            message = message,
+            sender = skKeyValueData.skUser().uuid,
+            createdDate = Clock.System.now().toEpochMilliseconds(),
+            modifiedDate = Clock.System.now().toEpochMilliseconds(),
+            isDeleted = false,
+            isSynced = false
+          )
+        )
+      }
+      this.message.value = TextFieldValue()
       chatBoxState.value = BoxState.Collapsed
     }
   }
@@ -100,6 +126,14 @@ class ChatScreenVM constructor(
 
   fun clearLongClickMessageRequest() {
     alertLongClickSkMessage.value = null
+  }
+
+  fun onClickHash(hashTag: String) {
+
+  }
+
+  fun setSpanInfo(spans: List<SpanInfos>) {
+    spanInfoList.value = spans
   }
 
 }

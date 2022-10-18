@@ -78,7 +78,7 @@ private fun NameField(createChannelVM: CreateChannelVM) {
   TextField(
     value = searchChannel.name,
     onValueChange = { newValue ->
-      val newId = newValue.replace(" ", "-")
+      val newId = newValue.replace(" ", "_")
       createChannelVM.createChannelState.value =
         createChannelVM.createChannelState.value.copy(name = newId, uuid = newId)
     },

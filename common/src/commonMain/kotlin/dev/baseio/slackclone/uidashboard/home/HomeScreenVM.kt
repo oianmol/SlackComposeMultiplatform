@@ -8,6 +8,7 @@ import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
 import ViewModel
+import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
@@ -22,7 +23,8 @@ class HomeScreenVM(
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   private val useCaseFetchChannels: UseCaseFetchAndSaveChannels,
   private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
-  private val skKeyValueData: SKKeyValueData
+  private val skKeyValueData: SKKeyValueData,
+  private val grpcCalls: GrpcCalls
 ) : ViewModel() {
   private var observeNewMessagesJob: Job? = null
   private var useCaseObserveUsersJob: Job? = null
@@ -45,6 +47,10 @@ class HomeScreenVM(
           useCaseFetchChannels.invoke(workspaceId, 0, 20)
           useCaseFetchAndSaveUsers(workspaceId)
         }
+        grpcCalls.listenToChangeInChannelMembers(workspaceId, skKeyValueData.skUser().uuid)
+          .map {
+            useCaseFetchChannels.invoke(workspaceId, 0, 20)
+          }.launchIn(viewModelScope)
       }
     }.launchIn(viewModelScope)
   }

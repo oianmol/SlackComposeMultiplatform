@@ -43,6 +43,7 @@ val viewModelModule = module {
         getKoin().get(),
         getKoin().get(),
         getKoin().get(),
+        getKoin().get(),
         getKoin().get()
       )
     }
@@ -113,7 +114,10 @@ val viewModelModule = module {
     scoped { DashboardVM(get(), get()) }
 
     scoped {
-      ChatScreenVM(getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get())
+      ChatScreenVM(
+        getKoin().get(), getKoin().get(), getKoin().get(),
+        getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get()
+      )
     }
 
     slackChannelVMScoped()

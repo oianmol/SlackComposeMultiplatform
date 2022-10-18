@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedTime
+import dev.baseio.slackclone.commonui.reusable.MentionsPatterns
 import dev.baseio.slackclone.commonui.reusable.MentionsText
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
@@ -25,7 +26,7 @@ import dev.baseio.slackdomain.model.users.DomainLayerUsers
 fun ChatMessage(
   message: DomainLayerMessages.SKMessage,
   alertLongClick: (DomainLayerMessages.SKMessage) -> Unit,
-  user: DomainLayerUsers.SKUser?
+  user: DomainLayerUsers.SKUser?, onClickHash: (String) -> Unit
 ) {
   ListItem(modifier = Modifier
     .padding(2.dp)
@@ -39,21 +40,31 @@ fun ChatMessage(
       imageUrl = user?.avatarUrl ?: "http://placekitten.com/200/300" // TODO sender image
     )
   }, secondaryText = {
-    ChatMedia(message)
+    ChatContent(message, onClickHash)
   }, text = {
     ChatUserDateTime(message, user)
   })
 }
 
 @Composable
-fun ChatMedia(message: DomainLayerMessages.SKMessage) {
+fun ChatContent(message: DomainLayerMessages.SKMessage, onClickHash: (String) -> Unit) {
   MentionsText(
     modifier = Modifier,
     message.message, style = SlackCloneTypography.subtitle2.copy(
       color = SlackCloneColorProvider.colors.textSecondary
     )
-  ) {
+  ) { range ->
+    when (range.tag) {
+      MentionsPatterns.HASH_TAG -> {
+        onClickHash(range.item)
+      }
+      MentionsPatterns.INVITE_TAG -> {
 
+      }
+      MentionsPatterns.AT_THE_RATE -> {
+
+      }
+    }
   }
 
 }

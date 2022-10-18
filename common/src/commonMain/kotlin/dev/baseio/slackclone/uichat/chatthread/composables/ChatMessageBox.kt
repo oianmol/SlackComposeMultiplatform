@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import mainDispatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -112,9 +111,7 @@ private fun MessageTFRow(
   val keyboard by keyboardAsState()
 
   val mentionText by viewModel.message.collectAsState(mainDispatcher)
-  var spanInfoList by remember {
-    mutableStateOf(listOf<SpanInfos>())
-  }
+
   var currentlyEditing by remember {
     mutableStateOf<SpanInfos?>(null)
   }
@@ -127,8 +124,8 @@ private fun MessageTFRow(
       MentionsTextField(
         mentionText = mentionText,
         onSpanUpdate = { text, spans, range ->
-          spanInfoList = spans
-          spanInfoList.firstOrNull { infos ->
+          viewModel.setSpanInfo(spans)
+          spans.firstOrNull { infos ->
             range.intersects(infos.range) || range.end == infos.range.end
           }?.let { infos ->
             currentlyEditing = infos

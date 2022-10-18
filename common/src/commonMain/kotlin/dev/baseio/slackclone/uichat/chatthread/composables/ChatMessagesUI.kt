@@ -37,7 +37,9 @@ fun ChatMessagesUI(
     for (messageIndex in messages.indices) {
       val message = messages[messageIndex]
       item {
-        ChatMessage(message, alertLongClick, members.firstOrNull { it.uuid == message.sender })
+        ChatMessage(message, alertLongClick, members.firstOrNull { it.uuid == message.sender }, onClickHash = {
+          viewModel.onClickHash(it)
+        })
       }
       lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
       if (!isLastMessage(messageIndex, messages)) {

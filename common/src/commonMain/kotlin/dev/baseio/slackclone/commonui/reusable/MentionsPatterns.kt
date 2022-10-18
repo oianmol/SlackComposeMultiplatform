@@ -23,8 +23,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.AT_THE_RATE
 import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.HASH_TAG
+import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.INVITE_TAG
 import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.URL_TAG
 import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.hashTagPattern
+import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.inviteTagPattern
 import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.mentionTagPattern
 import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.urlPattern
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
@@ -33,6 +35,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 object MentionsPatterns {
 
   const val HASH_TAG = "HASH"
+  const val INVITE_TAG = "INVITE_TAG"
   const val URL_TAG = "URL"
   const val AT_THE_RATE = "AT_RATE"
   val urlPattern = Regex(
@@ -43,7 +46,7 @@ object MentionsPatterns {
   )
 
   val hashTagPattern = Regex("\\B(\\#[a-zA-Z0-9._]+\\b)(?!;)")
-
+  val inviteTagPattern = Regex("\\B(\\/[invite]+\\b)(?!;)")
   val mentionTagPattern = Regex("\\B(\\@[a-zA-Z0-9._]+\\b)(?!;)")
 }
 
@@ -69,7 +72,7 @@ fun MentionsTextField(
 
 ) {
   val spans =
-    extractSpans(mentionText.text, listOf(urlPattern, mentionTagPattern, hashTagPattern))
+    extractSpans(mentionText.text, listOf(urlPattern, mentionTagPattern, hashTagPattern, inviteTagPattern))
   val annotatedString = buildAnnotatedString(mentionText.text, spans)
   onSpanUpdate(mentionText.text, spans, mentionText.selection)
   BasicTextField(
@@ -94,7 +97,7 @@ fun MentionsText(
   style: TextStyle, onClick: (AnnotatedString.Range<String>) -> Unit
 ) {
   val spans =
-    extractSpans(mentionText, listOf(urlPattern, mentionTagPattern, hashTagPattern))
+    extractSpans(mentionText, listOf(urlPattern, mentionTagPattern, hashTagPattern, inviteTagPattern))
   val annotatedString = buildAnnotatedString(mentionText, spans)
 
   ClickableText(text = annotatedString, style = style,
@@ -151,6 +154,10 @@ fun extractSpans(
       when {
         checkText.startsWith("#") -> {
           spans.add(SpanInfos(checkText, matchStart, matchEnd, HASH_TAG))
+        }
+
+        checkText.startsWith("/") -> {
+          spans.add(SpanInfos(checkText, matchStart, matchEnd, INVITE_TAG))
         }
 
         checkText.startsWith("@") -> {
