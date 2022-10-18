@@ -22,6 +22,7 @@ cd ..
 echo "<----Cloning gRPC-KMP---->"
 git clone https://github.com/oianmol/gRPC-KMP
 cd gRPC-KMP
+git pull
 ./gradlew grpc-multiplatform-lib:build && ./gradlew grpc-multiplatform-lib:publishToMavenLocal
 ./gradlew :plugin:build && ./gradlew :plugin:publishToMavenLocal
 
@@ -29,10 +30,12 @@ cd ..
 
 echo "<----Cloning slack_multiplatform_protos---->"
 git clone https://github.com/oianmol/slack_multiplatform_protos
+git pull
 
 echo "<----Cloning slack_multiplatform_generate_protos---->"
 git clone https://github.com/oianmol/slack_multiplatform_generate_protos || echo "already exists"
 cd slack_multiplatform_generate_protos || echo "already exists"
+git pull
 git submodule update --init --recursive
 git submodule update --recursive --remote
 
@@ -43,6 +46,7 @@ cd ..
 echo "<----Building slack_multiplatform_client_data_lib---->"
 git clone https://github.com/oianmol/slack_multiplatform_client_data_lib  || echo "already exists"
 cd slack_multiplatform_client_data_lib || echo "already exists"
+git pull
 git submodule update --init --recursive
 git submodule update --recursive --remote
 
@@ -52,6 +56,7 @@ cd ..
 echo "<----Running slack_multiplatform_grpc_server---->"
 git clone https://github.com/oianmol/slack_multiplatform_grpc_server || echo "already exists"
 cd slack_multiplatform_grpc_server || echo "already exists"
+git pull
 
 pwd
 ./gradlew run

@@ -56,9 +56,6 @@ private fun NewChannelContent(innerPadding: PaddingValues, createChannelVM: Crea
         NameField(createChannelVM)
         Divider(color = SlackCloneColorProvider.colors.lineColor)
         Spacer(modifier = Modifier.padding(bottom = 8.dp))
-        Divider(color = SlackCloneColorProvider.colors.lineColor)
-        Spacer(modifier = Modifier.padding(bottom = 8.dp))
-        Divider(color = SlackCloneColorProvider.colors.lineColor)
       }
     }
   }

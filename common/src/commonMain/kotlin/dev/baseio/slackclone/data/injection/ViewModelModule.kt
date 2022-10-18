@@ -129,20 +129,6 @@ private fun ScopeDSL.slackChannelVMScoped() {
       getKoin().get()
     )
   }
-  scoped(qualifier = StarredChatsQualifier) {
-    SlackChannelVM(
-      getKoin().get(),
-      getKoin().get(),
-      getKoin().get()
-    )
-  }
-  scoped(qualifier = DirectChatsQualifier) {
-    SlackChannelVM(
-      getKoin().get(),
-      getKoin().get(),
-      getKoin().get()
-    )
-  }
   scoped(qualifier = AllChatsQualifier) {
     SlackChannelVM(
       getKoin().get(),
@@ -156,16 +142,6 @@ private fun ScopeDSL.slackChannelVMScoped() {
 object RecentChatsQualifier : Qualifier {
   override val value: QualifierValue
     get() = "RecentChatsQualifier"
-}
-
-object StarredChatsQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "StarredChatsQualifier"
-}
-
-object DirectChatsQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "DirectChatsQualifier"
 }
 
 object AllChatsQualifier : Qualifier {

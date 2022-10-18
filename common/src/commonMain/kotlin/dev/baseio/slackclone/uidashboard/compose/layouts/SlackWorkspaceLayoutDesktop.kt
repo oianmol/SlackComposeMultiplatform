@@ -12,9 +12,7 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.data.injection.AllChatsQualifier
-import dev.baseio.slackclone.data.injection.DirectChatsQualifier
 import dev.baseio.slackclone.data.injection.RecentChatsQualifier
-import dev.baseio.slackclone.data.injection.StarredChatsQualifier
 import dev.baseio.slackclone.navigation.BackstackScreen
 import dev.baseio.slackclone.navigation.ComposeNavigator
 
@@ -53,16 +51,6 @@ fun BackstackScreen.SlackWorkspaceLayoutDesktop(
         }, onClickAdd = {
           onCreateChannelRequest()
         },scope.get(RecentChatsQualifier))
-        SlackStarredChannels({
-          onItemClick(it)
-        }, onClickAdd = {
-          onCreateChannelRequest()
-        },scope.get(StarredChatsQualifier))
-        SlackDirectMessages({
-          onItemClick(it)
-        }, onClickAdd = {
-          onCreateChannelRequest()
-        },scope.get(DirectChatsQualifier))
         SlackAllChannels({
           onItemClick(it)
         }, onClickAdd = {
