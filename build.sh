@@ -43,6 +43,16 @@ echo "<----Building slack_multiplatform_protos---->"
 ./gradlew build && ./gradlew publishToMavenLocal
 
 cd ..
+
+echo "<----Cloning slack_multiplatform_domain---->"
+git clone https://github.com/oianmol/slack_multiplatform_domain.git || echo "already exists"
+cd slack_multiplatform_domain || echo "already exists"
+git pull
+
+./gradlew build && ./gradlew publishToMavenLocal
+
+cd ..
+
 echo "<----Building slack_multiplatform_client_data_lib---->"
 git clone https://github.com/oianmol/slack_multiplatform_client_data_lib  || echo "already exists"
 cd slack_multiplatform_client_data_lib || echo "already exists"

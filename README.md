@@ -6,10 +6,11 @@
 
 1. [Protos](https://github.com/oianmol/slack_multiplatform_protos)
 2. [GenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
-3. [SlackClientLibrary](https://github.com/oianmol/slack_multiplatform_client_data_lib)
-4. [This project](https://github.com/oianmol/slackcomposemultiplatform)
-5. [Backend Server in Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
-6. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)(Note: On Mac's Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
+3. [Slack Domain Layer](https://github.com/oianmol/slack_multiplatform_domain.git)
+4. [Slack Data Layer](https://github.com/oianmol/slack_multiplatform_client_data_lib)
+5. [This project](https://github.com/oianmol/slackcomposemultiplatform)
+6. [Backend Server in Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
+7. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)(Note: On Mac's Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
 
 ## Instructions to compile and get running
 

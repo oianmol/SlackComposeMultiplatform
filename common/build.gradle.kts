@@ -20,7 +20,6 @@ object Versions {
     const val koin = "3.1.4"
 }
 
-
 object Deps {
 
     object Kotlinx {
@@ -67,7 +66,6 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
-val slackDataVersion: String by project
 
 
 kotlin {
@@ -84,7 +82,8 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_domain:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_data:1.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("com.squareup.sqldelight:runtime:1.5.3")
                 implementation(Deps.Koin.core)
@@ -107,7 +106,8 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-android:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_domain-android:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_data-android:1.0")
                 implementation(Deps.Koin.android)
                 implementation(Deps.Kotlinx.coroutines)
                 implementation(Deps.AndroidX.lifecycleViewModelKtx)
@@ -123,35 +123,37 @@ kotlin {
                 api("androidx.core:core-ktx:1.9.0")
             }
         }
-        val iosArm64Main by getting {
-            dependencies {
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-iosarm64:1.0")
-                implementation("io.ktor:ktor-client-darwin:$ktor_version")
-            }
-        }
-        val iosSimulatorArm64Main by getting {
-            dependencies {
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-iossimulatorarm64:1.0")
-                implementation("io.ktor:ktor-client-darwin:$ktor_version")
-            }
-        }
-        val iosX64Main by getting {
-            dependencies {
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-iosx64:1.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
-                implementation("io.ktor:ktor-client-darwin:$ktor_version")
-            }
-        }
-
-
         val androidTest by getting {
             dependencies {
                 implementation("junit:junit:4.13.2")
             }
         }
+        val iosArm64Main by getting {
+            dependencies {
+                implementation("dev.baseio.slackclone:slack_kmp_domain-iosarm64:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
+                implementation("io.ktor:ktor-client-darwin:$ktor_version")
+            }
+        }
+        val iosSimulatorArm64Main by getting {
+            dependencies {
+                implementation("dev.baseio.slackclone:slack_kmp_domain-iossimulatorarm64:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_data-iossimulatorarm64:1.0")
+                implementation("io.ktor:ktor-client-darwin:$ktor_version")
+            }
+        }
+        val iosX64Main by getting {
+            dependencies {
+                implementation("dev.baseio.slackclone:slack_kmp_domain-iosx64:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_data-iosx64:1.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
+                implementation("io.ktor:ktor-client-darwin:$ktor_version")
+            }
+        }
         val jvmMain by getting {
             dependencies {
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-jvm:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_domain-jvm:1.0")
+                implementation("dev.baseio.slackclone:slack_kmp_data-jvm:1.0")
                 implementation(Deps.Kotlinx.coroutines)
                 implementation("dev.baseio.slackdatalib:slack-multiplatform-generate-protos:1.0.0")
                 implementation(Deps.Kotlinx.JVM.coroutinesSwing)
