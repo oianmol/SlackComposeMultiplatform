@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ViewModel
+import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 class WorkspaceInputVM(
     private val loginUseCase: LoginUseCase,
@@ -61,7 +62,7 @@ class WorkspaceInputVM(
         object Empty : UiState()
         object Loading : UiState()
         data class Workspace(
-            val kmskWorkspace: KMSKWorkspace,
+            val kmskWorkspace:  DomainLayerWorkspaces.SKWorkspace,
             var email: String? = null,
             var password: String? = null
         ) :

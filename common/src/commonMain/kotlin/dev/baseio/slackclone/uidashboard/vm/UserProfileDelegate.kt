@@ -2,7 +2,7 @@ package dev.baseio.slackclone.uidashboard.vm
 
 import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
-import dev.baseio.slackdata.protos.KMSKUser
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.auth.UseCaseLogout
 import dev.baseio.slackdomain.usecases.auth.UseCaseCurrentUser
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMCode
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 interface UserProfileDelegate {
-  val currentLoggedInUser: MutableStateFlow<KMSKUser?>
+  val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?>
 
   fun getCurrentUser(viewModelScope: CoroutineScope)
 }
@@ -22,7 +22,7 @@ class UserProfileDelegateImpl(
   private val useCaseCurrentUser: UseCaseCurrentUser,
   private val useCaseClearAuth: UseCaseLogout,
 ) : UserProfileDelegate {
-  override val currentLoggedInUser: MutableStateFlow<KMSKUser?> = MutableStateFlow(null)
+  override val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?> = MutableStateFlow(null)
 
   override fun getCurrentUser(viewModelScope: CoroutineScope) {
     viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->

@@ -8,6 +8,8 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ViewModel
+import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
+
 class EmailInputVM(
   private val loginUseCase: LoginUseCase,
   private val findWorkspacesUseCase: FindWorkspacesUseCase
@@ -54,7 +56,7 @@ class EmailInputVM(
     }
   }
 
-  fun switchLogin(kmskWorkspace: KMSKWorkspace) {
+  fun switchLogin(kmskWorkspace:  DomainLayerWorkspaces.SKWorkspace) {
     uiState.value = (uiState.value).copy(selectedWorkspace = kmskWorkspace)
   }
 
@@ -67,8 +69,8 @@ class EmailInputVM(
     var isLoading: Boolean? = null,
     var isLoggedIn: Boolean = false,
     var throwable: Throwable? = null,
-    val workspaces: KMSKWorkspaces? = null,
-    var selectedWorkspace: KMSKWorkspace? = null,
+    val workspaces: List<DomainLayerWorkspaces.SKWorkspace>? = null,
+    var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace? = null,
     var email: String? = null,
     var password: String? = null,
     var validationMessage: String? = null

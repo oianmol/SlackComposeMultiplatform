@@ -26,7 +26,6 @@ import dev.baseio.slackclone.uidashboard.compose.*
 import dev.baseio.slackclone.uidashboard.vm.SideNavVM
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SlackSideBarLayoutDesktop(modifier: Modifier = Modifier, viewModel: SideNavVM) {
     val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())

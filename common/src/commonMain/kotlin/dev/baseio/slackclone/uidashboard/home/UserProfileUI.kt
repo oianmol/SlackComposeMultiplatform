@@ -40,6 +40,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackdata.protos.KMSKUser
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -116,7 +117,7 @@ fun SlackListItemTrailingView(
 
 
 @Composable
-fun UserHeader(user: KMSKUser?) {
+fun UserHeader(user: DomainLayerUsers.SKUser?) {
   Row(Modifier.padding(12.dp)) {
     SlackImageBox(
       Modifier.size(72.dp),
