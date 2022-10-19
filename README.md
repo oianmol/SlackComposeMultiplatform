@@ -2,7 +2,7 @@
 
 ### This is a jetpack compose Slack Client & Server Clone written in Kotlin and for Multiplatform.
 
-### Important Points
+### Sudmodules that this project uses.
 
 1. [Protos](https://github.com/oianmol/slack_multiplatform_protos)
 2. [GenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
@@ -14,9 +14,7 @@
 
 ## Instructions to compile and get running
 
-Prerequisite
-
-Use the `build.sh` file in the root dir to build everything! make sure to set the ANDROID_SDK_ROOT path in your ENV 
+Use the `build.sh` file in the root dir to build everything! make sure to set the ANDROID_SDK_ROOT path in your ENV and configure and mongodb atlas connection string for the gRPC server.
 
 ## iOS support with gRPC
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
