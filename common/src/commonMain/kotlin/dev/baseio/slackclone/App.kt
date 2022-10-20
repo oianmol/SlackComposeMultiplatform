@@ -13,7 +13,7 @@ import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
-import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.compose.*
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
@@ -45,7 +45,7 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
     Navigator(navigator = appNavigator, initialRoute = initialRoute) {
       this.route(SlackScreens.OnboardingRoute) {
         screen(SlackScreens.GettingStarted) {
-          val gettingStartedVM = scope.get<GettingStartedVM>()
+          val gettingStartedVM = scope.get<GettingStartedComponent>()
           GettingStartedUI(this@Navigator, gettingStartedVM)
         }
         screen(SlackScreens.SkipTypingScreen) {

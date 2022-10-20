@@ -18,18 +18,19 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.value.getValue
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
-import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 
 @Composable
-fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM) {
+fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedComponent) {
   val scaffoldState = rememberScaffoldState()
-  val showSlackAnim by gettingStartedVM.showSlackAnim
+  val showSlackAnim by gettingStartedVM.componentState
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.GettingStartedScreen()
 
@@ -46,10 +47,10 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         modifier = Modifier
           .padding(28.dp)
       ) {
-        if (showSlackAnim) {
+        if (showSlackAnim.showSlackAnim) {
           SlackAnimation(gettingStartedVM)
         } else {
-          AnimatedVisibility(visible = !showSlackAnim) {
+          AnimatedVisibility(visible = !showSlackAnim.showSlackAnim) {
             when (size) {
               WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
               else -> {
@@ -67,7 +68,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
 
 @Composable
 private fun LargeScreenLayout(
-  gettingStartedVM: GettingStartedVM,
+  gettingStartedVM: GettingStartedComponent,
   composeNavigator: ComposeNavigator
 ) {
   val density = LocalDensity.current
@@ -107,7 +108,7 @@ private fun LargeScreenLayout(
 
 @Composable
 private fun PhoneLayout(
-  gettingStartedVM: GettingStartedVM,
+  gettingStartedVM: GettingStartedComponent,
   composeNavigator: ComposeNavigator
 ) {
   val density = LocalDensity.current
@@ -158,11 +159,11 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedVM) {
+private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
   val painter = PainterRes.gettingStarted()
-  val expanded by gettingStartedVM.introTextExpanded
+  val expanded by gettingStartedVM.componentState
   AnimatedVisibility(
-    visible = expanded, enter = ImageEnterTransition(),
+    visible = expanded.introTextExpanded, enter = ImageEnterTransition(),
     exit = ImageExitTrans()
   ) {
     Image(
@@ -189,14 +190,14 @@ private fun ImageEnterTransition() = expandIn(
 @Composable
 private fun GetStartedButton(
   composeNavigator: ComposeNavigator,
-  gettingStartedVM: GettingStartedVM,
+  gettingStartedVM: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.introTextExpanded
+  val expanded by gettingStartedVM.componentState
 
   AnimatedVisibility(
-    visible = expanded, enter = enterAnim(),
+    visible = expanded.introTextExpanded, enter = enterAnim(),
     exit = exitAnim()
   ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -262,14 +263,14 @@ private fun GetStartedEnterTransitionVertical(density: Density) =
 @Composable
 private fun IntroText(
   modifier: Modifier = Modifier,
-  gettingStartedVM: GettingStartedVM,
+  gettingStartedVM: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.introTextExpanded
+  val expanded by gettingStartedVM.componentState
 
   AnimatedVisibility(
-    visible = expanded, enter = enterAnim(),
+    visible = expanded.introTextExpanded, enter = enterAnim(),
     exit = exitAnim()
   ) {
     Column(modifier) {

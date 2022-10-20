@@ -22,6 +22,13 @@ object Versions {
 
 object Deps {
 
+    object Decompose{
+        const val VERSION = "1.0.0-alpha-06"
+        const val core ="com.arkivanov.decompose:decompose:${VERSION}"
+        const val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION"
+        const val compose = "com.arkivanov.decompose:extensions-compose-jetpack:$VERSION"
+    }
+
     object Kotlinx {
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
         const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
@@ -96,6 +103,7 @@ kotlin {
                 implementation(Deps.Kotlinx.coroutines)
                 implementation(Deps.Koin.core)
                 implementation(kotlin("stdlib-common"))
+                implementation(Deps.Decompose.core)
             }
         }
         val commonTest by getting {
@@ -110,6 +118,8 @@ kotlin {
                 implementation("dev.baseio.slackclone:slack_kmp_data-android:1.0")
                 implementation(Deps.Koin.android)
                 implementation(Deps.Kotlinx.coroutines)
+                implementation(Deps.Decompose.composejb)
+                implementation(Deps.Decompose.compose)
                 implementation(Deps.AndroidX.lifecycleViewModelKtx)
                 implementation("dev.baseio.slackdatalib:slack-multiplatform-generate-protos:1.0.0")
                 implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")

@@ -1,18 +1,12 @@
 package dev.baseio.slackclone.navigation
 
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
-import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import org.koin.core.annotation.KoinInternalApi
 
 class SlackScreens {
 
     object OnboardingRoute : BackstackRoute("OnboardingRoute", GettingStarted)
-    object GettingStarted : BackstackScreen("gettingStarted") {
-        override fun close() {
-            scope.get<GettingStartedVM>().onClear()
-            super.close()
-        }
-    }
+    object GettingStarted : BackstackScreen("gettingStarted")
 
     object CreateWorkspace : BackstackScreen("createWorkspace") {
         const val IS_LOGIN = "isLogin"

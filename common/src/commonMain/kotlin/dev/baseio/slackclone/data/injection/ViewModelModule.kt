@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.data.injection
 
+import com.arkivanov.decompose.DefaultComponentContext
 import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
@@ -13,6 +14,7 @@ import dev.baseio.slackclone.uidashboard.home.HomeScreenVM
 import dev.baseio.slackclone.uidashboard.home.UserProfileVM
 import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegate
 import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegateImpl
+import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
@@ -54,7 +56,7 @@ val viewModelModule = module {
     }
   }
   scope<SlackScreens.GettingStarted> {
-    scoped { GettingStartedVM() }
+    scoped { GettingStartedComponent(componentContext = DefaultComponentContext(lifecycle = this)) }
   }
   scope<SlackScreens.WorkspaceInputUI> {
     scoped {

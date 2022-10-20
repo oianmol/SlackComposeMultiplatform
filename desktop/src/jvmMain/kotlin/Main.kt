@@ -39,6 +39,7 @@ import kotlinx.coroutines.delay
 @ExperimentalComposeUiApi
 fun main() = application {
   val windowState = rememberWindowState()
+  val root = RootComponent(componentContext = defaultComponentContext())
 
   Window(onCloseRequest = ::exitApplication, state = windowState) {
     var rememberedComposeWindow by remember(this.window) {
