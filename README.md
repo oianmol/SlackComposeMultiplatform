@@ -27,7 +27,8 @@ The android and jvm platform run's fine, make sure you match the ip address in G
 
 ## Architecture
 
-![Slack Multiplatform](https://user-images.githubusercontent.com/4393101/195993241-923fc168-aa20-430d-89bd-99e6934b2b08.png)
+![Slack Multiplatform-2](https://user-images.githubusercontent.com/4393101/196946429-d17cb7b1-09e1-4d4e-985e-2ad352d73e82.png)
+
 
 
 
