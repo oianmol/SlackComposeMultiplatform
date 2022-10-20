@@ -179,14 +179,22 @@ fun BackstackScreen.DashboardUI(
           viewModel.requestFetch(channel)
           dashboardVM.isChatViewClosed.value = false
         }
+        val clearChat = {
+          dashboardVM.isChatViewClosed.value = true
+          dashboardVM.selectedChatChannel.value = null
+        }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = { modifier ->
           SlackSideBarLayoutDesktop(modifier, scope.get(), openDM = {
+            clearChat()
             homeNavigator.navigateScreen(SlackScreens.DMs)
           }, mentionsScreen = {
+            clearChat()
             homeNavigator.navigateScreen(SlackScreens.Mentions)
           }, searchScreen = {
+            clearChat()
             homeNavigator.navigateScreen(SlackScreens.Search)
           }, userProfile = {
+            clearChat()
             homeNavigator.navigateScreen(SlackScreens.You)
           }, homeNavigator)
         }, workSpaceAndChannels = { modifier ->

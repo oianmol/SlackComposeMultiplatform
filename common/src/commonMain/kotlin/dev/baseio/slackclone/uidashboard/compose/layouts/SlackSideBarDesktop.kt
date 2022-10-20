@@ -76,7 +76,9 @@ fun SlackSideBarLayoutDesktop(
       SlackOnlineBox(
         user?.avatarUrl
           ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no",
-        parentModifier = Modifier.size(48.dp),
+        parentModifier = Modifier.size(48.dp).clickable {
+          userProfile()
+        },
         imageModifier = Modifier.size(36.dp)
       )
     }

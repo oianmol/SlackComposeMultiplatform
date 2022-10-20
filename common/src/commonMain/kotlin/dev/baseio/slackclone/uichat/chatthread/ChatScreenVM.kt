@@ -53,6 +53,7 @@ class ChatScreenVM constructor(
     parentJob?.cancel()
     parentJob = Job()
     channelFlow = MutableStateFlow(channel)
+    chatMessagesFlow.value = emptyList()
     with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
       viewModelScope.launch(parentJob!! + exceptions) {
         useCaseFetchMessages.invoke(this@with).collectLatest { skMessageList ->
