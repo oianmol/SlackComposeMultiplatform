@@ -44,6 +44,9 @@ class SlackScreens {
     }
 
     object HomeRoute : BackstackRoute("HomeRoute", initialScreen = Home)
+
+    object DesktopHomeRoute : BackstackRoute("DesktopHomeRoute", initialScreen = DMs)
+
     object Home : BackstackScreen("Home")
     object DMs : BackstackScreen("DMs")
     object Mentions : BackstackScreen("Mentions")

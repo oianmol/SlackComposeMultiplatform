@@ -15,10 +15,10 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
-    implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-android:1.0")
     implementation("androidx.activity:activity-compose:1.6.0")
     implementation("androidx.core:core-splashscreen:1.0.0")
     implementation("io.grpc:grpc-okhttp:1.49.2")
+    api("dev.baseio.slackclone:slack_kmp_data-android:1.0")
 }
 
 android {

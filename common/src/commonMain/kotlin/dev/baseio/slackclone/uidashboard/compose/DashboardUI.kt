@@ -179,8 +179,16 @@ fun BackstackScreen.DashboardUI(
           viewModel.requestFetch(channel)
           dashboardVM.isChatViewClosed.value = false
         }
-        SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = {
-          SlackSideBarLayoutDesktop(it, scope.get())
+        SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = { modifier ->
+          SlackSideBarLayoutDesktop(modifier, scope.get(), openDM = {
+            homeNavigator.navigateScreen(SlackScreens.DMs)
+          }, mentionsScreen = {
+            homeNavigator.navigateScreen(SlackScreens.Mentions)
+          }, searchScreen = {
+            homeNavigator.navigateScreen(SlackScreens.Search)
+          }, userProfile = {
+            homeNavigator.navigateScreen(SlackScreens.You)
+          }, homeNavigator)
         }, workSpaceAndChannels = { modifier ->
           SlackWorkspaceLayoutDesktop(modifier, onItemClick = { skChannel ->
             onItemClick(skChannel)
@@ -209,9 +217,24 @@ fun BackstackScreen.DashboardUI(
               color = SlackCloneColorProvider.colors.uiBackground,
               modifier = contentModifier
             ) {
-
+              Navigator(homeNavigator, initialRoute = SlackScreens.DesktopHomeRoute) {
+                this.route(SlackScreens.DesktopHomeRoute) {
+                  screen(SlackScreens.DMs) {
+                    DirectMessagesUI(onItemClick = onItemClick, scope.get())
+                  }
+                  screen(SlackScreens.Mentions) {
+                    MentionsReactionsUI()
+                  }
+                  screen(SlackScreens.Search) {
+                    SearchMessagesUI()
+                  }
+                  screen(SlackScreens.You) {
+                    val gettingStartedVM = scope.get<UserProfileVM>()
+                    UserProfileUI(this@Navigator, gettingStartedVM)
+                  }
+                }
+              }
             }
-
           }
         }
       }

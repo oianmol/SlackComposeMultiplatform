@@ -19,10 +19,10 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation("io.grpc:grpc-netty-shaded:1.49.1")
+                implementation("io.grpc:grpc-netty-shaded:1.49.2")
                 implementation(project(":common"))
                 implementation(compose.desktop.currentOs)
-                implementation("dev.baseio.slackdatalib:slack_multiplatform_client_data_lib-jvm:1.0")
+                api("dev.baseio.slackclone:slack_kmp_data-jvm:1.0")
             }
         }
         val jvmTest by getting
