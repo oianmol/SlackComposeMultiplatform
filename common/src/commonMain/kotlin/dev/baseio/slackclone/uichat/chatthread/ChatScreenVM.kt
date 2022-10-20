@@ -32,14 +32,17 @@ class ChatScreenVM constructor(
   private val useCaseChannelMembers: UseCaseGetChannelMembers,
   private val useCaseInviteUserToChannel: UseCaseInviteUserToChannel
 ) : ViewModel() {
-  val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
   lateinit var channelFlow: MutableStateFlow<DomainLayerChannels.SKChannel>
+
+  val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
   var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
-  var message = MutableStateFlow(TextFieldValue())
 
   var spanInfoList = MutableStateFlow<List<SpanInfos>>(emptyList())
-
+    private set
+  var message = MutableStateFlow(TextFieldValue())
+    private set
   var chatBoxState = MutableStateFlow(BoxState.Collapsed)
+    private set
   var alertLongClickSkMessage = MutableStateFlow<DomainLayerMessages.SKMessage?>(null)
     private set
 
@@ -52,8 +55,16 @@ class ChatScreenVM constructor(
   fun requestFetch(channel: DomainLayerChannels.SKChannel) {
     parentJob?.cancel()
     parentJob = Job()
+
     channelFlow = MutableStateFlow(channel)
+
     chatMessagesFlow.value = emptyList()
+    channelMembers.value = emptyList()
+
+    loadWorkspaceChannelData(channel)
+  }
+
+  private fun loadWorkspaceChannelData(channel: DomainLayerChannels.SKChannel) {
     with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
       viewModelScope.launch(parentJob!! + exceptions) {
         useCaseFetchMessages.invoke(this@with).collectLatest { skMessageList ->
