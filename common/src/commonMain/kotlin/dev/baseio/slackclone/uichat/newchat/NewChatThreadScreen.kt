@@ -24,185 +24,185 @@ import dev.baseio.slackclone.navigation.ComposeNavigator
 
 @Composable
 fun NewChatThreadScreen(
-    composeNavigator: ComposeNavigator,
-    newChatThread: NewChatThreadVM,
+  composeNavigator: ComposeNavigator,
+  newChatThread: NewChatThreadVM,
 ) {
 
-    val scaffoldState = rememberScaffoldState()
+  val scaffoldState = rememberScaffoldState()
 
-    ListRandomUsers(scaffoldState, composeNavigator, newChatThread = newChatThread)
+  ListRandomUsers(scaffoldState, composeNavigator, newChatThread = newChatThread)
 }
 
 @Composable
 private fun ListRandomUsers(
-    scaffoldState: ScaffoldState,
-    composeNavigator: ComposeNavigator,
-    newChatThread: NewChatThreadVM,
+  scaffoldState: ScaffoldState,
+  composeNavigator: ComposeNavigator,
+  newChatThread: NewChatThreadVM,
 ) {
-    Box {
-        Scaffold(
-            backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-            contentColor = SlackCloneColorProvider.colors.textSecondary,
-            modifier = Modifier,
-            scaffoldState = scaffoldState,
-            topBar = {
-                SearchAppBar(composeNavigator)
-            },
-            snackbarHost = {
-                scaffoldState.snackbarHostState
-            }
-        ) { innerPadding ->
-            SearchContent(innerPadding, newChatThread, composeNavigator)
-        }
+  Box {
+    Scaffold(
+      backgroundColor = SlackCloneColorProvider.colors.uiBackground,
+      contentColor = SlackCloneColorProvider.colors.textSecondary,
+      modifier = Modifier,
+      scaffoldState = scaffoldState,
+      topBar = {
+        SearchAppBar(composeNavigator)
+      },
+      snackbarHost = {
+        scaffoldState.snackbarHostState
+      }
+    ) { innerPadding ->
+      SearchContent(innerPadding, newChatThread, composeNavigator)
     }
+  }
 }
 
 @Composable
 private fun SearchContent(
-    innerPadding: PaddingValues,
-    newChatThread: NewChatThreadVM,
-    composeNavigator: ComposeNavigator
+  innerPadding: PaddingValues,
+  newChatThread: NewChatThreadVM,
+  composeNavigator: ComposeNavigator
 ) {
-    Box(modifier = Modifier.padding(innerPadding)) {
-        SlackCloneSurface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column {
-                SearchUsersTF(newChatThread)
-                ListAllUsers(newChatThread, composeNavigator)
-            }
-        }
+  Box(modifier = Modifier.padding(innerPadding)) {
+    SlackCloneSurface(
+      modifier = Modifier.fillMaxSize()
+    ) {
+      Column {
+        SearchUsersTF(newChatThread)
+        ListAllUsers(newChatThread, composeNavigator)
+      }
     }
+  }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNavigator) {
-    val channelsFlow by viewModel.channelsStream.collectAsState(mainDispatcher)
-    val errorFlow by viewModel.errorStream.collectAsState()
+  val channelsFlow by viewModel.channelsStream.collectAsState(mainDispatcher)
+  val errorFlow by viewModel.errorStream.collectAsState()
 
-    val listState = rememberLazyListState()
-    Box {
-        LazyColumn(state = listState, reverseLayout = false) {
-            var lastDrawnChannel: String? = null
-            for (channelIndex in channelsFlow.indices) {
-                val channel = channelsFlow[channelIndex]
-                val newDrawn = channel.channelName?.firstOrNull().toString()
-                if (canDrawHeader(lastDrawnChannel, newDrawn)) {
-                    stickyHeader {
-                        SlackChannelHeader(newDrawn)
-                    }
-                }
-                item {
-                    SlackChannelItem(channel) {
-                        viewModel.createChannel(it, composeNavigator)
-                    }
-                }
-                lastDrawnChannel = newDrawn
-            }
+  val listState = rememberLazyListState()
+  Box {
+    LazyColumn(state = listState, reverseLayout = false) {
+      var lastDrawnChannel: String? = null
+      for (channelIndex in channelsFlow.indices) {
+        val channel = channelsFlow[channelIndex]
+        val newDrawn = channel.channelName?.firstOrNull().toString()
+        if (canDrawHeader(lastDrawnChannel, newDrawn)) {
+          stickyHeader {
+            SlackChannelHeader(newDrawn)
+          }
         }
-        errorFlow?.let {
-            Text("Unknown Error Occurred! ${it.message}")
+        item {
+          SlackChannelItem(slackChannel = channel) {
+            viewModel.createChannel(it, composeNavigator)
+          }
         }
+        lastDrawnChannel = newDrawn
+      }
     }
+    errorFlow?.let {
+      Text("Unknown Error Occurred! ${it.message}")
+    }
+  }
 }
 
 fun canDrawHeader(lastDrawnChannel: String?, name: String?): Boolean {
-    return lastDrawnChannel != name
+  return lastDrawnChannel != name
 }
 
 @Composable
 fun SlackChannelHeader(title: String) {
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .background(SlackCloneColorProvider.colors.lineColor)
-    ) {
-        Text(
-            text = title.toUpperCase(Locale.current),
-            modifier = Modifier.padding(12.dp),
-            style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.textSecondary)
-        )
-    }
+  Box(
+    Modifier
+      .fillMaxWidth()
+      .background(SlackCloneColorProvider.colors.lineColor)
+  ) {
+    Text(
+      text = title.toUpperCase(Locale.current),
+      modifier = Modifier.padding(12.dp),
+      style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.textSecondary)
+    )
+  }
 }
 
 @Composable
 private fun ColumnScope.SearchUsersTF(newChatThread: NewChatThreadVM) {
-    val searchChannel by newChatThread.search.collectAsState(mainDispatcher)
+  val searchChannel by newChatThread.search.collectAsState(mainDispatcher)
 
-    TextField(
-        value = searchChannel,
-        onValueChange = { newValue ->
-            newChatThread.search(newValue)
-        },
-        textStyle = textStyleFieldPrimary(),
-        placeholder = {
-            Text(
-                text = "Search Channels",
-                style = textStyleFieldSecondary(),
-                textAlign = TextAlign.Start
-            )
-        },
-        colors = textFieldColors(),
-        singleLine = true,
-        maxLines = 1,
-    )
+  TextField(
+    value = searchChannel,
+    onValueChange = { newValue ->
+      newChatThread.search(newValue)
+    },
+    textStyle = textStyleFieldPrimary(),
+    placeholder = {
+      Text(
+        text = "Search Channels",
+        style = textStyleFieldSecondary(),
+        textAlign = TextAlign.Start
+      )
+    },
+    colors = textFieldColors(),
+    singleLine = true,
+    maxLines = 1,
+  )
 }
 
 @Composable
 private fun textStyleFieldPrimary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textPrimary,
-    fontWeight = FontWeight.Normal,
-    textAlign = TextAlign.Start
+  color = SlackCloneColorProvider.colors.textPrimary,
+  fontWeight = FontWeight.Normal,
+  textAlign = TextAlign.Start
 )
 
 
 @Composable
 private fun textStyleFieldSecondary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textSecondary,
-    fontWeight = FontWeight.Normal,
-    textAlign = TextAlign.Start
+  color = SlackCloneColorProvider.colors.textSecondary,
+  fontWeight = FontWeight.Normal,
+  textAlign = TextAlign.Start
 )
 
 @Composable
 private fun textFieldColors() = TextFieldDefaults.textFieldColors(
-    backgroundColor = Color.Transparent,
-    cursorColor = SlackCloneColorProvider.colors.textPrimary,
-    unfocusedIndicatorColor = Color.Transparent,
-    focusedIndicatorColor = Color.Transparent
+  backgroundColor = Color.Transparent,
+  cursorColor = SlackCloneColorProvider.colors.textPrimary,
+  unfocusedIndicatorColor = Color.Transparent,
+  focusedIndicatorColor = Color.Transparent
 )
 
 @Composable
 private fun SearchAppBar(composeNavigator: ComposeNavigator) {
-    SlackSurfaceAppBar(
-        title = {
-            SearchNavTitle()
-        },
-        navigationIcon = {
-            NavBackIcon(composeNavigator)
-        },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor,
-    )
+  SlackSurfaceAppBar(
+    title = {
+      SearchNavTitle()
+    },
+    navigationIcon = {
+      NavBackIcon(composeNavigator)
+    },
+    backgroundColor = SlackCloneColorProvider.colors.appBarColor,
+  )
 }
 
 @Composable
 private fun SearchNavTitle() {
-    Text(
-        text = "New Message",
-        style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
-    )
+  Text(
+    text = "New Message",
+    style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
+  )
 }
 
 @Composable
 private fun NavBackIcon(composeNavigator: ComposeNavigator) {
-    IconButton(onClick = {
-        composeNavigator.navigateUp()
-    }) {
-        Icon(
-            imageVector = Icons.Filled.Clear,
-            contentDescription = "clear",
-            modifier = Modifier.padding(start = 8.dp),
-            tint = SlackCloneColorProvider.colors.appBarIconColor
-        )
-    }
+  IconButton(onClick = {
+    composeNavigator.navigateUp()
+  }) {
+    Icon(
+      imageVector = Icons.Filled.Clear,
+      contentDescription = "clear",
+      modifier = Modifier.padding(start = 8.dp),
+      tint = SlackCloneColorProvider.colors.appBarIconColor
+    )
+  }
 }

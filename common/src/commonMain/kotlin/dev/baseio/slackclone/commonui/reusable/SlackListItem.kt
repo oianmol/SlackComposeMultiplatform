@@ -2,6 +2,7 @@ package dev.baseio.slackclone.commonui.reusable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ExperimentalMaterialApi
@@ -20,6 +21,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
 fun SlackListItem(
+  modifier: Modifier = Modifier.fillMaxWidth(),
   icon: ImageVector,
   title: String,
   textColor:Color = SlackCloneColorProvider.colors.textPrimary,
@@ -27,7 +29,7 @@ fun SlackListItem(
   onItemClick: () -> Unit = {}
 ) {
   Row(
-    modifier = Modifier
+    modifier = modifier
       .padding(8.dp)
       .clickable {
         onItemClick()
@@ -48,7 +50,6 @@ fun SlackListItem(
           alpha = 0.8f
         )
       ), modifier = Modifier
-        .weight(1f)
         .padding(8.dp)
     )
     trailingItem?.let { safeIcon ->
@@ -80,8 +81,7 @@ fun SlackListItem(
   ) {
     icon()
 
-    center(Modifier
-      .weight(1f))
+    center(Modifier)
 
     trailingItem()
   }

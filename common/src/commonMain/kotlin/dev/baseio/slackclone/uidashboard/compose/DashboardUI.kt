@@ -238,7 +238,7 @@ fun BackstackScreen.DashboardUI(
                   }
                   screen(SlackScreens.You) {
                     val gettingStartedVM = scope.get<UserProfileVM>()
-                    UserProfileUI(this@Navigator, gettingStartedVM)
+                    UserProfileUI(gettingStartedVM)
                   }
                 }
               }
@@ -342,7 +342,7 @@ private fun DashboardScaffold(
               }
               screen(SlackScreens.You) {
                 val gettingStartedVM = scope.get<UserProfileVM>()
-                UserProfileUI(this@Navigator, gettingStartedVM)
+                UserProfileUI(gettingStartedVM)
               }
             }
           }

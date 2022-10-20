@@ -39,6 +39,8 @@ class ChatScreenVM constructor(
 
   var spanInfoList = MutableStateFlow<List<SpanInfos>>(emptyList())
     private set
+  var showChannelDetails = MutableStateFlow(false)
+    private set
   var message = MutableStateFlow(TextFieldValue())
     private set
   var chatBoxState = MutableStateFlow(BoxState.Collapsed)
@@ -87,21 +89,27 @@ class ChatScreenVM constructor(
 
   fun sendMessage(message: String) {
     if (message.isNotEmpty()) {
-      val sortedList = spanInfoList.value.takeIf { it.size == 3 }?.sortedBy { it.start }
+      val sortedList = spanInfoList.value.takeIf { it.size == 2 }?.sortedBy { it.start }
       sortedList?.firstOrNull()?.let {
         if (it.tag == MentionsPatterns.INVITE_TAG) {
           val user = sortedList[1].spanText.replace("@", "")
-          val channel = sortedList[2].spanText.replace("#", "")
           viewModelScope.launch {
-            val result = useCaseInviteUserToChannel(user, channel)
-            this@ChatScreenVM.message.value = TextFieldValue("We just invited $user to $channel!")
+            val result = useCaseInviteUserToChannel(user, channelFlow.value.channelName!!)
+            when {
+              result.isSuccess -> {
+                this@ChatScreenVM.message.value = TextFieldValue("We just invited $user to ${channelFlow.value.channelName!!}!")
+              }
+              else -> {
+                this@ChatScreenVM.message.value = TextFieldValue("Failed to add $user to ${channelFlow.value.channelName!!} ${result.exceptionOrNull()?.message}!")
+              }
+            }
             chatBoxState.value = BoxState.Collapsed
           }
           return // don't move ahead for sending the message
         }
       }
 
-      viewModelScope.launch {
+      viewModelScope.launch(exceptions) {
         useCaseSendMessage(
           DomainLayerMessages.SKMessage(
             uuid = Clock.System.now().toEpochMilliseconds().toString(),
@@ -146,6 +154,10 @@ class ChatScreenVM constructor(
 
   fun setSpanInfo(spans: List<SpanInfos>) {
     spanInfoList.value = spans
+  }
+
+  fun showChannelDetailsRequested() {
+    showChannelDetails.value = !showChannelDetails.value
   }
 
 }

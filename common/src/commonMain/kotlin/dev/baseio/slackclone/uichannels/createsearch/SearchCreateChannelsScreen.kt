@@ -116,7 +116,7 @@ private fun ListAllChannels(
         }
       }
       item {
-        SlackChannelItem(channel) {
+        SlackChannelItem(slackChannel = channel) {
           onItemClick(it)
         }
       }
@@ -127,17 +127,6 @@ private fun ListAllChannels(
 
 fun canDrawHeader(lastDrawnChannel: String?, name: String?): Boolean {
   return lastDrawnChannel != name
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun SlackChannelListItem(SKChannel: DomainLayerChannels.SKChannel) {
-  Column {
-    SlackChannelItem(SKChannel) {
-
-    }
-    Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-  }
 }
 
 @Composable

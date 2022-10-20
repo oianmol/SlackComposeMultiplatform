@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 
 interface UserProfileDelegate {
   val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?>
-
   fun getCurrentUser(viewModelScope: CoroutineScope)
+  fun logout()
 }
 
 class UserProfileDelegateImpl(
@@ -23,6 +23,10 @@ class UserProfileDelegateImpl(
   private val useCaseClearAuth: UseCaseLogout,
 ) : UserProfileDelegate {
   override val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?> = MutableStateFlow(null)
+
+  override fun logout() {
+    useCaseClearAuth()
+  }
 
   override fun getCurrentUser(viewModelScope: CoroutineScope) {
     viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->

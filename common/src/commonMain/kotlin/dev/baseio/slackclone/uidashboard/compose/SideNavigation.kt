@@ -46,12 +46,12 @@ fun SideNavigation(
         item {
           WorkspacesBar()
         }
-        itemsIndexed(workspaces) { index,skWorkspace ->
+        itemsIndexed(workspaces) { index, skWorkspace ->
           Column(Modifier.clickable {
             viewModel.select(skWorkspace)
             onClose()
           }) {
-            Workspace(workspace = skWorkspace,index==0)
+            Workspace(workspace = skWorkspace, index == 0)
             Spacer(modifier = Modifier.padding(8.dp))
           }
         }
@@ -69,20 +69,20 @@ fun SideNavigation(
 }
 
 @Composable
-private fun SideNavFooter(logout:()->Unit) {
+private fun SideNavFooter(logout: () -> Unit) {
   Column(modifier = Modifier) {
     Divider(color = SlackCloneColorProvider.colors.lineColor)
-    SlackListItem(Icons.Filled.AddCircle, "Add Workspace")
-    SlackListItem(Icons.Filled.Settings, "Preferences")
-    SlackListItem(Icons.Filled.CheckCircle, "Help")
-    SlackListItem(Icons.Filled.ExitToApp, "Logout", onItemClick = {
+    SlackListItem(icon = Icons.Filled.AddCircle, title = "Add Workspace")
+    SlackListItem(icon = Icons.Filled.Settings, title = "Preferences")
+    SlackListItem(icon = Icons.Filled.CheckCircle, title = "Help")
+    SlackListItem(icon = Icons.Filled.ExitToApp, title = "Logout", onItemClick = {
       logout()
     })
   }
 }
 
 @Composable
-private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace,lastSelected: Boolean) {
+private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected: Boolean) {
   Box(
     Modifier.background(
       color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
