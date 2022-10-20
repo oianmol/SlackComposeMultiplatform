@@ -57,12 +57,12 @@ fun UserProfileUI(composeNavigator: ComposeNavigator, profileVM: UserProfileVM) 
       Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
         StatusBox()
       }
-      SlackListItem(Icons.Default.Notifications, "pause_notifications")
-      SlackListItem(Icons.Default.Person, "set_away")
+      SlackListItem(Icons.Default.Notifications, "Pause Notifications")
+      SlackListItem(Icons.Default.Person, "Set Away")
       Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-      SlackListItem(Icons.Default.FavoriteBorder, "saved_items")
-      SlackListItem(Icons.Default.Person, "view_profile")
-      SlackListItem(Icons.Default.Notifications, "notifications")
+      SlackListItem(Icons.Default.FavoriteBorder, "Saved Items")
+      SlackListItem(Icons.Default.Person, "View Profile")
+      SlackListItem(Icons.Default.Notifications, "Notifications")
     }
   }
 }
