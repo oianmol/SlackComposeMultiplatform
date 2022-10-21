@@ -67,6 +67,10 @@ repositories {
     mavenLocal()
 }
 
+dependencies {
+    commonMainApi("dev.icerock.moko:paging:0.7.2")
+}
+
 
 kotlin {
     android()

@@ -1,7 +1,6 @@
 package dev.baseio.slackclone.uichat.chatthread
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,12 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
-import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
-import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.uichat.chatthread.composables.ChatScreenContent
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
@@ -27,15 +24,11 @@ import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 @Composable
 fun ChatScreenUI(
   modifier: Modifier,
-  SKChannel: DomainLayerChannels.SKChannel,
   onBackClick: () -> Unit,
   viewModel: ChatScreenVM
 ) {
   val scaffoldState = rememberScaffoldState()
   val membersDialog by viewModel.showChannelDetails.collectAsState()
-  LaunchedEffect(SKChannel) {
-    viewModel.requestFetch(SKChannel)
-  }
 
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,

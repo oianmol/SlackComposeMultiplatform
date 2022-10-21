@@ -1,66 +1,58 @@
 package dev.baseio.slackclone.uichat.chatthread
 
-import androidx.compose.ui.text.input.TextFieldValue
-
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
-import dev.baseio.slackdomain.usecases.channels.UseCaseInviteUserToChannel
-import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import ViewModel
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns
-import dev.baseio.slackclone.commonui.reusable.SpanInfos
-import dev.baseio.slackdata.SKKeyValueData
-import dev.baseio.slackdata.datasources.local.channels.skUser
+import dev.baseio.slackdomain.datasources.local.messages.SKLocalDataSourceMessages
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
-import dev.baseio.slackdomain.usecases.chat.UseCaseFetchMessages
+import dev.icerock.moko.paging.LambdaPagedListDataSource
+import dev.icerock.moko.paging.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 
-class ChatScreenVM constructor(
-  private val useCaseFetchMessages: UseCaseFetchMessages,
-  private val useCaseSendMessage: UseCaseSendMessage,
-  private val skKeyValueData: SKKeyValueData,
+class ChatScreenVM(
   private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
   private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
   private val useCaseChannelMembers: UseCaseGetChannelMembers,
-  private val useCaseInviteUserToChannel: UseCaseInviteUserToChannel
-) : ViewModel() {
+  private val skLocalDataSourceMessages: SKLocalDataSourceMessages,
+  private val sendMessageDelegate: SendMessageDelegate,
+) : ViewModel(), SendMessageDelegate by sendMessageDelegate {
   lateinit var channelFlow: MutableStateFlow<DomainLayerChannels.SKChannel>
 
   val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
   var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
 
-  var spanInfoList = MutableStateFlow<List<SpanInfos>>(emptyList())
-    private set
+
   var showChannelDetails = MutableStateFlow(false)
     private set
-  var message = MutableStateFlow(TextFieldValue())
-    private set
+
   var chatBoxState = MutableStateFlow(BoxState.Collapsed)
     private set
-  var alertLongClickSkMessage = MutableStateFlow<DomainLayerMessages.SKMessage?>(null)
-    private set
+
 
   val exceptions = CoroutineExceptionHandler { coroutineContext, throwable ->
     throwable.printStackTrace()
   }
 
   var parentJob: Job? = null
+  private var limit = 20
+
+  var skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
+
 
   fun requestFetch(channel: DomainLayerChannels.SKChannel) {
+    channelFlow = MutableStateFlow(channel)
+    sendMessageDelegate.channel = (channelFlow.value)
+    skMessagePagination.refresh()
+
     parentJob?.cancel()
     parentJob = Job()
-
-    channelFlow = MutableStateFlow(channel)
-
-    chatMessagesFlow.value = emptyList()
     channelMembers.value = emptyList()
 
     loadWorkspaceChannelData(channel)
@@ -68,92 +60,94 @@ class ChatScreenVM constructor(
 
   private fun loadWorkspaceChannelData(channel: DomainLayerChannels.SKChannel) {
     with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
-      viewModelScope.launch(parentJob!! + exceptions) {
-        useCaseFetchMessages.invoke(this@with).collectLatest { skMessageList ->
-          chatMessagesFlow.value = skMessageList
-        }
-      }
-      viewModelScope.launch(parentJob!! + exceptions) {
-        useCaseChannelMembers.invoke(this@with).collectLatest { skUserList ->
-          channelMembers.value = skUserList
-        }
-      }
-      viewModelScope.launch(parentJob!! + exceptions) {
-        useCaseFetchAndSaveChannelMembers.invoke(this@with)
-      }
-      viewModelScope.launch(parentJob!! + exceptions) {
-        useCaseFetchAndSaveMessages.invoke(this@with)
+      fetchChannelMembers()
+      refreshChannelMembers()
+    }
+  }
+
+  fun sendMessageNow(message: String) {
+    viewModelScope.launch {
+      sendMessageDelegate.sendMessage(message.trim().trimEnd())
+      chatBoxState.value = BoxState.Collapsed
+      skMessagePagination.refresh()
+    }
+  }
+
+  private fun UseCaseWorkspaceChannelRequest.refreshChannelMembers() =
+    viewModelScope.launch(parentJob!! + exceptions) {
+      useCaseFetchAndSaveChannelMembers.invoke(this@refreshChannelMembers)
+    }
+
+  private fun UseCaseWorkspaceChannelRequest.fetchChannelMembers() {
+    viewModelScope.launch(parentJob!! + exceptions) {
+      useCaseChannelMembers.invoke(this@fetchChannelMembers).collectLatest { skUserList ->
+        channelMembers.value = skUserList
       }
     }
   }
 
-  fun sendMessage(message: String) {
-    if (message.isNotEmpty()) {
-      val sortedList = spanInfoList.value.takeIf { it.size == 2 }?.sortedBy { it.start }
-      sortedList?.firstOrNull()?.let {
-        if (it.tag == MentionsPatterns.INVITE_TAG) {
-          val user = sortedList[1].spanText.replace("@", "")
-          viewModelScope.launch {
-            val result = useCaseInviteUserToChannel(user, channelFlow.value.channelName!!)
-            when {
-              result.isSuccess -> {
-                this@ChatScreenVM.message.value = TextFieldValue("We just invited $user to ${channelFlow.value.channelName!!}!")
-              }
-              else -> {
-                this@ChatScreenVM.message.value = TextFieldValue("Failed to add $user to ${channelFlow.value.channelName!!} ${result.exceptionOrNull()?.message}!")
-              }
-            }
-            chatBoxState.value = BoxState.Collapsed
-          }
-          return // don't move ahead for sending the message
-        }
-      }
-
-      viewModelScope.launch(exceptions) {
-        useCaseSendMessage(
-          DomainLayerMessages.SKMessage(
-            uuid = Clock.System.now().toEpochMilliseconds().toString(),
-            workspaceId = channelFlow.value.workspaceId,
-            channelId = channelFlow.value.channelId,
-            message = message,
-            sender = skKeyValueData.skUser().uuid,
-            createdDate = Clock.System.now().toEpochMilliseconds(),
-            modifiedDate = Clock.System.now().toEpochMilliseconds(),
-            isDeleted = false,
-            isSynced = false
-          )
+  private fun getPagination() = Pagination(
+    parentScope = viewModelScope,
+    dataSource = LambdaPagedListDataSource { currentList ->
+      //fetch and save messages in the range
+      val request = UseCaseWorkspaceChannelRequest(
+        channelFlow.value.workspaceId,
+        (channelFlow.value.channelId),
+        limit,
+        currentList?.size ?: 0
+      )
+      viewModelScope.launch {
+        useCaseFetchAndSaveMessages.invoke(
+          request
         )
       }
-      this.message.value = TextFieldValue()
-      chatBoxState.value = BoxState.Collapsed
-    }
-  }
+      skLocalDataSourceMessages.getLocalMessages(
+        request.workspaceId,
+        request.channelId!!,
+        request.limit,
+        request.offset
+      )
+    },
+    comparator = { a, b ->
+      a.uuid.hashCode() - b.uuid.hashCode()
+    },
+    nextPageListener = { result: Result<List<DomainLayerMessages.SKMessage>> ->
+      if (result.isSuccess) {
+        chatMessagesFlow.value = result.getOrNull() ?: emptyList()
+        println("Next page successful loaded")
+      } else {
+        println("Next page loading failed")
+      }
+    },
+    refreshListener = { result: Result<List<DomainLayerMessages.SKMessage>> ->
+      if (result.isSuccess) {
+        println("Refresh successful")
+        chatMessagesFlow.value = (result.getOrNull() ?: emptyList())
+      } else {
+        println("Refresh failed")
+      }
+    },
+    initValue = emptyList()
+  )
+
 
   fun switchChatBoxState() {
     chatBoxState.value = chatBoxState.value.toggle()
   }
 
-  fun alertLongClick(skMessage: DomainLayerMessages.SKMessage) {
-    alertLongClickSkMessage.value = skMessage
-  }
-
   fun deleteMessage() {
     viewModelScope.launch {
-      alertLongClickSkMessage.value?.copy(isDeleted = true)?.let { useCaseSendMessage(it) }
-      alertLongClickSkMessage.value = null
+      sendMessageDelegate.deleteMessageNow()
+      skMessagePagination.refresh()
     }
   }
 
   fun clearLongClickMessageRequest() {
-    alertLongClickSkMessage.value = null
+    deleteMessageRequest.value = null
   }
 
   fun onClickHash(hashTag: String) {
 
-  }
-
-  fun setSpanInfo(spans: List<SpanInfos>) {
-    spanInfoList.value = spans
   }
 
   fun showChannelDetailsRequested() {

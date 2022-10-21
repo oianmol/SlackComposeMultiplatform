@@ -42,7 +42,7 @@ import dev.baseio.slackclone.uidashboard.vm.DashboardVM
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 
 val homeNavigator = SlackComposeNavigator()
-
+val dashboardHomeNavigator = SlackComposeNavigator()
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BackstackScreen.DashboardUI(
@@ -111,7 +111,6 @@ fun BackstackScreen.DashboardUI(
             lastChannel?.let { slackChannel ->
               ChatScreenUI(
                 modifier = chatViewModifier,
-                SKChannel = slackChannel,
                 onBackClick = { dashboardVM.isChatViewClosed.value = true },
                 viewModel = viewModel
               )
@@ -147,7 +146,6 @@ fun BackstackScreen.DashboardUI(
             lastChannel?.let { slackChannel ->
               ChatScreenUI(
                 modifier = chatViewModifier,
-                SKChannel = slackChannel,
                 onBackClick = {
                   dashboardVM.isChatViewClosed.value = true
                   dashboardVM.selectedChatChannel.value = null
@@ -213,7 +211,6 @@ fun BackstackScreen.DashboardUI(
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
               modifier = contentModifier,
-              SKChannel = slackChannel,
               onBackClick = {
                 dashboardVM.isChatViewClosed.value = true
                 dashboardVM.selectedChatChannel.value = null
@@ -225,7 +222,7 @@ fun BackstackScreen.DashboardUI(
               color = SlackCloneColorProvider.colors.uiBackground,
               modifier = contentModifier
             ) {
-              Navigator(homeNavigator, initialRoute = SlackScreens.DesktopHomeRoute) {
+              Navigator(dashboardHomeNavigator, initialRoute = SlackScreens.DesktopHomeRoute) {
                 this.route(SlackScreens.DesktopHomeRoute) {
                   screen(SlackScreens.DMs) {
                     DirectMessagesUI(onItemClick = onItemClick, scope.get())

@@ -146,7 +146,7 @@ private fun MessageTFRow(
         modifier = Modifier.weight(1f).onKeyEvent { event: KeyEvent ->
           when {
             eventIsEnter(event) -> {
-              viewModel.sendMessage(mentionText.text)
+              viewModel.sendMessageNow(mentionText.text)
               return@onKeyEvent true
             }
 
@@ -195,7 +195,7 @@ private fun SendMessageButton(
 ) {
   IconButton(
     onClick = {
-      viewModel.sendMessage(search)
+      viewModel.sendMessageNow(search)
     }, enabled = search.isNotEmpty(), modifier = modifier
   ) {
     Icon(

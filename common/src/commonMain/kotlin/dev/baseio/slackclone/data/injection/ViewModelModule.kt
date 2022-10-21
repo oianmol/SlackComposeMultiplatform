@@ -6,6 +6,8 @@ import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.SearchChannelsVM
 import dev.baseio.slackclone.uichannels.directmessages.MessageViewModel
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
+import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegateImpl
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.vm.DashboardVM
 import dev.baseio.slackclone.uidashboard.vm.SideNavVM
@@ -25,6 +27,9 @@ import org.koin.dsl.module
 val viewModelDelegateModule = module {
   single<UserProfileDelegate> {
     UserProfileDelegateImpl(getKoin().get(), getKoin().get())
+  }
+  single<SendMessageDelegate> {
+    SendMessageDelegateImpl(get(), get(), get())
   }
 }
 
@@ -109,7 +114,7 @@ val viewModelModule = module {
     scoped {
       ChatScreenVM(
         getKoin().get(), getKoin().get(), getKoin().get(),
-        getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get()
+        getKoin().get(), getKoin().get()
       )
     }
 
