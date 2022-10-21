@@ -6,7 +6,6 @@ plugins {
 
 group = "dev.baseio.slackclone"
 version = "1.0"
-val slackDataVersion: String by project
 
 repositories {
     jcenter()
@@ -19,6 +18,11 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.0")
     implementation("io.grpc:grpc-okhttp:1.49.2")
     api("dev.baseio.slackclone:slack_kmp_data-android:1.0")
+
+    // Test rules and transitive dependencies:
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.1")
+    // Needed for createComposeRule, but not createAndroidComposeRule:
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.1")
 }
 
 android {

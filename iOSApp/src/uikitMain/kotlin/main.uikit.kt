@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Application
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.slackdata.DriverFactory
+import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.cinterop.*
 import platform.UIKit.*
 import platform.Foundation.*
@@ -76,7 +77,7 @@ fun SlackApp(window: UIWindow): UIViewController {
     appNavigator.whenRouteCanNoLongerNavigateBack = {
 
     }
-    val driver = DriverFactory().createDriver(SlackDB.Schema) as SqlDriver
+    val driver = DriverFactory().createDriver(SlackDB.Schema)
     CompositionLocalProvider(
       LocalWindow provides rememberedComposeWindow
     ) {

@@ -66,7 +66,7 @@ fun BackstackScreen.HomeScreenUI(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ThreadsTile() {
-  SlackListItem(Icons.Default.MailOutline, "Threads")
+  SlackListItem(icon = Icons.Default.MailOutline, title = "Threads")
 }
 
 @Composable

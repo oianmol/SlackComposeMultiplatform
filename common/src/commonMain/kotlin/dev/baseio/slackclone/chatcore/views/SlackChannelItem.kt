@@ -2,10 +2,10 @@ package dev.baseio.slackclone.chatcore.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.common.extensions.calculateTimeAgoByTimeGranularity
+import dev.baseio.slackclone.common.extensions.calculateTimeAgo
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
@@ -25,13 +25,14 @@ import kotlinx.datetime.Clock
 
 @Composable
 fun SlackChannelItem(
+  modifier: Modifier = Modifier.fillMaxWidth(),
   slackChannel: DomainLayerChannels.SKChannel,
   textColor: Color = SlackCloneColorProvider.colors.textPrimary,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
   when (slackChannel) {
     is DomainLayerChannels.SKChannel.SkDMChannel -> {
-      DirectMessageChannel(onItemClick, slackChannel, textColor)
+      DirectMessageChannel(modifier,onItemClick, slackChannel, textColor)
     }
 
     is DomainLayerChannels.SKChannel.SkGroupChannel -> {
@@ -58,14 +59,14 @@ private fun GroupChannelItem(
 
 @Composable
 private fun DirectMessageChannel(
+  modifier: Modifier = Modifier
+    .fillMaxWidth(),
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
   slackChannel: DomainLayerChannels.SKChannel.SkDMChannel,
   textColor: Color
 ) {
   Row(
-    modifier = Modifier
-      .padding(8.dp)
-      .fillMaxWidth()
+    modifier = modifier.padding(8.dp)
       .clickable {
         onItemClick(slackChannel)
       }, verticalAlignment = Alignment.CenterVertically
@@ -92,24 +93,25 @@ fun DMLastMessageItem(
     SlackListItem(modifier = Modifier, icon = {
       when (slackChannel) {
         is DomainLayerChannels.SKChannel.SkGroupChannel -> {
-          Box(Modifier.size(24.dp)) {
-            Text(text = "#", style = textStyleFieldSecondary(), modifier = Modifier.align(Alignment.Center))
-          }
+          Icon(
+            imageVector = Icons.Default.Lock,
+            contentDescription = null,
+            tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
+            modifier = Modifier
+              .size(28.dp)
+              .padding(4.dp)
+          )
         }
 
         is DomainLayerChannels.SKChannel.SkDMChannel -> {
           SlackOnlineBox(
             imageUrl = slackChannel.pictureUrl ?: "",
-            parentModifier = Modifier.size(24.dp),
-            imageModifier = Modifier.size(20.dp),
-            onlineIndicator = Modifier.size(10.dp),
-            onlineIndicatorParent = Modifier.size(12.dp)
           )
         }
       }
 
     }, center = {
-      Column(it.padding(4.dp)) {
+      Column(it.weight(1f).padding(4.dp)) {
         ChannelText(slackChannel, SlackCloneColorProvider.colors.textPrimary)
         ChannelMessage(slackMessage, SlackCloneColorProvider.colors.textSecondary)
       }
@@ -147,7 +149,7 @@ private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSeco
 @Composable
 fun RelativeTime(createdDate: Long) {
   Text(
-    calculateTimeAgoByTimeGranularity
+    calculateTimeAgo
       (Clock.System.now().toEpochMilliseconds(), createdDate),
     style = SlackCloneTypography.caption.copy(
       color = SlackCloneColorProvider.colors.textSecondary

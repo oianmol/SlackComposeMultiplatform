@@ -59,16 +59,19 @@ kotlin {
         implementation(compose.runtime)
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
         implementation("com.squareup.sqldelight:native-driver:1.5.3")
+        api("dev.baseio.slackclone:slack_kmp_data:1.0")
       }
     }
     val uikitX64Main by getting {
       dependsOn(uikitMain)
       dependencies {
+        api("dev.baseio.slackclone:slack_kmp_data-iosx64:1.0")
       }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
       dependencies {
+        api("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
       }
     }
   }

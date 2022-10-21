@@ -8,19 +8,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.reusable.SlackListItem
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.commonui.theme.SlackGreen
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import mainDispatcher
@@ -34,7 +28,7 @@ fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenVM) {
   } else {
     0f
   }
-  val alert by viewModel.alertLongClickSkMessage.collectAsState()
+  val alert by viewModel.deleteMessageRequest.collectAsState()
 
   val change by animateFloatAsState(
     manualExpandValue,
@@ -58,28 +52,33 @@ fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenVM) {
       ChatMessageBoxWrapped(viewModel, checkBoxState, change)
     }
     alert?.let {
-      SlackCloneSurface(
-        modifier = Modifier.shadow(4.dp),
-        shape = RoundedCornerShape(4.dp)
-      ) {
-        ListItem(text = {
-          Text("Do you want to delete this message ?")
-        }, icon = {
-          IconButton(onClick = {
-            viewModel.clearLongClickMessageRequest()
-          }) {
-            Icon(Icons.Default.Clear, contentDescription = null)
-          }
-        }, trailing = {
-          IconButton(onClick = {
-            viewModel.deleteMessage()
-          }) {
-            Icon(Icons.Default.Delete, contentDescription = null)
-          }
-        })
-      }
+      DeleteMessageAlert(viewModel)
     }
+  }
+}
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun DeleteMessageAlert(viewModel: ChatScreenVM) {
+  SlackCloneSurface(
+    modifier = Modifier.shadow(4.dp),
+    shape = RoundedCornerShape(4.dp)
+  ) {
+    ListItem(text = {
+      Text("Do you want to delete this message ?")
+    }, icon = {
+      IconButton(onClick = {
+        viewModel.clearLongClickMessageRequest()
+      }) {
+        Icon(Icons.Default.Clear, contentDescription = null)
+      }
+    }, trailing = {
+      IconButton(onClick = {
+        viewModel.deleteMessage()
+      }) {
+        Icon(Icons.Default.Delete, contentDescription = null)
+      }
+    })
   }
 }
 

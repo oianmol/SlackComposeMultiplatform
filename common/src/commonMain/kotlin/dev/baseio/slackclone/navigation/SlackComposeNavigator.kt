@@ -13,15 +13,13 @@ import org.koin.core.scope.Scope
 import kotlin.collections.LinkedHashMap
 
 class SlackComposeNavigator : ComposeNavigator {
-    private var backStackRoute: LinkedHashMap<BackstackRoute, ArrayDeque<BackstackScreen>> =
-        LinkedHashMap()
+    private var backStackRoute: LinkedHashMap<BackstackRoute, ArrayDeque<BackstackScreen>> = LinkedHashMap()
     private var navigationResultMap = LinkedHashMap<String, (Any) -> Unit>()
     private val backPressObserver = HashMap<BackstackScreen, () -> Unit>()
-
     private val currentRoute: MutableState<BackstackRoute?> = mutableStateOf(null)
     private val currentScreen: MutableState<BackstackScreen?> = mutableStateOf(null)
-
     private val screenProviders = mutableMapOf<BackstackScreen, @Composable BackstackScreen.() -> Unit>()
+
     private val navigatorScope = CoroutineScope(SupervisorJob() + mainDispatcher)
     override val changePublisher = Channel<Unit>()
 

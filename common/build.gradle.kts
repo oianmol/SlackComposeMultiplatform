@@ -74,6 +74,10 @@ repositories {
     mavenLocal()
 }
 
+dependencies {
+    commonMainApi("dev.icerock.moko:paging:0.7.2")
+}
+
 
 kotlin {
     android()
@@ -121,7 +125,6 @@ kotlin {
                 implementation(Deps.Decompose.composejb)
                 implementation(Deps.Decompose.compose)
                 implementation(Deps.AndroidX.lifecycleViewModelKtx)
-                implementation("dev.baseio.slackdatalib:slack-multiplatform-generate-protos:1.0.0")
                 implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
                 implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
@@ -165,7 +168,6 @@ kotlin {
                 implementation("dev.baseio.slackclone:slack_kmp_domain-jvm:1.0")
                 implementation("dev.baseio.slackclone:slack_kmp_data-jvm:1.0")
                 implementation(Deps.Kotlinx.coroutines)
-                implementation("dev.baseio.slackdatalib:slack-multiplatform-generate-protos:1.0.0")
                 implementation(Deps.Kotlinx.JVM.coroutinesSwing)
                 implementation("io.ktor:ktor-client-java:$ktor_version")
                 implementation("com.alialbaali.kamel:kamel-image:0.4.0")

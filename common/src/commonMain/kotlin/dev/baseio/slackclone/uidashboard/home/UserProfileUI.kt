@@ -18,10 +18,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,19 +29,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackdata.protos.KMSKUser
+import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UserProfileUI(composeNavigator: ComposeNavigator, profileVM: UserProfileVM) {
+fun UserProfileUI(profileVM: UserProfileVM) {
   val user by profileVM.currentLoggedInUser.collectAsState()
 
   SlackCloneSurface(
@@ -57,12 +54,18 @@ fun UserProfileUI(composeNavigator: ComposeNavigator, profileVM: UserProfileVM) 
       Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
         StatusBox()
       }
-      SlackListItem(Icons.Default.Notifications, "Pause Notifications")
-      SlackListItem(Icons.Default.Person, "Set Away")
+      SlackListItem(icon = Icons.Default.Notifications, title = "Pause Notifications")
+      SlackListItem(icon = Icons.Default.Person, title = "Set Away")
       Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-      SlackListItem(Icons.Default.FavoriteBorder, "Saved Items")
-      SlackListItem(Icons.Default.Person, "View Profile")
-      SlackListItem(Icons.Default.Notifications, "Notifications")
+      SlackListItem(icon = Icons.Default.FavoriteBorder, title = "Saved Items")
+      SlackListItem(icon = Icons.Default.Person, title = "View Profile")
+      SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
+      SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
+        profileVM.logout()
+        appNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
+          remove() // remove all routes!
+        })
+      })
     }
   }
 }

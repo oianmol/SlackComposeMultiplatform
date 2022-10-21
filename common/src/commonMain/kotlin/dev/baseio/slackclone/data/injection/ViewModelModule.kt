@@ -7,6 +7,8 @@ import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
 import dev.baseio.slackclone.uichannels.createsearch.SearchChannelsVM
 import dev.baseio.slackclone.uichannels.directmessages.MessageViewModel
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
+import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegateImpl
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
 import dev.baseio.slackclone.uidashboard.vm.DashboardVM
 import dev.baseio.slackclone.uidashboard.vm.SideNavVM
@@ -28,6 +30,9 @@ val viewModelDelegateModule = module {
   single<UserProfileDelegate> {
     UserProfileDelegateImpl(getKoin().get(), getKoin().get())
   }
+  single<SendMessageDelegate> {
+    SendMessageDelegateImpl(get(), get(), get())
+  }
 }
 
 val viewModelModule = module {
@@ -40,13 +45,6 @@ val viewModelModule = module {
     scoped {
       HomeScreenVM(
         getKoin().get(),
-        getKoin().get(),
-        getKoin().get(),
-        getKoin().get(),
-        getKoin().get(),
-        getKoin().get(),
-        getKoin().get(),
-        getKoin().get()
       )
     }
   }
@@ -112,13 +110,13 @@ val viewModelModule = module {
   }
 
   scope<SlackScreens.Dashboard> {
-    scoped { SideNavVM(getKoin().get(), getKoin().get(), get(), get()) }
-    scoped { DashboardVM(get(), get()) }
+    scoped { SideNavVM(getKoin().get(), getKoin().get(), get()) }
+    scoped { DashboardVM(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
     scoped {
       ChatScreenVM(
-        getKoin().get(), getKoin().get(), getKoin().get(),
-        getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get()
+        getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get(),
+        getKoin().get()
       )
     }
 
