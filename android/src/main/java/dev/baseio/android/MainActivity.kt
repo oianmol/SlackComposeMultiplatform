@@ -8,11 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.DefaultComponentContext
 import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.components.RootComponent
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,6 +24,16 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+
+    val defaultComponentContext = DefaultComponentContext(
+      lifecycle = lifecycle,
+      savedStateRegistry = savedStateRegistry,
+      viewModelStore = viewModelStore,
+      onBackPressedDispatcher = onBackPressedDispatcher,
+    )
+    val root = RootComponent(defaultComponentContext)
+
     setContent {
       val config = LocalConfiguration.current
 
@@ -52,7 +64,8 @@ class MainActivity : AppCompatActivity() {
         SlackCloneTheme {
           App(
             sqlDriver = DriverFactory(this@MainActivity).createDriver(SlackDB.Schema),
-            skKeyValueData = SKKeyValueData(this)
+            skKeyValueData = SKKeyValueData(this),
+            rootComponent = root
           )
         }
       }

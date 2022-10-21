@@ -4,6 +4,7 @@ import dev.baseio.slackclone.uionboarding.compose.SlackAnimSpec
 import kotlinx.coroutines.delay
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.reduce
 
 class GettingStartedComponent(
   componentContext: ComponentContext
@@ -12,21 +13,29 @@ class GettingStartedComponent(
     GettingStartedState(
       introTextExpanded = false,
       isStartAnimation = false,
-      showSlackAnim = false
+      showSlackAnim = true
     )
   )
     private set
 
-  suspend fun endAnimation() {
-    componentState.value = componentState.value.copy(showSlackAnim = false)
-    delay(250)
-    componentState.value = componentState.value.copy(introTextExpanded = !componentState.value.introTextExpanded)
+  private suspend fun endAnimation() {
+    componentState.reduce {
+      it.copy(showSlackAnim = false)
+    }
+    delay(500)
+    componentState.reduce {
+      it.copy(introTextExpanded = true)
+    }
   }
 
   suspend fun animate() {
-    componentState.value = componentState.value.copy(isStartAnimation = true)
+    componentState.reduce {
+      it.copy(isStartAnimation = true)
+    }
     delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(700))
-    componentState.value = componentState.value.copy(isStartAnimation = false)
+    componentState.reduce {
+      it.copy(isStartAnimation = false)
+    }
     delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(800))
     endAnimation()
   }

@@ -16,8 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.arkivanov.decompose.value.getValue
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 
 
 val loaderYellow = Color(226, 179, 75)
@@ -27,35 +29,35 @@ val loaderGreen = Color(91, 178, 128)
 val slackWhite = Color(255, 255, 255)
 
 @Composable
-fun SlackAnimation(gettingStartedVM: GettingStartedVM) {
+fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
   Box(
     modifier = Modifier
       .fillMaxSize()
   ) {
 
-    val shouldStartLogoAnimation by gettingStartedVM.isStartAnimation
+    val shouldStartLogoAnimation by gettingStartedVM.componentState.subscribeAsState()
 
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
       gettingStartedVM.animate()
     }
 
     val animatedRotateLogo by animateFloatAsState(
-      targetValue = if (shouldStartLogoAnimation) 0f else 360f,
+      targetValue = if (shouldStartLogoAnimation.isStartAnimation) 0f else 360f,
       tween(durationMillis = SlackAnimSpec.ANIM_DURATION)
     )
 
     val animatedMoveLogo by animateDpAsState(
-      targetValue = if (shouldStartLogoAnimation) (-120).dp else 0.dp,
+      targetValue = if (shouldStartLogoAnimation.isStartAnimation) (-120).dp else 0.dp,
       tween(SlackAnimSpec.ANIM_DURATION)
     )
 
-    SKTextLoader(Modifier.align(Alignment.Center), shouldStartLogoAnimation)
+    SKTextLoader(Modifier.align(Alignment.Center), shouldStartLogoAnimation.isStartAnimation)
 
     SKFourColorLoader(
       Modifier.align(Alignment.Center),
       animatedRotateLogo,
       animatedMoveLogo,
-      shouldStartLogoAnimation
+      shouldStartLogoAnimation.isStartAnimation
     )
 
   }

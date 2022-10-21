@@ -3,6 +3,8 @@ package dev.baseio.slackclone
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.GrpcCalls
@@ -30,9 +32,14 @@ val appNavigator = SlackComposeNavigator()
 var koinApp: KoinApplication? = null
 
 @Composable
-fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKKeyValueData) {
+fun App(
+  modifier: Modifier = Modifier,
+  sqlDriver: SqlDriver,
+  skKeyValueData: SKKeyValueData,
+  defaultComponentContext: DefaultComponentContext
+) {
   if (koinApp == null) {
-    koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
+    koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData, defaultComponentContext)
   }
 
   val initialRoute = skKeyValueData.get(AUTH_TOKEN)?.let {
@@ -82,10 +89,14 @@ fun App(modifier: Modifier = Modifier, sqlDriver: SqlDriver, skKeyValueData: SKK
   }
 }
 
-fun initKoin(slackDB: SlackDB, skKeyValueData: SKKeyValueData): KoinApplication {
+fun initKoin(
+  slackDB: SlackDB,
+  skKeyValueData: SKKeyValueData,
+  defaultComponentContext: DefaultComponentContext
+): KoinApplication {
   return startKoin {
     modules(
-      appModule(slackDB, skKeyValueData),
+      appModule(slackDB, skKeyValueData, defaultComponentContext),
       dataSourceModule,
       dataMappersModule,
       useCaseModule,
@@ -96,9 +107,10 @@ fun initKoin(slackDB: SlackDB, skKeyValueData: SKKeyValueData): KoinApplication 
   }
 }
 
-fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
+fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData, defaultComponentContext: DefaultComponentContext) =
   module {
     single { slackDB }
     single { skKeyValueData }
+    single<ComponentContext> { defaultComponentContext }
     single { GrpcCalls(skKeyValueData = get(), address = "192.168.1.7") }
   }

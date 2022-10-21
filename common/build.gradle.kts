@@ -26,7 +26,6 @@ object Deps {
         const val VERSION = "1.0.0-alpha-06"
         const val core ="com.arkivanov.decompose:decompose:${VERSION}"
         const val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION"
-        const val compose = "com.arkivanov.decompose:extensions-compose-jetpack:$VERSION"
     }
 
     object Kotlinx {
@@ -86,9 +85,9 @@ kotlin {
             kotlinOptions.jvmTarget = "11"
         }
     }
-    iosArm64()
+/*    iosArm64()
     iosSimulatorArm64()
-    iosX64()
+    iosX64()*/
     sourceSets {
 
         val commonMain by getting {
@@ -108,6 +107,7 @@ kotlin {
                 implementation(Deps.Koin.core)
                 implementation(kotlin("stdlib-common"))
                 implementation(Deps.Decompose.core)
+                implementation(Deps.Decompose.composejb)
             }
         }
         val commonTest by getting {
@@ -122,8 +122,6 @@ kotlin {
                 implementation("dev.baseio.slackclone:slack_kmp_data-android:1.0")
                 implementation(Deps.Koin.android)
                 implementation(Deps.Kotlinx.coroutines)
-                implementation(Deps.Decompose.composejb)
-                implementation(Deps.Decompose.compose)
                 implementation(Deps.AndroidX.lifecycleViewModelKtx)
                 implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
                 implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
@@ -141,7 +139,7 @@ kotlin {
                 implementation("junit:junit:4.13.2")
             }
         }
-        val iosArm64Main by getting {
+/*        val iosArm64Main by getting {
             dependencies {
                 implementation("dev.baseio.slackclone:slack_kmp_domain-iosarm64:1.0")
                 implementation("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
@@ -162,7 +160,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
                 implementation("io.ktor:ktor-client-darwin:$ktor_version")
             }
-        }
+        }*/
         val jvmMain by getting {
             dependencies {
                 implementation("dev.baseio.slackclone:slack_kmp_domain-jvm:1.0")

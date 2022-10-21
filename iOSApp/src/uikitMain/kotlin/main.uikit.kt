@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
-import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
@@ -84,7 +83,7 @@ fun SlackApp(window: UIWindow): UIViewController {
       SlackCloneTheme(isDarkTheme = true) {
         Column {
           Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
-          App(sqlDriver = driver,skKeyValueData = SKKeyValueData())
+          App(sqlDriver = driver, skKeyValueData = SKKeyValueData(), defaultComponentContext = defaultComponentContext)
         }
       }
 

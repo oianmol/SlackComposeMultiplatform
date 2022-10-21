@@ -9,6 +9,12 @@ plugins {
 group = "dev.baseio.slackclone"
 version = "1.0"
 
+object Decompose {
+  val VERSION = "1.0.0-alpha-06"
+  val core = "com.arkivanov.decompose:decompose:${VERSION}"
+  val coreJvm = "com.arkivanov.decompose:decompose-jvm:${VERSION}"
+}
+
 kotlin {
   jvm {
     compilations.all {
@@ -22,6 +28,8 @@ kotlin {
         implementation("io.grpc:grpc-netty-shaded:1.49.2")
         implementation(project(":common"))
         implementation(compose.desktop.currentOs)
+        api(Decompose.core)
+        api(Decompose.coreJvm)
         api("dev.baseio.slackclone:slack_kmp_data-jvm:1.0")
         val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:1.0.0-alpha-06"
         implementation(composejb)

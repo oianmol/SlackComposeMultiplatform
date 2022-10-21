@@ -26,11 +26,12 @@ import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 
 @Composable
 fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedComponent) {
   val scaffoldState = rememberScaffoldState()
-  val showSlackAnim by gettingStartedVM.componentState
+  val showSlackAnim by gettingStartedVM.componentState.subscribeAsState()
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.GettingStartedScreen()
 
@@ -50,7 +51,7 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         if (showSlackAnim.showSlackAnim) {
           SlackAnimation(gettingStartedVM)
         } else {
-          AnimatedVisibility(visible = !showSlackAnim.showSlackAnim) {
+          AnimatedVisibility(visible = true) {
             when (size) {
               WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
               else -> {
@@ -161,7 +162,7 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
 @Composable
 private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
   val painter = PainterRes.gettingStarted()
-  val expanded by gettingStartedVM.componentState
+  val expanded by gettingStartedVM.componentState.subscribeAsState()
   AnimatedVisibility(
     visible = expanded.introTextExpanded, enter = ImageEnterTransition(),
     exit = ImageExitTrans()
@@ -194,7 +195,7 @@ private fun GetStartedButton(
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.componentState
+  val expanded by gettingStartedVM.componentState.subscribeAsState()
 
   AnimatedVisibility(
     visible = expanded.introTextExpanded, enter = enterAnim(),
@@ -267,7 +268,7 @@ private fun IntroText(
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.componentState
+  val expanded by gettingStartedVM.componentState.subscribeAsState()
 
   AnimatedVisibility(
     visible = expanded.introTextExpanded, enter = enterAnim(),

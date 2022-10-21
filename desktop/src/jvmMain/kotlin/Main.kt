@@ -15,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
@@ -31,7 +29,10 @@ import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.FabPosition
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.*
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
+import dev.baseio.slackclone.components.RootComponent
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.delay
@@ -39,7 +40,8 @@ import kotlinx.coroutines.delay
 @ExperimentalComposeUiApi
 fun main() = application {
   val windowState = rememberWindowState()
-  val root = RootComponent(componentContext = defaultComponentContext())
+  val lifecycle = LifecycleRegistry()
+
 
   Window(onCloseRequest = ::exitApplication, state = windowState) {
     var rememberedComposeWindow by remember(this.window) {
@@ -60,7 +62,19 @@ fun main() = application {
     }
 
     SlackCloneTheme {
-      Content(rememberedComposeWindow)
+      CompositionLocalProvider(
+        LocalWindow provides rememberedComposeWindow
+      ) {
+        Scaffold(floatingActionButton = {
+          FloatingActionButton()
+        }, isFloatingActionButtonDocked = true, floatingActionButtonPosition = FabPosition.Center) {
+          App(
+            sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
+            skKeyValueData = SKKeyValueData(),
+            defaultComponentContext = DefaultComponentContext(lifecycle = lifecycle)
+          )
+        }
+      }
     }
 
   }
@@ -111,20 +125,6 @@ private fun CommonCircleShape(modifier: Modifier, color: Color) {
     ) {
       enter = false
     })
-}
-
-@Composable
-@ExperimentalComposeUiApi
-private fun Content(rememberedComposeWindow: WindowInfo) {
-  CompositionLocalProvider(
-    LocalWindow provides rememberedComposeWindow
-  ) {
-    Scaffold(floatingActionButton = {
-      FloatingActionButton()
-    }, isFloatingActionButtonDocked = true, floatingActionButtonPosition = FabPosition.Center) {
-      App(sqlDriver = DriverFactory().createDriver(SlackDB.Schema), skKeyValueData = SKKeyValueData())
-    }
-  }
 }
 
 @ExperimentalComposeUiApi
