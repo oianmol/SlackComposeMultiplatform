@@ -6,10 +6,10 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
 import kotlinx.coroutines.launch
 import ViewModel
-import dev.baseio.slackdomain.datasources.local.messages.SKLocalDataSourceMessages
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
+import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
 import dev.icerock.moko.paging.LambdaPagedListDataSource
 import dev.icerock.moko.paging.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -20,7 +20,7 @@ class ChatScreenVM(
   private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
   private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
   private val useCaseChannelMembers: UseCaseGetChannelMembers,
-  private val skLocalDataSourceMessages: SKLocalDataSourceMessages,
+  private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
   private val sendMessageDelegate: SendMessageDelegate,
 ) : ViewModel(), SendMessageDelegate by sendMessageDelegate {
   lateinit var channelFlow: MutableStateFlow<DomainLayerChannels.SKChannel>
@@ -62,6 +62,7 @@ class ChatScreenVM(
     with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
       fetchChannelMembers()
       refreshChannelMembers()
+      messageChangeListener()
     }
   }
 
@@ -69,7 +70,6 @@ class ChatScreenVM(
     viewModelScope.launch {
       sendMessageDelegate.sendMessage(message.trim().trimEnd())
       chatBoxState.value = BoxState.Collapsed
-      skMessagePagination.refresh()
     }
   }
 
@@ -77,6 +77,14 @@ class ChatScreenVM(
     viewModelScope.launch(parentJob!! + exceptions) {
       useCaseFetchAndSaveChannelMembers.invoke(this@refreshChannelMembers)
     }
+
+  private fun UseCaseWorkspaceChannelRequest.messageChangeListener() {
+    viewModelScope.launch(parentJob!! + exceptions) {
+      useCaseStreamLocalMessages.invoke(this@messageChangeListener).collectLatest { skMessageList ->
+        chatMessagesFlow.value = skMessageList
+      }
+    }
+  }
 
   private fun UseCaseWorkspaceChannelRequest.fetchChannelMembers() {
     viewModelScope.launch(parentJob!! + exceptions) {
@@ -96,16 +104,8 @@ class ChatScreenVM(
         limit,
         currentList?.size ?: 0
       )
-      viewModelScope.launch {
-        useCaseFetchAndSaveMessages.invoke(
-          request
-        )
-      }
-      skLocalDataSourceMessages.getLocalMessages(
-        request.workspaceId,
-        request.channelId!!,
-        request.limit,
-        request.offset
+      useCaseFetchAndSaveMessages.invoke(
+        request
       )
     },
     comparator = { a, b ->
@@ -113,7 +113,7 @@ class ChatScreenVM(
     },
     nextPageListener = { result: Result<List<DomainLayerMessages.SKMessage>> ->
       if (result.isSuccess) {
-        chatMessagesFlow.value = result.getOrNull() ?: emptyList()
+        //chatMessagesFlow.value = result.getOrNull() ?: emptyList()
         println("Next page successful loaded")
       } else {
         println("Next page loading failed")
@@ -122,7 +122,7 @@ class ChatScreenVM(
     refreshListener = { result: Result<List<DomainLayerMessages.SKMessage>> ->
       if (result.isSuccess) {
         println("Refresh successful")
-        chatMessagesFlow.value = (result.getOrNull() ?: emptyList())
+        //chatMessagesFlow.value = (result.getOrNull() ?: emptyList())
       } else {
         println("Refresh failed")
       }
@@ -138,7 +138,6 @@ class ChatScreenVM(
   fun deleteMessage() {
     viewModelScope.launch {
       sendMessageDelegate.deleteMessageNow()
-      skMessagePagination.refresh()
     }
   }
 

@@ -113,8 +113,8 @@ val viewModelModule = module {
 
     scoped {
       ChatScreenVM(
-        getKoin().get(), getKoin().get(), getKoin().get(),
-        getKoin().get(), getKoin().get()
+        getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get(),
+        getKoin().get()
       )
     }
 

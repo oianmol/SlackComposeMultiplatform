@@ -16,12 +16,9 @@ import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedMonthDate
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.swiperefresh.ComposePullToRefresh
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
-import dev.icerock.moko.mvvm.livedata.asFlow
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatMessagesUI(
   viewModel: ChatScreenVM,
