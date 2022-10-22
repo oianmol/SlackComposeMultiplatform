@@ -18,7 +18,8 @@ class CreateNewChannelComponent constructor(
   coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-  val navigationPop:()->Unit
+  val navigationPop:()->Unit,
+  val navigationWith:(DomainLayerChannels.SKChannel)->Unit
 ) : ComponentContext by componentContext {
 
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
@@ -49,13 +50,7 @@ class CreateNewChannelComponent constructor(
             uuid = "${createChannelState.value.name}_${lastSelectedWorkspace.uuid}"
           )
           val channel = useCaseCreateChannel(createChannelState.value).getOrThrow()
-          TODO("deliverResult")
-          /*composeNavigator.navigateUp()
-          composeNavigator.deliverResult(
-            NavigationKey.NavigateChannel,
-            channel,
-            SlackScreens.CreateChannelsScreen
-          )*/
+          navigationWith(channel)
         }
 
       }

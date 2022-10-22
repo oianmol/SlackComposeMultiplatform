@@ -54,7 +54,7 @@ import java.lang.RuntimeException
 @Composable
 fun DashboardUI(
   dashboardComponent: DashboardComponent,
-  chatScreenComponent: ChatScreenComponent
+  chatScreenComponent: ChatScreenComponent = dashboardComponent.chatScreenComponent
 ) {
   val scaffoldState = rememberScaffoldState()
 
@@ -64,9 +64,9 @@ fun DashboardUI(
 
   val keyboardController = LocalSoftwareKeyboardController.current
   val lastChannel by dashboardComponent.selectedChatChannel.collectAsState(mainDispatcher)
+  val isChatViewClosed by dashboardComponent.isChatViewClosed.collectAsState(mainDispatcher)
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
-  val isChatViewClosed by dashboardComponent.isChatViewClosed.collectAsState(mainDispatcher)
   val size = getWindowSizeClass(LocalWindow.current)
   val screenWidth = LocalWindow.current.width
   val sideNavWidth = screenWidth * 0.8f

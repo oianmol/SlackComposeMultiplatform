@@ -29,7 +29,7 @@ interface Root {
     data class CreateNewChannel(val component: CreateNewChannelComponent) : Child()
     data class NewChatThread(val component: NewChatThreadComponent) : Child()
     data class CreateWorkspace(val component: CreateWorkspaceComponent) : Child()
-    data class DashboardScreen(val component: DashboardComponent, val chatComponent: ChatScreenComponent) : Child()
+    data class DashboardScreen(val component: DashboardComponent) : Child()
   }
 }
 
@@ -106,24 +106,21 @@ class RootComponent(
           }, {
             navigation.push(it)
           }
-        ),
-        ChatScreenComponent(
-          componentContext, koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
         )
       )
 
       Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
         CreateNewChannelComponent(
           componentContext, koinApp.koin.get(),
-          koinApp.koin.get(), koinApp.koin.get()
-        ) {
-          navigation.pop()
-        }
+          koinApp.koin.get(), koinApp.koin.get(),
+          {
+            navigation.pop()
+          }, { channel ->
+            navigation.popWhile {
+              it != Config.DashboardScreen
+            }
+            (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
+          })
       )
 
       Config.NewChatThreadScreen -> Root.Child.NewChatThread(
@@ -134,9 +131,15 @@ class RootComponent(
           koinApp.koin.get(),
           koinApp.koin.get(),
           koinApp.koin.get(),
-        ) {
-          navigation.pop()
-        }
+          {
+            navigation.pop()
+          }, { channel ->
+            navigation.popWhile {
+              it != Config.DashboardScreen
+            }
+            (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
+          }
+        )
       )
 
       Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(

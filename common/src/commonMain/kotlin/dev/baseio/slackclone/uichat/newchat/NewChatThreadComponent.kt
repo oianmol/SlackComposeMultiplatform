@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uichat.newchat
 
-import ViewModel
 import com.arkivanov.decompose.ComponentContext
 import dev.baseio.slackclone.uionboarding.coroutineScope
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
@@ -21,7 +20,8 @@ class NewChatThreadComponent(
   private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch,
-  val navigationPop: () -> Unit
+  val navigationPop: () -> Unit,
+  val navigationPopWith: (DomainLayerChannels.SKChannel) -> Unit
 ) : ComponentContext by componentContext {
 
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
@@ -58,12 +58,7 @@ class NewChatThreadComponent(
   }
 
   private fun navigate(channel: DomainLayerChannels.SKChannel) {
-    TODO()
-    /* composeNavigator.deliverResult(
-       NavigationKey.NavigateChannel,
-       channel,
-       SlackScreens.Dashboard
-     )*/
+    navigationPopWith(channel)
   }
 
   fun createChannel(channel: DomainLayerChannels.SKChannel) {

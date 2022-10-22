@@ -43,7 +43,7 @@ fun App(
     when (val child = it.instance) {
       is Root.Child.CreateWorkspace -> CreateWorkspaceScreen(child.component)
       is Root.Child.GettingStarted -> GettingStartedUI(child.component)
-      is Root.Child.DashboardScreen -> DashboardUI(child.component, child.chatComponent)
+      is Root.Child.DashboardScreen -> DashboardUI(child.component)
       is Root.Child.CreateNewChannel -> CreateNewChannelUI(child.component)
       is Root.Child.NewChatThread -> NewChatThreadScreen(child.component)
       is Root.Child.SearchCreateChannel -> SearchCreateChannelUI(child.component)

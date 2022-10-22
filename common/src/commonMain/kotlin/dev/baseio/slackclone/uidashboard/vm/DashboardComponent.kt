@@ -4,18 +4,16 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.arkivanov.decompose.router.stack.*
-import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import dev.baseio.grpc.GrpcCalls
-import dev.baseio.slackclone.Root
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.directmessages.DirectMessagesComponent
+import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uidashboard.home.HomeScreenComponent
 import dev.baseio.slackclone.uidashboard.home.MentionsComponent
 import dev.baseio.slackclone.uidashboard.home.SearchMessagesComponent
@@ -25,7 +23,6 @@ import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndUpdateChangeInChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
@@ -40,6 +37,8 @@ import kotlinx.coroutines.launch
 
 interface Dashboard {
   fun navigate(child: DashboardComponent.Config)
+  fun onChannelSelected(channel: DomainLayerChannels.SKChannel)
+
   val phoneStack: Value<ChildStack<*, Child>>
   val desktopStack: Value<ChildStack<*, Child>>
 
@@ -74,10 +73,21 @@ class DashboardComponent(
   val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) {
     navigateOnboarding()
   }
+  val chatScreenComponent = ChatScreenComponent(
+  componentContext, koinApp.koin.get(),
+  koinApp.koin.get(),
+  koinApp.koin.get(),
+  koinApp.koin.get(),
+  koinApp.koin.get(),
+  koinApp.koin.get(),
+  )
   val recentChannelsComponent =
     SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
   val allChannelsComponent =
     SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+
+
+
 
   override val phoneStack: Value<ChildStack<*, Dashboard.Child>> = childStack(
     key = "phone",
@@ -142,7 +152,7 @@ class DashboardComponent(
         cancelJobIfWorkspaceChanged(workspaceId)
         lastWorkspace = workspaceId
         val user = skKeyValueData.skUser()// TODO is this the best way to fetch user ?
-        observeForUserData(workspaceId, user)
+        observeForUserData(workspaceId)
         viewModelScope.launch {
           useCaseFetchChannels.invoke(workspaceId, 0, 20)
           useCaseFetchAndSaveUsers(workspaceId)
@@ -165,7 +175,13 @@ class DashboardComponent(
     }.launchIn(viewModelScope)
   }
 
-  private fun observeForUserData(workspaceId: String, user: DomainLayerUsers.SKUser) {
+  override fun onChannelSelected(channel: DomainLayerChannels.SKChannel) {
+    selectedChatChannel.value = channel
+    chatScreenComponent.requestFetch(channel)
+    isChatViewClosed.value = false
+  }
+
+  private fun observeForUserData(workspaceId: String) {
     observeNewMessagesJob =
       useCaseObserveMessages.invoke(UseCaseWorkspaceChannelRequest(workspaceId = workspaceId)).launchIn(viewModelScope)
     useCaseObserveUsersJob = useCaseObserveUsers.invoke(workspaceId).launchIn(viewModelScope)
