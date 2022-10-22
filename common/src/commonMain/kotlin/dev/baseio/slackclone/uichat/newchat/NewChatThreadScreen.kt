@@ -20,23 +20,20 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.ComposeNavigator
 
 @Composable
 fun NewChatThreadScreen(
-  composeNavigator: ComposeNavigator,
   newChatThread: NewChatThreadVM,
 ) {
 
   val scaffoldState = rememberScaffoldState()
 
-  ListRandomUsers(scaffoldState, composeNavigator, newChatThread = newChatThread)
+  ListRandomUsers(scaffoldState, newChatThread = newChatThread)
 }
 
 @Composable
 private fun ListRandomUsers(
   scaffoldState: ScaffoldState,
-  composeNavigator: ComposeNavigator,
   newChatThread: NewChatThreadVM,
 ) {
   Box {
@@ -46,13 +43,13 @@ private fun ListRandomUsers(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
-        SearchAppBar(composeNavigator)
+        SearchAppBar()
       },
       snackbarHost = {
         scaffoldState.snackbarHostState
       }
     ) { innerPadding ->
-      SearchContent(innerPadding, newChatThread, composeNavigator)
+      SearchContent(innerPadding, newChatThread)
     }
   }
 }
@@ -61,7 +58,6 @@ private fun ListRandomUsers(
 private fun SearchContent(
   innerPadding: PaddingValues,
   newChatThread: NewChatThreadVM,
-  composeNavigator: ComposeNavigator
 ) {
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
@@ -69,7 +65,7 @@ private fun SearchContent(
     ) {
       Column {
         SearchUsersTF(newChatThread)
-        ListAllUsers(newChatThread, composeNavigator)
+        ListAllUsers(newChatThread)
       }
     }
   }
@@ -77,7 +73,7 @@ private fun SearchContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNavigator) {
+private fun ListAllUsers(viewModel: NewChatThreadVM) {
   val channelsFlow by viewModel.channelsStream.collectAsState(mainDispatcher)
   val errorFlow by viewModel.errorStream.collectAsState()
 
@@ -95,7 +91,7 @@ private fun ListAllUsers(viewModel: NewChatThreadVM, composeNavigator: ComposeNa
         }
         item {
           SlackChannelItem(slackChannel = channel) {
-            viewModel.createChannel(it, composeNavigator)
+            viewModel.createChannel(it)
           }
         }
         lastDrawnChannel = newDrawn
@@ -173,13 +169,13 @@ private fun textFieldColors() = TextFieldDefaults.textFieldColors(
 )
 
 @Composable
-private fun SearchAppBar(composeNavigator: ComposeNavigator) {
+private fun SearchAppBar() {
   SlackSurfaceAppBar(
     title = {
       SearchNavTitle()
     },
     navigationIcon = {
-      NavBackIcon(composeNavigator)
+      NavBackIcon()
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
   )
@@ -194,9 +190,10 @@ private fun SearchNavTitle() {
 }
 
 @Composable
-private fun NavBackIcon(composeNavigator: ComposeNavigator) {
+private fun NavBackIcon() {
   IconButton(onClick = {
-    composeNavigator.navigateUp()
+    //composeNavigator.navigateUp()
+    TODO()
   }) {
     Icon(
       imageVector = Icons.Filled.Clear,

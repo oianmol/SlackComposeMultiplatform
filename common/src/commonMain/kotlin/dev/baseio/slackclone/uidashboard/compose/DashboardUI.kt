@@ -29,26 +29,27 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigation.*
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenUI
-import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackDesktopLayout
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackSideBarLayoutDesktop
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackWorkspaceLayoutDesktop
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
+import com.arkivanov.decompose.router.stack.active
+import com.arkivanov.essenty.backhandler.BackCallback
 import dev.baseio.slackclone.uidashboard.home.*
-import dev.baseio.slackclone.uidashboard.vm.DashboardVM
+import dev.baseio.slackclone.uidashboard.vm.Dashboard
+import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 
-val homeNavigator = SlackComposeNavigator()
-val dashboardHomeNavigator = SlackComposeNavigator()
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BackstackScreen.DashboardUI(
-  composeNavigator: ComposeNavigator,
-  dashboardVM: DashboardVM,
-  viewModel: ChatScreenVM
+fun DashboardUI(
+  dashboardComponent: DashboardComponent,
+  chatScreenComponent: ChatScreenComponent
 ) {
   val scaffoldState = rememberScaffoldState()
 
@@ -57,25 +58,20 @@ fun BackstackScreen.DashboardUI(
 
 
   val keyboardController = LocalSoftwareKeyboardController.current
-  val lastChannel by dashboardVM.selectedChatChannel.collectAsState(mainDispatcher)
+  val lastChannel by dashboardComponent.selectedChatChannel.collectAsState(mainDispatcher)
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
-  val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(mainDispatcher)
+  val isChatViewClosed by dashboardComponent.isChatViewClosed.collectAsState(mainDispatcher)
   val size = getWindowSizeClass(LocalWindow.current)
   val screenWidth = LocalWindow.current.width
   val sideNavWidth = screenWidth * 0.8f
   val sideNavPxValue = with(LocalDensity.current) { sideNavWidth.toPx() }
   val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
 
-  if (!isChatViewClosed) {
-    composeNavigator.observeWhenBackPressedFor(SlackScreens.Dashboard) {
-      if (!isChatViewClosed) {
-        dashboardVM.isChatViewClosed.value = true
-      }
-    }
-  } else {
-    composeNavigator.removeObserverForBackPress(SlackScreens.Dashboard)
-  }
+  dashboardComponent.backHandler.register(BackCallback(!isChatViewClosed) {
+    dashboardComponent.isChatViewClosed.value = true
+  })
+
 
   LaunchedEffect(isChatViewClosed) {
     if (isChatViewClosed) {
@@ -86,7 +82,7 @@ fun BackstackScreen.DashboardUI(
 
   BoxWithConstraints {
     when (size) {
-      WindowSize.Phones, WindowSize.Tablets -> {
+      WindowSize.Phones, WindowSize.SmallTablets -> {
         SlackDragComposableView(
           isLeftNavOpen = isLeftNavOpen,
           isChatViewClosed = checkChatViewClosed(lastChannel, isChatViewClosed),
@@ -96,13 +92,12 @@ fun BackstackScreen.DashboardUI(
             isLeftNavOpen = it
           },
           onOpenCloseRightView = {
-            dashboardVM.isChatViewClosed.value = it
+            dashboardComponent.isChatViewClosed.value = it
           },
           leftViewComposable = { sideNavModifier ->
             SideNavigation(
               modifier = sideNavModifier.width(sideNavWidth),
-              composeNavigator = composeNavigator,
-              scope.get()
+              viewModel = dashboardComponent.sideNavComponent,
             ) {
               isLeftNavOpen = false
             }
@@ -111,8 +106,8 @@ fun BackstackScreen.DashboardUI(
             lastChannel?.let { slackChannel ->
               ChatScreenUI(
                 modifier = chatViewModifier,
-                onBackClick = { dashboardVM.isChatViewClosed.value = true },
-                viewModel = viewModel
+                onBackClick = { dashboardComponent.isChatViewClosed.value = true },
+                viewModel = chatScreenComponent
               )
             }
           }
@@ -123,10 +118,10 @@ fun BackstackScreen.DashboardUI(
             modifier = mainViewModifier,
             appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
             onItemClick = {
-              dashboardVM.selectedChatChannel.value = it
-              viewModel.requestFetch(it)
-              dashboardVM.isChatViewClosed.value = false
-            }, composeNavigator
+              dashboardComponent.selectedChatChannel.value = it
+              chatScreenComponent.requestFetch(it)
+              dashboardComponent.isChatViewClosed.value = false
+            }, dashboardComponent
           )
         }
       }
@@ -136,8 +131,7 @@ fun BackstackScreen.DashboardUI(
           leftViewComposable = {
             SideNavigation(
               modifier = it,
-              composeNavigator = composeNavigator,
-              scope.get()
+              viewModel = dashboardComponent.sideNavComponent
             ) {
               isLeftNavOpen = false
             }
@@ -147,10 +141,10 @@ fun BackstackScreen.DashboardUI(
               ChatScreenUI(
                 modifier = chatViewModifier,
                 onBackClick = {
-                  dashboardVM.isChatViewClosed.value = true
-                  dashboardVM.selectedChatChannel.value = null
+                  dashboardComponent.isChatViewClosed.value = true
+                  dashboardComponent.selectedChatChannel.value = null
                 },
-                viewModel = viewModel
+                viewModel = chatScreenComponent
               )
             }
           },
@@ -161,11 +155,11 @@ fun BackstackScreen.DashboardUI(
             modifier = modifier,
             appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
             onItemClick = {
-              dashboardVM.selectedChatChannel.value = it
-              viewModel.requestFetch(it)
-              dashboardVM.isChatViewClosed.value = false
+              dashboardComponent.selectedChatChannel.value = it
+              chatScreenComponent.requestFetch(it)
+              dashboardComponent.isChatViewClosed.value = false
             },
-            composeNavigator = composeNavigator,
+            dashboardComponent = dashboardComponent,
           )
         }
 
@@ -173,70 +167,65 @@ fun BackstackScreen.DashboardUI(
 
       else -> {
         val onItemClick = { channel: Any ->
-          dashboardVM.selectedChatChannel.value = channel as DomainLayerChannels.SKChannel
-          viewModel.requestFetch(channel)
-          dashboardVM.isChatViewClosed.value = false
+          dashboardComponent.selectedChatChannel.value = channel as DomainLayerChannels.SKChannel
+          chatScreenComponent.requestFetch(channel)
+          dashboardComponent.isChatViewClosed.value = false
         }
         val clearChat = {
-          dashboardVM.isChatViewClosed.value = true
-          dashboardVM.selectedChatChannel.value = null
+          dashboardComponent.isChatViewClosed.value = true
+          dashboardComponent.selectedChatChannel.value = null
         }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = { modifier ->
-          SlackSideBarLayoutDesktop(modifier, scope.get(), openDM = {
+          SlackSideBarLayoutDesktop(modifier, dashboardComponent.sideNavComponent, openDM = {
             clearChat()
-            homeNavigator.navigateScreen(SlackScreens.DMs)
+            dashboardComponent.navigate(DashboardComponent.Config.DirectMessages)
           }, mentionsScreen = {
             clearChat()
-            homeNavigator.navigateScreen(SlackScreens.Mentions)
+            dashboardComponent.navigate(DashboardComponent.Config.MentionsConfig)
           }, searchScreen = {
             clearChat()
-            homeNavigator.navigateScreen(SlackScreens.Search)
+            dashboardComponent.navigate(DashboardComponent.Config.Search)
           }, userProfile = {
             clearChat()
-            homeNavigator.navigateScreen(SlackScreens.You)
-          }, homeNavigator)
+            dashboardComponent.navigate(DashboardComponent.Config.Profile)
+          }, dashboardComponent)
         }, workSpaceAndChannels = { modifier ->
           SlackWorkspaceLayoutDesktop(modifier, onItemClick = { skChannel ->
             onItemClick(skChannel)
           }, onCreateChannelRequest = {
-            composeNavigator.registerForNavigationResult(
+            TODO("CreateChannelsScreen")
+           /* composeNavigator.registerForNavigationResult(
               NavigationKey.NavigateChannel,
               SlackScreens.Dashboard
             ) {
               onItemClick(it as DomainLayerChannels.SKChannel)
             }
-            composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
-          }, composeNavigator)
+            composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
+          },dashboardComponent.recentChannelsComponent,dashboardComponent.allChannelsComponent)
         }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
               modifier = contentModifier,
               onBackClick = {
-                dashboardVM.isChatViewClosed.value = true
-                dashboardVM.selectedChatChannel.value = null
+                dashboardComponent.isChatViewClosed.value = true
+                dashboardComponent.selectedChatChannel.value = null
               },
-              viewModel = viewModel
+              viewModel = chatScreenComponent
             )
           } ?: run {
             SlackCloneSurface(
               color = SlackCloneColorProvider.colors.uiBackground,
               modifier = contentModifier
             ) {
-              Navigator(dashboardHomeNavigator, initialRoute = SlackScreens.DesktopHomeRoute) {
-                this.route(SlackScreens.DesktopHomeRoute) {
-                  screen(SlackScreens.DMs) {
-                    DirectMessagesUI(onItemClick = onItemClick, scope.get())
+              Children( stack = dashboardComponent.desktopStack) {
+                when (val child = it.instance) {
+                  is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
+                  is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
+                  is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
+                  is Dashboard.Child.UserProfileScreen -> {
+                    UserProfileUI(child.component)
                   }
-                  screen(SlackScreens.Mentions) {
-                    MentionsReactionsUI()
-                  }
-                  screen(SlackScreens.Search) {
-                    SearchMessagesUI()
-                  }
-                  screen(SlackScreens.You) {
-                    val gettingStartedVM = scope.get<UserProfileVM>()
-                    UserProfileUI(gettingStartedVM)
-                  }
+                  is Dashboard.Child.HomeScreen -> TODO()
                 }
               }
             }
@@ -248,14 +237,14 @@ fun BackstackScreen.DashboardUI(
 
 }
 
-enum class WindowSize { Phones, Tablets, BigTablets, DesktopOne, DesktopTwo }
+enum class WindowSize { Phones, SmallTablets, BigTablets, DesktopOne, DesktopTwo }
 
 fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
   windowDpSize.width < 0.dp ->
     throw IllegalArgumentException("Dp value cannot be negative")
 
   windowDpSize.width < 600.dp -> WindowSize.Phones
-  windowDpSize.width < 960.dp -> WindowSize.Tablets
+  windowDpSize.width < 960.dp -> WindowSize.SmallTablets
   windowDpSize.width < 1024.dp -> WindowSize.BigTablets
   windowDpSize.width < 1366.dp -> WindowSize.DesktopOne
   else -> WindowSize.DesktopTwo
@@ -289,7 +278,7 @@ private fun DashboardScaffold(
   modifier: Modifier,
   appBarIconClick: () -> Unit,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
-  composeNavigator: ComposeNavigator,
+  dashboardComponent: DashboardComponent,
 ) {
   Box(modifier) {
     Scaffold(
@@ -298,13 +287,13 @@ private fun DashboardScaffold(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       bottomBar = {
-        DashboardBottomNavBar(homeNavigator)
+        DashboardBottomNavBar(dashboardComponent)
       },
       snackbarHost = {
         scaffoldState.snackbarHostState
       },
       floatingActionButton = {
-        FloatingDM(composeNavigator, onItemClick)
+        FloatingDM(onItemClick)
       }
     ) { innerPadding ->
       Box(modifier = Modifier.padding(innerPadding)) {
@@ -312,37 +301,10 @@ private fun DashboardScaffold(
           color = SlackCloneColorProvider.colors.uiBackground,
           modifier = Modifier.fillMaxSize()
         ) {
-          Navigator(homeNavigator, initialRoute = SlackScreens.HomeRoute) {
-            this.route(SlackScreens.HomeRoute) {
-              screen(SlackScreens.Home) {
-                HomeScreenUI(
-                  appBarIconClick,
-                  onItemClick = onItemClick,
-                  onCreateChannelRequest = {
-                    composeNavigator.registerForNavigationResult(
-                      NavigationKey.NavigateChannel,
-                      SlackScreens.Dashboard
-                    ) {
-                      onItemClick(it as DomainLayerChannels.SKChannel)
-                    }
-                    composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)
-                  })
-              }
-              screen(SlackScreens.DMs) {
-                DirectMessagesUI(onItemClick = onItemClick, scope.get())
-              }
-              screen(SlackScreens.Mentions) {
-                MentionsReactionsUI()
-              }
-              screen(SlackScreens.Search) {
-                SearchMessagesUI()
-              }
-              screen(SlackScreens.You) {
-                val gettingStartedVM = scope.get<UserProfileVM>()
-                UserProfileUI(gettingStartedVM)
-              }
-            }
-          }
+          DashboardChildren(modifier,
+            dashboardComponent,
+            appBarIconClick,
+            onItemClick)
         }
       }
       if (needsOverlay) {
@@ -353,13 +315,50 @@ private fun DashboardScaffold(
 }
 
 @Composable
-fun FloatingDM(composeNavigator: ComposeNavigator, onItemClick: (DomainLayerChannels.SKChannel) -> Unit) {
-  FloatingActionButton(onClick = {
-    composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel, SlackScreens.Dashboard) {
-      composeNavigator.navigateUp()
-      onItemClick(it as DomainLayerChannels.SKChannel)
+private fun BoxScope.DashboardChildren(
+  modifier: Modifier,
+  dashboardComponent: DashboardComponent,
+  appBarIconClick: () -> Unit,
+  onItemClick: (DomainLayerChannels.SKChannel) -> Unit
+) {
+  Children(modifier = modifier, stack = dashboardComponent.phoneStack) {
+    when (val child = it.instance) {
+      is Dashboard.Child.HomeScreen -> {
+        HomeScreenUI(
+          child.component,
+          appBarIconClick,
+          onItemClick = onItemClick,
+          onCreateChannelRequest = {
+            TODO("onCreateChannelRequest")
+            /*composeNavigator.registerForNavigationResult(
+                      NavigationKey.NavigateChannel,
+                      SlackScreens.Dashboard
+                    ) {
+                      onItemClick(it as DomainLayerChannels.SKChannel)
+                    }
+                    composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
+          },dashboardComponent.recentChannelsComponent,dashboardComponent.allChannelsComponent)
+      }
+
+      is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
+      is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
+      is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
+      is Dashboard.Child.UserProfileScreen -> {
+        UserProfileUI(child.component)
+      }
     }
-    composeNavigator.navigateScreen(SlackScreens.CreateNewDM)
+  }
+}
+
+@Composable
+fun FloatingDM(onItemClick: (DomainLayerChannels.SKChannel) -> Unit) {
+  FloatingActionButton(onClick = {
+    TODO("CreateNewDM")
+    /* composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel, SlackScreens.Dashboard) {
+       composeNavigator.navigateUp()
+       onItemClick(it as DomainLayerChannels.SKChannel)
+     }
+     composeNavigator.navigateScreen(SlackScreens.CreateNewDM)*/
   }, backgroundColor = Color.White) {
     Icon(
       imageVector = Icons.Default.Edit,
@@ -384,17 +383,23 @@ private fun OverlayDark(appBarIconClick: () -> Unit) {
 }
 
 @Composable
-fun DashboardBottomNavBar(navController: ComposeNavigator?) {
+fun DashboardBottomNavBar(dashboardComponent: DashboardComponent) {
   Column(Modifier.background(color = SlackCloneColorProvider.colors.uiBackground)) {
     Divider(
       color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f),
       thickness = 0.5.dp
     )
     BottomNavigation(backgroundColor = SlackCloneColorProvider.colors.uiBackground) {
-      val navBackStackEntry = navController?.lastScreen
-      val dashTabs = getDashTabs()
+      val navBackStackEntry = dashboardComponent.phoneStack.active.instance
+      val dashTabs = mutableListOf(
+        DashboardComponent.Config.Home,
+        DashboardComponent.Config.DirectMessages,
+        DashboardComponent.Config.Search,
+        DashboardComponent.Config.MentionsConfig,
+        DashboardComponent.Config.Profile
+      )
       dashTabs.forEach { screen ->
-        BottomNavItem(screen, navBackStackEntry, navController)
+        BottomNavItem(screen, navBackStackEntry, dashboardComponent)
       }
     }
   }
@@ -402,9 +407,9 @@ fun DashboardBottomNavBar(navController: ComposeNavigator?) {
 
 @Composable
 private fun RowScope.BottomNavItem(
-  screen: BackstackScreen,
-  currentDestination: BackstackScreen?,
-  navController: ComposeNavigator?,
+  screen: DashboardComponent.Config,
+  navBackStackEntry: Dashboard.Child,
+  dashboardComponent: DashboardComponent
 ) {
 
   BottomNavigationItem(
@@ -418,20 +423,10 @@ private fun RowScope.BottomNavItem(
         style = SlackCloneTypography.overline,
       )
     },
-    selected = currentDestination == screen,
+    selected = dashboardComponent.phoneStack.active == navBackStackEntry,
     onClick = {
-      navController?.navigateScreen(screen)
+      dashboardComponent.navigate(screen)
     }
   )
-}
-
-private fun getDashTabs(): MutableList<BackstackScreen> {
-  return mutableListOf<BackstackScreen>().apply {
-    add(SlackScreens.Home)
-    add(SlackScreens.DMs)
-    add(SlackScreens.Mentions)
-    add(SlackScreens.Search)
-    add(SlackScreens.You)
-  }
 }
 

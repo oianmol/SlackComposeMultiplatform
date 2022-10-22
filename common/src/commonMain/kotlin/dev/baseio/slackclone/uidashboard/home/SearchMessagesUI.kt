@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.ComponentContext
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
@@ -22,7 +23,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uidashboard.home.search.SearchCancel
 
 @Composable
-fun SearchMessagesUI() {
+fun SearchMessagesUI(searchMessagesComponent: SearchMessagesComponent) {
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
@@ -33,6 +34,8 @@ fun SearchMessagesUI() {
     }
   }
 }
+
+class SearchMessagesComponent(componentContext: ComponentContext) : ComponentContext by componentContext
 
 @Composable
 private fun SearchTopAppBar() {

@@ -18,7 +18,6 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
-import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,7 +31,6 @@ import androidx.compose.ui.window.*
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
-import dev.baseio.slackclone.components.RootComponent
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.delay
@@ -57,23 +55,16 @@ fun main() = application {
         .launchIn(this)
     }
 
-    appNavigator.whenRouteCanNoLongerNavigateBack = {
-      this@application.exitApplication()
-    }
 
     SlackCloneTheme {
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow
       ) {
-        Scaffold(floatingActionButton = {
-          FloatingActionButton()
-        }, isFloatingActionButtonDocked = true, floatingActionButtonPosition = FabPosition.Center) {
-          App(
-            sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
-            skKeyValueData = SKKeyValueData(),
-            defaultComponentContext = DefaultComponentContext(lifecycle = lifecycle)
-          )
-        }
+        App(
+          sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
+          skKeyValueData = SKKeyValueData(),
+          defaultComponentContext = DefaultComponentContext(lifecycle = lifecycle)
+        )
       }
     }
 
@@ -143,7 +134,8 @@ private fun FloatingActionButton() {
   }.onPointerEvent(PointerEventType.Exit) {
     enter = false
   }, onClick = {
-    appNavigator.navigateUp()
+    TODO()
+    //appNavigator.navigateUp()
   }, content = {
     Icon(
       Icons.Default.ArrowBack,

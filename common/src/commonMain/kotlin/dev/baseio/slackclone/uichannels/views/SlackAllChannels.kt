@@ -2,7 +2,7 @@ package dev.baseio.slackclone.uichannels.views
 
 import mainDispatcher
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
-import dev.baseio.slackclone.uichannels.SlackChannelVM
+import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import androidx.compose.runtime.*
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
@@ -10,7 +10,7 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 fun SlackAllChannels(
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
   onClickAdd: () -> Unit,
-  channelVM: SlackChannelVM,
+  channelVM: SlackChannelComponent,
 ) {
   val recent = "Channels"
   val channelsFlow = channelVM.channels.collectAsState(mainDispatcher)

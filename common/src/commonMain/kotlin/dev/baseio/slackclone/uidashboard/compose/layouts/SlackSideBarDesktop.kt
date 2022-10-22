@@ -15,25 +15,24 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.router.stack.active
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.navigation.SlackComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
-
 import dev.baseio.slackclone.uidashboard.compose.*
-import dev.baseio.slackclone.uidashboard.vm.SideNavVM
+import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
+import dev.baseio.slackclone.uidashboard.vm.SideNavComponent
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
 fun SlackSideBarLayoutDesktop(
   modifier: Modifier = Modifier,
-  viewModel: SideNavVM,
+  viewModel: SideNavComponent,
   openDM: () -> Unit,
   mentionsScreen: () -> Unit,
   searchScreen: () -> Unit,
   userProfile: () -> Unit,
-  navigator: SlackComposeNavigator,
+  dashboardComponent: DashboardComponent,
 ) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
   val user by viewModel.currentLoggedInUser.collectAsState()
@@ -48,28 +47,28 @@ fun SlackSideBarLayoutDesktop(
             openDM()
           },
           icon = Icons.Default.Email,
-          isSelected = navigator.lastScreen == SlackScreens.DMs
+          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.DirectMessages
         )//dm
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             mentionsScreen()
           },
           icon = Icons.Default.Notifications,
-          isSelected = navigator.lastScreen == SlackScreens.Mentions
+          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.MentionsConfig
         )//mention
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             searchScreen()
           },
           icon = Icons.Default.Search,
-          isSelected = navigator.lastScreen == SlackScreens.Search
+          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.Search
         )//search
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             userProfile()
           },
           icon = Icons.Default.AccountCircle,
-          isSelected = navigator.lastScreen == SlackScreens.You
+          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.Profile
         )//You
         Spacer(Modifier.height(4.dp))
       }
@@ -112,7 +111,7 @@ private fun MoreOptionsSideBarDesktop(
 @Composable
 private fun WorkSpacesDesktop(
   workspaces: List<DomainLayerWorkspaces.SKWorkspace>,
-  viewModel: SideNavVM
+  viewModel: SideNavComponent
 ) {
   LazyColumn {
     itemsIndexed(workspaces) { index, skWorkspace ->

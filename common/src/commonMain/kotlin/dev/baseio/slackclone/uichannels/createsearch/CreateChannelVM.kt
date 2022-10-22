@@ -1,8 +1,5 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.NavigationKey
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +28,7 @@ class CreateChannelVM constructor(
       )
     )
 
-  fun createChannel(composeNavigator: ComposeNavigator) {
+  fun createChannel() {
     viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
       throwable.printStackTrace()
     }) {
@@ -43,12 +40,13 @@ class CreateChannelVM constructor(
             uuid = "${createChannelState.value.name}_${lastSelectedWorkspace.uuid}"
           )
           val channel = useCaseCreateChannel(createChannelState.value).getOrThrow()
-          composeNavigator.navigateUp()
+          TODO("deliverResult")
+          /*composeNavigator.navigateUp()
           composeNavigator.deliverResult(
             NavigationKey.NavigateChannel,
             channel,
             SlackScreens.CreateChannelsScreen
-          )
+          )*/
         }
 
       }

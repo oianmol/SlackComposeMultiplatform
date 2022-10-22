@@ -25,7 +25,7 @@ import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 fun ChatScreenUI(
   modifier: Modifier,
   onBackClick: () -> Unit,
-  viewModel: ChatScreenVM
+  viewModel: ChatScreenComponent
 ) {
   val scaffoldState = rememberScaffoldState()
   val membersDialog by viewModel.showChannelDetails.collectAsState()
@@ -55,20 +55,20 @@ fun ChatScreenUI(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BoxScope.ChannelMembersDialog(viewModel: ChatScreenVM) {
+fun BoxScope.ChannelMembersDialog(viewModel: ChatScreenComponent) {
   val members by viewModel.channelMembers.collectAsState()
   val size = getWindowSizeClass(LocalWindow.current)
   val screenWidth = LocalWindow.current.width
   val width = screenWidth * when (size) {
     WindowSize.Phones -> 1.0f
-    WindowSize.Tablets -> 0.8f
+    WindowSize.SmallTablets -> 0.8f
     WindowSize.BigTablets -> 0.6f
     WindowSize.DesktopOne -> 0.5f
     WindowSize.DesktopTwo -> 0.4f
   }
   val height = LocalWindow.current.height * when (size) {
     WindowSize.Phones -> 1.0f
-    WindowSize.Tablets -> 0.8f
+    WindowSize.SmallTablets -> 0.8f
     WindowSize.BigTablets -> 0.6f
     WindowSize.DesktopOne -> 0.5f
     WindowSize.DesktopTwo -> 0.4f
@@ -101,7 +101,7 @@ fun BoxScope.ChannelMembersDialog(viewModel: ChatScreenVM) {
 
 
 @Composable
-private fun ChatAppBar(onBackClick: () -> Unit, viewModel: ChatScreenVM) {
+private fun ChatAppBar(onBackClick: () -> Unit, viewModel: ChatScreenComponent) {
   val channel by viewModel.channelFlow.collectAsState()
 
   SlackSurfaceAppBar(backgroundColor = SlackCloneColorProvider.colors.appBarColor) {

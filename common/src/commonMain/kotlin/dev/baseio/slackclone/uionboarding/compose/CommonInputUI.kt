@@ -11,8 +11,6 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
 
 @Composable
 fun CommonInputUI(
@@ -76,10 +74,11 @@ fun NextButtonWithText(modifier: Modifier = Modifier, text:String, onNextClick: 
   }
 }
 
-fun navigateDashboard(composeNavigator: ComposeNavigator) {
-  composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
+fun navigateDashboard() {
+  TODO()
+ /* composeNavigator.navigateRoute(SlackScreens.DashboardRoute, removeRoute = { it, remove ->
     remove() // remove all routes!
-  })
+  })*/
 }
 
 @Composable

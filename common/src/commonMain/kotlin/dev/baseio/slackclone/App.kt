@@ -1,36 +1,27 @@
 package dev.baseio.slackclone
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
-import dev.baseio.slackclone.data.injection.viewModelModule
-import dev.baseio.slackclone.navigation.*
-import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
-import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
-import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
-import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.compose.*
-import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
-import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
-import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.injection.*
-import dev.baseio.slackdomain.AUTH_TOKEN
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 
-val appNavigator = SlackComposeNavigator()
-var koinApp: KoinApplication? = null
+lateinit var koinApp: KoinApplication
 
+@OptIn(ExperimentalDecomposeApi::class)
 @Composable
 fun App(
   modifier: Modifier = Modifier,
@@ -38,55 +29,48 @@ fun App(
   skKeyValueData: SKKeyValueData,
   defaultComponentContext: DefaultComponentContext
 ) {
-  if (koinApp == null) {
+  if (::koinApp.isInitialized.not()) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData, defaultComponentContext)
   }
 
-  val initialRoute = skKeyValueData.get(AUTH_TOKEN)?.let {
-    SlackScreens.DashboardRoute
-  } ?: run {
-    SlackScreens.OnboardingRoute
-  }
 
-  Box(modifier) {
-    Navigator(navigator = appNavigator, initialRoute = initialRoute) {
-      this.route(SlackScreens.OnboardingRoute) {
-        screen(SlackScreens.GettingStarted) {
-          val gettingStartedVM = scope.get<GettingStartedComponent>()
-          GettingStartedUI(this@Navigator, gettingStartedVM)
-        }
-        screen(SlackScreens.SkipTypingScreen) {
-          SkipTypingUI(this@Navigator)
-        }
-        screen(SlackScreens.CreateWorkspace) {
-          val viewModel = scope.get<WorkspaceCreateVM>().apply { navArgs = argMap }
-          CreateWorkspaceScreen(this@Navigator, viewModel)
-        }
-        screen(SlackScreens.WorkspaceInputUI) {
-          val workspaceInputVM = scope.get<WorkspaceInputVM>()
-          WorkspaceInputUI(this@Navigator, workspaceInputVM)
-        }
-        screen(SlackScreens.EmailAddressInputUI) {
-          val emailInputVM = scope.get<EmailInputVM>()
-          EmailAddressInputUI(this@Navigator, emailInputVM)
-        }
-      }
-      this.route(SlackScreens.DashboardRoute) {
-        screen(SlackScreens.Dashboard) {
-          DashboardUI(this@Navigator, scope.get(), scope.get())
-        }
-        screen(SlackScreens.CreateChannelsScreen) {
-          SearchCreateChannelUI(this@Navigator, scope.get())
-        }
-        screen(SlackScreens.CreateNewChannel) {
-          CreateNewChannelUI(this@Navigator, scope.get())
-        }
-        screen(SlackScreens.CreateNewDM) {
-          NewChatThreadScreen(this@Navigator, scope.get())
-        }
-      }
+  val rootComponent = RootComponent(defaultComponentContext, koinApp.koin.get())
+  Children(modifier = modifier, stack = rootComponent.childStack) {
+    when (val child = it.instance) {
+      is Root.Child.CreateWorkspace -> CreateWorkspaceScreen(child.component)
+      is Root.Child.GettingStarted -> GettingStartedUI(child.component)
+      is Root.Child.DashboardScreen -> DashboardUI(child.component, child.chatComponent)
     }
   }
+
+  /* Box(modifier) {
+     Navigator(navigator = appNavigator, initialRoute = initialRoute) {
+       this.route(SlackScreens.OnboardingRoute) {
+         screen(SlackScreens.GettingStarted) {
+           val gettingStartedVM = scope.get<GettingStartedComponent>()
+           GettingStartedUI(this@Navigator, gettingStartedVM)
+         }
+         screen(SlackScreens.CreateWorkspace) {
+           val viewModel = scope.get<CreateWorkspaceComponent>().apply { navArgs = argMap }
+           CreateWorkspaceScreen(this@Navigator, viewModel)
+         }
+       }
+       this.route(SlackScreens.DashboardRoute) {
+         screen(SlackScreens.Dashboard) {
+           DashboardUI(this@Navigator, scope.get(), scope.get())
+         }
+         screen(SlackScreens.CreateChannelsScreen) {
+           SearchCreateChannelUI(this@Navigator, scope.get())
+         }
+         screen(SlackScreens.CreateNewChannel) {
+           CreateNewChannelUI(this@Navigator, scope.get())
+         }
+         screen(SlackScreens.CreateNewDM) {
+           NewChatThreadScreen(this@Navigator, scope.get())
+         }
+       }
+     }
+   }*/
 }
 
 fun initKoin(
@@ -100,7 +84,6 @@ fun initKoin(
       dataSourceModule,
       dataMappersModule,
       useCaseModule,
-      viewModelModule,
       viewModelDelegateModule,
       dispatcherModule
     )

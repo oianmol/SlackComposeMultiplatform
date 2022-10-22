@@ -17,11 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.ComposeNavigator
 
 @Composable
 fun CreateNewChannelUI(
-  composeNavigator: ComposeNavigator,
   createChannelVM: CreateChannelVM,
 ) {
   val scaffoldState = rememberScaffoldState()
@@ -32,7 +30,7 @@ fun CreateNewChannelUI(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
-        NewChannelAppBar(composeNavigator, createChannelVM)
+        NewChannelAppBar( createChannelVM)
       },
       snackbarHost = {
         scaffoldState.snackbarHostState
@@ -129,7 +127,6 @@ private fun textFieldColors() = TextFieldDefaults.textFieldColors(
 
 @Composable
 private fun NewChannelAppBar(
-  composeNavigator: ComposeNavigator,
   createChannelVM: CreateChannelVM
 ) {
   val haptic = LocalHapticFeedback.current
@@ -138,13 +135,13 @@ private fun NewChannelAppBar(
       NavTitle()
     },
     navigationIcon = {
-      NavBackIcon(composeNavigator)
+      NavBackIcon()
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
     actions = {
       TextButton(onClick = {
         createChannelVM.createChannelState.value.name?.takeIf { it.isNotEmpty() }?.let {
-          createChannelVM.createChannel(composeNavigator)
+          createChannelVM.createChannel()
         } ?: run {
           haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         }
@@ -167,9 +164,9 @@ private fun NavTitle() {
 }
 
 @Composable
-private fun NavBackIcon(composeNavigator: ComposeNavigator) {
+private fun NavBackIcon() {
   IconButton(onClick = {
-    composeNavigator.navigateUp()
+    TODO("nav up")
   }) {
     Icon(
       imageVector = Icons.Filled.ArrowBack,

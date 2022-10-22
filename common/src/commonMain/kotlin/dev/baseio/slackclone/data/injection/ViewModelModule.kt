@@ -1,27 +1,11 @@
 package dev.baseio.slackclone.data.injection
 
-import dev.baseio.slackclone.navigation.SlackScreens
-import dev.baseio.slackclone.uichannels.SlackChannelVM
-import dev.baseio.slackclone.uichannels.createsearch.CreateChannelVM
-import dev.baseio.slackclone.uichannels.createsearch.SearchChannelsVM
-import dev.baseio.slackclone.uichannels.directmessages.MessageViewModel
-import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
 import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
 import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegateImpl
-import dev.baseio.slackclone.uichat.newchat.NewChatThreadVM
-import dev.baseio.slackclone.uidashboard.vm.DashboardVM
-import dev.baseio.slackclone.uidashboard.vm.SideNavVM
-import dev.baseio.slackclone.uidashboard.home.HomeScreenVM
-import dev.baseio.slackclone.uidashboard.home.UserProfileVM
 import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegate
 import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegateImpl
-import dev.baseio.slackclone.uionboarding.GettingStartedComponent
-import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
-import dev.baseio.slackclone.uionboarding.vm.WorkspaceCreateVM
-import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.qualifier.QualifierValue
-import org.koin.dsl.ScopeDSL
 import org.koin.dsl.module
 
 val viewModelDelegateModule = module {
@@ -33,26 +17,21 @@ val viewModelDelegateModule = module {
   }
 }
 
-val viewModelModule = module {
-  scope<SlackScreens.CreateWorkspace> {
-    scoped {
-      WorkspaceCreateVM(getKoin().get())
-    }
-  }
+/*val viewModelModule = module {
   scope<SlackScreens.Home> {
     scoped {
-      HomeScreenVM(
+      HomeScreenComponent(
         getKoin().get(),
       )
     }
   }
   scope<SlackScreens.You> {
     scoped {
-      UserProfileVM(get())
+      UserProfileComponent(get(), componentContext)
     }
   }
   scope<SlackScreens.GettingStarted> {
-    scoped { GettingStartedComponent(componentContext = get()) }
+    scoped { GettingStartedComponent(componentContext = get(), get()) }
   }
   scope<SlackScreens.WorkspaceInputUI> {
     scoped {
@@ -67,9 +46,10 @@ val viewModelModule = module {
 
   scope<SlackScreens.DMs> {
     scoped {
-      MessageViewModel(
+      DirectMessagesComponent(
         getKoin().get(),
-        getKoin().get()
+        getKoin().get(),
+        componentContext
       )
     }
   }
@@ -108,11 +88,11 @@ val viewModelModule = module {
   }
 
   scope<SlackScreens.Dashboard> {
-    scoped { SideNavVM(getKoin().get(), getKoin().get(), get()) }
-    scoped { DashboardVM(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    scoped { SideNavComponent(getKoin().get(), getKoin().get(), get()) }
+    scoped { DashboardComponent(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
     scoped {
-      ChatScreenVM(
+      ChatScreenComponent(
         getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get(),
         getKoin().get()
       )
@@ -138,7 +118,7 @@ private fun ScopeDSL.slackChannelVMScoped() {
       getKoin().get()
     )
   }
-}
+}*/
 
 
 object RecentChatsQualifier : Qualifier {

@@ -1,7 +1,6 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
 import mainDispatcher
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,12 +15,12 @@ import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedMonthDate
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @Composable
 fun ChatMessagesUI(
-  viewModel: ChatScreenVM,
+  viewModel: ChatScreenComponent,
   modifier: Modifier,
   alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
 ) {

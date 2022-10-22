@@ -20,7 +20,6 @@ import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigation.ComposeNavigator
 import dev.baseio.slackclone.uionboarding.vm.EmailInputVM
 import dev.baseio.slackclone.uionboarding.vm.WorkspaceInputVM
 import dev.baseio.slackdata.protos.KMSKWorkspace
@@ -28,7 +27,7 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import kotlinx.coroutines.delay
 
 @Composable
-fun EmailAddressInputUI(composeNavigator: ComposeNavigator, emailInputVM: EmailInputVM) {
+fun EmailAddressInputUI( emailInputVM: EmailInputVM) {
   val colors = SlackCloneColorProvider.colors
   val uiState by emailInputVM.uiState.collectAsState()
 
@@ -36,7 +35,7 @@ fun EmailAddressInputUI(composeNavigator: ComposeNavigator, emailInputVM: EmailI
   LaunchedEffect(uiState) {
     when {
       uiState.isLoggedIn -> {
-        navigateDashboard(composeNavigator)
+        navigateDashboard()
       }
 
       uiState.workspaces != null -> {
@@ -148,14 +147,14 @@ private fun WorkspacesList(
 }
 
 @Composable
-fun WorkspaceInputUI(composeNavigator: ComposeNavigator, workspaceInputVM: WorkspaceInputVM) {
+fun WorkspaceInputUI(workspaceInputVM: WorkspaceInputVM) {
   val colors = SlackCloneColorProvider.colors
   val uiState by workspaceInputVM.uiState.collectAsState()
   PlatformSideEffects.PlatformColors(colors.uiBackground, colors.uiBackground)
 
   LaunchedEffect(uiState) {
     if (uiState is WorkspaceInputVM.UiState.LoggedIn) {
-      navigateDashboard(composeNavigator)
+      navigateDashboard()
     }
   }
 

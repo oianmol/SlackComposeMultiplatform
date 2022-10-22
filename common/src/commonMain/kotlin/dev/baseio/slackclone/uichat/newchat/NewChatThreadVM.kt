@@ -1,9 +1,6 @@
 package dev.baseio.slackclone.uichat.newchat
 
 import ViewModel
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.NavigationKey
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
@@ -59,24 +56,25 @@ class NewChatThreadVM(
     search.value = newValue
   }
 
-  private fun navigate(channel: DomainLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
-    composeNavigator.deliverResult(
+  private fun navigate(channel: DomainLayerChannels.SKChannel) {
+    TODO()
+   /* composeNavigator.deliverResult(
       NavigationKey.NavigateChannel,
       channel,
       SlackScreens.Dashboard
-    )
+    )*/
   }
 
-  fun createChannel(channel: DomainLayerChannels.SKChannel, composeNavigator: ComposeNavigator) {
+  fun createChannel(channel: DomainLayerChannels.SKChannel) {
     viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
       errorStream.value = throwable
     }) {
       channel.channelId.takeIf { it.isNotEmpty() }?.let {
-        navigate(channel, composeNavigator)
+        navigate(channel)
       } ?: run {
         val result = useCaseCreateChannel.invoke(channel)
         val channelNew = result.getOrThrow()
-        navigate(channelNew, composeNavigator)
+        navigate(channelNew)
       }
     }
 

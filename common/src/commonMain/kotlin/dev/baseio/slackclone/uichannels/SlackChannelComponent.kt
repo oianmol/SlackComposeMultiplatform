@@ -5,13 +5,14 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAllChannels
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
-import ViewModel
+import com.arkivanov.decompose.ComponentContext
 
-class SlackChannelVM constructor(
+class SlackChannelComponent constructor(
+  componentContext: ComponentContext,
   private val ucFetchChannels: UseCaseFetchAllChannels,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   private val ucFetchRecentChannels: UseCaseFetchRecentChannels
-) : ViewModel() {
+) : ComponentContext by componentContext {
 
   val channels = MutableStateFlow<Flow<List<DomainLayerChannels.SKChannel>>>(emptyFlow())
 

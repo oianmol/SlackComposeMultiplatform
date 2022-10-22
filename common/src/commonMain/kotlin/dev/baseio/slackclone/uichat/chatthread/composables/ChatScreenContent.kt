@@ -16,12 +16,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.uichat.chatthread.BoxState
-import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import mainDispatcher
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenVM) {
+fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenComponent) {
   val checkBoxState by viewModel.chatBoxState.collectAsState(mainDispatcher)
   val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
     1f
@@ -59,7 +59,7 @@ fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenVM) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun DeleteMessageAlert(viewModel: ChatScreenVM) {
+private fun DeleteMessageAlert(viewModel: ChatScreenComponent) {
   SlackCloneSurface(
     modifier = Modifier.shadow(4.dp),
     shape = RoundedCornerShape(4.dp)
@@ -84,7 +84,7 @@ private fun DeleteMessageAlert(viewModel: ChatScreenVM) {
 
 @Composable
 private fun ChatMessageBoxWrapped(
-  viewModel: ChatScreenVM,
+  viewModel: ChatScreenComponent,
   checkBoxState: BoxState,
   change: Float
 ) {

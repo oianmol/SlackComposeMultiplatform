@@ -20,13 +20,11 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 
 @Composable
-fun SkipTypingUI(composeNavigator: ComposeNavigator) {
+fun SkipTypingUI() {
   val scaffoldState = rememberScaffoldState()
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.SkipTypingScreen()
@@ -39,7 +37,7 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
       SlackSurfaceAppBar(
         title = {},
         navigationIcon = {
-          ClearBackIcon(composeNavigator)
+          ClearBackIcon()
         },
         backgroundColor = SlackCloneColor,
         elevation = 0.dp
@@ -56,9 +54,9 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
           .padding(28.dp)
       ) {
         when (size) {
-          WindowSize.Phones -> SkipTypingPhone(composeNavigator)
+          WindowSize.Phones -> SkipTypingPhone()
           else -> {
-            SkipTypingLarge(composeNavigator)
+            SkipTypingLarge()
           }
         }
       }
@@ -70,7 +68,7 @@ fun SkipTypingUI(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-private fun SkipTypingLarge(composeNavigator: ComposeNavigator) {
+private fun SkipTypingLarge() {
   Row(
     Modifier.fillMaxSize(),
     horizontalArrangement = Arrangement.Center,
@@ -90,9 +88,9 @@ private fun SkipTypingLarge(composeNavigator: ComposeNavigator) {
       TitleSubtitleText()
       Spacer(Modifier.height(12.dp))
       Column {
-        EmailMeMagicLink(composeNavigator)
+        EmailMeMagicLink()
         Spacer(modifier = Modifier.height(12.dp))
-        IWillSignInManually(composeNavigator)
+        IWillSignInManually()
       }
     }
   }
@@ -100,7 +98,7 @@ private fun SkipTypingLarge(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-private fun SkipTypingPhone(composeNavigator: ComposeNavigator) {
+private fun SkipTypingPhone() {
   Column(
     verticalArrangement = Arrangement.SpaceAround,
     horizontalAlignment = Alignment.CenterHorizontally,
@@ -114,17 +112,18 @@ private fun SkipTypingPhone(composeNavigator: ComposeNavigator) {
     TitleSubtitleText()
     Spacer(Modifier.padding(8.dp))
     Column {
-      EmailMeMagicLink(composeNavigator)
+      EmailMeMagicLink()
       Box(modifier = Modifier.height(12.dp))
-      IWillSignInManually(composeNavigator)
+      IWillSignInManually()
     }
   }
 }
 
 @Composable
-private fun ClearBackIcon(composeNavigator: ComposeNavigator) {
+private fun ClearBackIcon() {
   IconButton(onClick = {
-    composeNavigator.navigateUp()
+    TODO()
+    //composeNavigator.navigateUp()
   }) {
     Icon(
       imageVector = Icons.Filled.Clear,
@@ -135,10 +134,11 @@ private fun ClearBackIcon(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
+fun EmailMeMagicLink() {
   OutlinedButton(
     onClick = {
-      composeNavigator.navigateScreen(SlackScreens.EmailAddressInputUI)
+              TODO()
+      //composeNavigator.navigateScreen(SlackScreens.EmailAddressInputUI)
     },
     border = BorderStroke(1.dp, color = Color.White),
     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
@@ -154,10 +154,11 @@ fun EmailMeMagicLink(composeNavigator: ComposeNavigator) {
 }
 
 @Composable
-private fun IWillSignInManually(composeNavigator: ComposeNavigator) {
+private fun IWillSignInManually() {
   Button(
     onClick = {
-      composeNavigator.navigateScreen(SlackScreens.WorkspaceInputUI)
+      TODO()
+      //composeNavigator.navigateScreen(SlackScreens.WorkspaceInputUI)
     },
     Modifier
       .fillMaxWidth()

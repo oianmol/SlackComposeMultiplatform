@@ -29,19 +29,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UserProfileUI(profileVM: UserProfileVM) {
+fun UserProfileUI(profileVM: UserProfileComponent) {
   val user by profileVM.currentLoggedInUser.collectAsState()
 
   SlackCloneSurface(
@@ -62,9 +60,10 @@ fun UserProfileUI(profileVM: UserProfileVM) {
       SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
       SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
         profileVM.logout()
-        appNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
+        TODO()
+        /*appNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
           remove() // remove all routes!
-        })
+        })*/
       })
     }
   }

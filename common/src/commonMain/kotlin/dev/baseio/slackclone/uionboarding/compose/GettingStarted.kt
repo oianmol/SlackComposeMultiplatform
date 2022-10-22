@@ -18,18 +18,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.value.getValue
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 
 @Composable
-fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedComponent) {
+fun GettingStartedUI(gettingStartedVM: GettingStartedComponent) {
   val scaffoldState = rememberScaffoldState()
   val showSlackAnim by gettingStartedVM.componentState.subscribeAsState()
   val size = getWindowSizeClass(LocalWindow.current)
@@ -53,9 +50,9 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         } else {
           AnimatedVisibility(visible = true) {
             when (size) {
-              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
+              WindowSize.Phones -> PhoneLayout(gettingStartedVM)
               else -> {
-                LargeScreenLayout(gettingStartedVM, composeNavigator)
+                LargeScreenLayout(gettingStartedVM)
               }
             }
 
@@ -70,8 +67,8 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
 @Composable
 private fun LargeScreenLayout(
   gettingStartedVM: GettingStartedComponent,
-  composeNavigator: ComposeNavigator
-) {
+
+  ) {
   val density = LocalDensity.current
 
   Row(
@@ -91,7 +88,7 @@ private fun LargeScreenLayout(
         IntroExitTransitionVertical()
       }
       Spacer(Modifier.padding(16.dp))
-      GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
+      GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
         GetStartedExitTransVertical()
       })
 
@@ -109,8 +106,7 @@ private fun LargeScreenLayout(
 
 @Composable
 private fun PhoneLayout(
-  gettingStartedVM: GettingStartedComponent,
-  composeNavigator: ComposeNavigator
+  gettingStartedVM: GettingStartedComponent
 ) {
   val density = LocalDensity.current
   Column(
@@ -125,7 +121,7 @@ private fun PhoneLayout(
     }
     CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
     Spacer(Modifier.padding(8.dp))
-    GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
+    GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
       GetStartedExitTransHorizontal()
     })
   }
@@ -190,7 +186,6 @@ private fun ImageEnterTransition() = expandIn(
 
 @Composable
 private fun GetStartedButton(
-  composeNavigator: ComposeNavigator,
   gettingStartedVM: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
@@ -202,31 +197,33 @@ private fun GetStartedButton(
     exit = exitAnim()
   ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-      Button(
-        onClick = {
-          skipTypingNavigate(composeNavigator)
-        },
-        Modifier
-          .fillMaxWidth()
-          .height(40.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
-      ) {
-        Text(
-          text = "Sign In to Slack",
-          style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
-        )
-      }
+      LoginButton(gettingStartedVM)
       Spacer(Modifier.padding(8.dp))
       TeamNewToSlack(Modifier.padding(8.dp)) {
-        composeNavigator.navigateScreen(SlackScreens.CreateWorkspace.withArgs(isLogin = false))
+        gettingStartedVM.onCreateWorkspaceRequested(false)
       }
     }
   }
 }
 
-private fun skipTypingNavigate(composeNavigator: ComposeNavigator) {
-  //composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
-  composeNavigator.navigateScreen(SlackScreens.CreateWorkspace.withArgs(isLogin = true))
+@Composable
+private fun LoginButton(
+  gettingStartedVM: GettingStartedComponent,
+) {
+  Button(
+    onClick = {
+      gettingStartedVM.onCreateWorkspaceRequested(true)
+    },
+    Modifier
+      .fillMaxWidth()
+      .height(40.dp),
+    colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
+  ) {
+    Text(
+      text = "Sign In to Slack",
+      style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+    )
+  }
 }
 
 @Composable
