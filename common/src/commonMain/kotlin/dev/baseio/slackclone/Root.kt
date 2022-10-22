@@ -79,7 +79,6 @@ class RootComponent(
       is Config.GettingStarted -> Root.Child.GettingStarted(
         GettingStartedComponent(
           componentContext,
-          koinApp.koin.get()
         ) { isLogin ->
           navigateCreateWorkspace(isLogin)
         }
