@@ -20,9 +20,13 @@ import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
+import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceVM
 
 @Composable
-fun CreateWorkspaceScreen(component: CreateWorkspaceComponent) {
+fun CreateWorkspaceScreen(
+  component: CreateWorkspaceComponent,
+  viewModel: CreateWorkspaceVM = component.createWorkspaceVM
+) {
   val scaffoldState = rememberScaffoldState()
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.GettingStartedScreen()
@@ -81,24 +85,24 @@ fun Heading(isLogin: Boolean) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun WorkspaceCreateForm(viewModel: CreateWorkspaceComponent) {
-  val email by viewModel.email.collectAsState()
-  val name by viewModel.domain.collectAsState()
-  val password by viewModel.password.collectAsState()
-  val error by viewModel.error.collectAsState()
-  val loading by viewModel.loading.collectAsState()
+fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
+  val email by createWorkspaceComponent.createWorkspaceVM.email.collectAsState()
+  val name by createWorkspaceComponent.createWorkspaceVM.domain.collectAsState()
+  val password by createWorkspaceComponent.createWorkspaceVM.password.collectAsState()
+  val error by createWorkspaceComponent.createWorkspaceVM.error.collectAsState()
+  val loading by createWorkspaceComponent.createWorkspaceVM.loading.collectAsState()
   Column {
     EmailTF(Modifier.padding(4.dp), email) { emailNew ->
-      viewModel.email.value = emailNew
+      createWorkspaceComponent.createWorkspaceVM.email.value = emailNew
     }
     PasswordTF(Modifier.padding(4.dp), password) { passwordNew ->
-      viewModel.password.value = passwordNew
+      createWorkspaceComponent.createWorkspaceVM.password.value = passwordNew
     }
-    WorkspaceView(Modifier.padding(4.dp), name, viewModel)
+    WorkspaceView(Modifier.padding(4.dp), name, createWorkspaceComponent)
     Spacer(Modifier.size(4.dp))
     ErrorText(Modifier.padding(4.dp), error)
     if (loading) CircularProgressIndicator(color = SlackGreen) else CreateWorkspaceButton(
-      viewModel
+      createWorkspaceComponent
     )
   }
 
@@ -120,7 +124,7 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
     Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(8.dp))
     TextHttps()
     WorkspaceTF(name) { nameNew ->
-      viewModel.domain.value = nameNew
+      viewModel.createWorkspaceVM.domain.value = nameNew
     }
     TextSlackCom()
   }
@@ -130,7 +134,7 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
 fun CreateWorkspaceButton(viewModel: CreateWorkspaceComponent) {
   Button(
     onClick = {
-      viewModel.createWorkspace()
+      viewModel.createWorkspaceVM.createWorkspace()
     },
     Modifier
       .fillMaxWidth()

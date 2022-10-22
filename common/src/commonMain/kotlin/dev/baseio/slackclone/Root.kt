@@ -87,8 +87,6 @@ class RootComponent(
       is Config.CreateWorkspace -> Root.Child.CreateWorkspace(
         CreateWorkspaceComponent(
           componentContext,
-          koinApp.koin.get(),
-          koinApp.koin.get(),
           config.isLogin
         ) {
           navigateDashboard()
