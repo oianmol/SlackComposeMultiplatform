@@ -26,7 +26,6 @@ import org.koin.dsl.module
 
 
 lateinit var koinApp: KoinApplication
-lateinit var rootComponent: RootComponent
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
@@ -34,16 +33,13 @@ fun App(
   modifier: Modifier = Modifier,
   sqlDriver: SqlDriver,
   skKeyValueData: SKKeyValueData,
-  defaultComponentContext: DefaultComponentContext
+  rootComponent: () -> RootComponent
 ) {
   if (::koinApp.isInitialized.not()) {
-    koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData, defaultComponentContext)
-  }
-  if (::rootComponent.isInitialized.not()) {
-    rootComponent = RootComponent(defaultComponentContext, koinApp.koin.get())
+    koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
   }
 
-  Children(modifier = modifier, stack = rootComponent.childStack, animation = stackAnimation(fade())) {
+  Children(modifier = modifier, stack = rootComponent().childStack, animation = stackAnimation(fade())) {
     when (val child = it.instance) {
       is Root.Child.CreateWorkspace -> CreateWorkspaceScreen(child.component)
       is Root.Child.GettingStarted -> GettingStartedUI(child.component)
@@ -53,32 +49,15 @@ fun App(
       is Root.Child.SearchCreateChannel -> SearchCreateChannelUI(child.component)
     }
   }
-
-  /* Box(modifier) {
-     Navigator(navigator = appNavigator, initialRoute = initialRoute) {
-       this.route(SlackScreens.DashboardRoute) {
-         screen(SlackScreens.CreateChannelsScreen) {
-           SearchCreateChannelUI(this@Navigator, scope.get())
-         }
-         screen(SlackScreens.CreateNewChannel) {
-           CreateNewChannelUI(this@Navigator, scope.get())
-         }
-         screen(SlackScreens.CreateNewDM) {
-           NewChatThreadScreen(this@Navigator, scope.get())
-         }
-       }
-     }
-   }*/
 }
 
 fun initKoin(
   slackDB: SlackDB,
   skKeyValueData: SKKeyValueData,
-  defaultComponentContext: DefaultComponentContext
 ): KoinApplication {
   return startKoin {
     modules(
-      appModule(slackDB, skKeyValueData, defaultComponentContext),
+      appModule(slackDB, skKeyValueData),
       dataSourceModule,
       dataMappersModule,
       useCaseModule,
@@ -88,10 +67,9 @@ fun initKoin(
   }
 }
 
-fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData, defaultComponentContext: DefaultComponentContext) =
+fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
   module {
     single { slackDB }
     single { skKeyValueData }
-    single<ComponentContext> { defaultComponentContext }
     single { GrpcCalls(skKeyValueData = get()) }
   }

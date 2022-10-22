@@ -31,6 +31,7 @@ import androidx.compose.ui.window.*
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.delay
@@ -55,6 +56,8 @@ fun main() = application {
         .launchIn(this)
     }
 
+    val skKeyValueData = SKKeyValueData()
+    val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle), skKeyValueData) }
 
     SlackCloneTheme {
       CompositionLocalProvider(
@@ -62,8 +65,10 @@ fun main() = application {
       ) {
         App(
           sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
-          skKeyValueData = SKKeyValueData(),
-          defaultComponentContext = DefaultComponentContext(lifecycle = lifecycle)
+          skKeyValueData = skKeyValueData,
+          rootComponent = {
+            rootComponent
+          }
         )
       }
     }
