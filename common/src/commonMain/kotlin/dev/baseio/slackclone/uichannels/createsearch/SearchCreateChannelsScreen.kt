@@ -18,6 +18,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
@@ -30,20 +31,6 @@ fun SearchCreateChannelUI(
 
   val scaffoldState = rememberScaffoldState()
 
-  ListChannels(scaffoldState, searchChannelsComponent = searchChannelsComponent, { slackChannel: Any ->
-
-  }) {
-
-  }
-}
-
-@Composable
-private fun ListChannels(
-  scaffoldState: ScaffoldState,
-  searchChannelsComponent: SearchChannelsComponent,
-  onItemClick: (Any) -> Unit,
-  newChannel: () -> Unit
-) {
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
@@ -56,10 +43,14 @@ private fun ListChannels(
       scaffoldState.snackbarHostState
     },
     floatingActionButton = {
-      NewChannelFAB(newChannel)
+      NewChannelFAB {
+        searchChannelsComponent.navigateRoot(RootComponent.Config.CreateNewChannelUI)
+      }
     }
   ) { innerPadding ->
-    SearchContent(innerPadding, searchChannelsComponent, onItemClick)
+    SearchContent(innerPadding, searchChannelsComponent) { skChannel ->
+      //searchChannelsComponent.navigateChannel(skChannel)
+    }
   }
 }
 

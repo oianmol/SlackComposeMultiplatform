@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 interface UserProfileDelegate {
   val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?>
-  fun getCurrentUser(scope: CoroutineScope)
+  fun getCurrentUser(viewModelScope: CoroutineScope, navigateOnboardingRoot: () -> Unit)
   fun logout()
 }
 
@@ -27,17 +27,12 @@ class UserProfileDelegateImpl(
     useCaseClearAuth()
   }
 
-  override fun getCurrentUser(viewModelScope: CoroutineScope) {
+  override fun getCurrentUser(viewModelScope: CoroutineScope, navigateOnboardingRoot: () -> Unit) {
     viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
       when {
         throwable is KMStatusException && throwable.status.code == KMCode.UNAUTHENTICATED -> {
           useCaseClearAuth()
-            TODO("go back to onboarding")
-          /*appNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { route, remove ->
-            if (route.name == SlackScreens.DashboardRoute.name) {
-              remove()
-            }
-          })*/
+          navigateOnboardingRoot()
         }
       }
     }) {

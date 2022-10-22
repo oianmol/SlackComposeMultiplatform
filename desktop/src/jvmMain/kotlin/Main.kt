@@ -118,29 +118,3 @@ private fun CommonCircleShape(modifier: Modifier, color: Color) {
     })
 }
 
-@ExperimentalComposeUiApi
-@Composable
-private fun FloatingActionButton() {
-  var enter by remember { mutableStateOf(true) }
-  val size by animateDpAsState(if (enter) 36.dp else 8.dp)
-
-  LaunchedEffect(true) {
-    delay(700)
-    enter = false
-  }
-
-  FloatingActionButton(modifier = Modifier.size(size).onPointerEvent(PointerEventType.Enter) {
-    enter = true
-  }.onPointerEvent(PointerEventType.Exit) {
-    enter = false
-  }, onClick = {
-    TODO()
-    //appNavigator.navigateUp()
-  }, content = {
-    Icon(
-      Icons.Default.ArrowBack,
-      contentDescription = null,
-      tint = SlackCloneColorProvider.colors.appBarIconColor
-    )
-  }, backgroundColor = SlackCloneColorProvider.colors.appBarColor)
-}

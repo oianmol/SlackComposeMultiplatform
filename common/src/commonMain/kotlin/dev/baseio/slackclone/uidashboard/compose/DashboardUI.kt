@@ -47,6 +47,7 @@ import dev.baseio.slackclone.uidashboard.home.*
 import dev.baseio.slackclone.uidashboard.vm.Dashboard
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
+import java.lang.RuntimeException
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -204,7 +205,7 @@ fun DashboardUI(
             onItemClick(skChannel)
           }, onCreateChannelRequest = {
             dashboardComponent.navigateRoot(RootComponent.Config.SearchCreateChannelUI)
-          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent,dashboardComponent)
+          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent, dashboardComponent)
         }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
@@ -233,7 +234,7 @@ fun DashboardUI(
                     UserProfileUI(child.component)
                   }
 
-                  is Dashboard.Child.HomeScreen -> TODO()
+                  is Dashboard.Child.HomeScreen -> throw RuntimeException("Not expecting to load home in desktop layout!")
                 }
               }
             }

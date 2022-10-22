@@ -71,7 +71,9 @@ class DashboardComponent(
   private val navigation = StackNavigation<Config>()
 
 
-  val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+  val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) {
+    navigateOnboarding()
+  }
   val recentChannelsComponent =
     SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
   val allChannelsComponent =
@@ -109,7 +111,9 @@ class DashboardComponent(
     Config.Profile -> Dashboard.Child.UserProfileScreen(
       UserProfileComponent(
         koinApp.koin.get(), koinApp.koin.get(), componentContext
-      )
+      ) {
+        navigateOnboarding()
+      }
     )
 
     Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(componentContext))

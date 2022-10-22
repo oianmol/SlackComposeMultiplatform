@@ -1,6 +1,5 @@
 package dev.baseio.slackclone.uionboarding.vm
 
-import dev.baseio.slackclone.uionboarding.compose.navigateDashboard
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow

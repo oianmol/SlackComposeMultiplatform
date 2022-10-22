@@ -144,10 +144,12 @@ class RootComponent(
           componentContext, koinApp.koin.get(),
           koinApp.koin.get(),
           koinApp.koin.get(),
-          koinApp.koin.get()
-        ) {
-          navigation.pop()
-        }
+          koinApp.koin.get(),
+          {
+            navigation.pop()
+          }, { config1 ->
+            navigation.push(config1)
+          })
       )
     }
 

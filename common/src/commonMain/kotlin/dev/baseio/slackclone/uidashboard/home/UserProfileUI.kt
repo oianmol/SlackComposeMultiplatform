@@ -60,10 +60,7 @@ fun UserProfileUI(profileVM: UserProfileComponent) {
       SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
       SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
         profileVM.logout()
-        TODO()
-        /*appNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
-          remove() // remove all routes!
-        })*/
+        profileVM.navigateOnboardingRoot()
       })
     }
   }

@@ -14,13 +14,14 @@ class SideNavComponent(
   private val useCaseFetchWorkspaces: UseCaseGetWorkspaces,
   private val useCaseLastSelectedWorkspace: UseCaseSetLastSelectedWorkspace,
   private val userProfileDelegate: UserProfileDelegate,
+  navigateOnboardingRoot:()->Unit
 ) : ViewModel(), UserProfileDelegate by userProfileDelegate, ComponentContext by componentContext {
 
   var workspacesFlow = MutableStateFlow(flow())
     private set
 
   init {
-    getCurrentUser(viewModelScope)
+    getCurrentUser(viewModelScope,navigateOnboardingRoot)
   }
 
   fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {

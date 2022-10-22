@@ -8,6 +8,7 @@ import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.launch
 import ViewModel
 import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.uionboarding.coroutineScope
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.SupervisorJob
@@ -20,7 +21,8 @@ class SearchChannelsComponent constructor(
   private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  val navigationPop: () -> Unit
+  val navigationPop: () -> Unit,
+  val navigateRoot: (RootComponent.Config) -> Unit
 ) : ComponentContext by componentContext{
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
 

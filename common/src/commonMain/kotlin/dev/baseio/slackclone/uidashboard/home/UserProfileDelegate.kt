@@ -9,12 +9,13 @@ import kotlinx.coroutines.SupervisorJob
 class UserProfileComponent(
   private val userProfileDelegate: UserProfileDelegate,
   coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  componentContext: ComponentContext
+  componentContext: ComponentContext,
+  val navigateOnboardingRoot: () -> Unit
 ) :
   UserProfileDelegate by userProfileDelegate, ComponentContext by componentContext {
   private val scope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
 
   init {
-    getCurrentUser(scope)
+    getCurrentUser(scope, navigateOnboardingRoot)
   }
 }
