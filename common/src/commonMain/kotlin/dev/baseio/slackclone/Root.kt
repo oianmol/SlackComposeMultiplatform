@@ -98,17 +98,7 @@ class RootComponent(
 
       Config.DashboardScreen -> Root.Child.DashboardScreen(
         DashboardComponent(
-          componentContext,
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(), {
+          componentContext,{
             navigation.navigate {
               listOf(Config.GettingStarted)
             }

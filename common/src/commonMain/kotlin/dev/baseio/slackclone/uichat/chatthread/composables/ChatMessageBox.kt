@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.Keyboard
 import dev.baseio.slackclone.commonui.reusable.MentionsTextField
 import dev.baseio.slackclone.commonui.reusable.SpanInfos
@@ -27,10 +28,15 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
+import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 import dev.keyboardAsState
 
 @Composable
-fun ChatMessageBox(viewModel: ChatScreenComponent, modifier: Modifier) {
+fun ChatMessageBox(
+  screenComponent: ChatScreenComponent,
+  viewModel: ChatViewModel = screenComponent.chatViewModel,
+  modifier: Modifier
+) {
   val keyboard by keyboardAsState()
   var focusState by remember { mutableStateOf<FocusState?>(null) }
   val focusRequester = FocusRequester()
@@ -53,9 +59,11 @@ fun ChatMessageBox(viewModel: ChatScreenComponent, modifier: Modifier) {
         focusState = newFocusState
       }.focusRequester(focusRequester)
     )
-    AnimatedVisibility(keyboard is Keyboard.Opened ||
-        keyboard is Keyboard.HardwareKeyboard ||
-        focusState?.hasFocus == true) {
+    AnimatedVisibility(
+      keyboard is Keyboard.Opened ||
+          keyboard is Keyboard.HardwareKeyboard ||
+          focusState?.hasFocus == true
+    ) {
       ChatOptions(
         viewModel,
         Modifier
@@ -67,7 +75,7 @@ fun ChatMessageBox(viewModel: ChatScreenComponent, modifier: Modifier) {
 }
 
 @Composable
-fun ChatOptions(viewModel: ChatScreenComponent, modifier: Modifier = Modifier) {
+fun ChatOptions(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
   val search by viewModel.message.collectAsState(mainDispatcher)
 
   Row(
@@ -105,7 +113,7 @@ private fun chatOptionIconSize() = Modifier.size(20.dp)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MessageTFRow(
-  viewModel: ChatScreenComponent,
+  viewModel: ChatViewModel,
   modifier: Modifier
 ) {
   val keyboard by keyboardAsState()
@@ -170,8 +178,8 @@ private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type 
     event.key == Key.Enter
 
 @Composable
-fun CollapseExpandButton(viewModel: ChatScreenComponent) {
-  val isExpanded by viewModel.chatBoxState.collectAsState(mainDispatcher)
+fun CollapseExpandButton(viewModel: ChatViewModel) {
+  val isExpanded by viewModel.chatBoxState.subscribeAsState()
   IconButton(
     onClick = {
       viewModel.switchChatBoxState()
@@ -189,7 +197,7 @@ fun CollapseExpandButton(viewModel: ChatScreenComponent) {
 
 @Composable
 private fun SendMessageButton(
-  viewModel: ChatScreenComponent,
+  viewModel: ChatViewModel,
   search: String,
   modifier: Modifier = Modifier
 ) {
@@ -211,9 +219,9 @@ private fun ChatTFPlusPlaceHolder(
   search: String,
   modifier: Modifier = Modifier,
   innerTextField: @Composable () -> Unit,
-  viewModel: ChatScreenComponent
+  viewModel: ChatViewModel
 ) {
-  val channel by viewModel.channelFlow.collectAsState()
+  val channel by viewModel.channelFlow.subscribeAsState()
   Row(
     modifier
       .padding(16.dp), verticalAlignment = Alignment.CenterVertically

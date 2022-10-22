@@ -46,6 +46,7 @@ import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.uidashboard.home.*
 import dev.baseio.slackclone.uidashboard.vm.Dashboard
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
+import dev.baseio.slackclone.uidashboard.vm.DashboardVM
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 import java.lang.RuntimeException
 
@@ -54,7 +55,8 @@ import java.lang.RuntimeException
 @Composable
 fun DashboardUI(
   dashboardComponent: DashboardComponent,
-  chatScreenComponent: ChatScreenComponent = dashboardComponent.chatScreenComponent
+  chatScreenComponent: ChatScreenComponent = dashboardComponent.chatScreenComponent,
+  dashboardVM: DashboardVM = dashboardComponent.dashboardVM
 ) {
   val scaffoldState = rememberScaffoldState()
 
@@ -63,8 +65,8 @@ fun DashboardUI(
 
 
   val keyboardController = LocalSoftwareKeyboardController.current
-  val lastChannel by dashboardComponent.selectedChatChannel.collectAsState(mainDispatcher)
-  val isChatViewClosed by dashboardComponent.isChatViewClosed.collectAsState(mainDispatcher)
+  val lastChannel by dashboardVM.selectedChatChannel.collectAsState(mainDispatcher)
+  val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(mainDispatcher)
 
   var isLeftNavOpen by remember { mutableStateOf(false) }
   val size = getWindowSizeClass(LocalWindow.current)
@@ -74,7 +76,7 @@ fun DashboardUI(
   val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
 
   dashboardComponent.backHandler.register(BackCallback(!isChatViewClosed) {
-    dashboardComponent.isChatViewClosed.value = true
+    dashboardVM.isChatViewClosed.value = true
   })
 
 
@@ -97,7 +99,7 @@ fun DashboardUI(
             isLeftNavOpen = it
           },
           onOpenCloseRightView = {
-            dashboardComponent.isChatViewClosed.value = it
+            dashboardVM.isChatViewClosed.value = it
           },
           leftViewComposable = { sideNavModifier ->
             SideNavigation(
@@ -114,8 +116,9 @@ fun DashboardUI(
             lastChannel?.let { slackChannel ->
               ChatScreenUI(
                 modifier = chatViewModifier,
-                onBackClick = { dashboardComponent.isChatViewClosed.value = true },
-                viewModel = chatScreenComponent
+                onBackClick = { dashboardVM.isChatViewClosed.value = true },
+                chatScreenComponent = chatScreenComponent,
+                slackChannel = slackChannel
               )
             }
           }
@@ -126,9 +129,9 @@ fun DashboardUI(
             modifier = mainViewModifier,
             appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
             onItemClick = {
-              dashboardComponent.selectedChatChannel.value = it
-              chatScreenComponent.requestFetch(it)
-              dashboardComponent.isChatViewClosed.value = false
+              dashboardVM.selectedChatChannel.value = it
+              chatScreenComponent.chatViewModel.requestFetch(it)
+              dashboardVM.isChatViewClosed.value = false
             }, dashboardComponent
           )
         }
@@ -152,10 +155,11 @@ fun DashboardUI(
               ChatScreenUI(
                 modifier = chatViewModifier,
                 onBackClick = {
-                  dashboardComponent.isChatViewClosed.value = true
-                  dashboardComponent.selectedChatChannel.value = null
+                  dashboardVM.isChatViewClosed.value = true
+                  dashboardVM.selectedChatChannel.value = null
                 },
-                viewModel = chatScreenComponent
+                chatScreenComponent = chatScreenComponent,
+                slackChannel = slackChannel
               )
             }
           },
@@ -166,9 +170,9 @@ fun DashboardUI(
             modifier = modifier,
             appBarIconClick = { isLeftNavOpen = isLeftNavOpen.not() },
             onItemClick = {
-              dashboardComponent.selectedChatChannel.value = it
-              chatScreenComponent.requestFetch(it)
-              dashboardComponent.isChatViewClosed.value = false
+              dashboardVM.selectedChatChannel.value = it
+              chatScreenComponent.chatViewModel.requestFetch(it)
+              dashboardVM.isChatViewClosed.value = false
             },
             dashboardComponent = dashboardComponent,
           )
@@ -178,13 +182,13 @@ fun DashboardUI(
 
       else -> {
         val onItemClick = { channel: Any ->
-          dashboardComponent.selectedChatChannel.value = channel as DomainLayerChannels.SKChannel
-          chatScreenComponent.requestFetch(channel)
-          dashboardComponent.isChatViewClosed.value = false
+          dashboardVM.selectedChatChannel.value = channel as DomainLayerChannels.SKChannel
+          chatScreenComponent.chatViewModel.requestFetch(channel)
+          dashboardVM.isChatViewClosed.value = false
         }
         val clearChat = {
-          dashboardComponent.isChatViewClosed.value = true
-          dashboardComponent.selectedChatChannel.value = null
+          dashboardVM.isChatViewClosed.value = true
+          dashboardVM.selectedChatChannel.value = null
         }
         SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = { modifier ->
           SlackSideBarLayoutDesktop(modifier, dashboardComponent.sideNavComponent, openDM = {
@@ -207,17 +211,17 @@ fun DashboardUI(
             dashboardComponent.navigateRoot(RootComponent.Config.SearchCreateChannelUI)
           }, dashboardComponent.recentChannelsComponent,
             dashboardComponent.allChannelsComponent,
-            dashboardComponent
-          )
+            dashboardComponent)
         }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
               modifier = contentModifier,
               onBackClick = {
-                dashboardComponent.isChatViewClosed.value = true
-                dashboardComponent.selectedChatChannel.value = null
+                dashboardVM.isChatViewClosed.value = true
+                dashboardVM.selectedChatChannel.value = null
               },
-              viewModel = chatScreenComponent
+              chatScreenComponent = chatScreenComponent,
+              slackChannel = slackChannel
             )
           } ?: run {
             SlackCloneSurface(
@@ -234,6 +238,7 @@ fun DashboardUI(
                   is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
                   is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
                   is Dashboard.Child.UserProfileScreen -> UserProfileUI(child.component)
+
                   is Dashboard.Child.HomeScreen -> throw RuntimeException("Not expecting to load home in desktop layout!")
                 }
               }

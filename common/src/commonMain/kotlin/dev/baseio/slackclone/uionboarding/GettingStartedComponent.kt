@@ -61,28 +61,11 @@ class GettingStartedComponent(
   )
 }
 
-internal class SomeRetainedInstance(mainContext: CoroutineContext) : InstanceKeeper.Instance {
-  // The scope survives Android configuration changes
-  val scope = CoroutineScope(mainContext + SupervisorJob())
-
-  fun foo() {
-    scope.launch {
-      // Do the job
-    }
-  }
-
-  override fun onDestroy() {
-    scope.cancel() // Cancel the scope when the instance is destroyed
-  }
-}
-
 fun CoroutineScope(context: CoroutineContext, lifecycle: Lifecycle): CoroutineScope {
   val scope = CoroutineScope(context)
   lifecycle.doOnDestroy(scope::cancel)
   return scope
 }
 
-fun ComponentContext.coroutineScope(context: CoroutineContext): CoroutineScope {
-  val someRetainedInstance = instanceKeeper.getOrCreate { SomeRetainedInstance(context) }
-  return someRetainedInstance.scope
-}
+fun LifecycleOwner.coroutineScope(context: CoroutineContext): CoroutineScope =
+  CoroutineScope(context, lifecycle)
