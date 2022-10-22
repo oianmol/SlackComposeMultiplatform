@@ -2,11 +2,15 @@ package dev.baseio.slackclone.uidashboard.home
 
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
-import ViewModel
+import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.koinApp
+import dev.baseio.slackclone.uichannels.SlackChannelComponent
 
-class HomeScreenVM(
+class HomeScreenComponent(
+  componentContext: ComponentContext,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-) : ViewModel() {
+) : ComponentContext by componentContext {
+
   var lastSelectedWorkspace = MutableStateFlow(flow())
     private set
 

@@ -12,7 +12,7 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 @Composable
 fun DMChannelsList(
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
-  channelVM: MessageViewModel
+  channelVM: DirectMessagesComponent
 ) {
   val channels by channelVM.channels.collectAsState(mainDispatcher)
   val channelsFlow by channels.collectAsState(emptyList(),mainDispatcher)

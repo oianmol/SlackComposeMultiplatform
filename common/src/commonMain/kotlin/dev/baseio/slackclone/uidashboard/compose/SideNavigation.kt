@@ -24,17 +24,16 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
-import dev.baseio.slackclone.uidashboard.vm.SideNavVM
+import dev.baseio.slackclone.uidashboard.vm.SideNavComponent
 
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
 fun SideNavigation(
   modifier: Modifier,
-  composeNavigator: ComposeNavigator,
-  viewModel: SideNavVM, onClose: () -> Unit
+  viewModel: SideNavComponent,
+  onClose: () -> Unit,
+  navigateOnboardingClearRoutes: () -> Unit
 ) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
@@ -59,9 +58,7 @@ fun SideNavigation(
       Spacer(modifier = Modifier.padding(8.dp))
       SideNavFooter(logout = {
         viewModel.logout()
-        composeNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
-          remove() // remove all routes!
-        })
+        navigateOnboardingClearRoutes()
       })
     }
 

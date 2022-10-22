@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -21,21 +20,21 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
-import dev.baseio.slackclone.data.injection.AllChatsQualifier
-import dev.baseio.slackclone.data.injection.RecentChatsQualifier
-import dev.baseio.slackclone.navigation.BackstackScreen
+import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.views.*
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun BackstackScreen.HomeScreenUI(
+fun HomeScreenUI(
+  homeScreenComponent: HomeScreenComponent,
   appBarIconClick: () -> Unit,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
-  onCreateChannelRequest: () -> Unit = {}
+  onCreateChannelRequest: () -> Unit = {},
+  recentChannelsComponent: SlackChannelComponent,
+  allChannelsComponent: SlackChannelComponent
 ) {
-  val homeScreenVM: HomeScreenVM = scope.get()
-  val selectedWorkspace by homeScreenVM.lastSelectedWorkspace.value.collectAsState(null)
+  val selectedWorkspace by homeScreenComponent.lastSelectedWorkspace.value.collectAsState(null)
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
@@ -50,12 +49,12 @@ fun BackstackScreen.HomeScreenUI(
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        }, scope.get(RecentChatsQualifier))
+        }, recentChannelsComponent)
         SlackAllChannels({
           onItemClick(it)
         }, onClickAdd = {
           onCreateChannelRequest()
-        }, scope.get(AllChatsQualifier))
+        }, allChannelsComponent)
       }
     }
 
@@ -63,7 +62,6 @@ fun BackstackScreen.HomeScreenUI(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ThreadsTile() {
   SlackListItem(icon = Icons.Default.MailOutline, title = "Threads")

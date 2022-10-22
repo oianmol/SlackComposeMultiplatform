@@ -22,6 +22,12 @@ object Versions {
 
 object Deps {
 
+    object Decompose{
+        const val VERSION = "1.0.0-alpha-06"
+        const val core ="com.arkivanov.decompose:decompose:${VERSION}"
+        const val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION"
+    }
+
     object Kotlinx {
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
         const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
@@ -79,9 +85,9 @@ kotlin {
             kotlinOptions.jvmTarget = "11"
         }
     }
-    iosArm64()
+/*    iosArm64()
     iosSimulatorArm64()
-    iosX64()
+    iosX64()*/
     sourceSets {
 
         val commonMain by getting {
@@ -100,6 +106,8 @@ kotlin {
                 implementation(Deps.Kotlinx.coroutines)
                 implementation(Deps.Koin.core)
                 implementation(kotlin("stdlib-common"))
+                implementation(Deps.Decompose.core)
+                implementation(Deps.Decompose.composejb)
             }
         }
         val commonTest by getting {
@@ -131,7 +139,7 @@ kotlin {
                 implementation("junit:junit:4.13.2")
             }
         }
-        val iosArm64Main by getting {
+/*        val iosArm64Main by getting {
             dependencies {
                 implementation("dev.baseio.slackclone:slack_kmp_domain-iosarm64:1.0")
                 implementation("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
@@ -152,7 +160,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4")
                 implementation("io.ktor:ktor-client-darwin:$ktor_version")
             }
-        }
+        }*/
         val jvmMain by getting {
             dependencies {
                 implementation("dev.baseio.slackclone:slack_kmp_domain-jvm:1.0")

@@ -15,12 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.WindowInfo
-import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,7 +28,10 @@ import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.FabPosition
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.*
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.delay
@@ -39,6 +39,10 @@ import kotlinx.coroutines.delay
 @ExperimentalComposeUiApi
 fun main() = application {
   val windowState = rememberWindowState()
+  val lifecycle = LifecycleRegistry()
+
+  val skKeyValueData = SKKeyValueData()
+  val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle), skKeyValueData) }
 
   Window(onCloseRequest = ::exitApplication, state = windowState) {
     var rememberedComposeWindow by remember(this.window) {
@@ -54,12 +58,19 @@ fun main() = application {
         .launchIn(this)
     }
 
-    appNavigator.whenRouteCanNoLongerNavigateBack = {
-      this@application.exitApplication()
-    }
 
     SlackCloneTheme {
-      Content(rememberedComposeWindow)
+      CompositionLocalProvider(
+        LocalWindow provides rememberedComposeWindow
+      ) {
+        App(
+          sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
+          skKeyValueData = skKeyValueData,
+          rootComponent = {
+            rootComponent
+          }
+        )
+      }
     }
 
   }
@@ -112,42 +123,3 @@ private fun CommonCircleShape(modifier: Modifier, color: Color) {
     })
 }
 
-@Composable
-@ExperimentalComposeUiApi
-private fun Content(rememberedComposeWindow: WindowInfo) {
-  CompositionLocalProvider(
-    LocalWindow provides rememberedComposeWindow
-  ) {
-    Scaffold(floatingActionButton = {
-      FloatingActionButton()
-    }, isFloatingActionButtonDocked = true, floatingActionButtonPosition = FabPosition.Center) {
-      App(sqlDriver = DriverFactory().createDriver(SlackDB.Schema), skKeyValueData = SKKeyValueData())
-    }
-  }
-}
-
-@ExperimentalComposeUiApi
-@Composable
-private fun FloatingActionButton() {
-  var enter by remember { mutableStateOf(true) }
-  val size by animateDpAsState(if (enter) 36.dp else 8.dp)
-
-  LaunchedEffect(true) {
-    delay(700)
-    enter = false
-  }
-
-  FloatingActionButton(modifier = Modifier.size(size).onPointerEvent(PointerEventType.Enter) {
-    enter = true
-  }.onPointerEvent(PointerEventType.Exit) {
-    enter = false
-  }, onClick = {
-    appNavigator.navigateUp()
-  }, content = {
-    Icon(
-      Icons.Default.ArrowBack,
-      contentDescription = null,
-      tint = SlackCloneColorProvider.colors.appBarIconColor
-    )
-  }, backgroundColor = SlackCloneColorProvider.colors.appBarColor)
-}

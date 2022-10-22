@@ -6,6 +6,9 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
 import kotlinx.coroutines.launch
 import ViewModel
+import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.uionboarding.coroutineScope
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
@@ -14,15 +17,21 @@ import dev.icerock.moko.paging.LambdaPagedListDataSource
 import dev.icerock.moko.paging.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
 
-class ChatScreenVM(
+class ChatScreenComponent(
+  componentContext: ComponentContext,
+  coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
   private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
   private val useCaseChannelMembers: UseCaseGetChannelMembers,
   private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
   private val sendMessageDelegate: SendMessageDelegate,
-) : ViewModel(), SendMessageDelegate by sendMessageDelegate {
+) : ComponentContext by componentContext, SendMessageDelegate by sendMessageDelegate {
+
+  private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
+
   lateinit var channelFlow: MutableStateFlow<DomainLayerChannels.SKChannel>
 
   val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())

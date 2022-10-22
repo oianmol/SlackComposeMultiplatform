@@ -1,22 +1,29 @@
 package dev.baseio.slackclone.uichannels.createsearch
 
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.NavigationKey
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import ViewModel
+import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.uionboarding.coroutineScope
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.datetime.Clock
 
-class CreateChannelVM constructor(
+class CreateNewChannelComponent constructor(
+  componentContext: ComponentContext,
+  coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-) :
-  ViewModel() {
+  val navigationPop:()->Unit,
+  val navigationWith:(DomainLayerChannels.SKChannel)->Unit
+) : ComponentContext by componentContext {
+
+  private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
+
 
   var createChannelState =
     MutableStateFlow(
@@ -31,7 +38,7 @@ class CreateChannelVM constructor(
       )
     )
 
-  fun createChannel(composeNavigator: ComposeNavigator) {
+  fun createChannel() {
     viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
       throwable.printStackTrace()
     }) {
@@ -43,12 +50,7 @@ class CreateChannelVM constructor(
             uuid = "${createChannelState.value.name}_${lastSelectedWorkspace.uuid}"
           )
           val channel = useCaseCreateChannel(createChannelState.value).getOrThrow()
-          composeNavigator.navigateUp()
-          composeNavigator.deliverResult(
-            NavigationKey.NavigateChannel,
-            channel,
-            SlackScreens.CreateChannelsScreen
-          )
+          navigationWith(channel)
         }
 
       }

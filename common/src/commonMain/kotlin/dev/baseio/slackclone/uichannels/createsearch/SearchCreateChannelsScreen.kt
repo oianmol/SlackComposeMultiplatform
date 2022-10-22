@@ -18,71 +18,46 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.NavigationKey
-import dev.baseio.slackclone.navigation.SlackScreens
 
 @Composable
 fun SearchCreateChannelUI(
-  composeNavigator: ComposeNavigator,
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
 ) {
 
   val scaffoldState = rememberScaffoldState()
 
-  ListChannels(scaffoldState, composeNavigator, searchChannelsVM = searchChannelsVM, { slackChannel: Any ->
-    val channel = slackChannel as DomainLayerChannels.SKChannel
-    composeNavigator.navigateUp()
-    composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
-  }) {
-    composeNavigator.registerForNavigationResult(
-      NavigationKey.NavigateChannel,
-      SlackScreens.CreateChannelsScreen
-    ) { slackChannel: Any ->
-      val channel = slackChannel as DomainLayerChannels.SKChannel
-      composeNavigator.navigateUp()
-      composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
-    }
-    composeNavigator.navigateScreen(SlackScreens.CreateNewChannel)
-  }
-}
-
-@Composable
-private fun ListChannels(
-  scaffoldState: ScaffoldState,
-  composeNavigator: ComposeNavigator,
-  searchChannelsVM: SearchChannelsVM,
-  onItemClick: (Any) -> Unit,
-  newChannel: () -> Unit
-) {
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
     modifier = Modifier,
     scaffoldState = scaffoldState,
     topBar = {
-      val channelCount by searchChannelsVM.channelCount.collectAsState(mainDispatcher)
-      SearchAppBar(composeNavigator, channelCount)
+      SearchAppBar(searchChannelsComponent)
     },
     snackbarHost = {
       scaffoldState.snackbarHostState
     },
     floatingActionButton = {
-      NewChannelFAB(newChannel)
+      NewChannelFAB {
+        searchChannelsComponent.navigateRoot(RootComponent.Config.CreateNewChannelUI)
+      }
     }
   ) { innerPadding ->
-    SearchContent(innerPadding, searchChannelsVM, onItemClick)
+    SearchContent(innerPadding, searchChannelsComponent) { skChannel ->
+      searchChannelsComponent.navigationPopWith(skChannel)
+    }
   }
 }
 
 @Composable
 private fun SearchContent(
   innerPadding: PaddingValues,
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
   Box(modifier = Modifier.padding(innerPadding)) {
@@ -90,8 +65,8 @@ private fun SearchContent(
       modifier = Modifier.fillMaxSize()
     ) {
       Column {
-        SearchChannelsTF(searchChannelsVM)
-        ListAllChannels(searchChannelsVM, onItemClick)
+        SearchChannelsTF(searchChannelsComponent)
+        ListAllChannels(searchChannelsComponent, onItemClick)
       }
     }
   }
@@ -100,10 +75,10 @@ private fun SearchContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllChannels(
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
-  val channelsFlow by searchChannelsVM.channels.collectAsState(mainDispatcher)
+  val channelsFlow by searchChannelsComponent.channels.collectAsState(mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -145,13 +120,13 @@ fun SlackChannelHeader(title: String) {
 }
 
 @Composable
-private fun SearchChannelsTF(searchChannelsVM: SearchChannelsVM) {
-  val searchChannel by searchChannelsVM.search.collectAsState(mainDispatcher)
+private fun SearchChannelsTF(searchChannelsComponent: SearchChannelsComponent) {
+  val searchChannel by searchChannelsComponent.search.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel,
     onValueChange = { newValue ->
-      searchChannelsVM.search.value = (newValue)
+      searchChannelsComponent.search.value = (newValue)
     },
     textStyle = textStyleFieldPrimary(),
     placeholder = {
@@ -204,13 +179,15 @@ private fun NewChannelFAB(newChannel: () -> Unit) {
 }
 
 @Composable
-private fun SearchAppBar(composeNavigator: ComposeNavigator, count: Int) {
+private fun SearchAppBar(searchChannelsComponent: SearchChannelsComponent) {
+  val channelCount by searchChannelsComponent.channelCount.collectAsState(mainDispatcher)
+
   SlackSurfaceAppBar(
     title = {
-      SearchNavTitle(count)
+      SearchNavTitle(channelCount)
     },
     navigationIcon = {
-      NavBackIcon(composeNavigator)
+      NavBackIcon(searchChannelsComponent)
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
   )
@@ -231,9 +208,9 @@ private fun SearchNavTitle(count: Int) {
 }
 
 @Composable
-private fun NavBackIcon(composeNavigator: ComposeNavigator) {
+private fun NavBackIcon(searchChannelsComponent: SearchChannelsComponent) {
   IconButton(onClick = {
-    composeNavigator.navigateUp()
+    searchChannelsComponent.navigationPop()
   }) {
     Icon(
       imageVector = Icons.Filled.Clear,

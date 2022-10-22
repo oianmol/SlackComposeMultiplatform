@@ -8,32 +8,34 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.data.injection.AllChatsQualifier
-import dev.baseio.slackclone.data.injection.RecentChatsQualifier
-import dev.baseio.slackclone.navigation.BackstackScreen
-import dev.baseio.slackclone.navigation.ComposeNavigator
-
+import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.views.*
 import dev.baseio.slackclone.uidashboard.compose.WorkspacesBar
 import dev.baseio.slackclone.uidashboard.compose.FloatingDM
 import dev.baseio.slackclone.uidashboard.home.JumpToText
 import dev.baseio.slackclone.uidashboard.home.ThreadsTile
+import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 
 @Composable
-fun BackstackScreen.SlackWorkspaceLayoutDesktop(
+fun SlackWorkspaceLayoutDesktop(
   modifier: Modifier = Modifier,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
   onCreateChannelRequest: () -> Unit = {},
-  composeNavigator: ComposeNavigator
+  recentChannelsComponent: SlackChannelComponent,
+  allChannelsComponent: SlackChannelComponent,
+  dashboardComponent: DashboardComponent,
 ) {
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
     floatingActionButton = {
-      FloatingDM(composeNavigator, onItemClick)
+      FloatingDM {
+        dashboardComponent.navigateRoot(RootComponent.Config.NewChatThreadScreen)
+      }
     }, modifier = modifier
   ) {
     SlackCloneSurface(
@@ -46,16 +48,16 @@ fun BackstackScreen.SlackWorkspaceLayoutDesktop(
         Spacer(modifier = Modifier.height(8.dp))
         ThreadsTile()
         Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-        SlackRecentChannels({
-          onItemClick(it)
+        SlackRecentChannels({ skChannel ->
+          onItemClick(skChannel)
         }, onClickAdd = {
           onCreateChannelRequest()
-        },scope.get(RecentChatsQualifier))
-        SlackAllChannels({
-          onItemClick(it)
+        }, recentChannelsComponent)
+        SlackAllChannels({ skChannel ->
+          onItemClick(skChannel)
         }, onClickAdd = {
           onCreateChannelRequest()
-        }, scope.get(AllChatsQualifier))
+        }, allChannelsComponent)
       }
     }
   }

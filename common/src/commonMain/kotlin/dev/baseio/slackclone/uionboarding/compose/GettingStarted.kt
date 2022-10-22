@@ -20,16 +20,15 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.navigation.ComposeNavigator
-import dev.baseio.slackclone.navigation.SlackScreens
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
-import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import dev.baseio.slackclone.uionboarding.GettingStartedComponent
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 
 @Composable
-fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: GettingStartedVM) {
+fun GettingStartedUI(gettingStartedVM: GettingStartedComponent) {
   val scaffoldState = rememberScaffoldState()
-  val showSlackAnim by gettingStartedVM.showSlackAnim
+  val showSlackAnim by gettingStartedVM.componentState.subscribeAsState()
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.GettingStartedScreen()
 
@@ -46,14 +45,14 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
         modifier = Modifier
           .padding(28.dp)
       ) {
-        if (showSlackAnim) {
+        if (showSlackAnim.showSlackAnim) {
           SlackAnimation(gettingStartedVM)
         } else {
-          AnimatedVisibility(visible = !showSlackAnim) {
+          AnimatedVisibility(visible = true) {
             when (size) {
-              WindowSize.Phones -> PhoneLayout(gettingStartedVM, composeNavigator)
+              WindowSize.Phones -> PhoneLayout(gettingStartedVM)
               else -> {
-                LargeScreenLayout(gettingStartedVM, composeNavigator)
+                LargeScreenLayout(gettingStartedVM)
               }
             }
 
@@ -67,9 +66,9 @@ fun GettingStartedUI(composeNavigator: ComposeNavigator, gettingStartedVM: Getti
 
 @Composable
 private fun LargeScreenLayout(
-  gettingStartedVM: GettingStartedVM,
-  composeNavigator: ComposeNavigator
-) {
+  gettingStartedVM: GettingStartedComponent,
+
+  ) {
   val density = LocalDensity.current
 
   Row(
@@ -89,7 +88,7 @@ private fun LargeScreenLayout(
         IntroExitTransitionVertical()
       }
       Spacer(Modifier.padding(16.dp))
-      GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
+      GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
         GetStartedExitTransVertical()
       })
 
@@ -107,8 +106,7 @@ private fun LargeScreenLayout(
 
 @Composable
 private fun PhoneLayout(
-  gettingStartedVM: GettingStartedVM,
-  composeNavigator: ComposeNavigator
+  gettingStartedVM: GettingStartedComponent
 ) {
   val density = LocalDensity.current
   Column(
@@ -123,7 +121,7 @@ private fun PhoneLayout(
     }
     CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
     Spacer(Modifier.padding(8.dp))
-    GetStartedButton(composeNavigator, gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
+    GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
       GetStartedExitTransHorizontal()
     })
   }
@@ -158,11 +156,11 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedVM) {
+private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
   val painter = PainterRes.gettingStarted()
-  val expanded by gettingStartedVM.introTextExpanded
+  val expanded by gettingStartedVM.componentState.subscribeAsState()
   AnimatedVisibility(
-    visible = expanded, enter = ImageEnterTransition(),
+    visible = expanded.introTextExpanded, enter = ImageEnterTransition(),
     exit = ImageExitTrans()
   ) {
     Image(
@@ -188,43 +186,44 @@ private fun ImageEnterTransition() = expandIn(
 
 @Composable
 private fun GetStartedButton(
-  composeNavigator: ComposeNavigator,
-  gettingStartedVM: GettingStartedVM,
+  gettingStartedVM: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.introTextExpanded
+  val expanded by gettingStartedVM.componentState.subscribeAsState()
 
   AnimatedVisibility(
-    visible = expanded, enter = enterAnim(),
+    visible = expanded.introTextExpanded, enter = enterAnim(),
     exit = exitAnim()
   ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-      Button(
-        onClick = {
-          skipTypingNavigate(composeNavigator)
-        },
-        Modifier
-          .fillMaxWidth()
-          .height(40.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
-      ) {
-        Text(
-          text = "Sign In to Slack",
-          style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
-        )
-      }
+      LoginButton(gettingStartedVM)
       Spacer(Modifier.padding(8.dp))
       TeamNewToSlack(Modifier.padding(8.dp)) {
-        composeNavigator.navigateScreen(SlackScreens.CreateWorkspace.withArgs(isLogin = false))
+        gettingStartedVM.onCreateWorkspaceRequested(false)
       }
     }
   }
 }
 
-private fun skipTypingNavigate(composeNavigator: ComposeNavigator) {
-  //composeNavigator.navigateScreen(SlackScreens.SkipTypingScreen)
-  composeNavigator.navigateScreen(SlackScreens.CreateWorkspace.withArgs(isLogin = true))
+@Composable
+private fun LoginButton(
+  gettingStartedVM: GettingStartedComponent,
+) {
+  Button(
+    onClick = {
+      gettingStartedVM.onCreateWorkspaceRequested(true)
+    },
+    Modifier
+      .fillMaxWidth()
+      .height(40.dp),
+    colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
+  ) {
+    Text(
+      text = "Sign In to Slack",
+      style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+    )
+  }
 }
 
 @Composable
@@ -262,14 +261,14 @@ private fun GetStartedEnterTransitionVertical(density: Density) =
 @Composable
 private fun IntroText(
   modifier: Modifier = Modifier,
-  gettingStartedVM: GettingStartedVM,
+  gettingStartedVM: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.introTextExpanded
+  val expanded by gettingStartedVM.componentState.subscribeAsState()
 
   AnimatedVisibility(
-    visible = expanded, enter = enterAnim(),
+    visible = expanded.introTextExpanded, enter = enterAnim(),
     exit = exitAnim()
   ) {
     Column(modifier) {

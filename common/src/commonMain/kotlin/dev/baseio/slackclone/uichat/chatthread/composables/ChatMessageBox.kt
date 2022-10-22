@@ -26,11 +26,11 @@ import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.BoxState
-import dev.baseio.slackclone.uichat.chatthread.ChatScreenVM
+import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.keyboardAsState
 
 @Composable
-fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
+fun ChatMessageBox(viewModel: ChatScreenComponent, modifier: Modifier) {
   val keyboard by keyboardAsState()
   var focusState by remember { mutableStateOf<FocusState?>(null) }
   val focusRequester = FocusRequester()
@@ -67,7 +67,7 @@ fun ChatMessageBox(viewModel: ChatScreenVM, modifier: Modifier) {
 }
 
 @Composable
-fun ChatOptions(viewModel: ChatScreenVM, modifier: Modifier = Modifier) {
+fun ChatOptions(viewModel: ChatScreenComponent, modifier: Modifier = Modifier) {
   val search by viewModel.message.collectAsState(mainDispatcher)
 
   Row(
@@ -105,7 +105,7 @@ private fun chatOptionIconSize() = Modifier.size(20.dp)
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MessageTFRow(
-  viewModel: ChatScreenVM,
+  viewModel: ChatScreenComponent,
   modifier: Modifier
 ) {
   val keyboard by keyboardAsState()
@@ -170,7 +170,7 @@ private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type 
     event.key == Key.Enter
 
 @Composable
-fun CollapseExpandButton(viewModel: ChatScreenVM) {
+fun CollapseExpandButton(viewModel: ChatScreenComponent) {
   val isExpanded by viewModel.chatBoxState.collectAsState(mainDispatcher)
   IconButton(
     onClick = {
@@ -189,7 +189,7 @@ fun CollapseExpandButton(viewModel: ChatScreenVM) {
 
 @Composable
 private fun SendMessageButton(
-  viewModel: ChatScreenVM,
+  viewModel: ChatScreenComponent,
   search: String,
   modifier: Modifier = Modifier
 ) {
@@ -211,7 +211,7 @@ private fun ChatTFPlusPlaceHolder(
   search: String,
   modifier: Modifier = Modifier,
   innerTextField: @Composable () -> Unit,
-  viewModel: ChatScreenVM
+  viewModel: ChatScreenComponent
 ) {
   val channel by viewModel.channelFlow.collectAsState()
   Row(

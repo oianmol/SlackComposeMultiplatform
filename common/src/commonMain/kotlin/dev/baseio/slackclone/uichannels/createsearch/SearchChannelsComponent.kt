@@ -7,19 +7,26 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.launch
 import ViewModel
-import androidx.compose.runtime.snapshotFlow
+import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.RootComponent
+import dev.baseio.slackclone.uionboarding.coroutineScope
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-class SearchChannelsVM constructor(
+class SearchChannelsComponent constructor(
+  componentContext:ComponentContext,
   private val ucFetchChannels: UseCaseSearchChannel,
   private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-  private val coroutineDispatcherProvider: CoroutineDispatcherProvider
-) : ViewModel() {
+  private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
+  val navigationPop: () -> Unit,
+  val navigateRoot: (RootComponent.Config) -> Unit,
+  val navigationPopWith: (DomainLayerChannels.SKChannel) -> Unit
+
+) : ComponentContext by componentContext{
+  private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
 
   val search = MutableStateFlow("")
   val channelCount = MutableStateFlow(0)

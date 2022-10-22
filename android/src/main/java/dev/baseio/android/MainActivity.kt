@@ -1,17 +1,14 @@
 package dev.baseio.android
 
-import dev.baseio.slackclone.App
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.DefaultComponentContext
 import dev.baseio.database.SlackDB
-import dev.baseio.slackclone.LocalWindow
-import dev.baseio.slackclone.WindowInfo
-import dev.baseio.slackclone.appNavigator
+import dev.baseio.slackclone.*
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
@@ -22,6 +19,19 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+
+    val defaultComponentContext = DefaultComponentContext(
+      lifecycle = lifecycle,
+      savedStateRegistry = savedStateRegistry,
+      viewModelStore = viewModelStore,
+      onBackPressedDispatcher = onBackPressedDispatcher,
+    )
+    val skKeyValueData =  SKKeyValueData(this)
+    val root by lazy {
+      RootComponent(defaultComponentContext, skKeyValueData)
+    }
+
     setContent {
       val config = LocalConfiguration.current
 
@@ -38,21 +48,16 @@ class MainActivity : AppCompatActivity() {
           .launchIn(this)
       }
 
-      onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-          appNavigator.navigateUp()
-        }
-      })
-      appNavigator.whenRouteCanNoLongerNavigateBack = {
-        finish()
-      }
       CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow
       ) {
         SlackCloneTheme {
           App(
             sqlDriver = DriverFactory(this@MainActivity).createDriver(SlackDB.Schema),
-            skKeyValueData = SKKeyValueData(this)
+            skKeyValueData = skKeyValueData,
+            rootComponent = {
+              root
+            }
           )
         }
       }
