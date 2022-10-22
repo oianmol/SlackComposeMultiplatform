@@ -11,21 +11,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedMonthDate
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
+import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @Composable
 fun ChatMessagesUI(
-  viewModel: ChatScreenComponent,
+  screenComponent: ChatScreenComponent,
+  viewModel: ChatViewModel = screenComponent.chatViewModel,
   modifier: Modifier,
   alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
 ) {
-  val messages by viewModel.chatMessagesFlow.collectAsState(mainDispatcher)
-  val members by viewModel.channelMembers.collectAsState(mainDispatcher)
+  val messages by viewModel.chatMessagesFlow.subscribeAsState()
+  val members by viewModel.channelMembers.subscribeAsState()
   val listState = rememberLazyListState()
   val threshold = 3
 

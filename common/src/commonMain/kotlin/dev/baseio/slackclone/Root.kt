@@ -22,6 +22,7 @@ interface Root {
   fun navigateDashboard()
   fun navigatePush(config: RootComponent.Config)
   fun navigationPop()
+  fun navigationClear()
 
   sealed class Child {
     data class GettingStarted(val component: GettingStartedComponent) : Child()
@@ -55,12 +56,18 @@ class RootComponent(
     navigation.pop()
   }
 
+  override fun navigationClear() {
+    navigation.popWhile { true }
+  }
+
   override fun navigateCreateWorkspace(isLogin: Boolean) {
     navigation.push(Config.CreateWorkspace(isLogin))
   }
 
   override fun navigateDashboard() {
-    navigation.replaceCurrent(Config.DashboardScreen)
+    navigation.navigate {
+      listOf(Config.DashboardScreen)
+    }
   }
 
   override fun navigatePush(config: Config) {
@@ -72,7 +79,6 @@ class RootComponent(
       is Config.GettingStarted -> Root.Child.GettingStarted(
         GettingStartedComponent(
           componentContext,
-          koinApp.koin.get()
         ) { isLogin ->
           navigateCreateWorkspace(isLogin)
         }
@@ -81,8 +87,6 @@ class RootComponent(
       is Config.CreateWorkspace -> Root.Child.CreateWorkspace(
         CreateWorkspaceComponent(
           componentContext,
-          koinApp.koin.get(),
-          koinApp.koin.get(),
           config.isLogin
         ) {
           navigateDashboard()
@@ -91,18 +95,10 @@ class RootComponent(
 
       Config.DashboardScreen -> Root.Child.DashboardScreen(
         DashboardComponent(
-          componentContext,
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(), {
-            navigation.bringToFront(Config.GettingStarted)
+          componentContext,{
+            navigation.navigate {
+              listOf(Config.GettingStarted)
+            }
           }, {
             navigation.push(it)
           }

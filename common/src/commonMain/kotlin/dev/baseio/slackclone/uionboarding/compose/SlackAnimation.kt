@@ -35,10 +35,10 @@ fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
       .fillMaxSize()
   ) {
 
-    val shouldStartLogoAnimation by gettingStartedVM.componentState.subscribeAsState()
+    val shouldStartLogoAnimation by gettingStartedVM.viewModel.componentState.subscribeAsState()
 
     LaunchedEffect(Unit) {
-      gettingStartedVM.animate()
+      gettingStartedVM.viewModel.animate()
     }
 
     val animatedRotateLogo by animateFloatAsState(

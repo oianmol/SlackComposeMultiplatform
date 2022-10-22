@@ -15,7 +15,6 @@ repositories {
 object Decompose {
   val VERSION = "1.0.0-alpha-06"
   val core = "com.arkivanov.decompose:decompose:${VERSION}"
-  val coreJvm = "com.arkivanov.decompose:decompose-jvm:${VERSION}"
 }
 
 dependencies {
@@ -25,7 +24,6 @@ dependencies {
   implementation("io.grpc:grpc-okhttp:1.49.2")
   api("dev.baseio.slackclone:slack_kmp_data-android:1.0")
   api(Decompose.core)
-  api(Decompose.coreJvm)
   // Test rules and transitive dependencies:
   androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.1")
   // Needed for createComposeRule, but not createAndroidComposeRule:

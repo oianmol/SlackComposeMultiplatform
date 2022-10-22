@@ -24,11 +24,12 @@ import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import dev.baseio.slackclone.uionboarding.GettingStartedVM
 
 @Composable
-fun GettingStartedUI(gettingStartedVM: GettingStartedComponent) {
+fun GettingStartedUI(gettingStartedVM: GettingStartedComponent,viewModel: GettingStartedVM = gettingStartedVM.viewModel) {
   val scaffoldState = rememberScaffoldState()
-  val showSlackAnim by gettingStartedVM.componentState.subscribeAsState()
+  val showSlackAnim by viewModel.componentState.subscribeAsState()
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.GettingStartedScreen()
 
@@ -158,7 +159,7 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
 @Composable
 private fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
   val painter = PainterRes.gettingStarted()
-  val expanded by gettingStartedVM.componentState.subscribeAsState()
+  val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
   AnimatedVisibility(
     visible = expanded.introTextExpanded, enter = ImageEnterTransition(),
     exit = ImageExitTrans()
@@ -190,7 +191,7 @@ private fun GetStartedButton(
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.componentState.subscribeAsState()
+  val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
 
   AnimatedVisibility(
     visible = expanded.introTextExpanded, enter = enterAnim(),
@@ -265,7 +266,7 @@ private fun IntroText(
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.componentState.subscribeAsState()
+  val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
 
   AnimatedVisibility(
     visible = expanded.introTextExpanded, enter = enterAnim(),

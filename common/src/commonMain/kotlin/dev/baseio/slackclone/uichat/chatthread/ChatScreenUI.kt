@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
@@ -20,15 +21,22 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.uichat.chatthread.composables.ChatScreenContent
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @Composable
 fun ChatScreenUI(
   modifier: Modifier,
   onBackClick: () -> Unit,
-  viewModel: ChatScreenComponent
+  chatScreenComponent: ChatScreenComponent,
+  viewModel:ChatViewModel = chatScreenComponent.chatViewModel,
+  slackChannel: DomainLayerChannels.SKChannel
 ) {
   val scaffoldState = rememberScaffoldState()
-  val membersDialog by viewModel.showChannelDetails.collectAsState()
+  val membersDialog by viewModel.showChannelDetails.subscribeAsState()
+
+  LaunchedEffect(slackChannel) {
+    viewModel.requestFetch(slackChannel)
+  }
 
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
@@ -44,7 +52,7 @@ fun ChatScreenUI(
   ) { innerPadding ->
     Box(Modifier.padding(innerPadding)) {
       ChatScreenContent(
-        modifier = Modifier.fillMaxSize(), viewModel
+        modifier = Modifier.fillMaxSize(), chatScreenComponent
       )
       if (membersDialog) {
         ChannelMembersDialog(viewModel)
@@ -55,8 +63,8 @@ fun ChatScreenUI(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BoxScope.ChannelMembersDialog(viewModel: ChatScreenComponent) {
-  val members by viewModel.channelMembers.collectAsState()
+fun BoxScope.ChannelMembersDialog(viewModel: ChatViewModel) {
+  val members by viewModel.channelMembers.subscribeAsState()
   val size = getWindowSizeClass(LocalWindow.current)
   val screenWidth = LocalWindow.current.width
   val width = screenWidth * when (size) {
@@ -101,8 +109,8 @@ fun BoxScope.ChannelMembersDialog(viewModel: ChatScreenComponent) {
 
 
 @Composable
-private fun ChatAppBar(onBackClick: () -> Unit, viewModel: ChatScreenComponent) {
-  val channel by viewModel.channelFlow.collectAsState()
+private fun ChatAppBar(onBackClick: () -> Unit, viewModel: ChatViewModel) {
+  val channel by viewModel.channelFlow.subscribeAsState()
 
   SlackSurfaceAppBar(backgroundColor = SlackCloneColorProvider.colors.appBarColor) {
     IconButton(onClick = { onBackClick() }) {

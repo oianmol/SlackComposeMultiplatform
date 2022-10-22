@@ -14,15 +14,17 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
+import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 import mainDispatcher
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenComponent) {
-  val checkBoxState by viewModel.chatBoxState.collectAsState(mainDispatcher)
+fun ChatScreenContent(modifier: Modifier, screenComponent: ChatScreenComponent,viewModel: ChatViewModel = screenComponent.chatViewModel) {
+  val checkBoxState by viewModel.chatBoxState.subscribeAsState()
   val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
     1f
   } else {
@@ -44,12 +46,12 @@ fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenComponent) {
         .fillMaxWidth()
     ) {
       ChatMessagesUI(
-        viewModel,
-        Modifier.weight(1f), alertLongClick = {
+        screenComponent,
+        modifier = Modifier.weight(1f), alertLongClick = {
           viewModel.alertLongClick(it)
         }
       )
-      ChatMessageBoxWrapped(viewModel, checkBoxState, change)
+      ChatMessageBoxWrapped(screenComponent, checkBoxState, change)
     }
     alert?.let {
       DeleteMessageAlert(viewModel)
@@ -59,7 +61,7 @@ fun ChatScreenContent(modifier: Modifier, viewModel: ChatScreenComponent) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun DeleteMessageAlert(viewModel: ChatScreenComponent) {
+private fun DeleteMessageAlert(viewModel: ChatViewModel) {
   SlackCloneSurface(
     modifier = Modifier.shadow(4.dp),
     shape = RoundedCornerShape(4.dp)
@@ -84,21 +86,21 @@ private fun DeleteMessageAlert(viewModel: ChatScreenComponent) {
 
 @Composable
 private fun ChatMessageBoxWrapped(
-  viewModel: ChatScreenComponent,
+  screenComponent: ChatScreenComponent,
   checkBoxState: BoxState,
   change: Float
 ) {
   ChatMessageBox(
-    viewModel,
-    Modifier.then(
+    screenComponent,
+    modifier = Modifier.then(
       if (checkBoxState == BoxState.Expanded) Modifier.fillMaxHeight(change).fillMaxWidth()
       else
         Modifier
     )
       .animateDrag({
-        viewModel.chatBoxState.value = BoxState.Expanded
+        screenComponent.chatViewModel.chatBoxState.value = BoxState.Expanded
       }) {
-        viewModel.chatBoxState.value = BoxState.Collapsed
+        screenComponent.chatViewModel.chatBoxState.value = BoxState.Collapsed
       }
   )
 }

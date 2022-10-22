@@ -3,6 +3,7 @@ import org.jetbrains.compose.compose
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("kotlin-parcelize")
     id("org.jetbrains.compose") version "1.2.0"
     kotlin("plugin.serialization") version "1.7.20"
 }
