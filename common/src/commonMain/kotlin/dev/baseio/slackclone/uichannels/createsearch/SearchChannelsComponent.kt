@@ -19,7 +19,8 @@ class SearchChannelsComponent constructor(
   private val ucFetchChannels: UseCaseSearchChannel,
   private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-  private val coroutineDispatcherProvider: CoroutineDispatcherProvider
+  private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
+  val navigationPop: () -> Unit
 ) : ComponentContext by componentContext{
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
 

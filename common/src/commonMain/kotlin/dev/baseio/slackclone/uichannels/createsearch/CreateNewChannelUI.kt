@@ -135,7 +135,7 @@ private fun NewChannelAppBar(
       NavTitle()
     },
     navigationIcon = {
-      NavBackIcon()
+      NavBackIcon(createNewChannelComponent)
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
     actions = {
@@ -164,9 +164,9 @@ private fun NavTitle() {
 }
 
 @Composable
-private fun NavBackIcon() {
+private fun NavBackIcon(createNewChannelComponent: CreateNewChannelComponent) {
   IconButton(onClick = {
-    TODO("nav up")
+    createNewChannelComponent.navigationPop()
   }) {
     Icon(
       imageVector = Icons.Filled.ArrowBack,

@@ -20,6 +20,9 @@ interface Root {
 
   fun navigateCreateWorkspace(isLogin: Boolean)
   fun navigateDashboard()
+  fun navigatePush(config: RootComponent.Config)
+  fun navigationPop()
+
   sealed class Child {
     data class GettingStarted(val component: GettingStartedComponent) : Child()
     data class SearchCreateChannel(val component: SearchChannelsComponent) : Child()
@@ -48,12 +51,20 @@ class RootComponent(
     childFactory = ::createChild,
   )
 
+  override fun navigationPop() {
+    navigation.pop()
+  }
+
   override fun navigateCreateWorkspace(isLogin: Boolean) {
     navigation.push(Config.CreateWorkspace(isLogin))
   }
 
   override fun navigateDashboard() {
     navigation.replaceCurrent(Config.DashboardScreen)
+  }
+
+  override fun navigatePush(config: Config) {
+    navigation.push(config)
   }
 
   private fun createChild(config: Config, componentContext: ComponentContext): Root.Child =
@@ -90,10 +101,12 @@ class RootComponent(
           koinApp.koin.get(),
           koinApp.koin.get(),
           koinApp.koin.get(),
-          koinApp.koin.get()
-        ) {
-          navigation.bringToFront(Config.GettingStarted)
-        },
+          koinApp.koin.get(), {
+            navigation.bringToFront(Config.GettingStarted)
+          }, {
+            navigation.push(it)
+          }
+        ),
         ChatScreenComponent(
           componentContext, koinApp.koin.get(),
           koinApp.koin.get(),
@@ -108,7 +121,9 @@ class RootComponent(
         CreateNewChannelComponent(
           componentContext, koinApp.koin.get(),
           koinApp.koin.get(), koinApp.koin.get()
-        )
+        ) {
+          navigation.pop()
+        }
       )
 
       Config.NewChatThreadScreen -> Root.Child.NewChatThread(
@@ -119,7 +134,9 @@ class RootComponent(
           koinApp.koin.get(),
           koinApp.koin.get(),
           koinApp.koin.get(),
-        )
+        ) {
+          navigation.pop()
+        }
       )
 
       Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(
@@ -128,12 +145,14 @@ class RootComponent(
           koinApp.koin.get(),
           koinApp.koin.get(),
           koinApp.koin.get()
-        )
+        ) {
+          navigation.pop()
+        }
       )
     }
 
 
-  private sealed class Config : Parcelable {
+  sealed class Config : Parcelable {
 
     @Parcelize
     object GettingStarted : Config()

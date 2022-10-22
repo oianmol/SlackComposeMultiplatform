@@ -8,17 +8,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.data.injection.AllChatsQualifier
-import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.views.*
 import dev.baseio.slackclone.uidashboard.compose.WorkspacesBar
 import dev.baseio.slackclone.uidashboard.compose.FloatingDM
 import dev.baseio.slackclone.uidashboard.home.JumpToText
 import dev.baseio.slackclone.uidashboard.home.ThreadsTile
+import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 
 @Composable
 fun SlackWorkspaceLayoutDesktop(
@@ -27,12 +27,15 @@ fun SlackWorkspaceLayoutDesktop(
   onCreateChannelRequest: () -> Unit = {},
   recentChannelsComponent: SlackChannelComponent,
   allChannelsComponent: SlackChannelComponent,
+  dashboardComponent: DashboardComponent,
 ) {
   Scaffold(
     backgroundColor = SlackCloneColorProvider.colors.uiBackground,
     contentColor = SlackCloneColorProvider.colors.textSecondary,
     floatingActionButton = {
-      FloatingDM( onItemClick)
+      FloatingDM {
+        dashboardComponent.navigateRoot(RootComponent.Config.NewChatThreadScreen)
+      }
     }, modifier = modifier
   ) {
     SlackCloneSurface(

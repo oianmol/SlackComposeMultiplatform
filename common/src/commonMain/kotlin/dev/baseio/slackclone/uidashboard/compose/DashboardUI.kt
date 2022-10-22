@@ -42,6 +42,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.essenty.backhandler.BackCallback
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.uidashboard.home.*
 import dev.baseio.slackclone.uidashboard.vm.Dashboard
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
@@ -202,15 +203,8 @@ fun DashboardUI(
           SlackWorkspaceLayoutDesktop(modifier, onItemClick = { skChannel ->
             onItemClick(skChannel)
           }, onCreateChannelRequest = {
-            TODO("CreateChannelsScreen")
-            /* composeNavigator.registerForNavigationResult(
-               NavigationKey.NavigateChannel,
-               SlackScreens.Dashboard
-             ) {
-               onItemClick(it as DomainLayerChannels.SKChannel)
-             }
-             composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
-          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent)
+            dashboardComponent.navigateRoot(RootComponent.Config.SearchCreateChannelUI)
+          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent,dashboardComponent)
         }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
@@ -307,7 +301,9 @@ private fun DashboardScaffold(
         scaffoldState.snackbarHostState
       },
       floatingActionButton = {
-        FloatingDM(onItemClick)
+        FloatingDM {
+          dashboardComponent.navigateRoot(RootComponent.Config.NewChatThreadScreen)
+        }
       }
     ) { innerPadding ->
       Box(modifier = Modifier.padding(innerPadding)) {
@@ -346,14 +342,7 @@ private fun DashboardChildren(
           appBarIconClick,
           onItemClick = onItemClick,
           onCreateChannelRequest = {
-            TODO("onCreateChannelRequest")
-            /*composeNavigator.registerForNavigationResult(
-                      NavigationKey.NavigateChannel,
-                      SlackScreens.Dashboard
-                    ) {
-                      onItemClick(it as DomainLayerChannels.SKChannel)
-                    }
-                    composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
+            dashboardComponent.navigateRoot(RootComponent.Config.SearchCreateChannelUI)
           }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent
         )
       }
@@ -369,14 +358,9 @@ private fun DashboardChildren(
 }
 
 @Composable
-fun FloatingDM(onItemClick: (DomainLayerChannels.SKChannel) -> Unit) {
+fun FloatingDM(onClick: () -> Unit) {
   FloatingActionButton(onClick = {
-    TODO("CreateNewDM")
-    /* composeNavigator.registerForNavigationResult(NavigationKey.NavigateChannel, SlackScreens.Dashboard) {
-       composeNavigator.navigateUp()
-       onItemClick(it as DomainLayerChannels.SKChannel)
-     }
-     composeNavigator.navigateScreen(SlackScreens.CreateNewDM)*/
+    onClick()
   }, backgroundColor = Color.White) {
     Icon(
       imageVector = Icons.Default.Edit,

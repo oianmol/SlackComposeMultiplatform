@@ -12,6 +12,10 @@ import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
+import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
+import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
+import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
+import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
 import dev.baseio.slackclone.uionboarding.compose.*
 import dev.baseio.slackdata.SKKeyValueData
@@ -35,7 +39,7 @@ fun App(
   if (::koinApp.isInitialized.not()) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData, defaultComponentContext)
   }
-  if(::rootComponent.isInitialized.not()){
+  if (::rootComponent.isInitialized.not()) {
     rootComponent = RootComponent(defaultComponentContext, koinApp.koin.get())
   }
 
@@ -44,6 +48,9 @@ fun App(
       is Root.Child.CreateWorkspace -> CreateWorkspaceScreen(child.component)
       is Root.Child.GettingStarted -> GettingStartedUI(child.component)
       is Root.Child.DashboardScreen -> DashboardUI(child.component, child.chatComponent)
+      is Root.Child.CreateNewChannel -> CreateNewChannelUI(child.component)
+      is Root.Child.NewChatThread -> NewChatThreadScreen(child.component)
+      is Root.Child.SearchCreateChannel -> SearchCreateChannelUI(child.component)
     }
   }
 
@@ -86,5 +93,5 @@ fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData, defaultComponent
     single { slackDB }
     single { skKeyValueData }
     single<ComponentContext> { defaultComponentContext }
-    single { GrpcCalls(skKeyValueData = get(), address = "192.168.1.7") }
+    single { GrpcCalls(skKeyValueData = get()) }
   }

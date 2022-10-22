@@ -11,6 +11,8 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import dev.baseio.grpc.GrpcCalls
+import dev.baseio.slackclone.Root
+import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.directmessages.DirectMessagesComponent
@@ -63,7 +65,8 @@ class DashboardComponent(
   private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
   private val skKeyValueData: SKKeyValueData,
   private val grpcCalls: GrpcCalls,
-  val navigateOnboarding:()->Unit
+  val navigateOnboarding: () -> Unit,
+  val navigateRoot: (RootComponent.Config) -> Unit
 ) : Dashboard, ComponentContext by componentContext {
   private val navigation = StackNavigation<Config>()
 

@@ -43,7 +43,7 @@ private fun ListRandomUsers(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
-        SearchAppBar()
+        SearchAppBar(newChatThread)
       },
       snackbarHost = {
         scaffoldState.snackbarHostState
@@ -169,13 +169,13 @@ private fun textFieldColors() = TextFieldDefaults.textFieldColors(
 )
 
 @Composable
-private fun SearchAppBar() {
+private fun SearchAppBar(newChatThread: NewChatThreadComponent) {
   SlackSurfaceAppBar(
     title = {
       SearchNavTitle()
     },
     navigationIcon = {
-      NavBackIcon()
+      NavBackIcon(newChatThread)
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
   )
@@ -190,10 +190,9 @@ private fun SearchNavTitle() {
 }
 
 @Composable
-private fun NavBackIcon() {
+private fun NavBackIcon(newChatThread: NewChatThreadComponent) {
   IconButton(onClick = {
-    //composeNavigator.navigateUp()
-    TODO()
+    newChatThread.navigationPop()
   }) {
     Icon(
       imageVector = Icons.Filled.Clear,

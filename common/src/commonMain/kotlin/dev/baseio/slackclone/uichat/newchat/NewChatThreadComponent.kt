@@ -20,7 +20,8 @@ class NewChatThreadComponent(
   private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
   private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
-  private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch
+  private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch,
+  val navigationPop: () -> Unit
 ) : ComponentContext by componentContext {
 
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())

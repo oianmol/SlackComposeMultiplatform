@@ -18,6 +18,7 @@ class CreateNewChannelComponent constructor(
   coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
+  val navigationPop:()->Unit
 ) : ComponentContext by componentContext {
 
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())

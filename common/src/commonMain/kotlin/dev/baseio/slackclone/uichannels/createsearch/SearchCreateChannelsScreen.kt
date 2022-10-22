@@ -31,21 +31,9 @@ fun SearchCreateChannelUI(
   val scaffoldState = rememberScaffoldState()
 
   ListChannels(scaffoldState, searchChannelsComponent = searchChannelsComponent, { slackChannel: Any ->
-    val channel = slackChannel as DomainLayerChannels.SKChannel
-  /*  composeNavigator.navigateUp()
-    composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)*/
-    TODO("impl")
+
   }) {
-    TODO()
-    /*composeNavigator.registerForNavigationResult(
-      NavigationKey.NavigateChannel,
-      SlackScreens.CreateChannelsScreen
-    ) { slackChannel: Any ->
-      val channel = slackChannel as DomainLayerChannels.SKChannel
-      composeNavigator.navigateUp()
-      composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)
-    }
-    composeNavigator.navigateScreen(SlackScreens.CreateNewChannel)*/
+
   }
 }
 
@@ -62,8 +50,7 @@ private fun ListChannels(
     modifier = Modifier,
     scaffoldState = scaffoldState,
     topBar = {
-      val channelCount by searchChannelsComponent.channelCount.collectAsState(mainDispatcher)
-      SearchAppBar( channelCount)
+      SearchAppBar(searchChannelsComponent)
     },
     snackbarHost = {
       scaffoldState.snackbarHostState
@@ -201,13 +188,15 @@ private fun NewChannelFAB(newChannel: () -> Unit) {
 }
 
 @Composable
-private fun SearchAppBar( count: Int) {
+private fun SearchAppBar(searchChannelsComponent: SearchChannelsComponent) {
+  val channelCount by searchChannelsComponent.channelCount.collectAsState(mainDispatcher)
+
   SlackSurfaceAppBar(
     title = {
-      SearchNavTitle(count)
+      SearchNavTitle(channelCount)
     },
     navigationIcon = {
-      NavBackIcon()
+      NavBackIcon(searchChannelsComponent)
     },
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
   )
@@ -228,10 +217,9 @@ private fun SearchNavTitle(count: Int) {
 }
 
 @Composable
-private fun NavBackIcon() {
+private fun NavBackIcon(searchChannelsComponent: SearchChannelsComponent) {
   IconButton(onClick = {
-    //composeNavigator.navigateUp()
-    TODO()
+    searchChannelsComponent.navigationPop()
   }) {
     Icon(
       imageVector = Icons.Filled.Clear,
