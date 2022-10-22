@@ -49,7 +49,7 @@ fun SearchCreateChannelUI(
     }
   ) { innerPadding ->
     SearchContent(innerPadding, searchChannelsComponent) { skChannel ->
-      //searchChannelsComponent.navigateChannel(skChannel)
+      searchChannelsComponent.navigationPopWith(skChannel)
     }
   }
 }

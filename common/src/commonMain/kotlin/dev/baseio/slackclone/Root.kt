@@ -152,8 +152,13 @@ class RootComponent(
             navigation.pop()
           }, { config1 ->
             navigation.push(config1)
-          })
-      )
+          }, { channel ->
+            navigation.popWhile {
+              it != Config.DashboardScreen
+            }
+            (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
+          }
+        ))
     }
 
 

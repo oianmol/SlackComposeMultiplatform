@@ -4,6 +4,8 @@ import dev.baseio.slackclone.uionboarding.compose.SlackAnimSpec
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.reduce
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.LifecycleOwner
 import com.arkivanov.essenty.lifecycle.doOnDestroy
@@ -59,11 +61,28 @@ class GettingStartedComponent(
   )
 }
 
+internal class SomeRetainedInstance(mainContext: CoroutineContext) : InstanceKeeper.Instance {
+  // The scope survives Android configuration changes
+  val scope = CoroutineScope(mainContext + SupervisorJob())
+
+  fun foo() {
+    scope.launch {
+      // Do the job
+    }
+  }
+
+  override fun onDestroy() {
+    scope.cancel() // Cancel the scope when the instance is destroyed
+  }
+}
+
 fun CoroutineScope(context: CoroutineContext, lifecycle: Lifecycle): CoroutineScope {
   val scope = CoroutineScope(context)
   lifecycle.doOnDestroy(scope::cancel)
   return scope
 }
 
-fun LifecycleOwner.coroutineScope(context: CoroutineContext): CoroutineScope =
-  CoroutineScope(context, lifecycle)
+fun ComponentContext.coroutineScope(context: CoroutineContext): CoroutineScope {
+  val someRetainedInstance = instanceKeeper.getOrCreate { SomeRetainedInstance(context) }
+  return someRetainedInstance.scope
+}

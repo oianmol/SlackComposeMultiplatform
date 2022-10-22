@@ -41,6 +41,8 @@ fun main() = application {
   val windowState = rememberWindowState()
   val lifecycle = LifecycleRegistry()
 
+  val skKeyValueData = SKKeyValueData()
+  val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle), skKeyValueData) }
 
   Window(onCloseRequest = ::exitApplication, state = windowState) {
     var rememberedComposeWindow by remember(this.window) {
@@ -56,8 +58,6 @@ fun main() = application {
         .launchIn(this)
     }
 
-    val skKeyValueData = SKKeyValueData()
-    val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle), skKeyValueData) }
 
     SlackCloneTheme {
       CompositionLocalProvider(

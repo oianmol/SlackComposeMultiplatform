@@ -205,7 +205,10 @@ fun DashboardUI(
             onItemClick(skChannel)
           }, onCreateChannelRequest = {
             dashboardComponent.navigateRoot(RootComponent.Config.SearchCreateChannelUI)
-          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent, dashboardComponent)
+          }, dashboardComponent.recentChannelsComponent,
+            dashboardComponent.allChannelsComponent,
+            dashboardComponent
+          )
         }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
@@ -230,10 +233,7 @@ fun DashboardUI(
 
                   is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
                   is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
-                  is Dashboard.Child.UserProfileScreen -> {
-                    UserProfileUI(child.component)
-                  }
-
+                  is Dashboard.Child.UserProfileScreen -> UserProfileUI(child.component)
                   is Dashboard.Child.HomeScreen -> throw RuntimeException("Not expecting to load home in desktop layout!")
                 }
               }

@@ -67,67 +67,6 @@ class DashboardComponent(
   val navigateOnboarding: () -> Unit,
   val navigateRoot: (RootComponent.Config) -> Unit
 ) : Dashboard, ComponentContext by componentContext {
-  private val navigation = StackNavigation<Config>()
-
-
-  val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) {
-    navigateOnboarding()
-  }
-  val chatScreenComponent = ChatScreenComponent(
-  componentContext, koinApp.koin.get(),
-  koinApp.koin.get(),
-  koinApp.koin.get(),
-  koinApp.koin.get(),
-  koinApp.koin.get(),
-  koinApp.koin.get(),
-  )
-  val recentChannelsComponent =
-    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
-  val allChannelsComponent =
-    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
-
-
-
-
-  override val phoneStack: Value<ChildStack<*, Dashboard.Child>> = childStack(
-    key = "phone",
-    source = navigation,
-    initialConfiguration = Config.Home,
-    handleBackButton = true, // Pop the back stack on back button press
-    childFactory = ::createChild,
-  )
-  override val desktopStack: Value<ChildStack<*, Dashboard.Child>> = childStack(
-    key = "desktop",
-    source = navigation,
-    initialConfiguration = Config.DirectMessages,
-    handleBackButton = true, // Pop the back stack on back button press
-    childFactory = ::createChild,
-  )
-
-
-  override fun navigate(child: Config) {
-    navigation.replaceCurrent(child)
-  }
-
-  private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {
-    Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
-      DirectMessagesComponent(
-        koinApp.koin.get(), koinApp.koin.get(), componentContext
-      )
-    )
-
-    Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext, koinApp.koin.get()))
-    Config.MentionsConfig -> Dashboard.Child.MentionsScreen(MentionsComponent(componentContext))
-    Config.Profile -> Dashboard.Child.UserProfileScreen(
-      UserProfileComponent(
-        koinApp.koin.get(), koinApp.koin.get(), componentContext
-      ) {
-        navigateOnboarding()
-      }
-    )
-
-    Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(componentContext))
-  }
 
 
   private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
@@ -174,6 +113,71 @@ class DashboardComponent(
       selectedWorkspace.value = it
     }.launchIn(viewModelScope)
   }
+
+
+  private val navigation = StackNavigation<Config>()
+
+  val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) {
+    navigateOnboarding()
+  }
+  val chatScreenComponent = ChatScreenComponent(
+    componentContext, koinApp.koin.get(),
+    koinApp.koin.get(),
+    koinApp.koin.get(),
+    koinApp.koin.get(),
+    koinApp.koin.get(),
+    koinApp.koin.get(),
+  )
+  val recentChannelsComponent =
+    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+  val allChannelsComponent =
+    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+
+  private val phoneChildStack = childStack(
+    key = "phone",
+    source = navigation,
+    initialConfiguration = Config.Home,
+    handleBackButton = true, // Pop the back stack on back button press
+    childFactory = ::createChild,
+  )
+
+  private val desktopChildStack = childStack(
+    key = "desktop",
+    source = navigation,
+    initialConfiguration = Config.DirectMessages,
+    handleBackButton = true, // Pop the back stack on back button press
+    childFactory = ::createChild,
+  )
+
+
+  override val phoneStack: Value<ChildStack<*, Dashboard.Child>> = phoneChildStack
+  override val desktopStack: Value<ChildStack<*, Dashboard.Child>> = desktopChildStack
+
+
+  override fun navigate(child: Config) {
+    navigation.replaceCurrent(child)
+  }
+
+  private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {
+    Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
+      DirectMessagesComponent(
+        koinApp.koin.get(), koinApp.koin.get(), componentContext
+      )
+    )
+
+    Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext, koinApp.koin.get()))
+    Config.MentionsConfig -> Dashboard.Child.MentionsScreen(MentionsComponent(componentContext))
+    Config.Profile -> Dashboard.Child.UserProfileScreen(
+      UserProfileComponent(
+        koinApp.koin.get(), koinApp.koin.get(), componentContext
+      ) {
+        navigateOnboarding()
+      }
+    )
+
+    Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(componentContext))
+  }
+
 
   override fun onChannelSelected(channel: DomainLayerChannels.SKChannel) {
     selectedChatChannel.value = channel
