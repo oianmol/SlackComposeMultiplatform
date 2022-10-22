@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.arkivanov.decompose.router.stack.active
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
@@ -27,48 +28,49 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 @Composable
 fun SlackSideBarLayoutDesktop(
   modifier: Modifier = Modifier,
-  viewModel: SideNavComponent,
+  sideNavComponent: SideNavComponent,
   openDM: () -> Unit,
   mentionsScreen: () -> Unit,
   searchScreen: () -> Unit,
   userProfile: () -> Unit,
   dashboardComponent: DashboardComponent,
 ) {
-  val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
-  val user by viewModel.currentLoggedInUser.collectAsState()
-
+  val workspaces by sideNavComponent.workspacesFlow.value.collectAsState(emptyList())
+  val user by sideNavComponent.currentLoggedInUser.collectAsState()
+  val state by dashboardComponent.desktopStack.subscribeAsState()
+  
   Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
     Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
       Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(4.dp))
-        WorkSpacesDesktop(workspaces, viewModel)
+        WorkSpacesDesktop(workspaces, sideNavComponent)
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             openDM()
           },
           icon = Icons.Default.Email,
-          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.DirectMessages
+          isSelected = state.active.configuration == DashboardComponent.Config.DirectMessages
         )//dm
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             mentionsScreen()
           },
           icon = Icons.Default.Notifications,
-          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.MentionsConfig
+          isSelected = state.active.configuration == DashboardComponent.Config.MentionsConfig
         )//mention
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             searchScreen()
           },
           icon = Icons.Default.Search,
-          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.Search
+          isSelected = state.active.configuration == DashboardComponent.Config.Search
         )//search
         SelectedSideBarIcon(
           modifier = Modifier.padding(vertical = 8.dp).clickable {
             userProfile()
           },
           icon = Icons.Default.AccountCircle,
-          isSelected = dashboardComponent.desktopStack.active.configuration == DashboardComponent.Config.Profile
+          isSelected = state.active.configuration == DashboardComponent.Config.Profile
         )//You
         Spacer(Modifier.height(4.dp))
       }

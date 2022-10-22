@@ -4,7 +4,9 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.*
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.arkivanov.decompose.router.stack.*
+import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
@@ -63,32 +65,33 @@ class DashboardComponent(
   private val skKeyValueData: SKKeyValueData,
   private val grpcCalls: GrpcCalls,
 ) : Dashboard, ComponentContext by componentContext {
-  private val phoneTabletNavigation = StackNavigation<Config>()
-  private val desktopNavigation = StackNavigation<Config>()
+  private val navigation = StackNavigation<Config>()
 
-  val sideNavComponent = SideNavComponent(componentContext, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+
+  val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
   val recentChannelsComponent =
-    SlackChannelComponent(componentContext, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
   val allChannelsComponent =
-    SlackChannelComponent(componentContext, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
 
   override val phoneStack: Value<ChildStack<*, Dashboard.Child>> = childStack(
-    key= "phone",
-    source = phoneTabletNavigation,
+    key = "phone",
+    source = navigation,
     initialConfiguration = Config.Home,
     handleBackButton = true, // Pop the back stack on back button press
     childFactory = ::createChild,
   )
   override val desktopStack: Value<ChildStack<*, Dashboard.Child>> = childStack(
-    key= "desktop",
-    source = desktopNavigation,
+    key = "desktop",
+    source = navigation,
     initialConfiguration = Config.DirectMessages,
     handleBackButton = true, // Pop the back stack on back button press
     childFactory = ::createChild,
   )
 
+
   override fun navigate(child: Config) {
-    phoneTabletNavigation.replaceCurrent(child)
+    navigation.replaceCurrent(child)
   }
 
   private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {

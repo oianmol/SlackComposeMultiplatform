@@ -194,14 +194,14 @@ fun DashboardUI(
             onItemClick(skChannel)
           }, onCreateChannelRequest = {
             TODO("CreateChannelsScreen")
-           /* composeNavigator.registerForNavigationResult(
-              NavigationKey.NavigateChannel,
-              SlackScreens.Dashboard
-            ) {
-              onItemClick(it as DomainLayerChannels.SKChannel)
-            }
-            composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
-          },dashboardComponent.recentChannelsComponent,dashboardComponent.allChannelsComponent)
+            /* composeNavigator.registerForNavigationResult(
+               NavigationKey.NavigateChannel,
+               SlackScreens.Dashboard
+             ) {
+               onItemClick(it as DomainLayerChannels.SKChannel)
+             }
+             composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
+          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent)
         }) { contentModifier ->
           lastChannel?.let { slackChannel ->
             ChatScreenUI(
@@ -217,14 +217,19 @@ fun DashboardUI(
               color = SlackCloneColorProvider.colors.uiBackground,
               modifier = contentModifier
             ) {
-              Children( stack = dashboardComponent.desktopStack) {
+              Children(stack = dashboardComponent.desktopStack) {
                 when (val child = it.instance) {
-                  is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
+                  is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(
+                    onItemClick = onItemClick,
+                    child.component
+                  )
+
                   is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
                   is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
                   is Dashboard.Child.UserProfileScreen -> {
                     UserProfileUI(child.component)
                   }
+
                   is Dashboard.Child.HomeScreen -> TODO()
                 }
               }
@@ -301,10 +306,12 @@ private fun DashboardScaffold(
           color = SlackCloneColorProvider.colors.uiBackground,
           modifier = Modifier.fillMaxSize()
         ) {
-          DashboardChildren(modifier,
+          DashboardChildren(
+            modifier,
             dashboardComponent,
             appBarIconClick,
-            onItemClick)
+            onItemClick
+          )
         }
       }
       if (needsOverlay) {
@@ -337,7 +344,8 @@ private fun BoxScope.DashboardChildren(
                       onItemClick(it as DomainLayerChannels.SKChannel)
                     }
                     composeNavigator.navigateScreen(SlackScreens.CreateChannelsScreen)*/
-          },dashboardComponent.recentChannelsComponent,dashboardComponent.allChannelsComponent)
+          }, dashboardComponent.recentChannelsComponent, dashboardComponent.allChannelsComponent
+        )
       }
 
       is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
