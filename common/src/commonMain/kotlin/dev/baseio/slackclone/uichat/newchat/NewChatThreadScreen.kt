@@ -23,7 +23,7 @@ import dev.baseio.slackclone.commonui.theme.*
 
 @Composable
 fun NewChatThreadScreen(
-  newChatThread: NewChatThreadVM,
+  newChatThread: NewChatThreadComponent,
 ) {
 
   val scaffoldState = rememberScaffoldState()
@@ -34,7 +34,7 @@ fun NewChatThreadScreen(
 @Composable
 private fun ListRandomUsers(
   scaffoldState: ScaffoldState,
-  newChatThread: NewChatThreadVM,
+  newChatThread: NewChatThreadComponent,
 ) {
   Box {
     Scaffold(
@@ -57,7 +57,7 @@ private fun ListRandomUsers(
 @Composable
 private fun SearchContent(
   innerPadding: PaddingValues,
-  newChatThread: NewChatThreadVM,
+  newChatThread: NewChatThreadComponent,
 ) {
   Box(modifier = Modifier.padding(innerPadding)) {
     SlackCloneSurface(
@@ -73,7 +73,7 @@ private fun SearchContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllUsers(viewModel: NewChatThreadVM) {
+private fun ListAllUsers(viewModel: NewChatThreadComponent) {
   val channelsFlow by viewModel.channelsStream.collectAsState(mainDispatcher)
   val errorFlow by viewModel.errorStream.collectAsState()
 
@@ -123,7 +123,7 @@ fun SlackChannelHeader(title: String) {
 }
 
 @Composable
-private fun ColumnScope.SearchUsersTF(newChatThread: NewChatThreadVM) {
+private fun ColumnScope.SearchUsersTF(newChatThread: NewChatThreadComponent) {
   val searchChannel by newChatThread.search.collectAsState(mainDispatcher)
 
   TextField(

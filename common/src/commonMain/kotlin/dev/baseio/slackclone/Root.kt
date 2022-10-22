@@ -5,7 +5,10 @@ import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
+import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelComponent
+import dev.baseio.slackclone.uichannels.createsearch.SearchChannelsComponent
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
+import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
@@ -19,6 +22,9 @@ interface Root {
   fun navigateDashboard()
   sealed class Child {
     data class GettingStarted(val component: GettingStartedComponent) : Child()
+    data class SearchCreateChannel(val component: SearchChannelsComponent) : Child()
+    data class CreateNewChannel(val component: CreateNewChannelComponent) : Child()
+    data class NewChatThread(val component: NewChatThreadComponent) : Child()
     data class CreateWorkspace(val component: CreateWorkspaceComponent) : Child()
     data class DashboardScreen(val component: DashboardComponent, val chatComponent: ChatScreenComponent) : Child()
   }
@@ -47,7 +53,7 @@ class RootComponent(
   }
 
   override fun navigateDashboard() {
-    navigation.push(Config.DashboardScreen)
+    navigation.replaceCurrent(Config.DashboardScreen)
   }
 
   private fun createChild(config: Config, componentContext: ComponentContext): Root.Child =
@@ -85,7 +91,9 @@ class RootComponent(
           koinApp.koin.get(),
           koinApp.koin.get(),
           koinApp.koin.get()
-        ),
+        ) {
+          navigation.bringToFront(Config.GettingStarted)
+        },
         ChatScreenComponent(
           componentContext, koinApp.koin.get(),
           koinApp.koin.get(),
@@ -95,7 +103,35 @@ class RootComponent(
           koinApp.koin.get(),
         )
       )
+
+      Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
+        CreateNewChannelComponent(
+          componentContext, koinApp.koin.get(),
+          koinApp.koin.get(), koinApp.koin.get()
+        )
+      )
+
+      Config.NewChatThreadScreen -> Root.Child.NewChatThread(
+        NewChatThreadComponent(
+          componentContext,
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+        )
+      )
+
+      Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(
+        SearchChannelsComponent(
+          componentContext, koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get()
+        )
+      )
     }
+
 
   private sealed class Config : Parcelable {
 
@@ -107,5 +143,14 @@ class RootComponent(
 
     @Parcelize
     data class CreateWorkspace(var isLogin: Boolean) : Config()
+
+    @Parcelize
+    object SearchCreateChannelUI : Config()
+
+    @Parcelize
+    object CreateNewChannelUI : Config()
+
+    @Parcelize
+    object NewChatThreadScreen : Config()
   }
 }

@@ -6,14 +6,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import ViewModel
+import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.uionboarding.coroutineScope
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.datetime.Clock
 
-class CreateChannelVM constructor(
+class CreateNewChannelComponent constructor(
+  componentContext: ComponentContext,
+  coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-) :
-  ViewModel() {
+) : ComponentContext by componentContext {
+
+  private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
+
 
   var createChannelState =
     MutableStateFlow(

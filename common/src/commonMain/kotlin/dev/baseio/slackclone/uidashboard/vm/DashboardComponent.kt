@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 
 interface Dashboard {
   fun navigate(child: DashboardComponent.Config)
-
   val phoneStack: Value<ChildStack<*, Child>>
   val desktopStack: Value<ChildStack<*, Child>>
 
@@ -64,6 +63,7 @@ class DashboardComponent(
   private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
   private val skKeyValueData: SKKeyValueData,
   private val grpcCalls: GrpcCalls,
+  val navigateOnboarding:()->Unit
 ) : Dashboard, ComponentContext by componentContext {
   private val navigation = StackNavigation<Config>()
 

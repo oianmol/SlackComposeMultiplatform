@@ -87,30 +87,6 @@ fun SlackSideBarLayoutDesktop(
 }
 
 @Composable
-private fun MoreOptionsSideBarDesktop(
-  signIntoWorkspace: () -> Unit,
-  createNewWorkspace: () -> Unit,
-  findWorkspaces: () -> Unit
-) {
-  SlackCloneSurface(
-    modifier = Modifier.shadow(4.dp),
-    shape = RoundedCornerShape(4.dp)
-  ) {
-    Column(Modifier.padding(12.dp)) {
-      Text("Sign in to another workspace", Modifier.padding(10.dp).clickable {
-        signIntoWorkspace()
-      })
-      Text("Create a new workspace", Modifier.padding(10.dp).clickable {
-        createNewWorkspace()
-      })
-      Text("Find workspaces", Modifier.padding(10.dp).clickable {
-        findWorkspaces()
-      })
-    }
-  }
-}
-
-@Composable
 private fun WorkSpacesDesktop(
   workspaces: List<DomainLayerWorkspaces.SKWorkspace>,
   viewModel: SideNavComponent

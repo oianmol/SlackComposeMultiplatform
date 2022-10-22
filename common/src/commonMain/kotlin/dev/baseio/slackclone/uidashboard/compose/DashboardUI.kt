@@ -36,7 +36,10 @@ import dev.baseio.slackclone.uidashboard.compose.layouts.SlackSideBarLayoutDeskt
 import dev.baseio.slackclone.uidashboard.compose.layouts.SlackWorkspaceLayoutDesktop
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.essenty.backhandler.BackCallback
 import dev.baseio.slackclone.uidashboard.home.*
@@ -98,9 +101,12 @@ fun DashboardUI(
             SideNavigation(
               modifier = sideNavModifier.width(sideNavWidth),
               viewModel = dashboardComponent.sideNavComponent,
-            ) {
-              isLeftNavOpen = false
-            }
+              {
+                isLeftNavOpen = false
+              }, {
+                dashboardComponent.navigateOnboarding()
+              }
+            )
           },
           rightViewComposable = { chatViewModifier ->
             lastChannel?.let { slackChannel ->
@@ -131,10 +137,13 @@ fun DashboardUI(
           leftViewComposable = {
             SideNavigation(
               modifier = it,
-              viewModel = dashboardComponent.sideNavComponent
-            ) {
-              isLeftNavOpen = false
-            }
+              viewModel = dashboardComponent.sideNavComponent,
+              {
+                isLeftNavOpen = false
+              }, {
+                dashboardComponent.navigateOnboarding()
+              }
+            )
           },
           rightViewComposable = { chatViewModifier ->
             lastChannel?.let { slackChannel ->
@@ -217,7 +226,7 @@ fun DashboardUI(
               color = SlackCloneColorProvider.colors.uiBackground,
               modifier = contentModifier
             ) {
-              Children(stack = dashboardComponent.desktopStack) {
+              Children(stack = dashboardComponent.desktopStack, animation = stackAnimation(fade())) {
                 when (val child = it.instance) {
                   is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(
                     onItemClick = onItemClick,
@@ -321,14 +330,15 @@ private fun DashboardScaffold(
   }
 }
 
+@OptIn(ExperimentalDecomposeApi::class)
 @Composable
-private fun BoxScope.DashboardChildren(
+private fun DashboardChildren(
   modifier: Modifier,
   dashboardComponent: DashboardComponent,
   appBarIconClick: () -> Unit,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
-  Children(modifier = modifier, stack = dashboardComponent.phoneStack) {
+  Children(modifier = modifier, stack = dashboardComponent.phoneStack, animation = stackAnimation(fade())) {
     when (val child = it.instance) {
       is Dashboard.Child.HomeScreen -> {
         HomeScreenUI(

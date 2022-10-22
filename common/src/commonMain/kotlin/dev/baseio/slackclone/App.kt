@@ -6,6 +6,8 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.GrpcCalls
@@ -20,6 +22,7 @@ import org.koin.dsl.module
 
 
 lateinit var koinApp: KoinApplication
+lateinit var rootComponent: RootComponent
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
@@ -32,10 +35,11 @@ fun App(
   if (::koinApp.isInitialized.not()) {
     koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData, defaultComponentContext)
   }
+  if(::rootComponent.isInitialized.not()){
+    rootComponent = RootComponent(defaultComponentContext, koinApp.koin.get())
+  }
 
-
-  val rootComponent = RootComponent(defaultComponentContext, koinApp.koin.get())
-  Children(modifier = modifier, stack = rootComponent.childStack) {
+  Children(modifier = modifier, stack = rootComponent.childStack, animation = stackAnimation(fade())) {
     when (val child = it.instance) {
       is Root.Child.CreateWorkspace -> CreateWorkspaceScreen(child.component)
       is Root.Child.GettingStarted -> GettingStartedUI(child.component)
@@ -45,20 +49,7 @@ fun App(
 
   /* Box(modifier) {
      Navigator(navigator = appNavigator, initialRoute = initialRoute) {
-       this.route(SlackScreens.OnboardingRoute) {
-         screen(SlackScreens.GettingStarted) {
-           val gettingStartedVM = scope.get<GettingStartedComponent>()
-           GettingStartedUI(this@Navigator, gettingStartedVM)
-         }
-         screen(SlackScreens.CreateWorkspace) {
-           val viewModel = scope.get<CreateWorkspaceComponent>().apply { navArgs = argMap }
-           CreateWorkspaceScreen(this@Navigator, viewModel)
-         }
-       }
        this.route(SlackScreens.DashboardRoute) {
-         screen(SlackScreens.Dashboard) {
-           DashboardUI(this@Navigator, scope.get(), scope.get())
-         }
          screen(SlackScreens.CreateChannelsScreen) {
            SearchCreateChannelUI(this@Navigator, scope.get())
          }

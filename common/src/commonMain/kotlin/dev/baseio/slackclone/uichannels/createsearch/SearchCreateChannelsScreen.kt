@@ -25,12 +25,12 @@ import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 
 @Composable
 fun SearchCreateChannelUI(
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
 ) {
 
   val scaffoldState = rememberScaffoldState()
 
-  ListChannels(scaffoldState, searchChannelsVM = searchChannelsVM, { slackChannel: Any ->
+  ListChannels(scaffoldState, searchChannelsComponent = searchChannelsComponent, { slackChannel: Any ->
     val channel = slackChannel as DomainLayerChannels.SKChannel
   /*  composeNavigator.navigateUp()
     composeNavigator.deliverResult(NavigationKey.NavigateChannel, channel, SlackScreens.Dashboard)*/
@@ -52,7 +52,7 @@ fun SearchCreateChannelUI(
 @Composable
 private fun ListChannels(
   scaffoldState: ScaffoldState,
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
   onItemClick: (Any) -> Unit,
   newChannel: () -> Unit
 ) {
@@ -62,7 +62,7 @@ private fun ListChannels(
     modifier = Modifier,
     scaffoldState = scaffoldState,
     topBar = {
-      val channelCount by searchChannelsVM.channelCount.collectAsState(mainDispatcher)
+      val channelCount by searchChannelsComponent.channelCount.collectAsState(mainDispatcher)
       SearchAppBar( channelCount)
     },
     snackbarHost = {
@@ -72,14 +72,14 @@ private fun ListChannels(
       NewChannelFAB(newChannel)
     }
   ) { innerPadding ->
-    SearchContent(innerPadding, searchChannelsVM, onItemClick)
+    SearchContent(innerPadding, searchChannelsComponent, onItemClick)
   }
 }
 
 @Composable
 private fun SearchContent(
   innerPadding: PaddingValues,
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
   Box(modifier = Modifier.padding(innerPadding)) {
@@ -87,8 +87,8 @@ private fun SearchContent(
       modifier = Modifier.fillMaxSize()
     ) {
       Column {
-        SearchChannelsTF(searchChannelsVM)
-        ListAllChannels(searchChannelsVM, onItemClick)
+        SearchChannelsTF(searchChannelsComponent)
+        ListAllChannels(searchChannelsComponent, onItemClick)
       }
     }
   }
@@ -97,10 +97,10 @@ private fun SearchContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ListAllChannels(
-  searchChannelsVM: SearchChannelsVM,
+  searchChannelsComponent: SearchChannelsComponent,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
-  val channelsFlow by searchChannelsVM.channels.collectAsState(mainDispatcher)
+  val channelsFlow by searchChannelsComponent.channels.collectAsState(mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -142,13 +142,13 @@ fun SlackChannelHeader(title: String) {
 }
 
 @Composable
-private fun SearchChannelsTF(searchChannelsVM: SearchChannelsVM) {
-  val searchChannel by searchChannelsVM.search.collectAsState(mainDispatcher)
+private fun SearchChannelsTF(searchChannelsComponent: SearchChannelsComponent) {
+  val searchChannel by searchChannelsComponent.search.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel,
     onValueChange = { newValue ->
-      searchChannelsVM.search.value = (newValue)
+      searchChannelsComponent.search.value = (newValue)
     },
     textStyle = textStyleFieldPrimary(),
     placeholder = {

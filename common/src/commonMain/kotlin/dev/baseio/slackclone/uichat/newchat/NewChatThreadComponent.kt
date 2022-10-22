@@ -1,29 +1,29 @@
 package dev.baseio.slackclone.uichat.newchat
 
 import ViewModel
+import com.arkivanov.decompose.ComponentContext
+import dev.baseio.slackclone.uionboarding.coroutineScope
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
-import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
-import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
-import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 
-class NewChatThreadVM(
+class NewChatThreadComponent(
+  componentContext: ComponentContext,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
   private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch
-) :
-  ViewModel() {
+) : ComponentContext by componentContext {
+
+  private val viewModelScope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
 
   val search = MutableStateFlow("")
   var channelsStream = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
@@ -58,11 +58,11 @@ class NewChatThreadVM(
 
   private fun navigate(channel: DomainLayerChannels.SKChannel) {
     TODO()
-   /* composeNavigator.deliverResult(
-      NavigationKey.NavigateChannel,
-      channel,
-      SlackScreens.Dashboard
-    )*/
+    /* composeNavigator.deliverResult(
+       NavigationKey.NavigateChannel,
+       channel,
+       SlackScreens.Dashboard
+     )*/
   }
 
   fun createChannel(channel: DomainLayerChannels.SKChannel) {

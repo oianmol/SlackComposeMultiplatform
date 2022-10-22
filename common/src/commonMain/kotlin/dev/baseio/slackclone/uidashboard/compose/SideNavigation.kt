@@ -32,7 +32,8 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 fun SideNavigation(
   modifier: Modifier,
   viewModel: SideNavComponent,
-  onClose: () -> Unit
+  onClose: () -> Unit,
+  navigateOnboardingClearRoutes: () -> Unit
 ) {
   val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
@@ -57,10 +58,7 @@ fun SideNavigation(
       Spacer(modifier = Modifier.padding(8.dp))
       SideNavFooter(logout = {
         viewModel.logout()
-        TODO("impl go back to onboarding")
-       /* composeNavigator.navigateRoute(SlackScreens.OnboardingRoute, removeRoute = { it, remove ->
-          remove() // remove all routes!
-        })*/
+        navigateOnboardingClearRoutes()
       })
     }
 
