@@ -48,8 +48,6 @@ import dev.baseio.slackclone.uidashboard.vm.Dashboard
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uidashboard.vm.DashboardVM
 import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
-import java.lang.RuntimeException
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

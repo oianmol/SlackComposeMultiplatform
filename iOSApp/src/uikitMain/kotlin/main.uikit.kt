@@ -42,7 +42,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
   companion object : UIResponderMeta(), UIApplicationDelegateProtocolMeta
 
   private val lifecycle = LifecycleRegistry()
-  val skKeyValueData = SKKeyValueData(this)
+  val skKeyValueData = SKKeyValueData()
   val root by lazy {
     RootComponent(
       context = DefaultComponentContext(lifecycle = lifecycle),
