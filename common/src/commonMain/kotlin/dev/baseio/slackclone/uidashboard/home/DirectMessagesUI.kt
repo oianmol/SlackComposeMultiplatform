@@ -19,7 +19,7 @@ import dev.baseio.slackclone.uichannels.directmessages.DirectMessagesComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @Composable
-fun DirectMessagesUI(onItemClick: (DomainLayerChannels.SKChannel) -> Unit, channelVM: DirectMessagesComponent) {
+fun DirectMessagesUI(onItemClick: (DomainLayerChannels.SKChannel) -> Unit, component: DirectMessagesComponent) {
   SlackCloneSurface(
     color = SlackCloneColorProvider.colors.uiBackground,
     modifier = Modifier.fillMaxSize()
@@ -29,7 +29,7 @@ fun DirectMessagesUI(onItemClick: (DomainLayerChannels.SKChannel) -> Unit, chann
       Spacer(modifier = Modifier.height(8.dp))
       JumpToText()
       Spacer(modifier = Modifier.height(12.dp))
-      DMChannelsList(onItemClick, channelVM)
+      DMChannelsList(onItemClick, component)
     }
   }
 }

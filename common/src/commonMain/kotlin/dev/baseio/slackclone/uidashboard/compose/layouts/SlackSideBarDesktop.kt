@@ -35,8 +35,8 @@ fun SlackSideBarLayoutDesktop(
   userProfile: () -> Unit,
   dashboardComponent: DashboardComponent,
 ) {
-  val workspaces by sideNavComponent.workspacesFlow.value.collectAsState(emptyList())
-  val user by sideNavComponent.currentLoggedInUser.collectAsState()
+  val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
+  val user by sideNavComponent.viewModel.currentLoggedInUser.collectAsState()
   val state by dashboardComponent.desktopStack.subscribeAsState()
   
   Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
@@ -89,12 +89,12 @@ fun SlackSideBarLayoutDesktop(
 @Composable
 private fun WorkSpacesDesktop(
   workspaces: List<DomainLayerWorkspaces.SKWorkspace>,
-  viewModel: SideNavComponent
+  component: SideNavComponent
 ) {
   LazyColumn {
     itemsIndexed(workspaces) { index, skWorkspace ->
       Column(Modifier.clickable {
-        viewModel.select(skWorkspace)
+        component.viewModel.select(skWorkspace)
       }) {
         WorkspaceDesktop(workspace = skWorkspace, index == 0)
         Spacer(modifier = Modifier.padding(4.dp))

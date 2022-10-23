@@ -31,11 +31,11 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 @Composable
 fun SideNavigation(
   modifier: Modifier,
-  viewModel: SideNavComponent,
+  sideNavComponent: SideNavComponent,
   onClose: () -> Unit,
   navigateOnboardingClearRoutes: () -> Unit
 ) {
-  val workspaces by viewModel.workspacesFlow.value.collectAsState(emptyList())
+  val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
     Column(
       modifier = Modifier
@@ -47,7 +47,7 @@ fun SideNavigation(
         }
         itemsIndexed(workspaces) { index, skWorkspace ->
           Column(Modifier.clickable {
-            viewModel.select(skWorkspace)
+            sideNavComponent.viewModel.select(skWorkspace)
             onClose()
           }) {
             Workspace(workspace = skWorkspace, index == 0)
@@ -57,7 +57,7 @@ fun SideNavigation(
       }
       Spacer(modifier = Modifier.padding(8.dp))
       SideNavFooter(logout = {
-        viewModel.logout()
+        sideNavComponent.viewModel.logout()
         navigateOnboardingClearRoutes()
       })
     }

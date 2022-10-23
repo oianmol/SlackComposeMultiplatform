@@ -135,10 +135,7 @@ class RootComponent(
 
       Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(
         SearchChannelsComponent(
-          componentContext, koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
+          componentContext,
           {
             navigation.pop()
           }, { config1 ->

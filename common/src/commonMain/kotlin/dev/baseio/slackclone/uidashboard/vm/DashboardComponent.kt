@@ -40,7 +40,7 @@ class DashboardComponent(
   val navigateRoot: (RootComponent.Config) -> Unit
 ) : Dashboard, ComponentContext by componentContext {
 
-  val sideNavComponent = SideNavComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) {
+  val sideNavComponent = SideNavComponent(this) {
     navigateOnboarding()
   }
   val chatScreenComponent = ChatScreenComponent(
@@ -98,9 +98,7 @@ class DashboardComponent(
 
   private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {
     Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
-      DirectMessagesComponent(
-        koinApp.koin.get(), koinApp.koin.get(), componentContext
-      )
+      DirectMessagesComponent(componentContext)
     )
 
     Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext, koinApp.koin.get()))

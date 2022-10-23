@@ -104,7 +104,7 @@ fun DashboardUI(
           leftViewComposable = { sideNavModifier ->
             SideNavigation(
               modifier = sideNavModifier.width(sideNavWidth),
-              viewModel = dashboardComponent.sideNavComponent,
+              sideNavComponent = dashboardComponent.sideNavComponent,
               {
                 isLeftNavOpen = false
               }, {
@@ -142,7 +142,7 @@ fun DashboardUI(
           leftViewComposable = {
             SideNavigation(
               modifier = it,
-              viewModel = dashboardComponent.sideNavComponent,
+              sideNavComponent = dashboardComponent.sideNavComponent,
               {
                 isLeftNavOpen = false
               }, {

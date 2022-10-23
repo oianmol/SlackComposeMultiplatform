@@ -78,7 +78,7 @@ private fun ListAllChannels(
   searchChannelsComponent: SearchChannelsComponent,
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
-  val channelsFlow by searchChannelsComponent.channels.collectAsState(mainDispatcher)
+  val channelsFlow by searchChannelsComponent.viewModel.channels.collectAsState(mainDispatcher)
   val listState = rememberLazyListState()
   LazyColumn(state = listState, reverseLayout = false) {
     var lastDrawnChannel: String? = null
@@ -121,12 +121,12 @@ fun SlackChannelHeader(title: String) {
 
 @Composable
 private fun SearchChannelsTF(searchChannelsComponent: SearchChannelsComponent) {
-  val searchChannel by searchChannelsComponent.search.collectAsState(mainDispatcher)
+  val searchChannel by searchChannelsComponent.viewModel.search.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel,
     onValueChange = { newValue ->
-      searchChannelsComponent.search.value = (newValue)
+      searchChannelsComponent.viewModel.search.value = (newValue)
     },
     textStyle = textStyleFieldPrimary(),
     placeholder = {
@@ -180,7 +180,7 @@ private fun NewChannelFAB(newChannel: () -> Unit) {
 
 @Composable
 private fun SearchAppBar(searchChannelsComponent: SearchChannelsComponent) {
-  val channelCount by searchChannelsComponent.channelCount.collectAsState(mainDispatcher)
+  val channelCount by searchChannelsComponent.viewModel.channelCount.collectAsState(mainDispatcher)
 
   SlackSurfaceAppBar(
     title = {

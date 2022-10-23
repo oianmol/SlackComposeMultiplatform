@@ -1,24 +1,14 @@
 package dev.baseio.slackclone.uichannels.directmessages
 
-import dev.baseio.slackdomain.model.message.DomainLayerMessages
-import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannelsWithLastMessage
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-import kotlinx.coroutines.flow.*
-import ViewModel
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.instancekeeper.getOrCreate
+import dev.baseio.slackclone.koinApp
 
 class DirectMessagesComponent(
-  private val useCaseFetchChannels: UseCaseFetchChannelsWithLastMessage,
-  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   componentContext: ComponentContext
 ) : ComponentContext by componentContext {
 
-  val channels = MutableStateFlow(fetchFlow())
 
-  fun fetchFlow(): Flow<List<DomainLayerMessages.SKLastMessage>> {
-    return useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
-      useCaseFetchChannels(it!!.uuid)
-    }
-  }
-
+  val viewModel =
+    instanceKeeper.getOrCreate { DirectMessagesVM(koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) }
 }

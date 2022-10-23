@@ -1,40 +1,16 @@
 package dev.baseio.slackclone.uidashboard.vm
 
-import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseSetLastSelectedWorkspace
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetWorkspaces
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import ViewModel
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.instancekeeper.getOrCreate
+import dev.baseio.slackclone.koinApp
 
 class SideNavComponent(
   componentContext: ComponentContext,
-  private val useCaseFetchWorkspaces: UseCaseGetWorkspaces,
-  private val useCaseLastSelectedWorkspace: UseCaseSetLastSelectedWorkspace,
-  private val userProfileDelegate: UserProfileDelegate,
-  navigateOnboardingRoot:()->Unit
-) : ViewModel(), UserProfileDelegate by userProfileDelegate, ComponentContext by componentContext {
+  navigateOnboardingRoot: () -> Unit
+) : ComponentContext by componentContext {
 
-  var workspacesFlow = MutableStateFlow(flow())
-    private set
-
-  init {
-    getCurrentUser(viewModelScope,navigateOnboardingRoot)
+  val viewModel = instanceKeeper.getOrCreate {
+    SideNavVM(koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get(), navigateOnboardingRoot)
   }
 
-  fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
-    return useCaseFetchWorkspaces.invoke()
-  }
-
-  fun select(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
-    viewModelScope.launch {
-      useCaseLastSelectedWorkspace.invoke(skWorkspace)
-    }
-  }
-
-  override fun logout() {
-    userProfileDelegate.logout()
-  }
 }
