@@ -27,30 +27,19 @@ fun NewChatThreadScreen(
 ) {
 
   val scaffoldState = rememberScaffoldState()
-
-  ListRandomUsers(scaffoldState, newChatThread = newChatThread)
-}
-
-@Composable
-private fun ListRandomUsers(
-  scaffoldState: ScaffoldState,
-  newChatThread: NewChatThreadComponent,
-) {
-  Box {
-    Scaffold(
-      backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-      contentColor = SlackCloneColorProvider.colors.textSecondary,
-      modifier = Modifier,
-      scaffoldState = scaffoldState,
-      topBar = {
-        SearchAppBar(newChatThread)
-      },
-      snackbarHost = {
-        scaffoldState.snackbarHostState
-      }
-    ) { innerPadding ->
-      SearchContent(innerPadding, newChatThread)
+  Scaffold(
+    backgroundColor = SlackCloneColorProvider.colors.uiBackground,
+    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    modifier = Modifier,
+    scaffoldState = scaffoldState,
+    topBar = {
+      SearchAppBar(newChatThread)
+    },
+    snackbarHost = {
+      scaffoldState.snackbarHostState
     }
+  ) { innerPadding ->
+    SearchContent(innerPadding, newChatThread)
   }
 }
 
@@ -59,23 +48,21 @@ private fun SearchContent(
   innerPadding: PaddingValues,
   newChatThread: NewChatThreadComponent,
 ) {
-  Box(modifier = Modifier.padding(innerPadding)) {
-    SlackCloneSurface(
-      modifier = Modifier.fillMaxSize()
-    ) {
-      Column {
-        SearchUsersTF(newChatThread)
-        ListAllUsers(newChatThread)
-      }
+  SlackCloneSurface(
+    modifier = Modifier.padding(innerPadding).fillMaxSize()
+  ) {
+    Column {
+      SearchUsersTF(newChatThread)
+      ListAllUsers(newChatThread)
     }
   }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllUsers(viewModel: NewChatThreadComponent) {
-  val channelsFlow by viewModel.channelsStream.collectAsState(mainDispatcher)
-  val errorFlow by viewModel.errorStream.collectAsState()
+private fun ListAllUsers(newChatThreadComponent: NewChatThreadComponent) {
+  val channelsFlow by newChatThreadComponent.viewModel.channelsStream.collectAsState(mainDispatcher)
+  val errorFlow by newChatThreadComponent.viewModel.errorStream.collectAsState()
 
   val listState = rememberLazyListState()
   Box {
@@ -91,7 +78,7 @@ private fun ListAllUsers(viewModel: NewChatThreadComponent) {
         }
         item {
           SlackChannelItem(slackChannel = channel) {
-            viewModel.createChannel(it)
+            newChatThreadComponent.viewModel.createChannel(it)
           }
         }
         lastDrawnChannel = newDrawn
@@ -123,13 +110,13 @@ fun SlackChannelHeader(title: String) {
 }
 
 @Composable
-private fun ColumnScope.SearchUsersTF(newChatThread: NewChatThreadComponent) {
-  val searchChannel by newChatThread.search.collectAsState(mainDispatcher)
+private fun SearchUsersTF(newChatThread: NewChatThreadComponent) {
+  val searchChannel by newChatThread.viewModel.search.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel,
     onValueChange = { newValue ->
-      newChatThread.search(newValue)
+      newChatThread.viewModel.search(newValue)
     },
     textStyle = textStyleFieldPrimary(),
     placeholder = {

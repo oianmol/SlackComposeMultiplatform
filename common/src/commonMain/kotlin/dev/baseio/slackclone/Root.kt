@@ -95,7 +95,7 @@ class RootComponent(
 
       Config.DashboardScreen -> Root.Child.DashboardScreen(
         DashboardComponent(
-          componentContext,{
+          componentContext, {
             navigation.navigate {
               listOf(Config.GettingStarted)
             }
@@ -107,14 +107,14 @@ class RootComponent(
 
       Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
         CreateNewChannelComponent(
-          componentContext, koinApp.koin.get(),
-          koinApp.koin.get(), koinApp.koin.get(),
+          componentContext,
           {
             navigation.pop()
           }, { channel ->
             navigation.popWhile {
               it != Config.DashboardScreen
             }
+            (childStack.value.active.instance as? Root.Child.CreateNewChannel)?.component?.onChannelSelected(channel)
             (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
           })
       )
@@ -122,11 +122,6 @@ class RootComponent(
       Config.NewChatThreadScreen -> Root.Child.NewChatThread(
         NewChatThreadComponent(
           componentContext,
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
-          koinApp.koin.get(),
           {
             navigation.pop()
           }, { channel ->

@@ -4,6 +4,7 @@ import mainDispatcher
 import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import androidx.compose.runtime.*
+import dev.baseio.slackclone.uichannels.SlackChannelVM
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 
@@ -11,7 +12,8 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 fun SlackRecentChannels(
   onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
   onClickAdd: () -> Unit,
-  channelVM: SlackChannelComponent
+  component: SlackChannelComponent,
+  channelVM: SlackChannelVM = component.viewModel
 ) {
   val recent = "Recent"
   val channelsFlow = channelVM.channels.collectAsState(mainDispatcher)

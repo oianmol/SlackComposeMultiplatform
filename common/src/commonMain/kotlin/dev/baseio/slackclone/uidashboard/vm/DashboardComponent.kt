@@ -12,7 +12,6 @@ import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.directmessages.DirectMessagesComponent
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uidashboard.home.HomeScreenComponent
-import dev.baseio.slackclone.uidashboard.home.MentionsComponent
 import dev.baseio.slackclone.uidashboard.home.SearchMessagesComponent
 import dev.baseio.slackclone.uidashboard.home.UserProfileComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
@@ -28,7 +27,7 @@ interface Dashboard {
   sealed class Child {
     data class HomeScreen(val component: HomeScreenComponent) : Child()
     data class DirectMessagesScreen(val component: DirectMessagesComponent) : Child()
-    data class MentionsScreen(val mentionsComponent: MentionsComponent) : Child()
+    object MentionsScreen : Child()
     data class SearchScreen(val searchMessagesComponent: SearchMessagesComponent) : Child()
     data class UserProfileScreen(val component: UserProfileComponent) : Child()
   }
@@ -48,9 +47,9 @@ class DashboardComponent(
     componentContext
   )
   val recentChannelsComponent =
-    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+    SlackChannelComponent(this, "recent")
   val allChannelsComponent =
-    SlackChannelComponent(this, koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get())
+    SlackChannelComponent(this, "allChannels")
 
 
   val dashboardVM = instanceKeeper.getOrCreate {
@@ -67,7 +66,6 @@ class DashboardComponent(
       koinApp.koin.get()
     )
   }
-
 
 
   private val navigation = StackNavigation<Config>()
@@ -106,10 +104,10 @@ class DashboardComponent(
     )
 
     Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext, koinApp.koin.get()))
-    Config.MentionsConfig -> Dashboard.Child.MentionsScreen(MentionsComponent(componentContext))
+    Config.MentionsConfig -> Dashboard.Child.MentionsScreen
     Config.Profile -> Dashboard.Child.UserProfileScreen(
       UserProfileComponent(
-        koinApp.koin.get(), koinApp.koin.get(), componentContext
+        componentContext
       ) {
         navigateOnboarding()
       }

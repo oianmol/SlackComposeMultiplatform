@@ -30,7 +30,7 @@ fun CreateNewChannelUI(
       modifier = Modifier,
       scaffoldState = scaffoldState,
       topBar = {
-        NewChannelAppBar( createNewChannelComponent)
+        NewChannelAppBar(createNewChannelComponent)
       },
       snackbarHost = {
         scaffoldState.snackbarHostState
@@ -71,14 +71,14 @@ private fun Name() {
 
 @Composable
 private fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
-  val searchChannel by createNewChannelComponent.createChannelState.collectAsState(mainDispatcher)
+  val searchChannel by createNewChannelComponent.viewModel.createChannelState.collectAsState(mainDispatcher)
 
   TextField(
     value = searchChannel.name,
     onValueChange = { newValue ->
       val newId = newValue.replace(" ", "_")
-      createNewChannelComponent.createChannelState.value =
-        createNewChannelComponent.createChannelState.value.copy(name = newId, uuid = newId)
+      createNewChannelComponent.viewModel.createChannelState.value =
+        createNewChannelComponent.viewModel.createChannelState.value.copy(name = newId, uuid = newId)
     },
     textStyle = textStyleFieldPrimary(),
     leadingIcon = {
@@ -140,8 +140,8 @@ private fun NewChannelAppBar(
     backgroundColor = SlackCloneColorProvider.colors.appBarColor,
     actions = {
       TextButton(onClick = {
-        createNewChannelComponent.createChannelState.value.name?.takeIf { it.isNotEmpty() }?.let {
-          createNewChannelComponent.createChannel()
+        createNewChannelComponent.viewModel.createChannelState.value.name?.takeIf { it.isNotEmpty() }?.let {
+          createNewChannelComponent.viewModel.createChannel()
         } ?: run {
           haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         }

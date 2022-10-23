@@ -235,7 +235,7 @@ fun DashboardUI(
                     child.component
                   )
 
-                  is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
+                  is Dashboard.Child.MentionsScreen -> MentionsReactionsUI()
                   is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
                   is Dashboard.Child.UserProfileScreen -> UserProfileUI(child.component)
 
@@ -354,7 +354,7 @@ private fun DashboardChildren(
       }
 
       is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
-      is Dashboard.Child.MentionsScreen -> MentionsReactionsUI(child.mentionsComponent)
+      is Dashboard.Child.MentionsScreen -> MentionsReactionsUI()
       is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
       is Dashboard.Child.UserProfileScreen -> {
         UserProfileUI(child.component)

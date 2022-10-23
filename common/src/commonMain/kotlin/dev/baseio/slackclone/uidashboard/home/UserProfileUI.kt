@@ -37,9 +37,8 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UserProfileUI(profileVM: UserProfileComponent) {
+fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfileVM = component.viewModel) {
   val user by profileVM.currentLoggedInUser.collectAsState()
 
   SlackCloneSurface(
@@ -60,7 +59,7 @@ fun UserProfileUI(profileVM: UserProfileComponent) {
       SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
       SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
         profileVM.logout()
-        profileVM.navigateOnboardingRoot()
+        component.navigateOnboardingRoot()
       })
     }
   }

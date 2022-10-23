@@ -1,21 +1,16 @@
 package dev.baseio.slackclone.uidashboard.home
 
-import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegate
 import com.arkivanov.decompose.ComponentContext
-import dev.baseio.slackclone.uionboarding.coroutineScope
-import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import kotlinx.coroutines.SupervisorJob
+import com.arkivanov.essenty.instancekeeper.getOrCreate
+import dev.baseio.slackclone.koinApp
 
 class UserProfileComponent(
-  private val userProfileDelegate: UserProfileDelegate,
-  coroutineDispatcherProvider: CoroutineDispatcherProvider,
   componentContext: ComponentContext,
   val navigateOnboardingRoot: () -> Unit
 ) :
-  UserProfileDelegate by userProfileDelegate, ComponentContext by componentContext {
-  private val scope = coroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
+  ComponentContext by componentContext {
 
-  init {
-    getCurrentUser(scope, navigateOnboardingRoot)
-  }
+  val viewModel = instanceKeeper.getOrCreate { UserProfileVM(koinApp.koin.get(),koinApp.koin.get(), navigateOnboardingRoot) }
+
+
 }

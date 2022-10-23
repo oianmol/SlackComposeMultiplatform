@@ -7,15 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import com.arkivanov.decompose.ComponentContext
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
-import dev.baseio.slackclone.commonui.theme.DarkBackground
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-fun MentionsReactionsUI(mentionsComponent: MentionsComponent) {
+fun MentionsReactionsUI() {
   SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = Modifier.fillMaxSize()){
     Column() {
       MRTopAppBar()
@@ -23,9 +21,6 @@ fun MentionsReactionsUI(mentionsComponent: MentionsComponent) {
   }
 }
 
-class MentionsComponent(componentContext: ComponentContext):ComponentContext by componentContext{
-
-}
 
 @Composable
 private fun MRTopAppBar() {
