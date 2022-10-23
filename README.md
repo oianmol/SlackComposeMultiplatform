@@ -14,7 +14,7 @@
 
 ## Instructions to compile and get running
 
-Use the `build.sh` file in the root dir to build everything! make sure to set the ANDROID_SDK_ROOT path in your ENV and configure and mongodb atlas connection string for the gRPC server.
+Use the `build.sh` file in the root dir to build everything! make sure to set the ANDROID_SDK_ROOT path in your ENV and configure a mongodb atlas connection environment variable for the gRPC server.
 
 ## iOS support with gRPC
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
