@@ -2,7 +2,7 @@
 
 ### This is a jetpack compose Slack Client & Server Clone written in Kotlin and for Multiplatform.
 
-### Sudmodules that this project uses.
+### Dependent Projects
 
 1. [Protos](https://github.com/oianmol/slack_multiplatform_protos)
 2. [GenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
@@ -31,39 +31,6 @@ The android and jvm platform run's fine, make sure you match the ip address in G
 
 
 
-
-## Latest Video Demos!
-
-
-https://user-images.githubusercontent.com/4393101/194718377-7495cb3f-a104-46e3-8ab7-481ec2397e33.mp4
-
-
-https://user-images.githubusercontent.com/4393101/194718380-d65a3869-4c4a-4409-9ac2-c952dc219b6e.mp4
-
-
-
-
-
-
-```
-SlackComposeMultiplatformProject
-│    
-│      
-│
-└───platform (Android/Desktop/iOS) = Compose multiplatform Desktop
-│      
-│     
-└───generate-proto = Generates the java/kotlin files using protobuf and grpc libs
-│  
-│     
-│   
-└───protos = Contains the proto files
-│     
-│       
-│   
-└───Slack Server =  the backend server which has the logic for the client app!
-```
-
 Video Demo for JVM Desktop with Responsive UI
 
 https://user-images.githubusercontent.com/4393101/188278261-4553ea2b-e80f-4515-be85-e2eba646930b.mp4
@@ -75,14 +42,14 @@ https://user-images.githubusercontent.com/32521663/189109199-6743606c-0e28-4d10-
 
 ## 🏗️️ Built with ❤️ using Jetpack Compose 😁
 
-| What            | How                        |
-|----------------	|------------------------------	|
-| 🎭 User Interface (Android,Desktop,iOS)   | [Jetpack Compose](https://developer.android.com/jetpack/compose)                |
-| 🏗 Architecture    | [Clean](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)                            |
-| 💉 DI (Android)                | [Koin](https://insert-koin.io/)                        |
-| 🌊 Async            | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)                |
-| 🌐 Networking        | [Ktor.IO](https://ktor.io/)                        |
-| 📄 Parsing            | [KotlinX](https://kotlinlang.org/docs/serialization.html)                            |
+| What                                    | How                                                                                                                                                                             |
+|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 🎭 User Interface (Android,Desktop,iOS) | [Jetpack Compose JB!](https://developer.android.com/jetpack/compose)                                                                                                            |
+| 🏗 Architecture                         | [Decompose + Clean Architecture](https://arkivanov.github.io/Decompose/)                                                                                                        |
+| 💉 DI (Android)                         | [Koin](https://insert-koin.io/)                                                                                                                                                 |
+| 🌊 Async                                | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
+| 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
+| 📄 Pagination                           | [KotlinX](https://kotlinlang.org/docs/serialization.html)                                                                                                                       |
 
 
 MIT License

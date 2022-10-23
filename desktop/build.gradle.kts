@@ -31,8 +31,6 @@ kotlin {
         api(Decompose.core)
         api(Decompose.coreJvm)
         api("dev.baseio.slackclone:slack_kmp_data-jvm:1.0")
-        val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:1.0.0-alpha-06"
-        implementation(composejb)
       }
     }
     val jvmTest by getting

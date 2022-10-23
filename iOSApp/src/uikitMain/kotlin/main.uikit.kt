@@ -18,12 +18,14 @@ import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.cinterop.*
 import platform.UIKit.*
 import platform.Foundation.*
-import dev.baseio.slackclone.App
-import dev.baseio.slackclone.LocalWindow
-import dev.baseio.slackclone.WindowInfo
-import dev.baseio.slackclone.appNavigator
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.destroy
+import com.arkivanov.essenty.lifecycle.resume
+import com.arkivanov.essenty.lifecycle.stop
+import dev.baseio.slackclone.*
 
 fun main() {
   val args = emptyArray<String>()
@@ -38,6 +40,15 @@ fun main() {
 
 class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
   companion object : UIResponderMeta(), UIApplicationDelegateProtocolMeta
+
+  private val lifecycle = LifecycleRegistry()
+  val skKeyValueData = SKKeyValueData(this)
+  val root by lazy {
+    RootComponent(
+      context = DefaultComponentContext(lifecycle = lifecycle),
+      skKeyValueData
+    )
+  }
 
   @ObjCObjectBase.OverrideInit
   constructor() : super()
@@ -57,36 +68,43 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
 
   override fun application(application: UIApplication, didFinishLaunchingWithOptions: Map<Any?, *>?): Boolean {
     window = UIWindow(frame = UIScreen.mainScreen.bounds)
-    window!!.rootViewController = SlackApp(window!!)
+    window!!.rootViewController = Application("SlackComposeiOS") {
+
+      val rememberedComposeWindow by remember(window!!) {
+        val windowInfo = window!!.frame.useContents {
+          WindowInfo(this.size.width.dp, this.size.height.dp)
+        }
+        mutableStateOf(windowInfo)
+      }
+
+      val driver = DriverFactory().createDriver(SlackDB.Schema)
+      CompositionLocalProvider(
+        LocalWindow provides rememberedComposeWindow
+      ) {
+        SlackCloneTheme(isDarkTheme = true) {
+          Column {
+            Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
+            App(sqlDriver = driver, skKeyValueData = skKeyValueData, rootComponent = {
+              root
+            })
+          }
+        }
+
+      }
+    }
     window!!.makeKeyAndVisible()
     return true
   }
-}
 
-fun SlackApp(window: UIWindow): UIViewController {
-  return Application("SlackComposeiOS") {
+  override fun applicationDidBecomeActive(application: UIApplication) {
+    lifecycle.resume()
+  }
 
-    val rememberedComposeWindow by remember(window) {
-      val windowInfo = window.frame.useContents {
-        WindowInfo(this.size.width.dp, this.size.height.dp)
-      }
-      mutableStateOf(windowInfo)
-    }
+  override fun applicationWillResignActive(application: UIApplication) {
+    lifecycle.stop()
+  }
 
-    appNavigator.whenRouteCanNoLongerNavigateBack = {
-
-    }
-    val driver = DriverFactory().createDriver(SlackDB.Schema)
-    CompositionLocalProvider(
-      LocalWindow provides rememberedComposeWindow
-    ) {
-      SlackCloneTheme(isDarkTheme = true) {
-        Column {
-          Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
-          App(sqlDriver = driver, skKeyValueData = SKKeyValueData(), defaultComponentContext = defaultComponentContext)
-        }
-      }
-
-    }
+  override fun applicationWillTerminate(application: UIApplication) {
+    lifecycle.destroy()
   }
 }

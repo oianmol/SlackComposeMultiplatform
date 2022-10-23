@@ -21,10 +21,15 @@ repositories {
 }
 
 
+object Decompose {
+  val VERSION = "1.0.0-alpha-06"
+  val core = "com.arkivanov.decompose:decompose:${VERSION}"
+}
+
 kotlin {
-  iosX64("uikitX64") {
-    binaries {
-      executable() {
+  listOf(iosX64("uikitX64"), iosArm64("uikitArm64")).forEach {
+    it.binaries {
+      executable {
         entryPoint = "main"
         freeCompilerArgs += listOf(
           "-linker-option", "-framework", "-linker-option", "Metal",
@@ -34,20 +39,7 @@ kotlin {
       }
     }
   }
-  iosArm64("uikitArm64") {
-    binaries {
-      executable() {
-        entryPoint = "main"
-        freeCompilerArgs += listOf(
-          "-linker-option", "-framework", "-linker-option", "Metal",
-          "-linker-option", "-framework", "-linker-option", "CoreText",
-          "-linker-option", "-framework", "-linker-option", "CoreGraphics"
-        )
-        // TODO: the current compose binary surprises LLVM, so disable checks for now.
-        freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
-      }
-    }
-  }
+
 
   sourceSets {
     val uikitMain by creating {
@@ -59,19 +51,24 @@ kotlin {
         implementation(compose.runtime)
         implementation("io.ktor:ktor-client-darwin:$ktor_version")
         implementation("com.squareup.sqldelight:native-driver:1.5.3")
+        implementation(Decompose.core)
         api("dev.baseio.slackclone:slack_kmp_data:1.0")
+
       }
     }
     val uikitX64Main by getting {
       dependsOn(uikitMain)
       dependencies {
         api("dev.baseio.slackclone:slack_kmp_data-iosx64:1.0")
+        implementation("com.arkivanov.decompose:extensions-compose-jetbrains-iosx64:1.0.0-alpha-06-native-compose")
+
       }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
       dependencies {
         api("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
+        implementation("com.arkivanov.decompose:extensions-compose-jetbrains-iosarm64:1.0.0-alpha-06-native-compose")
       }
     }
   }

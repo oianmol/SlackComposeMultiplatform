@@ -2,8 +2,6 @@ package dev.baseio.slackclone
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
@@ -14,7 +12,6 @@ import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
-import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
 import dev.baseio.slackclone.uionboarding.compose.*
@@ -27,7 +24,6 @@ import org.koin.dsl.module
 
 lateinit var koinApp: KoinApplication
 
-@OptIn(ExperimentalDecomposeApi::class)
 @Composable
 fun App(
   modifier: Modifier = Modifier,
