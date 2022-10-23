@@ -14,4 +14,4 @@ rootProject.name = "SlackJetpackCompose"
 include(":android")
 include(":desktop")
 include(":common")
-//include(":iOSApp")
+include(":iOSApp")

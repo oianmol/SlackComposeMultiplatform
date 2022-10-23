@@ -60,15 +60,12 @@ kotlin {
       dependsOn(uikitMain)
       dependencies {
         api("dev.baseio.slackclone:slack_kmp_data-iosx64:1.0")
-        implementation("com.arkivanov.decompose:extensions-compose-jetbrains-iosx64:1.0.0-alpha-06-native-compose")
-
       }
     }
     val uikitArm64Main by getting {
       dependsOn(uikitMain)
       dependencies {
         api("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
-        implementation("com.arkivanov.decompose:extensions-compose-jetbrains-iosarm64:1.0.0-alpha-06-native-compose")
       }
     }
   }

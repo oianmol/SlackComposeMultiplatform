@@ -26,8 +26,7 @@ object Deps {
   object Decompose {
     const val VERSION = "1.0.0-alpha-06"
     const val core = "com.arkivanov.decompose:decompose:${VERSION}"
-    const val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION"
-    const val composejbios = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION-native-compose"
+    const val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION-native-compose"
   }
 
   object Kotlinx {
@@ -81,7 +80,7 @@ dependencies {
 
 
 kotlin {
-  val iosEnabled = false
+  val iosEnabled = true
   targets(iosEnabled)
 
   sourceSets {
@@ -129,7 +128,7 @@ fun KotlinMultiplatformExtension.targets(iosEnabled: Boolean = true) {
   }
   if (iosEnabled) {
     iosArm64()
-    iosSimulatorArm64()
+    //iosSimulatorArm64()
     iosX64()
   }
 }
@@ -184,7 +183,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
       api("androidx.constraintlayout:constraintlayout-compose:1.0.1")
       api("androidx.appcompat:appcompat:1.5.1")
       api("androidx.core:core-ktx:1.9.0")
-      implementation(Deps.Decompose.composejbios)
+      implementation(Deps.Decompose.composejb)
     }
   }
   val androidTest by getting {
@@ -199,13 +198,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
     dependencies {
       implementation("dev.baseio.slackclone:slack_kmp_domain-iosarm64:1.0")
       implementation("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
-      implementation("io.ktor:ktor-client-darwin:$ktor_version")
-    }
-  }
-  val iosSimulatorArm64Main by getting {
-    dependencies {
-      implementation("dev.baseio.slackclone:slack_kmp_domain-iossimulatorarm64:1.0")
-      implementation("dev.baseio.slackclone:slack_kmp_data-iossimulatorarm64:1.0")
       implementation("io.ktor:ktor-client-darwin:$ktor_version")
     }
   }
