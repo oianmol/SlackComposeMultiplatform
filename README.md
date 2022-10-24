@@ -49,7 +49,7 @@ https://user-images.githubusercontent.com/32521663/189109199-6743606c-0e28-4d10-
 | 💉 DI (Android)                         | [Koin](https://insert-koin.io/)                                                                                                                                                 |
 | 🌊 Async                                | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
 | 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
-| 📄 Pagination                           | [KotlinX](https://kotlinlang.org/docs/serialization.html)                                                                                                                       |
+| 📄 Pagination                           | [moko-paging](https://github.com/icerockdev/moko-paging)                                                                                                                       |
 
 
 MIT License
