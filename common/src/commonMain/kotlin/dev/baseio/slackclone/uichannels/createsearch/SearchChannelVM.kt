@@ -11,33 +11,33 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-class SearchChannelVM(private val ucFetchChannels: UseCaseSearchChannel,
-                      private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
-                      private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-                      private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
+class SearchChannelVM(
+    private val ucFetchChannels: UseCaseSearchChannel,
+    private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
+    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : SlackViewModel(coroutineDispatcherProvider) {
-  val search = MutableStateFlow("")
-  val channelCount = MutableStateFlow(0)
-  var channels = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
+    val search = MutableStateFlow("")
+    val channelCount = MutableStateFlow(0)
+    var channels = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
 
-  init {
-    viewModelScope.launch {
-      val currentSelectedWorkspaceId = useCaseGetSelectedWorkspace()
-      currentSelectedWorkspaceId?.let {
-        val count = useCaseFetchChannelCount(workspaceId = currentSelectedWorkspaceId.uuid)
-        channelCount.value = count
-      }
-      search.debounce(250.milliseconds).collectLatest { search ->
-        useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
-          ucFetchChannels(UseCaseWorkspaceChannelRequest(it!!.uuid, search))
+    init {
+        viewModelScope.launch {
+            val currentSelectedWorkspaceId = useCaseGetSelectedWorkspace()
+            currentSelectedWorkspaceId?.let {
+                val count = useCaseFetchChannelCount(workspaceId = currentSelectedWorkspaceId.uuid)
+                channelCount.value = count
+            }
+            search.debounce(250.milliseconds).collectLatest { search ->
+                useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
+                    ucFetchChannels(UseCaseWorkspaceChannelRequest(it!!.uuid, search))
+                }
+                    .flowOn(coroutineDispatcherProvider.io)
+                    .onEach {
+                        channels.value = it
+                    }.flowOn(coroutineDispatcherProvider.main)
+                    .launchIn(viewModelScope)
+            }
         }
-          .flowOn(coroutineDispatcherProvider.io)
-          .onEach {
-            channels.value = it
-          }.flowOn(coroutineDispatcherProvider.main)
-          .launchIn(viewModelScope)
-      }
     }
-
-  }
 }

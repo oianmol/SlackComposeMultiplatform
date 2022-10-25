@@ -5,10 +5,9 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import dev.baseio.slackclone.koinApp
 
 class DirectMessagesComponent(
-  componentContext: ComponentContext
+    componentContext: ComponentContext
 ) : ComponentContext by componentContext {
 
-
-  val viewModel =
-    instanceKeeper.getOrCreate { DirectMessagesVM(koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) }
+    val viewModel =
+        instanceKeeper.getOrCreate { DirectMessagesVM(koinApp.koin.get(), koinApp.koin.get(), koinApp.koin.get()) }
 }

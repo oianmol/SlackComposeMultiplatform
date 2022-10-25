@@ -5,12 +5,10 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import dev.baseio.slackclone.koinApp
 
 class UserProfileComponent(
-  componentContext: ComponentContext,
-  val navigateOnboardingRoot: () -> Unit
+    componentContext: ComponentContext,
+    val navigateOnboardingRoot: () -> Unit
 ) :
-  ComponentContext by componentContext {
+    ComponentContext by componentContext {
 
-  val viewModel = instanceKeeper.getOrCreate { UserProfileVM(koinApp.koin.get(),koinApp.koin.get(), navigateOnboardingRoot) }
-
-
+    val viewModel = instanceKeeper.getOrCreate { UserProfileVM(koinApp.koin.get(), koinApp.koin.get(), navigateOnboardingRoot) }
 }

@@ -9,12 +9,12 @@ import org.koin.core.qualifier.QualifierValue
 import org.koin.dsl.module
 
 val viewModelDelegateModule = module {
-  single<UserProfileDelegate> {
-    UserProfileDelegateImpl(getKoin().get(), getKoin().get())
-  }
-  single<SendMessageDelegate> {
-    SendMessageDelegateImpl(get(), get(), get())
-  }
+    single<UserProfileDelegate> {
+        UserProfileDelegateImpl(getKoin().get(), getKoin().get())
+    }
+    single<SendMessageDelegate> {
+        SendMessageDelegateImpl(get(), get(), get())
+    }
 }
 
 /*val viewModelModule = module {
@@ -120,13 +120,12 @@ private fun ScopeDSL.slackChannelVMScoped() {
   }
 }*/
 
-
 object RecentChatsQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "RecentChatsQualifier"
+    override val value: QualifierValue
+        get() = "RecentChatsQualifier"
 }
 
 object AllChatsQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "AllChatsQualifier"
+    override val value: QualifierValue
+        get() = "AllChatsQualifier"
 }

@@ -8,28 +8,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class CreateWorkspaceVM(
-  coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
-  val navigateDashboard: () -> Unit
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
+    val navigateDashboard: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
-  val email = MutableStateFlow("")
-  val password = MutableStateFlow("")
-  val domain = MutableStateFlow("")
-  val error = MutableStateFlow<Throwable?>(null)
-  val loading = MutableStateFlow(false)
+    val email = MutableStateFlow("")
+    val password = MutableStateFlow("")
+    val domain = MutableStateFlow("")
+    val error = MutableStateFlow<Throwable?>(null)
+    val loading = MutableStateFlow(false)
 
-
-  fun createWorkspace() {
-    viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-      throwable.printStackTrace()
-      error.value = throwable
-      loading.value = false
-    }) {
-      error.value = null
-      loading.value = true
-      val result = useCaseCreateWorkspace(email.value, password.value, domain.value)
-      loading.value = false
-      navigateDashboard()
+    fun createWorkspace() {
+        viewModelScope.launch(
+            CoroutineExceptionHandler { _, throwable ->
+                throwable.printStackTrace()
+                error.value = throwable
+                loading.value = false
+            }
+        ) {
+            error.value = null
+            loading.value = true
+            val result = useCaseCreateWorkspace(email.value, password.value, domain.value)
+            loading.value = false
+            navigateDashboard()
+        }
     }
-  }
 }

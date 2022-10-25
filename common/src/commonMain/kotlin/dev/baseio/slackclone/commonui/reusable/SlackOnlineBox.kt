@@ -16,27 +16,28 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 
 @Composable
 fun SlackOnlineBox(
-  imageUrl: String,
-  parentModifier: Modifier = Modifier.size(34.dp),
-  imageModifier: Modifier = Modifier.size(28.dp),
-  onlineIndicator:Modifier = Modifier.size(12.dp),
-  onlineIndicatorParent:Modifier = Modifier.size(14.dp)
+    imageUrl: String,
+    parentModifier: Modifier = Modifier.size(34.dp),
+    imageModifier: Modifier = Modifier.size(28.dp),
+    onlineIndicator: Modifier = Modifier.size(12.dp),
+    onlineIndicatorParent: Modifier = Modifier.size(14.dp)
 ) {
-  Box(parentModifier) {
-    SlackImageBox(
-      imageModifier, imageUrl
-    )
+    Box(parentModifier) {
+        SlackImageBox(
+            imageModifier,
+            imageUrl
+        )
 
-    SlackCloneSurface(
-      shape = CircleShape,
-      border = BorderStroke(3.dp, color = SlackCloneColorProvider.colors.uiBackground),
-      modifier = onlineIndicatorParent.align(Alignment.BottomEnd),
-    ) {
-      Box(
-        modifier = onlineIndicator
-          .clip(CircleShape)
-          .background(Color.Green)
-      )
+        SlackCloneSurface(
+            shape = CircleShape,
+            border = BorderStroke(3.dp, color = SlackCloneColorProvider.colors.uiBackground),
+            modifier = onlineIndicatorParent.align(Alignment.BottomEnd)
+        ) {
+            Box(
+                modifier = onlineIndicator
+                    .clip(CircleShape)
+                    .background(Color.Green)
+            )
+        }
     }
-  }
 }

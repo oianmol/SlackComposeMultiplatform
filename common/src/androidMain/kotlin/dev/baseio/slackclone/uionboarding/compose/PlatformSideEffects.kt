@@ -8,37 +8,35 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 
 actual object PlatformSideEffects {
 
+    @Composable
+    actual fun GettingStartedScreen() {
+        val sysUiController = rememberSystemUiController()
 
-  @Composable
-  actual fun GettingStartedScreen() {
-    val sysUiController = rememberSystemUiController()
-
-    SideEffect {
-      sysUiController.setNavigationBarColor(color = SlackCloneColor)
-      sysUiController.setSystemBarsColor(color = SlackCloneColor)
+        SideEffect {
+            sysUiController.setNavigationBarColor(color = SlackCloneColor)
+            sysUiController.setSystemBarsColor(color = SlackCloneColor)
+        }
     }
-  }
 
-  @Composable
-  actual fun SkipTypingScreen() {
-    val sysUiController = rememberSystemUiController()
+    @Composable
+    actual fun SkipTypingScreen() {
+        val sysUiController = rememberSystemUiController()
 
-    SideEffect {
-      sysUiController.setNavigationBarColor(color = SlackCloneColor)
-      sysUiController.setSystemBarsColor(color = SlackCloneColor)
+        SideEffect {
+            sysUiController.setNavigationBarColor(color = SlackCloneColor)
+            sysUiController.setSystemBarsColor(color = SlackCloneColor)
+        }
     }
-  }
 
-  @Composable
-  actual fun PlatformColors(
-    topColor: Color,
-    bottomColor: Color
-  ) {
-    val sysUiController = rememberSystemUiController()
-    SideEffect {
-      sysUiController.setSystemBarsColor(color = topColor)
-      sysUiController.setNavigationBarColor(color = bottomColor)
+    @Composable
+    actual fun PlatformColors(
+        topColor: Color,
+        bottomColor: Color
+    ) {
+        val sysUiController = rememberSystemUiController()
+        SideEffect {
+            sysUiController.setSystemBarsColor(color = topColor)
+            sysUiController.setNavigationBarColor(color = bottomColor)
+        }
     }
-  }
-
 }

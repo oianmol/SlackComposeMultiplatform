@@ -8,26 +8,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
-import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
 fun MentionsReactionsUI() {
-  SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = Modifier.fillMaxSize()){
-    Column() {
-      MRTopAppBar()
+    SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = Modifier.fillMaxSize()) {
+        Column {
+            MRTopAppBar()
+        }
     }
-  }
 }
-
 
 @Composable
 private fun MRTopAppBar() {
-  SlackSurfaceAppBar(
-    title = {
-      Text(text = "Mentions & Reactions", style = SlackCloneTypography.h5.copy(color = Color.White, fontWeight = FontWeight.Bold))
-    },
-    backgroundColor = SlackCloneColorProvider.colors.appBarColor,
-  )
+    SlackSurfaceAppBar(
+        title = {
+            Text(text = "Mentions & Reactions", style = SlackCloneTypography.h5.copy(color = Color.White, fontWeight = FontWeight.Bold))
+        },
+        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+    )
 }

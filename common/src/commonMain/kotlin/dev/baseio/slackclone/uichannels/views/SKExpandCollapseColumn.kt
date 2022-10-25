@@ -11,95 +11,94 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
+import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.chatcore.data.ExpandCollapseModel
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SKExpandCollapseColumn(
-  expandCollapseModel: ExpandCollapseModel,
-  onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
-  onExpandCollapse: (isChecked: Boolean) -> Unit,
-  channels: List<DomainLayerChannels.SKChannel>,
-  onClickAdd: () -> Unit
+    expandCollapseModel: ExpandCollapseModel,
+    onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
+    onExpandCollapse: (isChecked: Boolean) -> Unit,
+    channels: List<DomainLayerChannels.SKChannel>,
+    onClickAdd: () -> Unit
 ) {
-  Column(
-    Modifier
-      .fillMaxWidth()
-      .padding(start = 16.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
-  ) {
-    Row(
-      Modifier
-        .fillMaxWidth()
-        .clickable {
-          onExpandCollapse(!expandCollapseModel.isOpen)
-        },
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
     ) {
-      Text(
-        text = expandCollapseModel.title,
-        style = SlackCloneTypography.subtitle2.copy(fontWeight = FontWeight.SemiBold),
-        modifier = Modifier.weight(1f)
-      )
-      AddButton(expandCollapseModel, onClickAdd)
-      ToggleButton(expandCollapseModel, onExpandCollapse)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onExpandCollapse(!expandCollapseModel.isOpen)
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = expandCollapseModel.title,
+                style = SlackCloneTypography.subtitle2.copy(fontWeight = FontWeight.SemiBold),
+                modifier = Modifier.weight(1f)
+            )
+            AddButton(expandCollapseModel, onClickAdd)
+            ToggleButton(expandCollapseModel, onExpandCollapse)
+        }
+        ChannelsList(expandCollapseModel, onItemClick, channels)
+        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
     }
-    ChannelsList(expandCollapseModel, onItemClick, channels)
-    Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-  }
 }
 
 @Composable
 private fun ColumnScope.ChannelsList(
-  expandCollapseModel: ExpandCollapseModel,
-  onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
-  channels: List<DomainLayerChannels.SKChannel>
+    expandCollapseModel: ExpandCollapseModel,
+    onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
+    channels: List<DomainLayerChannels.SKChannel>
 ) {
-  AnimatedVisibility(visible = expandCollapseModel.isOpen) {
-    Column {
-      repeat(channels.size) {
-        val slackChannel = channels[it]
-        SlackChannelItem(slackChannel = slackChannel) { skChannel ->
-          onItemClick(skChannel)
+    AnimatedVisibility(visible = expandCollapseModel.isOpen) {
+        Column {
+            repeat(channels.size) {
+                val slackChannel = channels[it]
+                SlackChannelItem(slackChannel = slackChannel) { skChannel ->
+                    onItemClick(skChannel)
+                }
+            }
         }
-      }
     }
-  }
 }
 
 @Composable
 private fun AddButton(
-  expandCollapseModel: ExpandCollapseModel,
-  onClickAdd: () -> Unit
+    expandCollapseModel: ExpandCollapseModel,
+    onClickAdd: () -> Unit
 ) {
-  if (expandCollapseModel.needsPlusButton) {
-    IconButton(onClick = onClickAdd) {
-      Icon(
-        imageVector = Icons.Default.Add,
-        contentDescription = null,
-        tint = SlackCloneColorProvider.colors.lineColor
-      )
+    if (expandCollapseModel.needsPlusButton) {
+        IconButton(onClick = onClickAdd) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = null,
+                tint = SlackCloneColorProvider.colors.lineColor
+            )
+        }
     }
-  }
-
 }
 
 @Composable
 private fun ToggleButton(
-  expandCollapseModel: ExpandCollapseModel,
-  onExpandCollapse: (isChecked: Boolean) -> Unit
+    expandCollapseModel: ExpandCollapseModel,
+    onExpandCollapse: (isChecked: Boolean) -> Unit
 ) {
-  IconToggleButton(checked = expandCollapseModel.isOpen, onCheckedChange = {
-    onExpandCollapse(it)
-  }) {
-    Icon(
-      imageVector = if (expandCollapseModel.isOpen) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-      contentDescription = null,
-      tint = SlackCloneColorProvider.colors.lineColor
-    )
-  }
+    IconToggleButton(checked = expandCollapseModel.isOpen, onCheckedChange = {
+        onExpandCollapse(it)
+    }) {
+        Icon(
+            imageVector = if (expandCollapseModel.isOpen) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+            contentDescription = null,
+            tint = SlackCloneColorProvider.colors.lineColor
+        )
+    }
 }

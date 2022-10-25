@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -39,141 +38,143 @@ import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 @Composable
 fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfileVM = component.viewModel) {
-  val user by profileVM.currentLoggedInUser.collectAsState()
+    val user by profileVM.currentLoggedInUser.collectAsState()
 
-  SlackCloneSurface(
-    color = SlackCloneColorProvider.colors.uiBackground,
-    modifier = Modifier.fillMaxSize()
-  ) {
-    Column(Modifier.verticalScroll(rememberScrollState())) {
-      SearchTopAppBar()
-      UserHeader(user)
-      Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
-        StatusBox()
-      }
-      SlackListItem(icon = Icons.Default.Notifications, title = "Pause Notifications")
-      SlackListItem(icon = Icons.Default.Person, title = "Set Away")
-      Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-      SlackListItem(icon = Icons.Default.FavoriteBorder, title = "Saved Items")
-      SlackListItem(icon = Icons.Default.Person, title = "View Profile")
-      SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
-      SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
-        profileVM.logout()
-        component.navigateOnboardingRoot()
-      })
+    SlackCloneSurface(
+        color = SlackCloneColorProvider.colors.uiBackground,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            SearchTopAppBar()
+            UserHeader(user)
+            Box(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
+                StatusBox()
+            }
+            SlackListItem(icon = Icons.Default.Notifications, title = "Pause Notifications")
+            SlackListItem(icon = Icons.Default.Person, title = "Set Away")
+            Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+            SlackListItem(icon = Icons.Default.FavoriteBorder, title = "Saved Items")
+            SlackListItem(icon = Icons.Default.Person, title = "View Profile")
+            SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
+            SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
+                profileVM.logout()
+                component.navigateOnboardingRoot()
+            })
+        }
     }
-  }
 }
 
 @Composable
 private fun SearchTopAppBar() {
-  SlackSurfaceAppBar(
-    title = {
-      Text(
-        text = "You",
-        style = SlackCloneTypography.h5.copy(
-          color = Color.White,
-          fontWeight = FontWeight.Bold
-        )
-      )
-    },
-    backgroundColor = SlackCloneColorProvider.colors.appBarColor,
-  )
+    SlackSurfaceAppBar(
+        title = {
+            Text(
+                text = "You",
+                style = SlackCloneTypography.h5.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        },
+        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+    )
 }
-
 
 @Composable
 fun SlackListItemTrailingView(
-  icon: ImageVector,
-  title: String,
-  trailingView: @Composable () -> Unit = {}
+    icon: ImageVector,
+    title: String,
+    trailingView: @Composable () -> Unit = {}
 ) {
-  Row(modifier = Modifier
-    .padding(12.dp)
-    .clickable { }) {
-    Icon(
-      imageVector = icon,
-      contentDescription = null,
-      tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
-      modifier = Modifier
-        .size(24.dp)
-        .padding(4.dp)
-    )
-    Text(
-      text = title,
-      style = SlackCloneTypography.subtitle1.copy(
-        color = SlackCloneColorProvider.colors.textPrimary.copy(
-          alpha = 0.8f
+    Row(
+        modifier = Modifier
+            .padding(12.dp)
+            .clickable { }
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
+            modifier = Modifier
+                .size(24.dp)
+                .padding(4.dp)
         )
-      ), modifier = Modifier
-        .weight(1f)
-        .padding(4.dp)
-    )
-    trailingView()
-  }
+        Text(
+            text = title,
+            style = SlackCloneTypography.subtitle1.copy(
+                color = SlackCloneColorProvider.colors.textPrimary.copy(
+                    alpha = 0.8f
+                )
+            ),
+            modifier = Modifier
+                .weight(1f)
+                .padding(4.dp)
+        )
+        trailingView()
+    }
 }
-
 
 @Composable
 fun UserHeader(user: DomainLayerUsers.SKUser?) {
-  Row(Modifier.padding(12.dp)) {
-    SlackImageBox(
-      Modifier.size(72.dp),
-      user?.avatarUrl
-        ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no"
-    )
-    Column(Modifier.padding(start = 8.dp)) {
-      Text(text = user?.name ?: "Anmol Verma", style = SlackCloneTypography.h6.copy(fontWeight = FontWeight.Bold))
-      Spacer(modifier = Modifier.padding(top = 4.dp))
-      Text(
-        text = "Active",
-        style = SlackCloneTypography.subtitle1.copy(
-          fontWeight = FontWeight.Bold,
-          color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f)
+    Row(Modifier.padding(12.dp)) {
+        SlackImageBox(
+            Modifier.size(72.dp),
+            user?.avatarUrl
+                ?: "https://lh3.googleusercontent.com/a-/AFdZucqng-xqztAwJco6kqpNaehNMg6JbX4C5rYwv9VsNQ=s576-p-rw-no"
         )
-      )
+        Column(Modifier.padding(start = 8.dp)) {
+            Text(text = user?.name ?: "Anmol Verma", style = SlackCloneTypography.h6.copy(fontWeight = FontWeight.Bold))
+            Spacer(modifier = Modifier.padding(top = 4.dp))
+            Text(
+                text = "Active",
+                style = SlackCloneTypography.subtitle1.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f)
+                )
+            )
+        }
     }
-  }
 }
 
 @Composable
 fun StatusBox() {
-  RoundedCornerBoxDecoration {
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Text("🌴", modifier = Modifier.padding(2.dp), style = SlackCloneTypography.subtitle1)
-      Text(
-        text = "Out on a vacation", style = SlackCloneTypography.body1.copy(
-          fontWeight = FontWeight.Normal,
-          color = SlackCloneColorProvider.colors.textPrimary
-        ), modifier = Modifier
-          .padding(2.dp)
-          .weight(1f),
-        textAlign = TextAlign.Start
-      )
-      Icon(
-        imageVector = Icons.Default.Clear,
-        contentDescription = null,
-        tint = SlackCloneColorProvider.colors.textPrimary
-      )
+    RoundedCornerBoxDecoration {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("🌴", modifier = Modifier.padding(2.dp), style = SlackCloneTypography.subtitle1)
+            Text(
+                text = "Out on a vacation",
+                style = SlackCloneTypography.body1.copy(
+                    fontWeight = FontWeight.Normal,
+                    color = SlackCloneColorProvider.colors.textPrimary
+                ),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .weight(1f),
+                textAlign = TextAlign.Start
+            )
+            Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = null,
+                tint = SlackCloneColorProvider.colors.textPrimary
+            )
+        }
     }
-  }
 }
-
 
 @Composable
 fun RoundedCornerBoxDecoration(content: @Composable () -> Unit) {
-  Box(
-    Modifier
-      .border(
-        width = 1.dp,
-        color = SlackCloneColorProvider.colors.lineColor,
-        shape = RoundedCornerShape(12.dp)
-      )
-      .padding(12.dp)
-  ) {
-    content()
-  }
+    Box(
+        Modifier
+            .border(
+                width = 1.dp,
+                color = SlackCloneColorProvider.colors.lineColor,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(12.dp)
+    ) {
+        content()
+    }
 }

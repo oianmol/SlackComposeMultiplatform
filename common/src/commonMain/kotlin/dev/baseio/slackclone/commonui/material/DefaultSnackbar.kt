@@ -12,37 +12,37 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
 fun DefaultSnackbar(
-  snackbarHostState: SnackbarHostState,
-  modifier: Modifier = Modifier,
-  onDismiss: () -> Unit = { }
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = { }
 ) {
-  SnackbarHost(
-    hostState = snackbarHostState,
-    snackbar = { data ->
-      Snackbar(
-        content = {
-          Text(
-            text = data.message,
-            style = SlackCloneTypography.body1,
-            color = SlackCloneColorProvider.colors.textPrimary,
+    SnackbarHost(
+        hostState = snackbarHostState,
+        snackbar = { data ->
+            Snackbar(
+                content = {
+                    Text(
+                        text = data.message,
+                        style = SlackCloneTypography.body1,
+                        color = SlackCloneColorProvider.colors.textPrimary
+                    )
+                },
+                action = {
+                    data.actionLabel?.let { actionLabel ->
+                        TextButton(onClick = onDismiss) {
+                            Text(
+                                text = actionLabel,
+                                color = SlackCloneColorProvider.colors.textPrimary,
+                                style = SlackCloneTypography.body2
+                            )
+                        }
+                    }
+                },
+                backgroundColor = Color.White
             )
         },
-        action = {
-          data.actionLabel?.let { actionLabel ->
-            TextButton(onClick = onDismiss) {
-              Text(
-                text = actionLabel,
-                color = SlackCloneColorProvider.colors.textPrimary,
-                style = SlackCloneTypography.body2
-              )
-            }
-          }
-        },
-        backgroundColor = Color.White
-      )
-    },
-    modifier = modifier
-      .fillMaxWidth()
-      .wrapContentHeight(Alignment.Bottom)
-  )
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(Alignment.Bottom)
+    )
 }

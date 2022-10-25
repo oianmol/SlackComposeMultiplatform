@@ -5,11 +5,11 @@ import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegate
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 
 class UserProfileVM(
-  private val userProfileDelegate: UserProfileDelegate,
-  coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  navigateOnboardingRoot: () -> Unit,
+    private val userProfileDelegate: UserProfileDelegate,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    navigateOnboardingRoot: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider), UserProfileDelegate by userProfileDelegate {
-  init {
-    getCurrentUser(viewModelScope, navigateOnboardingRoot)
-  }
+    init {
+        getCurrentUser(viewModelScope, navigateOnboardingRoot)
+    }
 }

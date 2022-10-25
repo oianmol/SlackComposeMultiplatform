@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uionboarding.compose
 
+import PainterRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -24,169 +25,171 @@ import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceVM
 
 @Composable
 fun CreateWorkspaceScreen(
-  component: CreateWorkspaceComponent,
-  viewModel: CreateWorkspaceVM = component.createWorkspaceVM
+    component: CreateWorkspaceComponent,
+    viewModel: CreateWorkspaceVM = component.createWorkspaceVM
 ) {
-  val scaffoldState = rememberScaffoldState()
-  val size = getWindowSizeClass(LocalWindow.current)
-  PlatformSideEffects.GettingStartedScreen()
+    val scaffoldState = rememberScaffoldState()
+    val size = getWindowSizeClass(LocalWindow.current)
+    PlatformSideEffects.GettingStartedScreen()
 
-  Scaffold(
-    backgroundColor = SlackCloneColor,
-    contentColor = SlackCloneColorProvider.colors.textSecondary,
-    modifier = Modifier.fillMaxSize(), scaffoldState = scaffoldState, snackbarHost = {
-      scaffoldState.snackbarHostState
-    }
-  ) { innerPadding ->
-    Box(modifier = Modifier.padding(innerPadding)) {
-      SlackCloneSurface(
-        color = SlackCloneColor,
-        modifier = Modifier
-          .padding(28.dp)
-      ) {
-        when (size) {
-          WindowSize.Phones -> CreateWorkspacePhoneLayout(component)
-          else -> {
-            CreateWorkspaceLargeScreenLayout(component)
-          }
+    Scaffold(
+        backgroundColor = SlackCloneColor,
+        contentColor = SlackCloneColorProvider.colors.textSecondary,
+        modifier = Modifier.fillMaxSize(),
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            scaffoldState.snackbarHostState
         }
-      }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            SlackCloneSurface(
+                color = SlackCloneColor,
+                modifier = Modifier
+                    .padding(28.dp)
+            ) {
+                when (size) {
+                    WindowSize.Phones -> CreateWorkspacePhoneLayout(component)
+                    else -> {
+                        CreateWorkspaceLargeScreenLayout(component)
+                    }
+                }
+            }
+        }
     }
-
-  }
 }
 
 @Composable
 fun Title(title: String) {
-  Text(
-    title,
-    style = SlackCloneTypography.h5.copy(
-      fontWeight = FontWeight.Bold,
-      color = SlackCloneColorProvider.colors.appBarTextTitleColor
+    Text(
+        title,
+        style = SlackCloneTypography.h5.copy(
+            fontWeight = FontWeight.Bold,
+            color = SlackCloneColorProvider.colors.appBarTextTitleColor
+        )
     )
-  )
 }
 
 @Composable
 fun SubTitle(text: String) {
-  Text(
-    text,
-    style = SlackCloneTypography.h6.copy(color = SlackCloneColorProvider.colors.appBarTextSubTitleColor)
-  )
+    Text(
+        text,
+        style = SlackCloneTypography.h6.copy(color = SlackCloneColorProvider.colors.appBarTextSubTitleColor)
+    )
 }
 
 @Composable
 fun Heading(isLogin: Boolean) {
-  Column(Modifier.fillMaxWidth()) {
-    Title(title = if (isLogin) "Login to Slack" else "Create a new workspace")
-    SubTitle(text = if (isLogin) "Please provide your credentials" else "To make a workspace from scratch, please confirm your email address.")
-  }
+    Column(Modifier.fillMaxWidth()) {
+        Title(title = if (isLogin) "Login to Slack" else "Create a new workspace")
+        SubTitle(text = if (isLogin) "Please provide your credentials" else "To make a workspace from scratch, please confirm your email address.")
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
-  val email by createWorkspaceComponent.createWorkspaceVM.email.collectAsState()
-  val name by createWorkspaceComponent.createWorkspaceVM.domain.collectAsState()
-  val password by createWorkspaceComponent.createWorkspaceVM.password.collectAsState()
-  val error by createWorkspaceComponent.createWorkspaceVM.error.collectAsState()
-  val loading by createWorkspaceComponent.createWorkspaceVM.loading.collectAsState()
-  Column {
-    EmailTF(Modifier.padding(4.dp), email) { emailNew ->
-      createWorkspaceComponent.createWorkspaceVM.email.value = emailNew
+    val email by createWorkspaceComponent.createWorkspaceVM.email.collectAsState()
+    val name by createWorkspaceComponent.createWorkspaceVM.domain.collectAsState()
+    val password by createWorkspaceComponent.createWorkspaceVM.password.collectAsState()
+    val error by createWorkspaceComponent.createWorkspaceVM.error.collectAsState()
+    val loading by createWorkspaceComponent.createWorkspaceVM.loading.collectAsState()
+    Column {
+        EmailTF(Modifier.padding(4.dp), email) { emailNew ->
+            createWorkspaceComponent.createWorkspaceVM.email.value = emailNew
+        }
+        PasswordTF(Modifier.padding(4.dp), password) { passwordNew ->
+            createWorkspaceComponent.createWorkspaceVM.password.value = passwordNew
+        }
+        WorkspaceView(Modifier.padding(4.dp), name, createWorkspaceComponent)
+        Spacer(Modifier.size(4.dp))
+        ErrorText(Modifier.padding(4.dp), error)
+        if (loading) {
+            CircularProgressIndicator(color = SlackGreen)
+        } else {
+            CreateWorkspaceButton(
+                createWorkspaceComponent
+            )
+        }
     }
-    PasswordTF(Modifier.padding(4.dp), password) { passwordNew ->
-      createWorkspaceComponent.createWorkspaceVM.password.value = passwordNew
-    }
-    WorkspaceView(Modifier.padding(4.dp), name, createWorkspaceComponent)
-    Spacer(Modifier.size(4.dp))
-    ErrorText(Modifier.padding(4.dp), error)
-    if (loading) CircularProgressIndicator(color = SlackGreen) else CreateWorkspaceButton(
-      createWorkspaceComponent
-    )
-  }
-
-
 }
 
 @Composable
 fun ErrorText(modifier: Modifier, error: Throwable?) {
-  Text(error?.message ?: "", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
+    Text(error?.message ?: "", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
 }
 
 @Composable
 private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWorkspaceComponent) {
-  Row(
-    modifier = modifier,
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Start
-  ) {
-    Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(8.dp))
-    TextHttps()
-    WorkspaceTF(name) { nameNew ->
-      viewModel.createWorkspaceVM.domain.value = nameNew
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(8.dp))
+        TextHttps()
+        WorkspaceTF(name) { nameNew ->
+            viewModel.createWorkspaceVM.domain.value = nameNew
+        }
+        TextSlackCom()
     }
-    TextSlackCom()
-  }
 }
 
 @Composable
 fun CreateWorkspaceButton(viewModel: CreateWorkspaceComponent) {
-  Button(
-    onClick = {
-      viewModel.createWorkspaceVM.createWorkspace()
-    },
-    Modifier
-      .fillMaxWidth()
-      .height(40.dp),
-    colors = ButtonDefaults.buttonColors(backgroundColor = SlackGreen)
-  ) {
-    Text(
-      text = if (viewModel.isLogin()) "Let me in..." else "Create Workspace",
-      style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
-    )
-  }
+    Button(
+        onClick = {
+            viewModel.createWorkspaceVM.createWorkspace()
+        },
+        Modifier
+            .fillMaxWidth()
+            .height(40.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = SlackGreen)
+    ) {
+        Text(
+            text = if (viewModel.isLogin()) "Let me in..." else "Create Workspace",
+            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+        )
+    }
 }
 
 @Composable
 fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent) {
-  Row(
-    Modifier.fillMaxSize(),
-    horizontalArrangement = Arrangement.Center,
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    Column(
-      Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight(),
-      verticalArrangement = Arrangement.SpaceAround,
-      horizontalAlignment = Alignment.CenterHorizontally,
+    Row(
+        Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-      Heading(viewModel.isLogin())
-      WorkspaceCreateForm(viewModel)
+        Column(
+            Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Heading(viewModel.isLogin())
+            WorkspaceCreateForm(viewModel)
+        }
+        Column(
+            Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier.size(256.dp),
+                painter = PainterRes.gettingStarted(),
+                contentDescription = null,
+                contentScale = ContentScale.Fit
+            )
+        }
     }
-    Column(
-      Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight(),
-      verticalArrangement = Arrangement.SpaceAround,
-      horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-      Image(
-        modifier = Modifier.size(256.dp),
-        painter = PainterRes.gettingStarted(),
-        contentDescription = null,
-        contentScale = ContentScale.Fit
-      )
-    }
-  }
-
 }
 
 @Composable
 fun CreateWorkspacePhoneLayout(viewModel: CreateWorkspaceComponent) {
-  Column(
-    Modifier.padding(8.dp).fillMaxSize(),
-    verticalArrangement = Arrangement.SpaceAround,
-    horizontalAlignment = Alignment.CenterHorizontally,
-  ) {
-    Heading(viewModel.isLogin())
-    WorkspaceCreateForm(viewModel)
-  }
+    Column(
+        Modifier.padding(8.dp).fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceAround,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Heading(viewModel.isLogin())
+        WorkspaceCreateForm(viewModel)
+    }
 }

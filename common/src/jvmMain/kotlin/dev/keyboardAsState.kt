@@ -7,6 +7,6 @@ import androidx.compose.runtime.remember
 
 @Composable
 actual fun keyboardAsState(): State<Keyboard> {
-  val keyboardState = remember { mutableStateOf<Keyboard>(Keyboard.HardwareKeyboard) }
-  return keyboardState
+    val keyboardState = remember { mutableStateOf<Keyboard>(Keyboard.HardwareKeyboard) }
+    return keyboardState
 }

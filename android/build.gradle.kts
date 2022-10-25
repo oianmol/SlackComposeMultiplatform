@@ -1,54 +1,46 @@
 plugins {
-  id("org.jetbrains.compose") version "1.2.0"
-  id("com.android.application")
-  kotlin("android")
+    id("org.jetbrains.compose") version Lib.AndroidX.COMPOSE_VERSION
+    id("com.android.application")
+    kotlin("android")
 }
 
-group = "dev.baseio.slackclone"
+group = ProjectProperties.APPLICATION_ID
 version = "1.0"
 
 repositories {
-  jcenter()
-  mavenLocal()
-}
-
-object Decompose {
-  val VERSION = "1.0.0-alpha-06"
-  val core = "com.arkivanov.decompose:decompose:${VERSION}"
+    jcenter()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-  implementation(project(":common"))
-  implementation("androidx.activity:activity-compose:1.6.0")
-  implementation("androidx.core:core-splashscreen:1.0.0")
-  implementation("io.grpc:grpc-okhttp:1.49.2")
-  api("dev.baseio.slackclone:slack_kmp_data-android:1.0")
-  api(Decompose.core)
-  // Test rules and transitive dependencies:
-  androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.1")
-  // Needed for createComposeRule, but not createAndroidComposeRule:
-  debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.1")
+    api(Lib.Decompose.core)
+    implementation(project(Lib.Project.common))
+    implementation(Lib.AndroidX.ACTIVITY_COMPOSE)
+    implementation(Lib.AndroidX.SPLASH_SCREEN)
+    implementation(Lib.Grpc.OKHTTP)
+    api(Lib.Project.SLACK_DATA_ANDROID)
 }
 
 android {
-  compileSdk = 33
-  packagingOptions {
-    resources.excludes.add("google/protobuf/*.proto")
-  }
-  defaultConfig {
-    versionCode = 1
-    versionName = "1.0"
-    applicationId = "dev.baseio.slackclone"
-    minSdk = 24
-    targetSdk = 33
-  }
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-  }
-  buildTypes {
-    getByName("release") {
-      isMinifyEnabled = false
+    compileSdk = ProjectProperties.COMPILE_SDK
+    packagingOptions {
+        resources.excludes.add("google/protobuf/*.proto")
     }
-  }
+    defaultConfig {
+        versionCode = 1
+        versionName = "1.0"
+        applicationId = "dev.baseio.slackclone"
+        minSdk = ProjectProperties.MIN_SDK
+        targetSdk = ProjectProperties.TARGET_SDK
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+        }
+    }
 }

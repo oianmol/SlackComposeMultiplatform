@@ -6,10 +6,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 
-abstract class SlackViewModel(coroutineDispatcherProvider: CoroutineDispatcherProvider) : InstanceKeeper.Instance  {
-  val viewModelScope = CoroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
+abstract class SlackViewModel(coroutineDispatcherProvider: CoroutineDispatcherProvider) : InstanceKeeper.Instance {
+    val viewModelScope = CoroutineScope(coroutineDispatcherProvider.main + SupervisorJob())
 
-  override fun onDestroy() {
-    viewModelScope.cancel() // Cancel the scope when the instance is destroyed
-  }
+    override fun onDestroy() {
+        viewModelScope.cancel() // Cancel the scope when the instance is destroyed
+    }
 }

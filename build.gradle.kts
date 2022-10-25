@@ -7,14 +7,26 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
-        classpath("com.android.tools.build:gradle:7.2.2")
-        classpath("com.squareup.sqldelight:gradle-plugin:1.5.3")
+        classpath(BuildPlugins.ANDROID_TOOLS_BUILD_GRADLE)
+        classpath(BuildPlugins.KOTLIN_GRADLE_PLUGIN)
+        classpath(BuildPlugins.SQLDELIGHT)
+        classpath(BuildPlugins.KTLINT_GRADLE_PLUGIN)
     }
 }
 
 group = "dev.baseio.slackclone"
 version = "1.0"
+
+subprojects {
+    apply(plugin = BuildPlugins.KTLINT)
+}
+
+apply(from = teamPropsFile("git-hooks.gradle.kts"))
+
+fun teamPropsFile(propsFile: String): File {
+    val teamPropsDir = file("team-props")
+    return File(teamPropsDir, propsFile)
+}
 
 allprojects {
     repositories {

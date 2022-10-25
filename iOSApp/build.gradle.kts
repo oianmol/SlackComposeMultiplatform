@@ -1,107 +1,95 @@
-import org.jetbrains.compose.compose
+import org.jetbrains.compose.experimental.dsl.IOSDevices
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.compose.experimental.dsl.IOSDevices
 
 plugins {
-  kotlin("multiplatform")
-  id("com.squareup.sqldelight")
-  id("org.jetbrains.compose") version "1.2.0"
+    kotlin(BuildPlugins.MULTIPLATFORM)
+    id(BuildPlugins.SQLDELIGHT_ID)
+    id(BuildPlugins.COMPOSE_ID) version Lib.AndroidX.COMPOSE_VERSION
 }
 
 version = "1.0.0"
-val ktor_version = "2.1.0"
-val slackDataVersion: String by project
 
 repositories {
-  mavenCentral()
-  mavenLocal()
-  maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-  google()
-}
-
-
-object Decompose {
-  val VERSION = "1.0.0-alpha-06"
-  val core = "com.arkivanov.decompose:decompose:${VERSION}"
+    mavenCentral()
+    mavenLocal()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    google()
 }
 
 kotlin {
-  listOf(iosX64("uikitX64"), iosArm64("uikitArm64")).forEach {
-    it.binaries {
-      executable {
-        entryPoint = "main"
-        freeCompilerArgs += listOf(
-          "-linker-option", "-framework", "-linker-option", "Metal",
-          "-linker-option", "-framework", "-linker-option", "CoreText",
-          "-linker-option", "-framework", "-linker-option", "CoreGraphics"
-        )
-      }
+    listOf(iosX64("uikitX64"), iosArm64("uikitArm64")).forEach {
+        it.binaries {
+            executable {
+                entryPoint = "main"
+                freeCompilerArgs += listOf(
+                    "-linker-option", "-framework", "-linker-option", "Metal",
+                    "-linker-option", "-framework", "-linker-option", "CoreText",
+                    "-linker-option", "-framework", "-linker-option", "CoreGraphics"
+                )
+            }
+        }
     }
-  }
 
-
-  sourceSets {
-    val uikitMain by creating {
-      dependencies {
-        implementation(project(":common"))
-        implementation(compose.ui)
-        implementation(compose.foundation)
-        implementation(compose.material)
-        implementation(compose.runtime)
-        implementation("io.ktor:ktor-client-darwin:$ktor_version")
-        implementation("com.squareup.sqldelight:native-driver:1.5.3")
-        implementation(Decompose.core)
-        api("dev.baseio.slackclone:slack_kmp_data:1.0")
-
-      }
+    sourceSets {
+        val uikitMain by creating {
+            dependencies {
+                implementation(project(Lib.Project.common))
+                implementation(compose.ui)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.runtime)
+                implementation(Lib.Networking.KTOR_DARWIN)
+                implementation(Lib.Persistence.SQLDELIGHT_NATIVE)
+                implementation(Lib.Decompose.core)
+                api(Lib.Project.SLACK_DATA_COMMON)
+            }
+        }
+        val uikitX64Main by getting {
+            dependsOn(uikitMain)
+            dependencies {
+                api(Lib.Project.SLACK_DATA_IOSX64)
+            }
+        }
+        val uikitArm64Main by getting {
+            dependsOn(uikitMain)
+            dependencies {
+                api(Lib.Project.SLACK_DATA_IOSARM64)
+            }
+        }
     }
-    val uikitX64Main by getting {
-      dependsOn(uikitMain)
-      dependencies {
-        api("dev.baseio.slackclone:slack_kmp_data-iosx64:1.0")
-      }
-    }
-    val uikitArm64Main by getting {
-      dependsOn(uikitMain)
-      dependencies {
-        api("dev.baseio.slackclone:slack_kmp_data-iosarm64:1.0")
-      }
-    }
-  }
 }
 
-
 compose.experimental {
-  uikit.application {
-    bundleIdPrefix = "dev.baseio"
-    projectName = "SlackComposeClone"
-    deployConfigurations {
-      simulator("IPhone13Pro") {
-        //Usage: ./gradlew iosDeployIPhone8Debug
-        device = IOSDevices.IPHONE_13_PRO
-      }
-      simulator("IPad") {
-        //Usage: ./gradlew iosDeployIPadDebug
-        device = IOSDevices.IPAD_MINI_6th_Gen
-      }
-      connectedDevice("Device") {
-        //Usage: ./gradlew iosDeployDeviceRelease
-        this.teamId = "***"
-      }
+    uikit.application {
+        bundleIdPrefix = "dev.baseio"
+        projectName = "SlackComposeClone"
+        deployConfigurations {
+            simulator("IPhone13Pro") {
+                // Usage: ./gradlew iosDeployIPhone8Debug
+                device = IOSDevices.IPHONE_13_PRO
+            }
+            simulator("IPad") {
+                // Usage: ./gradlew iosDeployIPadDebug
+                device = IOSDevices.IPAD_MINI_6th_Gen
+            }
+            connectedDevice("Device") {
+                // Usage: ./gradlew iosDeployDeviceRelease
+                this.teamId = "***"
+            }
+        }
     }
-  }
 }
 
 tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "11"
 }
 
 kotlin {
-  targets.withType<KotlinNativeTarget> {
-    binaries.all {
-      // TODO: the current compose binary surprises LLVM, so disable checks for now.
-      freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
+    targets.withType<KotlinNativeTarget> {
+        binaries.all {
+            // TODO: the current compose binary surprises LLVM, so disable checks for now.
+            freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
+        }
     }
-  }
 }

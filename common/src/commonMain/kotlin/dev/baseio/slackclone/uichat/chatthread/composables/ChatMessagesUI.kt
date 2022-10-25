@@ -1,13 +1,14 @@
 package dev.baseio.slackclone.uichat.chatthread.composables
 
-import mainDispatcher
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,63 +23,64 @@ import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @Composable
 fun ChatMessagesUI(
-  screenComponent: ChatScreenComponent,
-  viewModel: ChatViewModel = screenComponent.chatViewModel,
-  modifier: Modifier,
-  alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
+    screenComponent: ChatScreenComponent,
+    viewModel: ChatViewModel = screenComponent.chatViewModel,
+    modifier: Modifier,
+    alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
 ) {
-  val messages by viewModel.chatMessagesFlow.subscribeAsState()
-  val members by viewModel.channelMembers.subscribeAsState()
-  val listState = rememberLazyListState()
-  val threshold = 3
+    val messages by viewModel.chatMessagesFlow.subscribeAsState()
+    val members by viewModel.channelMembers.subscribeAsState()
+    val listState = rememberLazyListState()
+    val threshold = 3
 
-  LazyColumn(state = listState, reverseLayout = true, modifier = modifier) {
-    var lastDrawnMessage: String?
-    for (messageIndex in messages.indices) {
-      val message = messages[messageIndex]
-      item {
-        ChatMessage(message, alertLongClick, members.firstOrNull { it.uuid == message.sender }, onClickHash = {
-          viewModel.onClickHash(it)
-        })
-        if (messageIndex + threshold >= messages.lastIndex) {
-          SideEffect {
-            viewModel.skMessagePagination.loadNextPage()
-          }
+    LazyColumn(state = listState, reverseLayout = true, modifier = modifier) {
+        var lastDrawnMessage: String?
+        for (messageIndex in messages.indices) {
+            val message = messages[messageIndex]
+            item {
+                ChatMessage(message, alertLongClick, members.firstOrNull { it.uuid == message.sender }, onClickHash = {
+                    viewModel.onClickHash(it)
+                })
+                if (messageIndex + threshold >= messages.lastIndex) {
+                    SideEffect {
+                        viewModel.skMessagePagination.loadNextPage()
+                    }
+                }
+            }
+            lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
+            if (!isLastMessage(messageIndex, messages)) {
+                val nextMessageMonth =
+                    messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
+                if (nextMessageMonth != lastDrawnMessage) {
+                    item {
+                        ChatHeader(message.createdDate)
+                    }
+                }
+            } else {
+                item {
+                    ChatHeader(message.createdDate)
+                }
+            }
         }
-      }
-      lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
-      if (!isLastMessage(messageIndex, messages)) {
-        val nextMessageMonth =
-          messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
-        if (nextMessageMonth != lastDrawnMessage) {
-          item {
-            ChatHeader(message.createdDate)
-          }
-        }
-      } else {
-        item {
-          ChatHeader(message.createdDate)
-        }
-      }
     }
-  }
 }
 
 private fun isLastMessage(
-  messageIndex: Int,
-  messages: List<DomainLayerMessages.SKMessage>
+    messageIndex: Int,
+    messages: List<DomainLayerMessages.SKMessage>
 ) = messageIndex == messages.size.minus(1)
 
 @Composable
 private fun ChatHeader(createdDate: Long) {
-  Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
-    Text(
-      createdDate.calendar().formattedMonthDate(),
-      style = SlackCloneTypography.subtitle2.copy(
-        fontWeight = FontWeight.Bold,
-        color = SlackCloneColorProvider.colors.textPrimary
-      ), modifier = Modifier.padding(4.dp)
-    )
-    Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
-  }
+    Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
+        Text(
+            createdDate.calendar().formattedMonthDate(),
+            style = SlackCloneTypography.subtitle2.copy(
+                fontWeight = FontWeight.Bold,
+                color = SlackCloneColorProvider.colors.textPrimary
+            ),
+            modifier = Modifier.padding(4.dp)
+        )
+        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+    }
 }

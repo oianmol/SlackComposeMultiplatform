@@ -9,11 +9,10 @@ import coil.compose.AsyncImage
 
 @Composable
 actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
-  AsyncImage(
-    model = imageUrl,
-    modifier = modifier.clip(RoundedCornerShape(25)),
-    contentDescription = null,
-    contentScale = ContentScale.FillBounds
-  )
-
+    AsyncImage(
+        model = imageUrl,
+        modifier = modifier.clip(RoundedCornerShape(25)),
+        contentDescription = null,
+        contentScale = ContentScale.FillBounds
+    )
 }

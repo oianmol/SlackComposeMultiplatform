@@ -10,30 +10,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class SideNavVM(
-  private val useCaseFetchWorkspaces: UseCaseGetWorkspaces,
-  private val useCaseLastSelectedWorkspace: UseCaseSetLastSelectedWorkspace,
-  private val userProfileDelegate: UserProfileDelegate,
-  coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  navigateOnboardingRoot: () -> Unit,
+    private val useCaseFetchWorkspaces: UseCaseGetWorkspaces,
+    private val useCaseLastSelectedWorkspace: UseCaseSetLastSelectedWorkspace,
+    private val userProfileDelegate: UserProfileDelegate,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    navigateOnboardingRoot: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider), UserProfileDelegate by userProfileDelegate {
-  var workspacesFlow = MutableStateFlow(flow())
-    private set
+    var workspacesFlow = MutableStateFlow(flow())
+        private set
 
-  init {
-    getCurrentUser(viewModelScope, navigateOnboardingRoot)
-  }
-
-  fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
-    return useCaseFetchWorkspaces.invoke()
-  }
-
-  fun select(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
-    viewModelScope.launch {
-      useCaseLastSelectedWorkspace.invoke(skWorkspace)
+    init {
+        getCurrentUser(viewModelScope, navigateOnboardingRoot)
     }
-  }
 
-  override fun logout() {
-    userProfileDelegate.logout()
-  }
+    fun flow(): Flow<List<DomainLayerWorkspaces.SKWorkspace>> {
+        return useCaseFetchWorkspaces.invoke()
+    }
+
+    fun select(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
+        viewModelScope.launch {
+            useCaseLastSelectedWorkspace.invoke(skWorkspace)
+        }
+    }
+
+    override fun logout() {
+        userProfileDelegate.logout()
+    }
 }
