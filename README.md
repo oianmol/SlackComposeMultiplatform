@@ -2,6 +2,20 @@
 
 ### This is a jetpack compose Slack Client & Server Clone written in Kotlin and for Multiplatform.
 
+
+## 🏗️️ Built with 💪🏼 using Jetpack Compose And Kotlin Multiplatform 😁
+
+| What                                    | How                                                                                                                                                                             |
+|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 🎭 User Interface (Android,Desktop,iOS) | [Jetpack Compose JB!](https://developer.android.com/jetpack/compose)                                                                                                            |
+| 🏗 Architecture                         | [Decompose + Clean Architecture](https://arkivanov.github.io/Decompose/)                                                                                                        |
+| 💉 DI (Android)                         | [Koin](https://insert-koin.io/)                                                                                                                                                 |
+| 🌊 Async                                | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
+| 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
+| 📄 Pagination                           | [moko-paging](https://github.com/icerockdev/moko-paging)                                                                                                                        |
+| 🪔 Lint                                 | [ktlint gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle) , [ktlint Pinterest](https://github.com/pinterest/ktlint)                                                  |
+
+
 ### Dependent Projects
 
 1. [Protos](https://github.com/oianmol/slack_multiplatform_protos)
@@ -39,17 +53,6 @@ Video Demo for Jetpack Compose for iOS
 
 https://user-images.githubusercontent.com/32521663/189109199-6743606c-0e28-4d10-b7ba-61ec3641ed55.mp4
 
-
-## 🏗️️ Built with ❤️ using Jetpack Compose 😁
-
-| What                                    | How                                                                                                                                                                             |
-|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 🎭 User Interface (Android,Desktop,iOS) | [Jetpack Compose JB!](https://developer.android.com/jetpack/compose)                                                                                                            |
-| 🏗 Architecture                         | [Decompose + Clean Architecture](https://arkivanov.github.io/Decompose/)                                                                                                        |
-| 💉 DI (Android)                         | [Koin](https://insert-koin.io/)                                                                                                                                                 |
-| 🌊 Async                                | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
-| 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
-| 📄 Pagination                           | [moko-paging](https://github.com/icerockdev/moko-paging)                                                                                                                       |
 
 
 MIT License
