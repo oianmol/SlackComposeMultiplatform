@@ -7,6 +7,6 @@ tasks {
                 from(File(rootProject.rootDir, "scripts/git-hooks/pre-push"))
                 into(File(rootProject.rootDir, ".git/hooks"))
                 fileMode = 777*/
-        getByPath(":app:preBuild").dependsOn(":installGitHook")
+        getByPath(":common:preBuild").dependsOn(":installGitHook")
     }
 }

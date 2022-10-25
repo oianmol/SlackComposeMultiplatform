@@ -72,6 +72,7 @@ object Lib {
         const val IOSX64 = "iosx64"
         const val android = "android"
         const val ARM64 = "iosarm64"
+        const val IOSSIMULATOR64 = "iossimulatorarm64"
         const val slackData = "dev.baseio.slackclone:slack_kmp_data"
         const val slackDomain = "dev.baseio.slackclone:slack_kmp_domain"
 
@@ -79,12 +80,14 @@ object Lib {
         const val SLACK_DOMAIN_ANDROID = "$slackDomain-$android:1.0"
         const val SLACK_DOMAIN_IOSX64 = "$slackDomain-$IOSX64:1.0"
         const val SLACK_DOMAIN_IOSARM64 = "$slackDomain-$ARM64:1.0"
+        const val SLACK_DOMAIN_IOSSIMULATORARM64 = "$slackDomain-$IOSSIMULATOR64:1.0"
         const val SLACK_DOMAIN_JVM = "$slackDomain-jvm:1.0"
 
         const val SLACK_DATA_COMMON = "$slackData:1.0"
         const val SLACK_DATA_ANDROID = "$slackData-$android:1.0"
         const val SLACK_DATA_IOSX64 = "$slackData-$IOSX64:1.0"
         const val SLACK_DATA_IOSARM64 = "$slackData-$ARM64:1.0"
+        const val SLACK_DATA_IOSSIMULATORARM64 = "$slackData-$IOSSIMULATOR64:1.0"
         const val SLACK_DATA_JVM = "$slackData-jvm:1.0"
         const val common = ":common"
     }

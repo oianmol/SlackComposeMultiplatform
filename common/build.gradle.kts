@@ -31,6 +31,7 @@ kotlin {
         jvmDependencies(this@kotlin)
         if (iosEnabled) {
             iosArmDependencies()
+            iosSimulatorArmDependencies()
             iosX64Dependencies()
         }
     }
@@ -69,7 +70,7 @@ fun KotlinMultiplatformExtension.targets(iosEnabled: Boolean = true) {
     }
     if (iosEnabled) {
         iosArm64()
-        // iosSimulatorArm64()
+        iosSimulatorArm64()
         iosX64()
     }
 }
@@ -133,6 +134,28 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         dependencies {
             implementation(Lib.Project.SLACK_DOMAIN_IOSARM64)
             implementation(Lib.Project.SLACK_DATA_IOSARM64)
+            implementation(Lib.Decompose.composejb)
+        }
+    }
+}
+
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosSimulatorArmDependencies(){
+    val iosSimulatorArm64Main by getting {
+        dependencies {
+            implementation(Lib.Project.SLACK_DOMAIN_IOSSIMULATORARM64)
+            implementation(Lib.Project.SLACK_DATA_IOSSIMULATORARM64)
+            implementation(Lib.Decompose.composejb)
+        }
+    }
+}
+
+
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosX64Dependencies() {
+    val iosX64Main by getting {
+        dependencies {
+            implementation(Lib.Project.SLACK_DOMAIN_IOSX64)
+            implementation(Lib.Project.SLACK_DATA_IOSX64)
+            implementation(Lib.Decompose.composejb)
         }
     }
 }
@@ -150,15 +173,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Lib.Multiplatform.kamelImage)
             api(kotlinMultiplatformExtension.compose.preview)
             implementation(Deps.Koin.core_jvm)
-        }
-    }
-}
-
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosX64Dependencies() {
-    val iosX64Main by getting {
-        dependencies {
-            implementation(Lib.Project.SLACK_DOMAIN_IOSX64)
-            implementation(Lib.Project.SLACK_DATA_IOSX64)
+            implementation(Lib.Decompose.composejb)
         }
     }
 }
