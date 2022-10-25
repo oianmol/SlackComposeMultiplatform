@@ -53,7 +53,6 @@ class DashboardVM(
             workspace?.uuid?.let { workspaceId ->
                 cancelJobIfWorkspaceChanged(workspaceId)
                 lastWorkspace = workspaceId
-                val user = skKeyValueData.skUser() // TODO is this the best way to fetch user ?
                 observeForUserData(workspaceId)
                 viewModelScope.launch {
                     useCaseFetchChannels.invoke(workspaceId, 0, 20)

@@ -115,7 +115,6 @@ private fun MessageTFRow(
     viewModel: ChatViewModel,
     modifier: Modifier
 ) {
-    val keyboard by keyboardAsState()
 
     val mentionText by viewModel.message.collectAsState(mainDispatcher)
 
@@ -130,7 +129,7 @@ private fun MessageTFRow(
         ) {
             MentionsTextField(
                 mentionText = mentionText,
-                onSpanUpdate = { text, spans, range ->
+                onSpanUpdate = { _, spans, range ->
                     viewModel.setSpanInfo(spans)
                     spans.firstOrNull { infos ->
                         range.intersects(infos.range) || range.end == infos.range.end

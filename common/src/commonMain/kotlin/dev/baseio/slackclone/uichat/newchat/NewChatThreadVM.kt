@@ -8,6 +8,7 @@ import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapConcat
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 class NewChatThreadVM(
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,

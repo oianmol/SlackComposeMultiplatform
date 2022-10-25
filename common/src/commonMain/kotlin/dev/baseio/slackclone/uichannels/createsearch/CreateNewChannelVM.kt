@@ -31,7 +31,7 @@ class CreateNewChannelVM(
 
     fun createChannel() {
         viewModelScope.launch(
-            CoroutineExceptionHandler { coroutineContext, throwable ->
+            CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
             }
         ) {

@@ -26,7 +26,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uidashboard.home.search.SearchCancel
 
 @Composable
-fun SearchMessagesUI(searchMessagesComponent: SearchMessagesComponent) {
+fun SearchMessagesUI() {
     SlackCloneSurface(
         color = SlackCloneColorProvider.colors.uiBackground,
         modifier = Modifier.fillMaxSize()

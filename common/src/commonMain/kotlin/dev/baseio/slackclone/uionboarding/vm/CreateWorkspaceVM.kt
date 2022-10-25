@@ -28,7 +28,7 @@ class CreateWorkspaceVM(
         ) {
             error.value = null
             loading.value = true
-            val result = useCaseCreateWorkspace(email.value, password.value, domain.value)
+            useCaseCreateWorkspace(email.value, password.value, domain.value)
             loading.value = false
             navigateDashboard()
         }

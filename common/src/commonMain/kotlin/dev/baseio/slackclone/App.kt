@@ -2,6 +2,7 @@ package dev.baseio.slackclone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
@@ -26,6 +27,7 @@ import org.koin.dsl.module
 
 lateinit var koinApp: KoinApplication
 
+@OptIn(ExperimentalDecomposeApi::class)
 @Composable
 fun App(
     modifier: Modifier = Modifier,

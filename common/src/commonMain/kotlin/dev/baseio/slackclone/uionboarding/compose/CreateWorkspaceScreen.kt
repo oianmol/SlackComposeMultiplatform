@@ -21,12 +21,10 @@ import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
-import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceVM
 
 @Composable
 fun CreateWorkspaceScreen(
-    component: CreateWorkspaceComponent,
-    viewModel: CreateWorkspaceVM = component.createWorkspaceVM
+    component: CreateWorkspaceComponent
 ) {
     val scaffoldState = rememberScaffoldState()
     val size = getWindowSizeClass(LocalWindow.current)

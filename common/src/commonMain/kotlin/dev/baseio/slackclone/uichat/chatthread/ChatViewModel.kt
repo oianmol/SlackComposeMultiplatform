@@ -37,7 +37,7 @@ class ChatViewModel(
     var chatBoxState = MutableValue(BoxState.Collapsed)
         private set
 
-    val exceptions = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val exceptions = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
 
@@ -142,9 +142,6 @@ class ChatViewModel(
 
     fun clearLongClickMessageRequest() {
         deleteMessageRequest.value = null
-    }
-
-    fun onClickHash(hashTag: String) {
     }
 
     fun showChannelDetailsRequested() {

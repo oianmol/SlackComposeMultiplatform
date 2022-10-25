@@ -7,10 +7,12 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseFetchChannelCount
 import dev.baseio.slackdomain.usecases.channels.UseCaseSearchChannel
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(FlowPreview::class)
 class SearchChannelVM(
     private val ucFetchChannels: UseCaseSearchChannel,
     private val useCaseFetchChannelCount: UseCaseFetchChannelCount,

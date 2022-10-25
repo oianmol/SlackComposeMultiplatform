@@ -19,8 +19,52 @@ object BuildPlugins {
     const val KTLINT = "org.jlleitschuh.gradle.ktlint"
     const val SQLDELIGHT_ID: String = "com.squareup.sqldelight"
     const val COMPOSE_ID: String = "org.jetbrains.compose"
+    const val SERIALIZATION = "plugin.serialization"
     const val MULTIPLATFORM = "multiplatform"
     const val SAFE_ARGS_KOTLIN = "androidx.navigation.safeargs.kotlin"
+}
+
+
+object Versions {
+    const val koin = "3.1.4"
+}
+
+object Deps {
+
+    object Kotlinx {
+        const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
+
+        object JVM {
+            const val coroutinesSwing = "org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4"
+        }
+
+        object IOS {
+            const val coroutinesX64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4"
+            const val coroutinesArm64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4"
+        }
+
+        object Android {
+            const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+        }
+    }
+
+    object SqlDelight {
+        const val androidDriver = "com.squareup.sqldelight:android-driver:1.5.3"
+        const val jvmDriver = "com.squareup.sqldelight:sqlite-driver:1.5.3"
+        const val nativeDriver = "com.squareup.sqldelight:native-driver:1.5.3"
+        const val runtime = "com.squareup.sqldelight:runtime:1.5.3"
+    }
+
+    object Koin {
+        const val core = "io.insert-koin:koin-core:${Versions.koin}"
+        const val core_jvm = "io.insert-koin:koin-core-jvm:${Versions.koin}"
+        const val test = "io.insert-koin:koin-test:${Versions.koin}"
+        const val android = "io.insert-koin:koin-android:${Versions.koin}"
+    }
+
+    object AndroidX {
+        const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    }
 }
 
 object Lib {
@@ -29,11 +73,19 @@ object Lib {
         const val android = "android"
         const val ARM64 = "iosarm64"
         const val slackData = "dev.baseio.slackclone:slack_kmp_data"
+        const val slackDomain = "dev.baseio.slackclone:slack_kmp_domain"
+
+        const val SLACK_DOMAIN_COMMON = "$slackDomain:1.0"
+        const val SLACK_DOMAIN_ANDROID = "$slackDomain-$android:1.0"
+        const val SLACK_DOMAIN_IOSX64 = "$slackDomain-$IOSX64:1.0"
+        const val SLACK_DOMAIN_IOSARM64 = "$slackDomain-$ARM64:1.0"
+        const val SLACK_DOMAIN_JVM = "$slackDomain-jvm:1.0"
+
         const val SLACK_DATA_COMMON = "$slackData:1.0"
         const val SLACK_DATA_ANDROID = "$slackData-$android:1.0"
         const val SLACK_DATA_IOSX64 = "$slackData-$IOSX64:1.0"
         const val SLACK_DATA_IOSARM64 = "$slackData-$ARM64:1.0"
-        val SLACK_DATA_JVM = "$slackData-jvm:1.0"
+        const val SLACK_DATA_JVM = "$slackData-jvm:1.0"
         const val common = ":common"
     }
 
@@ -52,13 +104,14 @@ object Lib {
     }
 
     object AndroidX {
+        val securityCrypto = "androidx.security:security-crypto-ktx:1.1.0-alpha03"
         const val COMPOSE_VERSION = "1.2.0"
         const val COMPOSE_COMPILER_VERSION = COMPOSE_VERSION
         private const val COMPOSE_ACTIVITY_VERSION = "1.6.0"
         private const val COMPOSE_CONSTRAINT_LAYOUT_VERSION = "1.0.0"
         private const val COMPOSE_NAVIGATION_VERSION = "2.5.0-alpha01"
-        private const val COMPOSE_COIL_VERSION = "2.1.0"
-        private const val ACCOMPANIST_VERSION = "0.24.13-rc"
+        private const val COMPOSE_COIL_VERSION = "2.2.0"
+        private const val ACCOMPANIST_VERSION = "0.26.3-beta"
         private const val ACCOMPANIST_FLOW_LAYOUT_VERSION = "0.24.13-rc"
         private const val WINDOW_METRICES_VERSION = "1.0.0"
         private const val ACTIVITY_VERSION = "1.6.0"
@@ -143,7 +196,13 @@ object Lib {
     }
 
     object Persistence {
-        val SQLDELIGHT_NATIVE = "com.squareup.sqldelight:native-driver:1.5.3"
+        const val SQLDELIGHT_NATIVE = "com.squareup.sqldelight:native-driver:1.5.3"
+    }
+
+    object Multiplatform {
+
+        const val kamelImage = "com.alialbaali.kamel:kamel-image:0.4.0"
+        const val mokoPaging = "dev.icerock.moko:paging:0.7.2"
     }
 }
 

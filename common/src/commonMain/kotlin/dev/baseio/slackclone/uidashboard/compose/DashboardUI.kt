@@ -49,7 +49,7 @@ import dev.baseio.slackclone.uionboarding.compose.PlatformSideEffects
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import mainDispatcher
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalDecomposeApi::class)
 @Composable
 fun DashboardUI(
     dashboardComponent: DashboardComponent,
@@ -240,7 +240,7 @@ fun DashboardUI(
                                     )
 
                                     is Dashboard.Child.MentionsScreen -> MentionsReactionsUI()
-                                    is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
+                                    is Dashboard.Child.SearchScreen -> SearchMessagesUI()
                                     is Dashboard.Child.UserProfileScreen -> UserProfileUI(child.component)
 
                                     is Dashboard.Child.HomeScreen -> throw RuntimeException("Not expecting to load home in desktop layout!")
@@ -359,7 +359,7 @@ private fun DashboardChildren(
 
             is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
             is Dashboard.Child.MentionsScreen -> MentionsReactionsUI()
-            is Dashboard.Child.SearchScreen -> SearchMessagesUI(child.searchMessagesComponent)
+            is Dashboard.Child.SearchScreen -> SearchMessagesUI()
             is Dashboard.Child.UserProfileScreen -> {
                 UserProfileUI(child.component)
             }

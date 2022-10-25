@@ -38,9 +38,11 @@ fun ChatMessagesUI(
         for (messageIndex in messages.indices) {
             val message = messages[messageIndex]
             item {
-                ChatMessage(message, alertLongClick, members.firstOrNull { it.uuid == message.sender }, onClickHash = {
-                    viewModel.onClickHash(it)
-                })
+                ChatMessage(
+                    message,
+                    alertLongClick,
+                    members.firstOrNull { it.uuid == message.sender },
+                    onClickHash = {})
                 if (messageIndex + threshold >= messages.lastIndex) {
                     SideEffect {
                         viewModel.skMessagePagination.loadNextPage()
@@ -49,8 +51,7 @@ fun ChatMessagesUI(
             }
             lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
             if (!isLastMessage(messageIndex, messages)) {
-                val nextMessageMonth =
-                    messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
+                val nextMessageMonth = messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
                 if (nextMessageMonth != lastDrawnMessage) {
                     item {
                         ChatHeader(message.createdDate)
@@ -66,20 +67,16 @@ fun ChatMessagesUI(
 }
 
 private fun isLastMessage(
-    messageIndex: Int,
-    messages: List<DomainLayerMessages.SKMessage>
+    messageIndex: Int, messages: List<DomainLayerMessages.SKMessage>
 ) = messageIndex == messages.size.minus(1)
 
 @Composable
 private fun ChatHeader(createdDate: Long) {
     Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
         Text(
-            createdDate.calendar().formattedMonthDate(),
-            style = SlackCloneTypography.subtitle2.copy(
-                fontWeight = FontWeight.Bold,
-                color = SlackCloneColorProvider.colors.textPrimary
-            ),
-            modifier = Modifier.padding(4.dp)
+            createdDate.calendar().formattedMonthDate(), style = SlackCloneTypography.subtitle2.copy(
+                fontWeight = FontWeight.Bold, color = SlackCloneColorProvider.colors.textPrimary
+            ), modifier = Modifier.padding(4.dp)
         )
         Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
     }
