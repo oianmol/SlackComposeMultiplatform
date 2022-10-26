@@ -195,6 +195,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
     }
     val jvmTest by getting {
         dependencies {
+            implementation(Lib.Grpc.OKHTTP)
             implementation(kotlin("test-junit"))
             implementation("junit:junit:4.13.2")
         }

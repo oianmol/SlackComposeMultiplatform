@@ -1,6 +1,7 @@
 package dev.baseio.slackdata.injection
 
 import dev.baseio.database.SlackDB
+import dev.baseio.grpc.GrpcCalls
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.network.FakeGrpcCalls
@@ -12,6 +13,6 @@ val testDataModule = module {
     }
 
     single<IGrpcCalls> {
-        FakeGrpcCalls(get())
+        GrpcCalls(skKeyValueData = get(), address = "localhost")
     }
 }
