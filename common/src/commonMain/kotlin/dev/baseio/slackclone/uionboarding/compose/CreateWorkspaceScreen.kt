@@ -86,17 +86,17 @@ fun Heading(isLogin: Boolean) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
-    val email by createWorkspaceComponent.createWorkspaceVM.email.collectAsState()
-    val name by createWorkspaceComponent.createWorkspaceVM.domain.collectAsState()
-    val password by createWorkspaceComponent.createWorkspaceVM.password.collectAsState()
-    val error by createWorkspaceComponent.createWorkspaceVM.error.collectAsState()
-    val loading by createWorkspaceComponent.createWorkspaceVM.loading.collectAsState()
+    val email by createWorkspaceComponent.authCreateWorkspaceVM.email.collectAsState()
+    val name by createWorkspaceComponent.authCreateWorkspaceVM.domain.collectAsState()
+    val password by createWorkspaceComponent.authCreateWorkspaceVM.password.collectAsState()
+    val error by createWorkspaceComponent.authCreateWorkspaceVM.error.collectAsState()
+    val loading by createWorkspaceComponent.authCreateWorkspaceVM.loading.collectAsState()
     Column {
         EmailTF(Modifier.padding(4.dp), email) { emailNew ->
-            createWorkspaceComponent.createWorkspaceVM.email.value = emailNew
+            createWorkspaceComponent.authCreateWorkspaceVM.email.value = emailNew
         }
         PasswordTF(Modifier.padding(4.dp), password) { passwordNew ->
-            createWorkspaceComponent.createWorkspaceVM.password.value = passwordNew
+            createWorkspaceComponent.authCreateWorkspaceVM.password.value = passwordNew
         }
         WorkspaceView(Modifier.padding(4.dp), name, createWorkspaceComponent)
         Spacer(Modifier.size(4.dp))
@@ -126,7 +126,7 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
         Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(8.dp))
         TextHttps()
         WorkspaceTF(name) { nameNew ->
-            viewModel.createWorkspaceVM.domain.value = nameNew
+            viewModel.authCreateWorkspaceVM.domain.value = nameNew
         }
         TextSlackCom()
     }
@@ -136,7 +136,7 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
 fun CreateWorkspaceButton(viewModel: CreateWorkspaceComponent) {
     Button(
         onClick = {
-            viewModel.createWorkspaceVM.createWorkspace()
+            viewModel.authCreateWorkspaceVM.createWorkspace()
         },
         Modifier
             .fillMaxWidth()
