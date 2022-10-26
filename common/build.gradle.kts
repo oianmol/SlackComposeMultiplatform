@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation("androidx.test:core-ktx:1.4.0")
     commonMainApi(Lib.Multiplatform.mokoPaging)
 }
 
@@ -191,6 +192,12 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         dependencies {
             implementation(kotlin("test-junit"))
             implementation("junit:junit:4.13.2")
+            implementation(Deps.SqlDelight.jvmDriver)
+            implementation(Deps.SqlDelight.androidDriver)
+            implementation(TestLib.ROBO_ELECTRIC)
+            implementation(TestLib.ANDROID_JUNIT)
+            implementation(TestLib.COROUTINES)
+            implementation(Lib.Grpc.OKHTTP)
         }
     }
     val jvmTest by getting {
@@ -198,6 +205,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Lib.Grpc.OKHTTP)
             implementation(kotlin("test-junit"))
             implementation("junit:junit:4.13.2")
+            implementation(Deps.SqlDelight.jvmDriver)
         }
     }
 }

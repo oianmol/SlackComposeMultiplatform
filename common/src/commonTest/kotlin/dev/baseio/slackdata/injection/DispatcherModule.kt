@@ -11,9 +11,11 @@ val testDispatcherModule = module {
     single<CoroutineDispatcherProvider> { TestCoroutineDispatcherProvider() }
 }
 
+expect val testMainDispatcher: CoroutineDispatcher
+
 class TestCoroutineDispatcherProvider(
-    override val default: CoroutineDispatcher = mainDispatcher,
-    override val io: CoroutineDispatcher = mainDispatcher,
-    override val main: CoroutineDispatcher = mainDispatcher,
-    override val unconfirmed: CoroutineDispatcher = mainDispatcher
+    override val default: CoroutineDispatcher = testMainDispatcher,
+    override val io: CoroutineDispatcher = testMainDispatcher,
+    override val main: CoroutineDispatcher = testMainDispatcher,
+    override val unconfirmed: CoroutineDispatcher = testMainDispatcher
 ) : CoroutineDispatcherProvider

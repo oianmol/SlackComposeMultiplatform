@@ -10,7 +10,10 @@ import dev.baseio.slackdata.injection.testDispatcherModule
 import dev.baseio.slackdata.injection.testUseCaseModule
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -47,10 +50,12 @@ class AuthCreateWorkspaceVMTest : KoinTest {
                 testDispatcherModule
             )
         }
+        Dispatchers.setMain(coroutineDispatcherProvider.main)
     }
 
     @AfterTest
     fun tearDown() {
+        Dispatchers.resetMain()
         stopKoin()
     }
 
