@@ -27,8 +27,9 @@ kotlin {
 
     sourceSets {
         commonDependencies(this@kotlin)
-        androidDependencies(this@kotlin)
+        androidDependencies()
         jvmDependencies(this@kotlin)
+        configureTest(this@kotlin)
         if (iosEnabled) {
             iosArmDependencies()
             iosSimulatorArmDependencies()
@@ -97,17 +98,9 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Lib.Decompose.composejb)
         }
     }
-    val commonTest by getting {
-        dependencies {
-            implementation(Deps.Koin.test)
-            implementation(kotlin("test"))
-        }
-    }
 }
 
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.androidDependencies(
-    kotlinMultiplatformExtension: KotlinMultiplatformExtension
-) {
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.androidDependencies() {
     val androidMain by getting {
         dependencies {
             implementation(Lib.Project.SLACK_DOMAIN_ANDROID)
@@ -120,11 +113,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Lib.Async.COROUTINES_ANDROID)
             implementation(Lib.AndroidX.COIL_COMPOSE)
             implementation(Lib.Decompose.composejb)
-        }
-    }
-    val androidTest by getting {
-        dependencies {
-            implementation("junit:junit:4.13.2")
         }
     }
 }
@@ -174,6 +162,39 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             api(kotlinMultiplatformExtension.compose.preview)
             implementation(Deps.Koin.core_jvm)
             implementation(Lib.Decompose.composejb)
+        }
+    }
+
+}
+
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.configureTest(kotlinMultiplatformExtension: KotlinMultiplatformExtension) {
+    val commonTest by getting {
+        dependencies {
+            implementation(Deps.Koin.test)
+            implementation(kotlin("test"))
+            implementation(kotlin("test-common"))
+            implementation(kotlin("test-annotations-common"))
+        }
+    }
+    val iosX64Test by getting
+    val iosArm64Test by getting
+    val iosSimulatorArm64Test by getting
+    val iosTest by creating {
+        dependsOn(commonTest)
+        iosX64Test.dependsOn(this)
+        iosArm64Test.dependsOn(this)
+        iosSimulatorArm64Test.dependsOn(this)
+    }
+    val androidTest by getting {
+        dependencies {
+            implementation(kotlin("test-junit"))
+            implementation("junit:junit:4.13.2")
+        }
+    }
+    val jvmTest by getting {
+        dependencies {
+            implementation(kotlin("test-junit"))
+            implementation("junit:junit:4.13.2")
         }
     }
 }

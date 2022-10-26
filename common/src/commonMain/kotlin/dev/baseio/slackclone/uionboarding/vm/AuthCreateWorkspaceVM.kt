@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class CreateWorkspaceVM(
+class AuthCreateWorkspaceVM(
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
     val navigateDashboard: () -> Unit

@@ -1,4 +1,4 @@
-package dev.baseio.slackclone.chatcore.data
+package dev.baseio.slackclone.uichannels.views
 
 data class ExpandCollapseModel(
     val id: Int,

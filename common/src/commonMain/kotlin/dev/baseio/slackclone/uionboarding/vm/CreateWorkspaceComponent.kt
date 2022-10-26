@@ -10,9 +10,9 @@ class CreateWorkspaceComponent(
     val navigateDashboard: () -> Unit
 ) : ComponentContext by componentContext {
 
-    val createWorkspaceVM =
+    val authCreateWorkspaceVM =
         instanceKeeper.getOrCreate {
-            CreateWorkspaceVM(
+            AuthCreateWorkspaceVM(
                 koinApp.koin.get(),
                 navigateDashboard = navigateDashboard,
                 useCaseCreateWorkspace = koinApp.koin.get()
