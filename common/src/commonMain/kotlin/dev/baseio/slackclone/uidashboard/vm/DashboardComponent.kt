@@ -1,6 +1,7 @@
 package dev.baseio.slackclone.uidashboard.vm
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
@@ -41,16 +42,22 @@ class DashboardComponent(
     val navigateRoot: (RootComponent.Config) -> Unit
 ) : Dashboard, ComponentContext by componentContext {
 
-    val sideNavComponent = SideNavComponent(this) {
+    val sideNavComponent = SideNavComponent(childContext(SideNavComponent::class.qualifiedName.toString())) {
         navigateOnboarding()
     }
     val chatScreenComponent = ChatScreenComponent(
-        componentContext
+        childContext(ChatScreenComponent::class.qualifiedName.toString())
     )
     val recentChannelsComponent =
-        SlackChannelComponent(this, "recent")
+        SlackChannelComponent(
+            childContext(SlackChannelComponent::class.qualifiedName.toString().plus("recent")),
+            "recent"
+        )
     val allChannelsComponent =
-        SlackChannelComponent(this, "allChannels")
+        SlackChannelComponent(
+            childContext(SlackChannelComponent::class.qualifiedName.toString().plus("allChannels")),
+            "allChannels"
+        )
 
     val dashboardVM = instanceKeeper.getOrCreate {
         DashboardVM(
@@ -94,20 +101,20 @@ class DashboardComponent(
 
     private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {
         Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
-            DirectMessagesComponent(componentContext)
+            DirectMessagesComponent(childContext(DirectMessagesComponent::class.qualifiedName.toString()))
         )
 
-        Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext, koinApp.koin.get()))
+        Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(childContext(HomeScreenComponent::class.qualifiedName.toString()), koinApp.koin.get()))
         Config.MentionsConfig -> Dashboard.Child.MentionsScreen
         Config.Profile -> Dashboard.Child.UserProfileScreen(
             UserProfileComponent(
-                componentContext
+                childContext(UserProfileComponent::class.qualifiedName.toString())
             ) {
                 navigateOnboarding()
             }
         )
 
-        Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(componentContext))
+        Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(childContext(SearchMessagesComponent::class.qualifiedName.toString())))
     }
 
     override fun onChannelSelected(channel: DomainLayerChannels.SKChannel) {
