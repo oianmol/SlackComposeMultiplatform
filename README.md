@@ -1,5 +1,9 @@
 # SlackComposeMultiplatform (Experimental & In-Development)
 
+
+![Component 1](https://user-images.githubusercontent.com/4393101/197988428-87a04d5e-94e0-4f7e-9c34-48d04983b081.png)
+
+
 ### This is a jetpack compose Slack Client & Server Clone written in Kotlin and for Multiplatform.
 
 
@@ -14,6 +18,7 @@
 | 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
 | 📄 Pagination                           | [moko-paging](https://github.com/icerockdev/moko-paging)                                                                                                                        |
 | 🪔 Lint                                 | [ktlint gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle) , [ktlint Pinterest](https://github.com/pinterest/ktlint)                                                  |
+| 🤿 Testing with Turbine                                 | [Turbine](https://github.com/cashapp/turbine)                                                 |
 
 
 ### Dependent Projects
