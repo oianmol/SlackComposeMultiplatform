@@ -27,7 +27,12 @@ kotlin {
                 api(Lib.Project.SLACK_DOMAIN_JVM)
             }
         }
-        val jvmTest by getting
+        val jvmTest by getting{
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            dependencies{
+                implementation(compose.uiTestJUnit4)
+            }
+        }
     }
 }
 
@@ -37,7 +42,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             modules("java.sql")
-            packageName = "jvm"
+            packageName = "SlackClone"
             packageVersion = "1.0.0"
         }
     }

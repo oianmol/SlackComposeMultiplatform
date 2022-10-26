@@ -217,7 +217,7 @@ object TestLib {
     private const val ROBO_ELECTRIC_VERSION = "4.3"
     private const val ARCH_CORE_VERSION = "2.1.0"
     private const val CORE_TEST_VERSION = "1.2.0"
-    private const val JUNIT_VERSION = "4.13"
+    private const val JUNIT_VERSION = "4.13.2"
     private const val nav_version = "2.3.5"
 
     const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINES_VERSION"
@@ -225,6 +225,7 @@ object TestLib {
     const val MOCK_WEB_SERVER = "com.squareup.okhttp3:mockwebserver:${Networking.OKHTTP_VERSION}"
     const val CORE_TEST = "androidx.test:core-ktx:$CORE_TEST_VERSION"
     const val JUNIT = "junit:junit:$JUNIT_VERSION"
+    const val RUNNER = "androidx.test:runner:1.4.0"
     const val ANDROID_JUNIT = "androidx.test.ext:junit-ktx:$ANDROID_JUNIT_VERSION"
     const val ARCH_CORE = "androidx.arch.core:core-testing:$ARCH_CORE_VERSION"
     const val MOCKK = "io.mockk:mockk:1.10.5"

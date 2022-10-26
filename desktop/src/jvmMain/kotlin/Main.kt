@@ -1,4 +1,3 @@
-
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,6 +58,7 @@ fun main() = application {
             mutableStateOf(WindowInfo(windowState.size.width, windowState.size.height))
         }
 
+
         LaunchedEffect(windowState) {
             snapshotFlow { windowState.size }
                 .distinctUntilChanged()
@@ -68,21 +68,30 @@ fun main() = application {
                 .launchIn(this)
         }
 
-        SlackCloneTheme {
-            CompositionLocalProvider(
-                LocalWindow provides rememberedComposeWindow
-            ) {
-                App(
-                    sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
-                    skKeyValueData = skKeyValueData,
-                    rootComponent = {
-                        rootComponent
-                    }
-                )
-            }
+        DesktopApp(rememberedComposeWindow, skKeyValueData) {
+            rootComponent
         }
     }
 }
+
+
+@Composable
+fun DesktopApp(
+    rememberedComposeWindow: WindowInfo, skKeyValueData: SKKeyValueData, rootComponent: () -> RootComponent
+) {
+    SlackCloneTheme {
+        CompositionLocalProvider(
+            LocalWindow provides rememberedComposeWindow
+        ) {
+            App(
+                sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
+                skKeyValueData = skKeyValueData,
+                rootComponent = rootComponent
+            )
+        }
+    }
+}
+
 
 @Composable
 @ExperimentalComposeUiApi

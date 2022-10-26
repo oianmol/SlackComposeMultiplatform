@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -185,7 +186,7 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
                 append(" Create a workspace?")
             }
         },
-        modifier = modifier,
+        modifier = modifier.testTag("createWorkspaceButton"),
         style = SlackCloneTypography.subtitle2,
         onClick = {
             onClick()

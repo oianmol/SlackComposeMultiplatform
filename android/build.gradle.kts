@@ -13,6 +13,7 @@ repositories {
     mavenCentral()
 }
 
+@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
     api(Lib.Decompose.core)
     implementation(project(Lib.Project.common))
@@ -21,6 +22,16 @@ dependencies {
     implementation(Lib.Grpc.OKHTTP)
     api(Lib.Project.SLACK_DATA_ANDROID)
     api(Lib.Project.SLACK_DOMAIN_ANDROID)
+
+    androidTestImplementation(
+        Lib.AndroidX.COMPOSE_JUNIT
+    )
+    debugImplementation(
+        Lib.AndroidX.COMPOSE_TEST_MANIFEST
+    )
+    androidTestImplementation(TestLib.JUNIT)
+    androidTestImplementation(TestLib.RUNNER)
+    implementation(compose.uiTestJUnit4)
 }
 
 android {
