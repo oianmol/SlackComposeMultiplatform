@@ -1,5 +1,6 @@
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -22,35 +23,30 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.stopKoin
 
 @RunWith(AndroidJUnit4::class)
-class AuthCreateWorkspaceUITest {
+class AndroidAuthCreateWorkspaceUITest {
     @get:Rule
     val compose = createComposeRule()
 
     private val lifecycle = LifecycleRegistry()
     private val skKeyValueData = SKKeyValueData(ApplicationProvider.getApplicationContext())
     private val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)) }
-    lateinit var koinApplication:KoinApplication
+    lateinit var koinApplication: KoinApplication
 
     @Before
     fun prepare() {
-        koinApplication =  initKoin({ skKeyValueData },
+        koinApplication = initKoin({ skKeyValueData },
             { DriverFactory(ApplicationProvider.getApplicationContext()).createDriver(SlackDB.Schema) })
     }
 
     @Test
     fun createWorkspaceWhenCredentialsAreValid() {
-        runBlocking(Dispatchers.Main) {
-            compose.apply {
-                mainClock.autoAdvance = false
-                setContent {
-                    MobileApp({
-                        rootComponent
-                    }, koinApplication)
-                }
-                awaitIdle()
-                mainClock.advanceTimeBy(5000)
-                onNodeWithTag("createWorkspaceButton").performClick()
+        compose.apply {
+            setContent {
+                MobileApp({
+                    rootComponent
+                }, koinApplication)
             }
+            onNodeWithText("Sign In to Slack").performClick()
         }
     }
 

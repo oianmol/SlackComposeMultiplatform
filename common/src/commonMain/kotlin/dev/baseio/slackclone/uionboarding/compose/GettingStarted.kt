@@ -186,7 +186,7 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
                 append(" Create a workspace?")
             }
         },
-        modifier = modifier.testTag("createWorkspaceButton"),
+        modifier = modifier,
         style = SlackCloneTypography.subtitle2,
         onClick = {
             onClick()
