@@ -1,6 +1,7 @@
 package dev.baseio.slackclone
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
@@ -77,7 +78,7 @@ class RootComponent(
         when (config) {
             is Config.GettingStarted -> Root.Child.GettingStarted(
                 GettingStartedComponent(
-                    componentContext
+                    childContext(GettingStartedComponent::class.qualifiedName.toString())
                 ) { isLogin ->
                     navigateCreateWorkspace(isLogin)
                 }
@@ -85,7 +86,7 @@ class RootComponent(
 
             is Config.CreateWorkspace -> Root.Child.CreateWorkspace(
                 CreateWorkspaceComponent(
-                    componentContext,
+                    childContext(CreateWorkspaceComponent::class.qualifiedName.toString()),
                     config.isLogin
                 ) {
                     navigateDashboard()
@@ -94,7 +95,7 @@ class RootComponent(
 
             Config.DashboardScreen -> Root.Child.DashboardScreen(
                 DashboardComponent(
-                    componentContext,
+                    childContext(DashboardComponent::class.qualifiedName.toString()),
                     {
                         navigation.navigate {
                             listOf(Config.GettingStarted)
@@ -108,7 +109,7 @@ class RootComponent(
 
             Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
                 CreateNewChannelComponent(
-                    componentContext,
+                    childContext(CreateNewChannelComponent::class.qualifiedName.toString()),
                     {
                         navigation.pop()
                     },
@@ -124,7 +125,7 @@ class RootComponent(
 
             Config.NewChatThreadScreen -> Root.Child.NewChatThread(
                 NewChatThreadComponent(
-                    componentContext,
+                    childContext(NewChatThreadComponent::class.qualifiedName.toString()),
                     {
                         navigation.pop()
                     },
@@ -139,7 +140,7 @@ class RootComponent(
 
             Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(
                 SearchChannelsComponent(
-                    componentContext,
+                    childContext(SearchChannelsComponent::class.qualifiedName.toString()),
                     {
                         navigation.pop()
                     },
