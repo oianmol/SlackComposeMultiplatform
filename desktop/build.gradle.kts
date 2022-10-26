@@ -24,6 +24,7 @@ kotlin {
                 api(Lib.Decompose.core)
                 api(Lib.Decompose.coreJvm)
                 api(Lib.Project.SLACK_DATA_JVM)
+                api(Lib.Project.SLACK_DOMAIN_JVM)
             }
         }
         val jvmTest by getting

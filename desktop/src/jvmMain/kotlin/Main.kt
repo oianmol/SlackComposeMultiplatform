@@ -52,7 +52,7 @@ fun main() = application {
     val lifecycle = LifecycleRegistry()
 
     val skKeyValueData = SKKeyValueData()
-    val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle), skKeyValueData) }
+    val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)) }
 
     Window(onCloseRequest = ::exitApplication, state = windowState) {
         var rememberedComposeWindow by remember(this.window) {

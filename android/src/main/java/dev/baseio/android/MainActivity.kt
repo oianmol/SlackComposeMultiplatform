@@ -19,6 +19,7 @@ import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.koinApp
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         )
         val skKeyValueData = SKKeyValueData(this)
         val root by lazy {
-            RootComponent(defaultComponentContext, skKeyValueData)
+            RootComponent(defaultComponentContext)
         }
 
         setContent {

@@ -36,7 +36,7 @@ interface Root {
 
 class RootComponent(
     context: ComponentContext,
-    skKeyValueData: SKLocalKeyValueSource
+    skKeyValueData: SKLocalKeyValueSource = koinApp.koin.get()
 ) : Root, ComponentContext by context {
 
     private val navigation = StackNavigation<Config>()

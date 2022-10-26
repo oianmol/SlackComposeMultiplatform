@@ -21,6 +21,7 @@ import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.koinApp
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.cinterop.memScoped
@@ -59,7 +60,6 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
     val root by lazy {
         RootComponent(
             context = DefaultComponentContext(lifecycle = lifecycle),
-            skKeyValueData
         )
     }
 

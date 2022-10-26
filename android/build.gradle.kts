@@ -20,6 +20,7 @@ dependencies {
     implementation(Lib.AndroidX.SPLASH_SCREEN)
     implementation(Lib.Grpc.OKHTTP)
     api(Lib.Project.SLACK_DATA_ANDROID)
+    api(Lib.Project.SLACK_DOMAIN_ANDROID)
 }
 
 android {
