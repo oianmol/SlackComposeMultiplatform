@@ -12,25 +12,27 @@ class AuthCreateWorkspaceVM(
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
     val navigateDashboard: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
-    val email = MutableStateFlow("")
-    val password = MutableStateFlow("")
-    val domain = MutableStateFlow("")
-    val error = MutableStateFlow<Throwable?>(null)
-    val loading = MutableStateFlow(false)
+    val state = MutableStateFlow(AuthCreateWorkspaceVMState())
 
     fun createWorkspace() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
-                error.value = throwable
-                loading.value = false
+                state.value = state.value.copy(error = throwable, loading = false)
             }
         ) {
-            error.value = null
-            loading.value = true
-            useCaseCreateWorkspace(email.value, password.value, domain.value)
-            loading.value = false
+            state.value = state.value.copy(error = null, loading = true)
+            useCaseCreateWorkspace(state.value.email, state.value.password, state.value.domain)
+            state.value = state.value.copy(loading = false)
             navigateDashboard()
         }
     }
 }
+
+data class AuthCreateWorkspaceVMState(
+    var email: String = "",
+    var password: String = "",
+    var domain: String = "",
+    var error: Throwable? = null,
+    var loading: Boolean = false
+)

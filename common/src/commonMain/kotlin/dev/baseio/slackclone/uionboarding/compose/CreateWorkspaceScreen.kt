@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.arkivanov.decompose.value.reduce
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
@@ -86,22 +88,24 @@ fun Heading(isLogin: Boolean) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
-    val email by createWorkspaceComponent.authCreateWorkspaceVM.email.collectAsState()
-    val name by createWorkspaceComponent.authCreateWorkspaceVM.domain.collectAsState()
-    val password by createWorkspaceComponent.authCreateWorkspaceVM.password.collectAsState()
-    val error by createWorkspaceComponent.authCreateWorkspaceVM.error.collectAsState()
-    val loading by createWorkspaceComponent.authCreateWorkspaceVM.loading.collectAsState()
+    val state by createWorkspaceComponent.authCreateWorkspaceVM.state.collectAsState()
+
+
     Column {
-        EmailTF(Modifier.padding(4.dp), email) { emailNew ->
-            createWorkspaceComponent.authCreateWorkspaceVM.email.value = emailNew
+        EmailTF(Modifier.padding(4.dp), state.email) { emailNew ->
+            createWorkspaceComponent.authCreateWorkspaceVM.state.apply {
+                this.value = this.value.copy(email = emailNew)
+            }
         }
-        PasswordTF(Modifier.padding(4.dp), password) { passwordNew ->
-            createWorkspaceComponent.authCreateWorkspaceVM.password.value = passwordNew
+        PasswordTF(Modifier.padding(4.dp), state.password) { passwordNew ->
+            createWorkspaceComponent.authCreateWorkspaceVM.state.apply {
+                this.value = this.value.copy(password = passwordNew)
+            }
         }
-        WorkspaceView(Modifier.padding(4.dp), name, createWorkspaceComponent)
+        WorkspaceView(Modifier.padding(4.dp), state.domain, createWorkspaceComponent)
         Spacer(Modifier.size(4.dp))
-        ErrorText(Modifier.padding(4.dp), error)
-        if (loading) {
+        ErrorText(Modifier.padding(4.dp), state.error)
+        if (state.loading) {
             CircularProgressIndicator(color = SlackGreen)
         } else {
             CreateWorkspaceButton(
@@ -126,7 +130,9 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
         Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(8.dp))
         TextHttps()
         WorkspaceTF(name) { nameNew ->
-            viewModel.authCreateWorkspaceVM.domain.value = nameNew
+            viewModel.authCreateWorkspaceVM.state.apply {
+                this.value = this.value.copy(domain = nameNew)
+            }
         }
         TextSlackCom()
     }

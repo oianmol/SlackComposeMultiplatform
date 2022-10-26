@@ -12,8 +12,8 @@ import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
-import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdomain.AUTH_TOKEN
+import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
 interface Root {
     val childStack: Value<ChildStack<*, Child>>
@@ -36,7 +36,7 @@ interface Root {
 
 class RootComponent(
     context: ComponentContext,
-    skKeyValueData: SKKeyValueData
+    skKeyValueData: SKLocalKeyValueSource
 ) : Root, ComponentContext by context {
 
     private val navigation = StackNavigation<Config>()

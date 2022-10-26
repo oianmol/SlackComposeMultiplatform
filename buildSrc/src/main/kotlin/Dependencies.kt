@@ -169,6 +169,8 @@ object Lib {
         private const val COROUTINES_VERSION = "1.6.4"
 
         const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
+        const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINES_VERSION"
+
         const val COROUTINES_ANDROID =
             "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION"
     }

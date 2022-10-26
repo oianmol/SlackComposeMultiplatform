@@ -174,6 +174,8 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(kotlin("test"))
             implementation(kotlin("test-common"))
             implementation(kotlin("test-annotations-common"))
+            implementation(Lib.Async.COROUTINES_TEST)
+            implementation("app.cash.turbine:turbine:0.12.0")
         }
     }
     val iosX64Test by getting

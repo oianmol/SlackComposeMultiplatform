@@ -8,6 +8,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
+import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
@@ -71,5 +72,5 @@ fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
     module {
         single { slackDB }
         single { skKeyValueData }
-        single { GrpcCalls(skKeyValueData = get(), address = "192.168.1.7") }
+        single<IGrpcCalls> { GrpcCalls(skKeyValueData = get(), address = "192.168.1.7") }
     }

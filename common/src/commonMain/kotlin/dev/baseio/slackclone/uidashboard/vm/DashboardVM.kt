@@ -1,10 +1,10 @@
 package dev.baseio.slackclone.uidashboard.vm
 
-import dev.baseio.grpc.GrpcCalls
+import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
-import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannels
@@ -31,8 +31,8 @@ class DashboardVM(
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val useCaseFetchChannels: UseCaseFetchAndSaveChannels,
     private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
-    private val skKeyValueData: SKKeyValueData,
-    private val grpcCalls: GrpcCalls
+    private val skKeyValueData: SKLocalKeyValueSource,
+    private val grpcCalls: IGrpcCalls
 ) :
     SlackViewModel(coroutineDispatcherProvider) {
     val selectedChatChannel = MutableStateFlow<DomainLayerChannels.SKChannel?>(null)
