@@ -39,6 +39,7 @@ import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.initKoin
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -52,6 +53,8 @@ fun main() = application {
 
     val skKeyValueData = SKKeyValueData()
     val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)) }
+    val koinApplication =
+    initKoin({ skKeyValueData }, { DriverFactory().createDriver(SlackDB.Schema) })
 
     Window(onCloseRequest = ::exitApplication, state = windowState) {
         var rememberedComposeWindow by remember(this.window) {
@@ -68,25 +71,26 @@ fun main() = application {
                 .launchIn(this)
         }
 
-        DesktopApp(rememberedComposeWindow, skKeyValueData) {
+        DesktopApp(rememberedComposeWindow, {
             rootComponent
-        }
+        }, koinApplication)
     }
 }
 
 
 @Composable
 fun DesktopApp(
-    rememberedComposeWindow: WindowInfo, skKeyValueData: SKKeyValueData, rootComponent: () -> RootComponent
+    rememberedComposeWindow: WindowInfo,
+    rootComponent: () -> RootComponent,
+    koinApplication: org.koin.core.KoinApplication
 ) {
     SlackCloneTheme {
         CompositionLocalProvider(
             LocalWindow provides rememberedComposeWindow
         ) {
             App(
-                sqlDriver = DriverFactory().createDriver(SlackDB.Schema),
-                skKeyValueData = skKeyValueData,
-                rootComponent = rootComponent
+                rootComponent = rootComponent,
+                koinApplication = koinApplication
             )
         }
     }

@@ -23,6 +23,10 @@ dependencies {
     api(Lib.Project.SLACK_DATA_ANDROID)
     api(Lib.Project.SLACK_DOMAIN_ANDROID)
 
+    implementation(Deps.Koin.core)
+    implementation(Deps.Koin.android)
+    testImplementation(Deps.Koin.test)
+
     androidTestImplementation(
         Lib.AndroidX.COMPOSE_JUNIT
     )
@@ -30,7 +34,7 @@ dependencies {
         Lib.AndroidX.COMPOSE_TEST_MANIFEST
     )
     androidTestImplementation(TestLib.JUNIT)
-    androidTestImplementation(TestLib.RUNNER)
+    //androidTestImplementation(TestLib.RUNNER)
     implementation(compose.uiTestJUnit4)
 }
 
@@ -45,6 +49,7 @@ android {
         applicationId = "dev.baseio.slackclone"
         minSdk = ProjectProperties.MIN_SDK
         targetSdk = ProjectProperties.TARGET_SDK
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

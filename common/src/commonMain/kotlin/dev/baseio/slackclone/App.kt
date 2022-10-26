@@ -8,8 +8,6 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.squareup.sqldelight.db.SqlDriver
 import dev.baseio.database.SlackDB
-import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
@@ -24,7 +22,6 @@ import dev.baseio.slackdata.injection.dispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 
 lateinit var koinApp: KoinApplication
 
@@ -32,14 +29,10 @@ lateinit var koinApp: KoinApplication
 @Composable
 fun App(
     modifier: Modifier = Modifier,
-    sqlDriver: SqlDriver,
-    skKeyValueData: SKKeyValueData,
-    rootComponent: () -> RootComponent
+    rootComponent: () -> RootComponent,
+    koinApplication: KoinApplication
 ) {
-    if (::koinApp.isInitialized.not()) {
-        koinApp = initKoin(SlackDB.invoke(sqlDriver), skKeyValueData)
-    }
-
+    koinApp = koinApplication
     Children(modifier = modifier, stack = rootComponent().childStack, animation = stackAnimation(fade())) {
         when (val child = it.instance) {
             is Root.Child.CreateWorkspace -> CreateWorkspaceScreen(child.component)
@@ -52,13 +45,17 @@ fun App(
     }
 }
 
-fun initKoin(
-    slackDB: SlackDB,
-    skKeyValueData: SKKeyValueData
-): KoinApplication {
+fun initKoin(keyValueData: () -> SKKeyValueData, database: () -> SqlDriver): KoinApplication {
     return startKoin {
         modules(
-            appModule(slackDB, skKeyValueData),
+            org.koin.dsl.module {
+                single {
+                    keyValueData()
+                }
+                single {
+                    SlackDB.invoke(database())
+                }
+            },
             dataSourceModule,
             dataMappersModule,
             useCaseModule,
@@ -67,10 +64,3 @@ fun initKoin(
         )
     }
 }
-
-fun appModule(slackDB: SlackDB, skKeyValueData: SKKeyValueData) =
-    module {
-        single { slackDB }
-        single { skKeyValueData }
-        single<IGrpcCalls> { GrpcCalls(skKeyValueData = get(), address = "192.168.1.7") }
-    }

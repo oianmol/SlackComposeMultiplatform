@@ -3,6 +3,7 @@ package dev.baseio.android
 import android.os.Bundle // ktlint-disable import-ordering
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,12 +20,13 @@ import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.koinApp
+import dev.baseio.slackclone.initKoin
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.core.KoinApplication
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,32 +43,42 @@ class MainActivity : AppCompatActivity() {
             RootComponent(defaultComponentContext)
         }
 
+        val koinApplication =
+            initKoin({ skKeyValueData }, { DriverFactory(this@MainActivity).createDriver(SlackDB.Schema) })
+
         setContent {
-            val config = LocalConfiguration.current
+            MobileApp({
+                root
+            }, koinApplication)
+        }
+    }
 
-            var rememberedComposeWindow by remember(this.window) {
-                mutableStateOf(WindowInfo(config.screenWidthDp.dp, config.screenHeightDp.dp))
-            }
 
-            LaunchedEffect(config) {
-                snapshotFlow { config }.distinctUntilChanged().onEach {
-                    rememberedComposeWindow = WindowInfo(it.screenWidthDp.dp, it.screenHeightDp.dp)
-                }.launchIn(this)
-            }
+}
 
-            CompositionLocalProvider(
-                LocalWindow provides rememberedComposeWindow
-            ) {
-                SlackCloneTheme {
-                    App(
-                        sqlDriver = DriverFactory(this@MainActivity).createDriver(SlackDB.Schema),
-                        skKeyValueData = skKeyValueData,
-                        rootComponent = {
-                            root
-                        }
-                    )
-                }
-            }
+@Composable
+fun MobileApp(root: () -> RootComponent, koinApplication: KoinApplication) {
+    val config = LocalConfiguration.current
+
+    var rememberedComposeWindow by remember {
+        mutableStateOf(WindowInfo(config.screenWidthDp.dp, config.screenHeightDp.dp))
+    }
+
+    LaunchedEffect(config) {
+        snapshotFlow { config }.distinctUntilChanged().onEach {
+            rememberedComposeWindow = WindowInfo(it.screenWidthDp.dp, it.screenHeightDp.dp)
+        }.launchIn(this)
+    }
+
+    CompositionLocalProvider(
+        LocalWindow provides rememberedComposeWindow
+    ) {
+        SlackCloneTheme {
+            App(
+                rootComponent = {
+                    root.invoke()
+                }, koinApplication = koinApplication
+            )
         }
     }
 }

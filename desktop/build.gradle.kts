@@ -25,12 +25,16 @@ kotlin {
                 api(Lib.Decompose.coreJvm)
                 api(Lib.Project.SLACK_DATA_JVM)
                 api(Lib.Project.SLACK_DOMAIN_JVM)
+
+                implementation(Deps.Koin.core)
+                implementation(Deps.Koin.core_jvm)
             }
         }
         val jvmTest by getting{
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             dependencies{
                 implementation(compose.uiTestJUnit4)
+                implementation(Deps.Koin.test)
             }
         }
     }
