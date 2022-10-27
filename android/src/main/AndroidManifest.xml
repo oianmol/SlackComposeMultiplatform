@@ -3,6 +3,8 @@
           package="org.example.android">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
             android:allowBackup="false"
             android:usesCleartextTraffic="true"

@@ -74,7 +74,7 @@ fun WorkspaceTF(workspace: String, onUpdate: (String) -> Unit) {
 }
 
 @Composable
-private fun textStyleField() = SlackCloneTypography.h6.copy(
+private fun textStyleField() = SlackCloneTypography.subtitle1.copy(
     color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.7f),
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start

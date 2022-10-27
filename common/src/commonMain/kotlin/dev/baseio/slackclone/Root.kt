@@ -12,6 +12,7 @@ import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
+import dev.baseio.slackclone.uiqrscanner.QRCodeComponent
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
@@ -31,6 +32,7 @@ interface Root {
         data class NewChatThread(val component: NewChatThreadComponent) : Child()
         data class CreateWorkspace(val component: CreateWorkspaceComponent) : Child()
         data class DashboardScreen(val component: DashboardComponent) : Child()
+        data class QrScanner(val qrCodeComponent: QRCodeComponent) : Child()
     }
 }
 
@@ -78,15 +80,16 @@ class RootComponent(
         when (config) {
             is Config.GettingStarted -> Root.Child.GettingStarted(
                 GettingStartedComponent(
-                    childContext(GettingStartedComponent::class.qualifiedName.toString())
-                ) { isLogin ->
-                    navigateCreateWorkspace(isLogin)
-                }
+                    componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()), { isLogin ->
+                        navigateCreateWorkspace(isLogin)
+                    }, {
+                        navigateDashboard()
+                    })
             )
 
             is Config.CreateWorkspace -> Root.Child.CreateWorkspace(
                 CreateWorkspaceComponent(
-                    childContext(CreateWorkspaceComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(CreateWorkspaceComponent::class.qualifiedName.toString()),
                     config.isLogin
                 ) {
                     navigateDashboard()
@@ -95,11 +98,13 @@ class RootComponent(
 
             Config.DashboardScreen -> Root.Child.DashboardScreen(
                 DashboardComponent(
-                    childContext(DashboardComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(DashboardComponent::class.qualifiedName.toString()),
                     {
                         navigation.navigate {
                             listOf(Config.GettingStarted)
                         }
+                    }, {
+                        navigation.push(Config.QrScanner)
                     },
                     {
                         navigation.push(it)
@@ -109,7 +114,7 @@ class RootComponent(
 
             Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
                 CreateNewChannelComponent(
-                    childContext(CreateNewChannelComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(CreateNewChannelComponent::class.qualifiedName.toString()),
                     {
                         navigation.pop()
                     },
@@ -117,15 +122,19 @@ class RootComponent(
                         navigation.popWhile {
                             it != Config.DashboardScreen
                         }
-                        (childStack.value.active.instance as? Root.Child.CreateNewChannel)?.component?.onChannelSelected(channel)
-                        (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
+                        (childStack.value.active.instance as? Root.Child.CreateNewChannel)?.component?.onChannelSelected(
+                            channel
+                        )
+                        (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(
+                            channel
+                        )
                     }
                 )
             )
 
             Config.NewChatThreadScreen -> Root.Child.NewChatThread(
                 NewChatThreadComponent(
-                    childContext(NewChatThreadComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(NewChatThreadComponent::class.qualifiedName.toString()),
                     {
                         navigation.pop()
                     },
@@ -133,14 +142,16 @@ class RootComponent(
                         navigation.popWhile {
                             it != Config.DashboardScreen
                         }
-                        (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
+                        (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(
+                            channel
+                        )
                     }
                 )
             )
 
             Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(
                 SearchChannelsComponent(
-                    childContext(SearchChannelsComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(SearchChannelsComponent::class.qualifiedName.toString()),
                     {
                         navigation.pop()
                     },
@@ -151,13 +162,24 @@ class RootComponent(
                         navigation.popWhile {
                             it != Config.DashboardScreen
                         }
-                        (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(channel)
+                        (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(
+                            channel
+                        )
                     }
                 )
             )
+
+            Config.QrScanner -> Root.Child.QrScanner(QRCodeComponent(
+                componentContext.childContext(QRCodeComponent::class.qualifiedName.toString())
+            ) {
+                navigation.pop()
+            })
         }
 
     sealed class Config : Parcelable {
+
+        @Parcelize
+        object QrScanner : Config()
 
         @Parcelize
         object GettingStarted : Config()

@@ -107,6 +107,8 @@ fun DashboardUI(
                             },
                             {
                                 dashboardComponent.navigateOnboarding()
+                            },{
+                                dashboardComponent.navigateQrScanner()
                             }
                         )
                     },
@@ -147,6 +149,8 @@ fun DashboardUI(
                             },
                             {
                                 dashboardComponent.navigateOnboarding()
+                            },{
+                                dashboardComponent.navigateQrScanner()
                             }
                         )
                     },

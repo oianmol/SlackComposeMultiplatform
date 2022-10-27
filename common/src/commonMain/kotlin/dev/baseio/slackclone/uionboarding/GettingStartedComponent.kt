@@ -12,10 +12,12 @@ import kotlin.coroutines.CoroutineContext
 
 class GettingStartedComponent(
     componentContext: ComponentContext,
-    val onCreateWorkspaceRequested: (Boolean) -> Unit
+    val onCreateWorkspaceRequested: (Boolean) -> Unit,
+    val navigateDashboard: () -> Unit
 ) : ComponentContext by componentContext {
 
-    val viewModel = instanceKeeper.getOrCreate { GettingStartedVM(koinApp.koin.get()) }
+    val viewModel =
+        instanceKeeper.getOrCreate { GettingStartedVM(koinApp.koin.get(),koinApp.koin.get(), navigateDashboard = navigateDashboard) }
 
     data class GettingStartedState(
         val introTextExpanded: Boolean,

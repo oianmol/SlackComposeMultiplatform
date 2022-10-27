@@ -15,6 +15,7 @@ import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.uidashboard.compose.DashboardUI
 import dev.baseio.slackclone.uionboarding.compose.CreateWorkspaceScreen
 import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
+import dev.baseio.slackclone.uiqrscanner.QRScannerUI
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.dataSourceModule
@@ -41,6 +42,7 @@ fun App(
             is Root.Child.CreateNewChannel -> CreateNewChannelUI(child.component)
             is Root.Child.NewChatThread -> NewChatThreadScreen(child.component)
             is Root.Child.SearchCreateChannel -> SearchCreateChannelUI(child.component)
+            is Root.Child.QrScanner -> QRScannerUI(child.qrCodeComponent)
         }
     }
 }

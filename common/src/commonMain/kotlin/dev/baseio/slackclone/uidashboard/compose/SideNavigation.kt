@@ -32,7 +32,8 @@ fun SideNavigation(
     modifier: Modifier,
     sideNavComponent: SideNavComponent,
     onClose: () -> Unit,
-    navigateOnboardingClearRoutes: () -> Unit
+    navigateOnboardingClearRoutes: () -> Unit,
+    navigateQrScanner: () -> Unit
 ) {
     val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
     SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
@@ -61,16 +62,26 @@ fun SideNavigation(
             SideNavFooter(logout = {
                 sideNavComponent.viewModel.logout()
                 navigateOnboardingClearRoutes()
+            }, openQrScanner = {
+                navigateQrScanner()
             })
         }
     }
 }
 
 @Composable
-private fun SideNavFooter(logout: () -> Unit) {
+private fun SideNavFooter(logout: () -> Unit, openQrScanner: () -> Unit) {
     Column(modifier = Modifier) {
         Divider(color = SlackCloneColorProvider.colors.lineColor)
-        SlackListItem(icon = Icons.Filled.AddCircle, title = "Add Workspace")
+        SlackListItem(
+            icon = Icons.Filled.AddCircle,
+            title = "Authorize other device(s)",
+            subtitle = "Use QR Camera",
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Start,
+            onItemClick = {
+                openQrScanner()
+            })
         SlackListItem(icon = Icons.Filled.Settings, title = "Preferences")
         SlackListItem(icon = Icons.Filled.CheckCircle, title = "Help")
         SlackListItem(icon = Icons.Filled.ExitToApp, title = "Logout", onItemClick = {
