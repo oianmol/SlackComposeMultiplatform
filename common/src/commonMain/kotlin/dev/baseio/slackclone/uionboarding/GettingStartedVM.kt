@@ -2,19 +2,30 @@ package dev.baseio.slackclone.uionboarding
 
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.reduce
+import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
+import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.uionboarding.compose.SlackAnimSpec
+import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class GettingStartedVM(coroutineDispatcherProvider: CoroutineDispatcherProvider) :
     SlackViewModel(coroutineDispatcherProvider) {
+
+    var qrCode = MutableStateFlow<KMSKQrCodeResponse?>(null)
+    var loadingQR = MutableStateFlow(false)
+    var message = MutableStateFlow("")
+
     var componentState = MutableValue(
         GettingStartedComponent.GettingStartedState(
             introTextExpanded = false,
             isStartAnimation = false,
-            showSlackAnim = true
+            showSlackAnim = true,
         )
     )
         private set
@@ -41,5 +52,29 @@ class GettingStartedVM(coroutineDispatcherProvider: CoroutineDispatcherProvider)
             delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(800))
             endAnimation()
         }
+    }
+
+    fun loadQrCode() {
+        qrCode.value?.let {
+            clearQR()
+            return
+        }
+        loadingQR.value = true
+        message.value = "Preparing for Authentication"
+        viewModelScope.launch {
+            withContext(koinApp.koin.get<CoroutineDispatcherProvider>().io + CoroutineExceptionHandler { coroutineContext, throwable ->
+                loadingQR.value = false
+                message.value = throwable.message.toString()
+            }) {
+                qrCode.value = koinApp.koin.get<IGrpcCalls>().getQrCodeResponse()
+                message.value = "QR successfully generated"
+                loadingQR.value = false
+            }
+        }
+    }
+
+    fun clearQR() {
+        qrCode.value = null
+        message.value = ""
     }
 }
