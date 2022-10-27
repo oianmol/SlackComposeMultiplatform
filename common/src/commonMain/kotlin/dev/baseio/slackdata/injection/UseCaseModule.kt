@@ -11,6 +11,7 @@ import dev.baseio.slackdomain.usecases.workspaces.*
 import org.koin.dsl.module
 
 val useCaseModule = module {
+  factory { UseCaseQRAuthUser(get(),get(),get()) }
   factory { LoginUseCase(get(), get(), get()) }
   factory { UseCaseGetChannelMembers(get(), get()) }
   factory { FindWorkspacesUseCase(get()) }

@@ -16,8 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import com.arkivanov.decompose.value.reduce
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
@@ -42,17 +40,15 @@ fun CreateWorkspaceScreen(
             scaffoldState.snackbarHostState
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            SlackCloneSurface(
-                color = SlackCloneColor,
-                modifier = Modifier
-                    .padding(28.dp)
-            ) {
-                when (size) {
-                    WindowSize.Phones -> CreateWorkspacePhoneLayout(component)
-                    else -> {
-                        CreateWorkspaceLargeScreenLayout(component)
-                    }
+        SlackCloneSurface(
+            color = SlackCloneColor,
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+            when (size) {
+                WindowSize.Phones -> CreateWorkspacePhoneLayout(component)
+                else -> {
+                    CreateWorkspaceLargeScreenLayout(component,contentPadding = Modifier.padding(12.dp))
                 }
             }
         }
@@ -80,10 +76,18 @@ fun SubTitle(text: String) {
 
 @Composable
 fun Heading(isLogin: Boolean) {
-    Column(Modifier.fillMaxWidth()) {
-        Title(title = if (isLogin) "Login to Slack" else "Create a new workspace")
-        SubTitle(text = if (isLogin) "Please provide your credentials" else "To make a workspace from scratch, please confirm your email address.")
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+        Image(
+            modifier = Modifier.size(128.dp),
+            painter = PainterRes.slackLogo(),
+            contentDescription = null
+        )
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Title(title = if (isLogin) "Login to Slack" else "Create a new workspace")
+            SubTitle(text = if (isLogin) "Please provide your credentials" else "To make a workspace from scratch, please confirm your email address.")
+        }
     }
+
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -128,7 +132,7 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(8.dp))
+        Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(horizontal = 12.dp))
         TextHttps()
         WorkspaceTF(name) { nameNew ->
             viewModel.authCreateWorkspaceVM.state.apply {
@@ -158,20 +162,12 @@ fun CreateWorkspaceButton(viewModel: CreateWorkspaceComponent) {
 }
 
 @Composable
-fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent) {
+fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent, contentPadding: Modifier) {
     Row(
         Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Heading(viewModel.isLogin())
-            WorkspaceCreateForm(viewModel)
-        }
         Column(
             Modifier.weight(1f, fill = true).padding(8.dp).fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceAround,
@@ -184,6 +180,15 @@ fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent) {
                 contentScale = ContentScale.Fit
             )
         }
+        Column(
+            contentPadding.weight(1f, fill = true).fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Heading(viewModel.isLogin())
+            WorkspaceCreateForm(viewModel)
+        }
+
     }
 }
 
@@ -191,10 +196,11 @@ fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent) {
 fun CreateWorkspacePhoneLayout(viewModel: CreateWorkspaceComponent) {
     Column(
         Modifier.padding(8.dp).fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceAround,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Heading(viewModel.isLogin())
+        Spacer(Modifier.height(24.dp))
         WorkspaceCreateForm(viewModel)
     }
 }

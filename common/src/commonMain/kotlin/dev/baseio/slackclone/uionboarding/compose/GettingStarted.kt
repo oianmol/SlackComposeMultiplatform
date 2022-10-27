@@ -31,17 +31,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -51,16 +53,20 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.LocalWindow
+import dev.baseio.slackclone.commonui.reusable.QrCodeView
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
+import dev.baseio.slackclone.commonui.theme.SlackGreen
 import dev.baseio.slackclone.commonui.theme.SlackLogoYellow
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
+import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GettingStartedUI(
     gettingStartedVM: GettingStartedComponent,
@@ -84,7 +90,7 @@ fun GettingStartedUI(
             SlackCloneSurface(
                 color = SlackCloneColor,
                 modifier = Modifier
-                    .padding(28.dp)
+                    .padding(12.dp)
             ) {
                 if (showSlackAnim.showSlackAnim) {
                     SlackAnimation(gettingStartedVM)
@@ -108,6 +114,8 @@ private fun LargeScreenLayout(
     gettingStartedVM: GettingStartedComponent
 
 ) {
+    val qrResponse by gettingStartedVM.viewModel.qrCode.collectAsState()
+
     val density = LocalDensity.current
 
     Row(
@@ -137,7 +145,9 @@ private fun LargeScreenLayout(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CenterImage(Modifier.padding(24.dp), gettingStartedVM)
+            qrResponse?.let { it1 -> QrCodeView(Modifier.weight(1f, fill = false), it1) } ?: kotlin.run {
+                CenterImage(Modifier.padding(24.dp), gettingStartedVM)
+            }
         }
     }
 }
@@ -146,6 +156,8 @@ private fun LargeScreenLayout(
 private fun PhoneLayout(
     gettingStartedVM: GettingStartedComponent
 ) {
+    val qrResponse by gettingStartedVM.viewModel.qrCode.collectAsState()
+
     val density = LocalDensity.current
     Column(
         verticalArrangement = Arrangement.SpaceAround,
@@ -157,7 +169,9 @@ private fun PhoneLayout(
         }) {
             IntroExitTransitionHorizontal()
         }
-        CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
+        qrResponse?.let { it1 -> QrCodeView(Modifier.weight(1f, fill = false), it1) } ?: kotlin.run {
+            CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
+        }
         Spacer(Modifier.padding(8.dp))
         GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
             GetStartedExitTransHorizontal()
@@ -230,6 +244,8 @@ private fun GetStartedButton(
     exitAnim: @Composable () -> ExitTransition
 ) {
     val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
+    val loading by gettingStartedVM.viewModel.loadingQR.collectAsState()
+    val qrcode by gettingStartedVM.viewModel.qrCode.collectAsState()
 
     AnimatedVisibility(
         visible = expanded.introTextExpanded,
@@ -237,14 +253,39 @@ private fun GetStartedButton(
         exit = exitAnim()
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            if (loading) CircularProgressIndicator(color = SlackLogoYellow) else QrCodeButton(qrcode) {
+                gettingStartedVM.viewModel.loadQrCode()
+            }
+            Spacer(Modifier.padding(8.dp))
+
             LoginButton(gettingStartedVM)
             Spacer(Modifier.padding(8.dp))
+
             TeamNewToSlack(Modifier.padding(8.dp)) {
                 gettingStartedVM.onCreateWorkspaceRequested(false)
             }
         }
     }
 }
+
+@Composable
+fun QrCodeButton(qrCode: KMSKQrCodeResponse?, onClick: () -> Unit) {
+    Button(
+        onClick = {
+            onClick()
+        },
+        Modifier
+            .fillMaxWidth()
+            .height(40.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = SlackGreen)
+    ) {
+        Text(
+            text = if (qrCode == null) "Login via QR Code" else "Clear QR",
+            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+        )
+    }
+}
+
 
 @Composable
 private fun LoginButton(

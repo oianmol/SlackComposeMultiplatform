@@ -23,6 +23,7 @@ dependencies {
     api(Lib.Project.SLACK_DATA_ANDROID)
     api(Lib.Project.SLACK_DOMAIN_ANDROID)
 
+
     implementation(Deps.Koin.core)
     implementation(Deps.Koin.android)
     testImplementation(Deps.Koin.test)
@@ -54,6 +55,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
     buildTypes {
         getByName("release") {

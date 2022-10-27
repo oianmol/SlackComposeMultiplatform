@@ -1,6 +1,8 @@
 package dev.baseio.slackclone.commonui.reusable
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,8 +23,11 @@ fun SlackListItem(
     modifier: Modifier = Modifier.fillMaxWidth(),
     icon: ImageVector,
     title: String,
+    subtitle: String? = null,
     textColor: Color = SlackCloneColorProvider.colors.textPrimary,
     trailingItem: ImageVector? = null,
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     onItemClick: () -> Unit = {}
 ) {
     Row(
@@ -31,26 +36,25 @@ fun SlackListItem(
             .clickable {
                 onItemClick()
             },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = verticalAlignment,
+        horizontalArrangement = horizontalArrangement
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = textColor.copy(alpha = 0.4f),
             modifier = Modifier
-                .size(28.dp)
+                .size(24.dp)
                 .padding(4.dp)
         )
-        Text(
-            text = title,
-            style = SlackCloneTypography.subtitle2.copy(
-                color = textColor.copy(
-                    alpha = 0.8f
-                )
-            ),
-            modifier = Modifier
-                .padding(8.dp)
-        )
+        subtitle?.let {
+            Column {
+                TitleText(title, textColor)
+                SubTitleText(it, textColor)
+            }
+        } ?: run {
+            TitleText(title, textColor)
+        }
         trailingItem?.let { safeIcon ->
             Icon(
                 imageVector = safeIcon,
@@ -64,12 +68,41 @@ fun SlackListItem(
     }
 }
 
+
+@Composable
+fun SubTitleText(title: String, textColor: Color) {
+    Text(
+        text = title,
+        style = SlackCloneTypography.caption.copy(
+            color = textColor.copy(
+                alpha = 0.5f
+            )
+        ),
+        modifier = Modifier
+            .padding(8.dp)
+    )
+}
+
+@Composable
+private fun TitleText(title: String, textColor: Color) {
+    Text(
+        text = title,
+        style = SlackCloneTypography.subtitle2.copy(
+            color = textColor.copy(
+                alpha = 0.8f
+            )
+        ),
+        modifier = Modifier
+            .padding(8.dp)
+    )
+}
+
 @Composable
 fun SlackListItem(
     modifier: Modifier = Modifier.padding(8.dp),
     icon: @Composable () -> Unit,
     center: @Composable (Modifier) -> Unit,
-    trailingItem: @Composable () -> Unit ? = {},
+    trailingItem: @Composable () -> Unit? = {},
     onItemClick: () -> Unit = {}
 ) {
     Row(

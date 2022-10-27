@@ -1,3 +1,4 @@
+import Lib.AndroidX.ACTIVITY_COMPOSE
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
@@ -104,6 +105,18 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.androidDependencies() {
     val androidMain by getting {
         dependencies {
+
+            // CameraX
+            api("androidx.camera:camera-camera2:1.2.0-beta02")
+            api ("androidx.camera:camera-lifecycle:1.2.0-beta02")
+            api ("androidx.camera:camera-view:1.2.0-beta02")
+            api ("androidx.camera:camera-video:1.2.0-beta02")
+
+            // Zxing
+            api("com.google.zxing:core:3.5.0")
+            api(ACTIVITY_COMPOSE)
+            api("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+
             implementation(Lib.Project.SLACK_DOMAIN_ANDROID)
             implementation(Lib.Project.SLACK_DATA_ANDROID)
             implementation(Deps.Koin.android)

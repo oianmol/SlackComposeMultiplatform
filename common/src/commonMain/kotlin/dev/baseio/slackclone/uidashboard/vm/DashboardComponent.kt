@@ -39,6 +39,7 @@ interface Dashboard {
 class DashboardComponent(
     componentContext: ComponentContext,
     val navigateOnboarding: () -> Unit,
+    val navigateQrScanner:()->Unit,
     val navigateRoot: (RootComponent.Config) -> Unit
 ) : Dashboard, ComponentContext by componentContext {
 
@@ -101,20 +102,20 @@ class DashboardComponent(
 
     private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {
         Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
-            DirectMessagesComponent(childContext(DirectMessagesComponent::class.qualifiedName.toString()))
+            DirectMessagesComponent(componentContext.childContext(DirectMessagesComponent::class.qualifiedName.toString()))
         )
 
-        Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(childContext(HomeScreenComponent::class.qualifiedName.toString()), koinApp.koin.get()))
+        Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext.childContext(HomeScreenComponent::class.qualifiedName.toString()), koinApp.koin.get()))
         Config.MentionsConfig -> Dashboard.Child.MentionsScreen
         Config.Profile -> Dashboard.Child.UserProfileScreen(
             UserProfileComponent(
-                childContext(UserProfileComponent::class.qualifiedName.toString())
+                componentContext.childContext(UserProfileComponent::class.qualifiedName.toString())
             ) {
                 navigateOnboarding()
             }
         )
 
-        Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(childContext(SearchMessagesComponent::class.qualifiedName.toString())))
+        Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(componentContext.childContext(SearchMessagesComponent::class.qualifiedName.toString())))
     }
 
     override fun onChannelSelected(channel: DomainLayerChannels.SKChannel) {

@@ -47,7 +47,7 @@ import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkSourceWorks
 import org.koin.dsl.module
 
 val dataSourceModule = module {
-  single<IGrpcCalls> { GrpcCalls(skKeyValueData = get(), address = "192.168.1.7") }
+  single<IGrpcCalls> { GrpcCalls(skKeyValueData = get(), address = "192.168.1.16") }
   single<SKLocalDatabaseSource> {
     SKLocalDatabaseSourceImpl(get())
   }
