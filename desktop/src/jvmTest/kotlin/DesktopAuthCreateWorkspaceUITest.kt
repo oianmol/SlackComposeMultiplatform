@@ -1,3 +1,4 @@
+import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,9 +48,11 @@ class DesktopAuthCreateWorkspaceUITest {
 
     private val lifecycle = LifecycleRegistry()
     private val skKeyValueData = SKKeyValueData()
-    private val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)).apply {
-        navigateCreateWorkspace(true)
-    } }
+    private val rootComponent by lazy {
+        RootComponent(DefaultComponentContext(lifecycle = lifecycle)).apply {
+            navigateCreateWorkspace(true)
+        }
+    }
 
     lateinit var koinApplication: KoinApplication
 
@@ -78,33 +81,47 @@ class DesktopAuthCreateWorkspaceUITest {
 
     @Test
     fun `create workspace when credentials are valid`() {
-        runBlocking(koinApplication.koin.get<CoroutineDispatcherProvider>().main) {
-            with(compose) {
-                setContent {
-                    Window(onCloseRequest = {
-                    }) {
-                        val window = rememberWindowState()
-                        var rememberedComposeWindow by remember(window) {
-                            mutableStateOf(WindowInfo(window.size.width, window.size.height))
-                        }
-                        LaunchedEffect(window) {
-                            snapshotFlow { window.size }
-                                .distinctUntilChanged()
-                                .onEach {
-                                    rememberedComposeWindow = WindowInfo(it.width, it.height)
-                                }
-                                .launchIn(this)
-                        }
-                        DesktopApp(rememberedComposeWindow, {
-                            rootComponent
-                        }, koinApplication)
-                    }
+        with(compose) {
+            mainClock.autoAdvance = false
+            setContent {
+                val window = rememberWindowState()
+                var rememberedComposeWindow by remember(window) {
+                    mutableStateOf(WindowInfo(window.size.width, window.size.height))
                 }
-                awaitIdle()
-                onNodeWithText("Login to Slack").assertIsDisplayed()
+                LaunchedEffect(window) {
+                    snapshotFlow { window.size }
+                        .distinctUntilChanged()
+                        .onEach {
+                            rememberedComposeWindow = WindowInfo(it.width, it.height)
+                        }
+                        .launchIn(this)
+                }
+                DesktopApp(rememberedComposeWindow, {
+                    rootComponent
+                }, koinApplication)
+            }
+            runBlocking(koinApplication.koin.get<CoroutineDispatcherProvider>().main) {
+                waitForIdle()
+                onNodeWithText("Let me in", substring = true, ignoreCase = true).performClick()
+                onNodeWithText(
+                    "check the form",
+                    substring = true,
+                    ignoreCase = true
+                ).assertExists() // why is this not working!
             }
         }
 
+    }
+
+    @Test
+    fun some() {
+        with(compose) {
+            setContent {
+                Text("some")
+            }
+            waitForIdle()
+            onNodeWithText("some").performClick()
+        }
     }
 
     @After

@@ -21,6 +21,12 @@ class AuthCreateWorkspaceVM(
                 state.value = state.value.copy(error = throwable, loading = false)
             }
         ) {
+            if (state.value.email.trim().isEmpty() || state.value.password.trim().isEmpty() || state.value.domain.trim()
+                    .isEmpty()
+            ) {
+                state.value = state.value.copy(error = Exception("Please check the form and input the required details!"), loading = false)
+                return@launch
+            }
             state.value = state.value.copy(error = null, loading = true)
             useCaseCreateWorkspace(state.value.email, state.value.password, state.value.domain)
             state.value = state.value.copy(loading = false)
