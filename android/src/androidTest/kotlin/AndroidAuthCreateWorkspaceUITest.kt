@@ -1,6 +1,11 @@
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.arkivanov.decompose.DefaultComponentContext
@@ -29,6 +34,7 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
 class AndroidAuthCreateWorkspaceUITest {
@@ -37,9 +43,11 @@ class AndroidAuthCreateWorkspaceUITest {
 
     private val lifecycle = LifecycleRegistry()
     private val skKeyValueData = SKKeyValueData(ApplicationProvider.getApplicationContext())
-    private val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)).apply {
-        navigateCreateWorkspace(true)
-    } }
+    private val rootComponent by lazy {
+        RootComponent(DefaultComponentContext(lifecycle = lifecycle)).apply {
+            navigateCreateWorkspace(true)
+        }
+    }
     lateinit var koinApplication: KoinApplication
 
     @Before
@@ -65,19 +73,18 @@ class AndroidAuthCreateWorkspaceUITest {
     }
 
     @Test
-    fun whenLoginToSlackClickedItNavigatesToTheLoginScreen() {
-        runBlocking(koinApplication.koin.get<CoroutineDispatcherProvider>().main) {
-            with(compose) {
-                mainClock.autoAdvance = false
-                setContent {
-                    MobileApp({
-                        rootComponent
-                    }, koinApplication)
-                }
-                awaitIdle()
-                mainClock.advanceTimeBy(5000)
-                onNodeWithText("Login to Slack").assertIsDisplayed()
+    fun createWorkspaceFailsWithExceptionWhenCredentialsAreNotInvalid() {
+        with(compose) {
+            mainClock.autoAdvance = false
+            setContent {
+                MobileApp({
+                    rootComponent
+                }, koinApplication)
             }
+            waitForIdle()
+            onNodeWithText("Let me in...").performClick()
+            mainClock.advanceTimeBy(4000)
+            onNodeWithText("check the form", substring = true, ignoreCase = true).assertIsDisplayed()
         }
     }
 
@@ -85,5 +92,23 @@ class AndroidAuthCreateWorkspaceUITest {
     fun teardown() {
         Dispatchers.resetMain()
         stopKoin()
+    }
+}
+
+
+fun ComposeContentTestRule.waitUntilExists(
+    matcher: SemanticsMatcher,
+    timeoutMillis: Long = 1_000L
+) {
+    return this.waitUntilNodeCount(matcher, 1, timeoutMillis)
+}
+
+fun ComposeContentTestRule.waitUntilNodeCount(
+    matcher: SemanticsMatcher,
+    count: Int,
+    timeoutMillis: Long = 1_000L
+) {
+    this.waitUntil(timeoutMillis) {
+        this.onAllNodes(matcher).fetchSemanticsNodes().size == count
     }
 }

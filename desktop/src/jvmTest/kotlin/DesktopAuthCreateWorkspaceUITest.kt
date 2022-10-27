@@ -5,7 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -80,7 +83,7 @@ class DesktopAuthCreateWorkspaceUITest {
 
 
     @Test
-    fun `create workspace when credentials are valid`() {
+    fun `create workspace fails when credentials are not entered`() {
         with(compose) {
             mainClock.autoAdvance = false
             setContent {
@@ -100,33 +103,32 @@ class DesktopAuthCreateWorkspaceUITest {
                     rootComponent
                 }, koinApplication)
             }
-            runBlocking(koinApplication.koin.get<CoroutineDispatcherProvider>().main) {
-                waitForIdle()
-                onNodeWithText("Let me in", substring = true, ignoreCase = true).performClick()
-                onNodeWithText(
-                    "check the form",
-                    substring = true,
-                    ignoreCase = true
-                ).assertExists() // why is this not working!
-            }
+            onNodeWithText("Let me in...").performClick()
+            waitUntilExists(hasText("check the form", substring = true, ignoreCase = true))
         }
 
-    }
-
-    @Test
-    fun some() {
-        with(compose) {
-            setContent {
-                Text("some")
-            }
-            waitForIdle()
-            onNodeWithText("some").performClick()
-        }
     }
 
     @After
     fun teardown() {
         Dispatchers.resetMain()
         stopKoin()
+    }
+}
+
+fun ComposeContentTestRule.waitUntilExists(
+    matcher: SemanticsMatcher,
+    timeoutMillis: Long = 1_000L
+) {
+    return this.waitUntilNodeCount(matcher, 1, timeoutMillis)
+}
+
+fun ComposeContentTestRule.waitUntilNodeCount(
+    matcher: SemanticsMatcher,
+    count: Int,
+    timeoutMillis: Long = 1_000L
+) {
+    this.waitUntil(timeoutMillis) {
+        this.onAllNodes(matcher).fetchSemanticsNodes().size == count
     }
 }

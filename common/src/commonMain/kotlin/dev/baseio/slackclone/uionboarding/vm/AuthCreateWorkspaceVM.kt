@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AuthCreateWorkspaceVM(
-    coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
     val navigateDashboard: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
@@ -21,18 +21,28 @@ class AuthCreateWorkspaceVM(
                 state.value = state.value.copy(error = throwable, loading = false)
             }
         ) {
-            if (state.value.email.trim().isEmpty() || state.value.password.trim().isEmpty() || state.value.domain.trim()
-                    .isEmpty()
-            ) {
-                state.value = state.value.copy(error = Exception("Please check the form and input the required details!"), loading = false)
-                return@launch
+            when {
+                validationFailed() -> {
+                    state.value = state.value.copy(
+                        error = Exception("Please check the form and input the required details!"),
+                        loading = false
+                    )
+                }
+
+                else -> {
+                    state.value = state.value.copy(error = null, loading = true)
+                    useCaseCreateWorkspace(state.value.email, state.value.password, state.value.domain)
+                    state.value = state.value.copy(loading = false)
+                    navigateDashboard()
+                }
             }
-            state.value = state.value.copy(error = null, loading = true)
-            useCaseCreateWorkspace(state.value.email, state.value.password, state.value.domain)
-            state.value = state.value.copy(loading = false)
-            navigateDashboard()
+
         }
     }
+
+    private fun validationFailed() =
+        state.value.email.trim().isEmpty() || state.value.password.trim().isEmpty() || state.value.domain.trim()
+            .isEmpty()
 }
 
 data class AuthCreateWorkspaceVMState(

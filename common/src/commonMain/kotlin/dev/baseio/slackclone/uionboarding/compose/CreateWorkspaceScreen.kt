@@ -23,6 +23,7 @@ import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
+import mainDispatcher
 
 @Composable
 fun CreateWorkspaceScreen(
@@ -88,7 +89,7 @@ fun Heading(isLogin: Boolean) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
-    val state by createWorkspaceComponent.authCreateWorkspaceVM.state.collectAsState()
+    val state by createWorkspaceComponent.authCreateWorkspaceVM.state.collectAsState(mainDispatcher)
 
 
     Column {
