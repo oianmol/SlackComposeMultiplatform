@@ -15,6 +15,7 @@ import dev.icerock.moko.paging.LambdaPagedListDataSource
 import dev.icerock.moko.paging.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -28,13 +29,13 @@ class ChatViewModel(
 ) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
-    val channelMembers = MutableValue<List<DomainLayerUsers.SKUser>>(emptyList())
-    var chatMessagesFlow = MutableValue<List<DomainLayerMessages.SKMessage>>(emptyList())
+    val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
+    var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
 
-    var showChannelDetails = MutableValue(false)
+    var showChannelDetails = MutableStateFlow(false)
         private set
 
-    var chatBoxState = MutableValue(BoxState.Collapsed)
+    var chatBoxState = MutableStateFlow(BoxState.Collapsed)
         private set
 
     private val exceptions = CoroutineExceptionHandler { _, throwable ->

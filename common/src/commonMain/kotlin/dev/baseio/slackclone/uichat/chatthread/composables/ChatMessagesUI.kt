@@ -8,6 +8,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -28,8 +29,8 @@ fun ChatMessagesUI(
     modifier: Modifier,
     alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
 ) {
-    val messages by viewModel.chatMessagesFlow.subscribeAsState()
-    val members by viewModel.channelMembers.subscribeAsState()
+    val messages by viewModel.chatMessagesFlow.collectAsState()
+    val members by viewModel.channelMembers.collectAsState()
     val listState = rememberLazyListState()
     val threshold = 3
 

@@ -177,7 +177,7 @@ private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type 
 
 @Composable
 fun CollapseExpandButton(viewModel: ChatViewModel) {
-    val isExpanded by viewModel.chatBoxState.subscribeAsState()
+    val isExpanded by viewModel.chatBoxState.collectAsState()
     IconButton(
         onClick = {
             viewModel.switchChatBoxState()

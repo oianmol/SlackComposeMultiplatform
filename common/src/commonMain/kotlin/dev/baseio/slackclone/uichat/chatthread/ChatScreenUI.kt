@@ -32,7 +32,7 @@ fun ChatScreenUI(
     slackChannel: DomainLayerChannels.SKChannel
 ) {
     val scaffoldState = rememberScaffoldState()
-    val membersDialog by viewModel.showChannelDetails.subscribeAsState()
+    val membersDialog by viewModel.showChannelDetails.collectAsState()
 
     LaunchedEffect(slackChannel) {
         viewModel.requestFetch(slackChannel)
@@ -65,7 +65,7 @@ fun ChatScreenUI(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BoxScope.ChannelMembersDialog(viewModel: ChatViewModel) {
-    val members by viewModel.channelMembers.subscribeAsState()
+    val members by viewModel.channelMembers.collectAsState()
     val size = getWindowSizeClass(LocalWindow.current)
     val screenWidth = LocalWindow.current.width
     val width = screenWidth * when (size) {

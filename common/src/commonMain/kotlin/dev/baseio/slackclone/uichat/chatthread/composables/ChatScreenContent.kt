@@ -20,14 +20,13 @@ import dev.baseio.slackclone.uichat.chatthread.BoxState
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChatScreenContent(
     modifier: Modifier,
     screenComponent: ChatScreenComponent,
     viewModel: ChatViewModel = screenComponent.chatViewModel
 ) {
-    val checkBoxState by viewModel.chatBoxState.subscribeAsState()
+    val checkBoxState by viewModel.chatBoxState.collectAsState()
     val manualExpandValue = if (checkBoxState == BoxState.Expanded) {
         1f
     } else {
