@@ -10,7 +10,7 @@ import kotlin.test.Test
 import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
-class NewChatThreadVMTest : SlackKoinUnitTest() {
+class NavigateChatThreadVMTest : SlackKoinUnitTest() {
     private val useCaseCreateChannel: UseCaseCreateChannel by inject()
     private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch by inject()
 
