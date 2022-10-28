@@ -47,87 +47,89 @@ import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkSourceWorks
 import org.koin.dsl.module
 
 val dataSourceModule = module {
-  single<IGrpcCalls> { GrpcCalls(skKeyValueData = get(), address = "192.168.1.16") }
-  single<SKLocalDatabaseSource> {
-    SKLocalDatabaseSourceImpl(get())
-  }
-  single<SKLocalKeyValueSource> {
-    SKLocalKeyValueSourceImpl(get())
-  }
-  single<SKNetworkSourceChannel> {
-    SKNetworkSourceChannelImpl(get())
-  }
-  single<SKNetworkSourceWorkspaces> {
-    SKNetworkSourceWorkspacesImpl(get())
-  }
-  single<SKAuthNetworkDataSource> {
-    SKAuthNetworkDataSourceImpl(get())
-  }
-  single<SKLocalDataSourceChannelMembers> {
-    SKLocalDataSourceChannelMembersImpl(get(), get())
-  }
-  single<SKNetworkDataSourceReadChannelMembers> {
-    SKNetworkDataSourceReadChannelMembersImpl(get())
-  }
-  single<SKNetworkDataSourceMessages> {
-    SKNetworkDataSourceMessagesImpl(get())
-  }
-  single<SKNetworkDataSourceReadUsers> {
-    SKNetworkDataSourceReadUsersImpl(get(), get())
-  }
-  single<SKNetworkDataSourceReadWorkspaces> { SKNetworkDataSourceReadWorkspacesImpl(get()) }
-  single<SKNetworkDataSourceWriteWorkspaces> {
-    SKNetworkDataSourceWriteWorkspacesImpl(get())
-  }
-  single<SKLocalDataSourceWriteUsers> {
-    SKLocalDataSourceCreateUsersImpl(get(), get())
-  }
-  single<SKLocalDataSourceWriteWorkspaces> {
-    SKLocalDataSourceWriteWorkspacesImpl(get(), get())
-  }
-  single<SKLocalDataSourceReadWorkspaces> {
-    SKLocalDataSourceReadWorkspacesImpl(get(), get(SlackWorkspaceMapperQualifier), get())
-  }
-  single<SKNetworkDataSourceWriteChannels> {
-    SKNetworkDataSourceWriteChannelsImpl(get(), get())
-  }
-  single<SKNetworkDataSourceReadChannels> {
-    SKNetworkDataSourceReadChannelsImpl(get(), get())
-  }
-  single<SKLocalDataSourceCreateChannels> {
-    SKLocalDataSourceCreateChannelsImpl(
-      get(),
-      get(SlackChannelDMChannelQualifier),
-      get(qualifier = SlackChannelChannelQualifier),
-      get(),
-    )
-  }
-  single<SKLocalDataSourceReadChannels> {
-    SKLocalDataSourceReadChannelsImpl(
-      get(),
-      get(SlackChannelChannelQualifier),
-      get(SlackChannelDMChannelQualifier),
-      get(), get(), get()
-    )
-  }
-  single<SKLocalDataSourceUsers> { SKLocalDataSourceUsersImpl(get(), get(SlackUserRandomUserQualifier)) }
-  single<SKLocalDataSourceMessages> {
-    SKLocalDataSourceMessagesImpl(
-      get(),
-      get(SlackMessageMessageQualifier),
-      get()
-    )
-  }
-  single<SKLocalDataSourceChannelLastMessage> {
-    SlackSKLocalDataSourceChannelLastMessage(
-      get(),
-      get(),
-      get(SlackMessageMessageQualifier),
-      get(SlackChannelChannelQualifier),
-      get(SlackChannelDMChannelQualifier),
-      get(),
-      get()
-    )
-  }
+    single<IGrpcCalls> {
+        GrpcCalls("192.168.1.25", skKeyValueData = get())
+    }
+    single<SKLocalDatabaseSource> {
+        SKLocalDatabaseSourceImpl(get())
+    }
+    single<SKLocalKeyValueSource> {
+        SKLocalKeyValueSourceImpl(get())
+    }
+    single<SKNetworkSourceChannel> {
+        SKNetworkSourceChannelImpl(get())
+    }
+    single<SKNetworkSourceWorkspaces> {
+        SKNetworkSourceWorkspacesImpl(get())
+    }
+    single<SKAuthNetworkDataSource> {
+        SKAuthNetworkDataSourceImpl(get())
+    }
+    single<SKLocalDataSourceChannelMembers> {
+        SKLocalDataSourceChannelMembersImpl(get(), get())
+    }
+    single<SKNetworkDataSourceReadChannelMembers> {
+        SKNetworkDataSourceReadChannelMembersImpl(get())
+    }
+    single<SKNetworkDataSourceMessages> {
+        SKNetworkDataSourceMessagesImpl(get())
+    }
+    single<SKNetworkDataSourceReadUsers> {
+        SKNetworkDataSourceReadUsersImpl(get(), get())
+    }
+    single<SKNetworkDataSourceReadWorkspaces> { SKNetworkDataSourceReadWorkspacesImpl(get()) }
+    single<SKNetworkDataSourceWriteWorkspaces> {
+        SKNetworkDataSourceWriteWorkspacesImpl(get())
+    }
+    single<SKLocalDataSourceWriteUsers> {
+        SKLocalDataSourceCreateUsersImpl(get(), get())
+    }
+    single<SKLocalDataSourceWriteWorkspaces> {
+        SKLocalDataSourceWriteWorkspacesImpl(get(), get())
+    }
+    single<SKLocalDataSourceReadWorkspaces> {
+        SKLocalDataSourceReadWorkspacesImpl(get(), get(SlackWorkspaceMapperQualifier), get())
+    }
+    single<SKNetworkDataSourceWriteChannels> {
+        SKNetworkDataSourceWriteChannelsImpl(get(), get())
+    }
+    single<SKNetworkDataSourceReadChannels> {
+        SKNetworkDataSourceReadChannelsImpl(get(), get())
+    }
+    single<SKLocalDataSourceCreateChannels> {
+        SKLocalDataSourceCreateChannelsImpl(
+            get(),
+            get(SlackChannelDMChannelQualifier),
+            get(qualifier = SlackChannelChannelQualifier),
+            get(),
+        )
+    }
+    single<SKLocalDataSourceReadChannels> {
+        SKLocalDataSourceReadChannelsImpl(
+            get(),
+            get(SlackChannelChannelQualifier),
+            get(SlackChannelDMChannelQualifier),
+            get(), get(), get()
+        )
+    }
+    single<SKLocalDataSourceUsers> { SKLocalDataSourceUsersImpl(get(), get(SlackUserRandomUserQualifier)) }
+    single<SKLocalDataSourceMessages> {
+        SKLocalDataSourceMessagesImpl(
+            get(),
+            get(SlackMessageMessageQualifier),
+            get()
+        )
+    }
+    single<SKLocalDataSourceChannelLastMessage> {
+        SlackSKLocalDataSourceChannelLastMessage(
+            get(),
+            get(),
+            get(SlackMessageMessageQualifier),
+            get(SlackChannelChannelQualifier),
+            get(SlackChannelDMChannelQualifier),
+            get(),
+            get()
+        )
+    }
 }
 

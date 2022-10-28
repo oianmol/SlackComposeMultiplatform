@@ -7,7 +7,7 @@ import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.fakeDataSourceModule
 import dev.baseio.slackdata.injection.testDataModule
 import dev.baseio.slackdata.injection.testDispatcherModule
-import dev.baseio.slackdata.injection.testUseCaseModule
+import dev.baseio.slackdata.injection.useCaseModule
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +43,7 @@ class AuthCreateWorkspaceVMTest : KoinTest {
         startKoin {
             modules(
                 testDataModule,
-                testUseCaseModule,
+                useCaseModule,
                 viewModelDelegateModule,
                 dataMappersModule,
                 fakeDataSourceModule,
@@ -81,7 +81,7 @@ class AuthCreateWorkspaceVMTest : KoinTest {
     }
 
     @Test
-    fun `viewModel state fails with exception`() {
+    fun `viewModel state fails with validation exception`() {
         runTest {
             viewModel.state.apply {
                 this.value = this.value.copy(email = "", password = "", "email")
@@ -89,10 +89,6 @@ class AuthCreateWorkspaceVMTest : KoinTest {
             viewModel.createWorkspace()
             viewModel.state.test(timeout = 5.seconds) {
                 awaitItem().apply {
-                    asserter.assertTrue(actual = loading, message = "Loading was not true!")
-                }
-                awaitItem().apply {
-                    asserter.assertTrue(actual = !loading, message = "Loading was not false!")
                     asserter.assertTrue(actual = this.error != null, message = "error was null!")
                 }
                 asserter.assertTrue({ "Was navigated!" }, navigated.not())

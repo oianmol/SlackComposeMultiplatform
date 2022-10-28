@@ -12,7 +12,7 @@ val testDataModule = module {
     }
 
     single<IGrpcCalls> {
-        GrpcCalls(skKeyValueData = get(), address = "192.168.1.7")
+        GrpcCalls("192.168.1.25", skKeyValueData = get())
     }
 }
 
