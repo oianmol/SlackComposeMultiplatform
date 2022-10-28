@@ -40,20 +40,13 @@ class ChatViewModelTest : SlackKoinUnitTest() {
     }
 
     @Test
-    fun `when viewModel is initialized with a channel then it fetches the related information`() {
+    fun `when a message is sent it's found in the local database!`() {
         runTest {
             authorizeUserFirst()
 
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
             val firstChannel = channels.first()
             chatViewModel.requestFetch(firstChannel)
-
-            // channel members
-            skLocalDataSourceChannelMembers.get(selectedWorkspace.uuid, firstChannel.channelId).test {
-                awaitItem().apply {
-                    asserter.assertTrue("was expecting empty state", this.isEmpty())
-                }
-            }
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
 
