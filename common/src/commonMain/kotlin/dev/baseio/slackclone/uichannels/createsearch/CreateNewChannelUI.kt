@@ -91,18 +91,19 @@ private fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
     val searchChannel by createNewChannelComponent.viewModel.createChannelState.collectAsState(mainDispatcher)
 
     TextField(
-        value = searchChannel.name,
+        value = searchChannel.channel.name,
         onValueChange = { newValue ->
             val newId = newValue.replace(" ", "_")
-            createNewChannelComponent.viewModel.createChannelState.value =
-                createNewChannelComponent.viewModel.createChannelState.value.copy(name = newId, uuid = newId)
+            with(createNewChannelComponent.viewModel.createChannelState){
+                value = value.copy(channel = value.channel.copy(name = newId))
+            }
         },
         textStyle = textStyleFieldPrimary(),
         leadingIcon = {
             Text(text = "#", style = textStyleFieldSecondary())
         },
         trailingIcon = {
-            Text(text = "${80 - searchChannel.name.length}", style = textStyleFieldSecondary())
+            Text(text = "${80 - searchChannel.channel.name.length}", style = textStyleFieldSecondary())
         },
         placeholder = {
             Text(
@@ -156,7 +157,7 @@ private fun NewChannelAppBar(
         backgroundColor = SlackCloneColorProvider.colors.appBarColor,
         actions = {
             TextButton(onClick = {
-                createNewChannelComponent.viewModel.createChannelState.value.name.takeIf { it.isNotEmpty() }?.let {
+                createNewChannelComponent.viewModel.createChannelState.value.channel.name.takeIf { it.isNotEmpty() }?.let {
                     createNewChannelComponent.viewModel.createChannel()
                 } ?: run {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
