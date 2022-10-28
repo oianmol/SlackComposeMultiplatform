@@ -93,13 +93,6 @@ class ChatViewModelTest : SlackKoinUnitTest() {
                     asserter.assertTrue("was expecting success state", this.isSuccess())
                 }
             }
-            // test load next page!
-            chatViewModel.skMessagePagination.loadNextPage()
-            chatViewModel.skMessagePagination.nextPageLoading.asFlow().test {
-                awaitItem().apply {
-                    asserter.assertTrue("was expecting nextPageLoading == true", this)
-                }
-            }
         }
 
     }
