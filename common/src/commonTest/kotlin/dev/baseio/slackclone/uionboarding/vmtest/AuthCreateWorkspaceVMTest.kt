@@ -24,7 +24,7 @@ import kotlin.test.Test
 import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
-class AuthCreateWorkspaceVMTest : KoinTest {
+class AuthCreateWorkspaceVMTest : SlackKoinUnitTest() {
 
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace by inject()
@@ -33,30 +33,13 @@ class AuthCreateWorkspaceVMTest : KoinTest {
         navigated = true
     }
 
-    val viewModel by lazy {
+    private val viewModel by lazy {
         AuthCreateWorkspaceVM(coroutineDispatcherProvider, useCaseCreateWorkspace, navigateDashboard)
     }
 
     @BeforeTest
-    fun setUp() {
+    fun before() {
         navigated = false
-        startKoin {
-            modules(
-                testDataModule,
-                useCaseModule,
-                viewModelDelegateModule,
-                dataMappersModule,
-                fakeDataSourceModule,
-                testDispatcherModule
-            )
-        }
-        Dispatchers.setMain(coroutineDispatcherProvider.main)
-    }
-
-    @AfterTest
-    fun tearDown() {
-        Dispatchers.resetMain()
-        stopKoin()
     }
 
     @Test
