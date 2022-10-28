@@ -26,8 +26,6 @@ import kotlin.time.Duration.Companion.seconds
 
 class AuthCreateWorkspaceVMTest : SlackKoinUnitTest() {
 
-    private val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
-    private val useCaseCreateWorkspace: UseCaseCreateWorkspace by inject()
     private var navigated = false
     private val navigateDashboard = {
         navigated = true
