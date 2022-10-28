@@ -12,7 +12,7 @@ class NewChatThreadComponent(
 ) : ComponentContext by componentContext {
 
     val viewModel = instanceKeeper.getOrCreate {
-        NewChatThreadVM(
+        NavigateChatThreadVM(
             koinApp.koin.get(),
             koinApp.koin.get(),
             koinApp.koin.get(),

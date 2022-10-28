@@ -21,7 +21,6 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
 
 
     private val useCaseCreateChannel: UseCaseCreateChannel by inject()
-    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
     private val createNewChannelVM by lazy {
         CreateNewChannelVM(coroutineDispatcherProvider, useCaseCreateChannel, useCaseGetSelectedWorkspace) { }

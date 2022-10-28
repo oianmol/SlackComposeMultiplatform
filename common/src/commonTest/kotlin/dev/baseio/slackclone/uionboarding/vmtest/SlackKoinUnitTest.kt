@@ -7,10 +7,11 @@ import dev.baseio.slackdata.injection.testDataModule
 import dev.baseio.slackdata.injection.testDispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import dev.baseio.slackdomain.usecases.auth.LoginUseCase
-import dev.baseio.slackdomain.usecases.workspaces.FindWorkspacesUseCase
+import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannels
+import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
+import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -25,7 +26,10 @@ open class SlackKoinUnitTest : KoinTest {
 
     protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
     protected val useCaseCreateWorkspace: UseCaseCreateWorkspace by inject()
-    private val workspaces: UseCaseFetchAndSaveWorkspaces by inject()
+    protected val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
+    protected val getWorkspaces: UseCaseFetchAndSaveWorkspaces by inject()
+    protected val getChannels: UseCaseFetchAndSaveChannels by inject()
+    protected val getUsers: UseCaseFetchAndSaveUsers by inject()
 
     @BeforeTest
     fun setUp() {
@@ -44,14 +48,17 @@ open class SlackKoinUnitTest : KoinTest {
 
     suspend fun authorizeUserFirst() {
         useCaseCreateWorkspace.invoke("anmol.verma4@gmail.com", "password", "gmail")
-        workspaces.invoke()
-        //Dispatchers.resetMain()
+        getWorkspaces.invoke()
+        val workspace = useCaseGetSelectedWorkspace.invoke()!!
+        getChannels.invoke(workspace.uuid, 0, 20)
+        getUsers.invoke(workspace.uuid)
     }
 
 
     @AfterTest
     fun tearDown() {
         stopKoin()
+        //Dispatchers.resetMain()
     }
 
 }

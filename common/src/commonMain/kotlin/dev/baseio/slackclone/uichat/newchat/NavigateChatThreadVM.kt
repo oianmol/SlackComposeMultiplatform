@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
-class NewChatThreadVM(
+class NavigateChatThreadVM(
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
