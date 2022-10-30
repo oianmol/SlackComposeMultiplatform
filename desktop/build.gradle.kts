@@ -23,9 +23,8 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 api(Lib.Decompose.core)
                 api(Lib.Decompose.coreJvm)
-                api(Lib.Project.SLACK_DATA_JVM)
-                api(Lib.Project.SLACK_DOMAIN_JVM)
-
+                implementation(project(Lib.Project.SLACK_DATA_COMMON))
+                implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
                 implementation(Deps.Koin.core)
                 implementation(Deps.Koin.core_jvm)
             }

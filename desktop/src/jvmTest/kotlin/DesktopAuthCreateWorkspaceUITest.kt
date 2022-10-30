@@ -1,4 +1,3 @@
-import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,14 +5,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
@@ -26,14 +22,12 @@ import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.fakeDataSourceModule
 import dev.baseio.slackdata.injection.testDispatcherModule
-import dev.baseio.slackdata.injection.testUseCaseModule
+import dev.baseio.slackdata.injection.useCaseModule
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -71,7 +65,7 @@ class DesktopAuthCreateWorkspaceUITest {
                         SlackDB.invoke(DriverFactory().createDriver(SlackDB.Schema))
                     }
                 },
-                testUseCaseModule,
+                useCaseModule,
                 viewModelDelegateModule,
                 dataMappersModule,
                 fakeDataSourceModule,

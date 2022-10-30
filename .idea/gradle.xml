@@ -8,7 +8,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="17" />
+        <option name="gradleJvm" value="corretto-18" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -17,6 +17,10 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/desktop" />
             <option value="$PROJECT_DIR$/iOSApp" />
+            <option value="$PROJECT_DIR$/slack_data_layer" />
+            <option value="$PROJECT_DIR$/slack_domain_layer" />
+            <option value="$PROJECT_DIR$/slack_generate_protos" />
+            <option value="$PROJECT_DIR$/slack_protos" />
           </set>
         </option>
       </GradleProjectSettings>

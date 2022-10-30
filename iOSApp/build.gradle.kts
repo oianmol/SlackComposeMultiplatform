@@ -42,22 +42,18 @@ kotlin {
                 implementation(Lib.Networking.KTOR_DARWIN)
                 implementation(Lib.Persistence.SQLDELIGHT_NATIVE)
                 implementation(Lib.Decompose.core)
-                api(Lib.Project.SLACK_DATA_COMMON)
-                api(Lib.Project.SLACK_DOMAIN_COMMON)
+                api(project(Lib.Project.SLACK_DATA_COMMON))
+                api(project(Lib.Project.SLACK_DOMAIN_COMMON))
             }
         }
         val uikitX64Main by getting {
             dependsOn(uikitMain)
             dependencies {
-                api(Lib.Project.SLACK_DATA_IOSX64)
-                api(Lib.Project.SLACK_DOMAIN_IOSX64)
             }
         }
         val uikitArm64Main by getting {
             dependsOn(uikitMain)
             dependencies {
-                api(Lib.Project.SLACK_DATA_IOSARM64)
-                api(Lib.Project.SLACK_DOMAIN_IOSARM64)
             }
         }
     }

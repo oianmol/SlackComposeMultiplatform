@@ -83,8 +83,8 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 ) {
     val commonMain by getting {
         dependencies {
-            implementation(Lib.Project.SLACK_DOMAIN_COMMON)
-            implementation(Lib.Project.SLACK_DATA_COMMON)
+            implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
+            implementation(project(Lib.Project.SLACK_DATA_COMMON))
             implementation(Deps.Kotlinx.datetime)
             implementation(Deps.SqlDelight.runtime)
             implementation(Deps.Koin.core)
@@ -107,18 +107,16 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         dependencies {
 
             // CameraX
-            api("androidx.camera:camera-camera2:1.2.0-beta02")
-            api ("androidx.camera:camera-lifecycle:1.2.0-beta02")
-            api ("androidx.camera:camera-view:1.2.0-beta02")
-            api ("androidx.camera:camera-video:1.2.0-beta02")
+            api("androidx.camera:camera-camera2:1.2.0-rc01")
+            api ("androidx.camera:camera-lifecycle:1.2.0-rc01")
+            api ("androidx.camera:camera-view:1.2.0-rc01")
+            api ("androidx.camera:camera-video:1.2.0-rc01")
 
             // Zxing
             api("com.google.zxing:core:3.5.0")
             api(ACTIVITY_COMPOSE)
             api("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 
-            implementation(Lib.Project.SLACK_DOMAIN_ANDROID)
-            implementation(Lib.Project.SLACK_DATA_ANDROID)
             implementation(Deps.Koin.android)
             implementation(Lib.Async.COROUTINES)
             implementation(Deps.AndroidX.lifecycleViewModelKtx)
@@ -134,8 +132,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosArmDependencies() {
     val iosArm64Main by getting {
         dependencies {
-            implementation(Lib.Project.SLACK_DOMAIN_IOSARM64)
-            implementation(Lib.Project.SLACK_DATA_IOSARM64)
             implementation(Lib.Decompose.composejb)
         }
     }
@@ -144,8 +140,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosSimulatorArmDependencies(){
     val iosSimulatorArm64Main by getting {
         dependencies {
-            implementation(Lib.Project.SLACK_DOMAIN_IOSSIMULATORARM64)
-            implementation(Lib.Project.SLACK_DATA_IOSSIMULATORARM64)
             implementation(Lib.Decompose.composejb)
         }
     }
@@ -155,8 +149,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosX64Dependencies() {
     val iosX64Main by getting {
         dependencies {
-            implementation(Lib.Project.SLACK_DOMAIN_IOSX64)
-            implementation(Lib.Project.SLACK_DATA_IOSX64)
             implementation(Lib.Decompose.composejb)
         }
     }
@@ -167,8 +159,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 ) {
     val jvmMain by getting {
         dependencies {
-            implementation(Lib.Project.SLACK_DOMAIN_JVM)
-            implementation(Lib.Project.SLACK_DATA_JVM)
             implementation(Lib.Async.COROUTINES)
             implementation(Deps.Kotlinx.JVM.coroutinesSwing)
             implementation("io.ktor:ktor-client-java:2.1.0")

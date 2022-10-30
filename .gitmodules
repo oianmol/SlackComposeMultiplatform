@@ -1,0 +1,12 @@
+[submodule "slack_data_layer"]
+	path = slack_data_layer
+	url = https://github.com/oianmol/slack_multiplatform_client_data_lib
+[submodule "slack_domain_layer"]
+	path = slack_domain_layer
+	url = https://github.com/oianmol/slack_multiplatform_domain
+[submodule "slack_generate_protos"]
+	path = slack_generate_protos
+	url = https://github.com/oianmol/slack_multiplatform_generate_protos
+[submodule "slack_protos"]
+	path = slack_protos
+	url = https://github.com/oianmol/slack_multiplatform_protos

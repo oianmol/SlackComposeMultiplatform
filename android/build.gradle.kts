@@ -20,10 +20,8 @@ dependencies {
     implementation(Lib.AndroidX.ACTIVITY_COMPOSE)
     implementation(Lib.AndroidX.SPLASH_SCREEN)
     implementation(Lib.Grpc.OKHTTP)
-    api(Lib.Project.SLACK_DATA_ANDROID)
-    api(Lib.Project.SLACK_DOMAIN_ANDROID)
-
-
+    implementation(project(Lib.Project.SLACK_DATA_COMMON))
+    implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
     implementation(Deps.Koin.core)
     implementation(Deps.Koin.android)
     testImplementation(Deps.Koin.test)
