@@ -26,13 +26,9 @@ import kotlin.time.Duration.Companion.seconds
 
 class AuthCreateWorkspaceVMTest : SlackKoinUnitTest() {
 
-
     private val viewModel by lazy {
-        AuthCreateWorkspaceVM(coroutineDispatcherProvider, useCaseCreateWorkspace) {
-
-        }
+        AuthCreateWorkspaceVM(coroutineDispatcherProvider, useCaseCreateWorkspace) {}
     }
-
 
     @Test
     fun `viewModel informs the component to navigate after successful authentication`() {

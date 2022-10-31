@@ -10,6 +10,8 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
 import dev.icerock.moko.mvvm.livedata.asFlow
+import dev.icerock.moko.test.AndroidArchitectureInstantTaskExecutorRule
+import dev.icerock.moko.test.TestRule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -26,7 +28,9 @@ class ChatViewModelTest : SlackKoinUnitTest() {
     private val sendMessageDelegate: SendMessageDelegate by inject()
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
 
-    private val skLocalDataSourceChannelMembers: SKLocalDataSourceChannelMembers by inject()
+    @get:TestRule
+    val instantTaskExecutorRule = AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
+
 
     private val chatViewModel by lazy {
         ChatViewModel(

@@ -179,8 +179,8 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(kotlin("test-common"))
             implementation(kotlin("test-annotations-common"))
             implementation(Lib.Async.COROUTINES_TEST)
-            implementation(Lib.Async.COROUTINES)
             implementation("app.cash.turbine:turbine:0.12.0")
+            implementation("dev.icerock.moko:test-core:0.6.1")
         }
     }
     val iosX64Test by getting
@@ -200,7 +200,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Deps.SqlDelight.androidDriver)
             implementation(TestLib.ROBO_ELECTRIC)
             implementation(TestLib.ANDROID_JUNIT)
-            implementation(TestLib.COROUTINES)
+            implementation(Lib.Async.COROUTINES_TEST)
             implementation(Lib.Grpc.OKHTTP)
         }
     }
@@ -210,6 +210,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(kotlin("test-junit"))
             implementation("junit:junit:4.13.2")
             implementation(Deps.SqlDelight.jvmDriver)
+            implementation(Lib.Async.COROUTINES_TEST)
         }
     }
 }

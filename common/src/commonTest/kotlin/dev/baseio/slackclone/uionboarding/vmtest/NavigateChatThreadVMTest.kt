@@ -40,6 +40,7 @@ class NavigateChatThreadVMTest : SlackKoinUnitTest() {
                         this.filter { it.channelName == "new_channel" }.size == 1
                     )
                 }
+                cancelAndIgnoreRemainingEvents()
             }
         }
     }
