@@ -3,8 +3,10 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_data_layer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/slack_data_layer/protos" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_domain_layer" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_generate_protos" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/slack_generate_protos/protos" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_protos" vcs="Git" />
   </component>
 </project>
