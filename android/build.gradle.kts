@@ -33,7 +33,6 @@ dependencies {
         Lib.AndroidX.COMPOSE_TEST_MANIFEST
     )
     androidTestImplementation(TestLib.JUNIT)
-    //androidTestImplementation(TestLib.RUNNER)
     implementation(compose.uiTestJUnit4)
 }
 

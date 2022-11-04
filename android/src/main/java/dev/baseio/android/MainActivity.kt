@@ -52,8 +52,6 @@ class MainActivity : AppCompatActivity() {
             }, koinApplication)
         }
     }
-
-
 }
 
 @Composable
