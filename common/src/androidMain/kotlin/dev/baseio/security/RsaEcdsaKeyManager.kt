@@ -36,7 +36,7 @@ actual class RsaEcdsaKeyManager constructor(
     }
 
     actual fun rawGenerateKeyPair(isAuth: Boolean) {
-        AndroidKeyStoreRsaUtils.generateKeyPair(context, keychainId, isAuth)
+        AndroidKeyStoreRsaUtils.generateKeyPair(keychainId, isAuth)
     }
 
     actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {

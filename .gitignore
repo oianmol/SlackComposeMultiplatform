@@ -18,3 +18,4 @@ local.properties
 # yarn.lock # but absent yarn.lock leads to inconsistent builds on CI, so let's keep it
 /common/src/androidMain/res/raw/sender_verification_key.dat
 /common/src/androidMain/res/raw/tls.crt
+/common/src/jvmMain/resources/sender_verification_key.dat

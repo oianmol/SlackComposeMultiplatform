@@ -1,13 +1,9 @@
 package dev.baseio.security
 
-import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import java.security.InvalidAlgorithmParameterException
 import java.security.KeyPairGenerator
 import java.security.KeyStore
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.spec.AlgorithmParameterSpec
@@ -29,7 +25,7 @@ object AndroidKeyStoreRsaUtils {
     // Allow any screen unlock event to be valid for up to 1 hour.
     private const val UNLOCK_DURATION_SECONDS = 60 * 60
 
-    fun generateKeyPair(context: Context?, keychainId: String, isAuth: Boolean) {
+    fun generateKeyPair(keychainId: String, isAuth: Boolean) {
         val keyAlias = toKeyAlias(keychainId, isAuth)
         val rsaSpec = RSAKeyGenParameterSpec(KEY_SIZE, RSAKeyGenParameterSpec.F4)
         val spec: AlgorithmParameterSpec

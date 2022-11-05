@@ -188,6 +188,9 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation("com.google.crypto.tink:tink:1.7.0") {
                 exclude("com.google.protobuf", module = "*")
             }
+            implementation("com.google.crypto.tink:apps-webpush:1.7.0") {
+                exclude("com.google.crypto.tink", module = "*")
+            }
         }
     }
 

@@ -50,7 +50,7 @@ actual class WebPushKeyManager constructor(
         // com.google.capillary.HybridRsaUtils.java.)
 
         // Generate RSA key pair in Android key store.
-        AndroidKeyStoreRsaUtils.generateKeyPair(context, keychainId, isAuth)
+        AndroidKeyStoreRsaUtils.generateKeyPair(keychainId, isAuth)
 
         // Generate web push key pair.
         val theAuthSecret = Random.randBytes(16)
