@@ -38,7 +38,7 @@ actual class WebPushKeyManager constructor(
         sharedPreferences = storageContext.getSharedPreferences(prefName, Context.MODE_PRIVATE)
     }
 
-    fun rawGenerateKeyPair(isAuth: Boolean) {
+    actual fun rawGenerateKeyPair(isAuth: Boolean) {
         // Android Keystore does not support Web Push (i.e., ECDH) protocol. So we have to generate the
         // Web Push key pair using the Tink library, and wrap the generated Web Push private key using a
         // private key stored in Android Keystore. The only cipher that Android Keystore consistently
@@ -62,12 +62,12 @@ actual class WebPushKeyManager constructor(
         )
 
         val webPushPublicKey = kmWrappedWebPushPublicKey {
-            this@kmWrappedWebPushPublicKey.auth_secretList.addAll(theAuthSecret.map { it ->
+            this@kmWrappedWebPushPublicKey.authsecretList.addAll(theAuthSecret.map { it ->
                 kmSKByteArrayElement {
                     this.byte = it.toInt()
                 }
             })
-            this@kmWrappedWebPushPublicKey.key_bytesList.addAll(theEcPublicKeyBytes.map { it ->
+            this@kmWrappedWebPushPublicKey.keybytesList.addAll(theEcPublicKeyBytes.map { it ->
                 kmSKByteArrayElement {
                     this.byte = it.toInt()
                 }
@@ -80,17 +80,17 @@ actual class WebPushKeyManager constructor(
 
 
         val webPushPrivateKey = kmWrappedWebPushPrivateKey {
-            this.auth_secretList.addAll(theAuthSecret.map {
+            this.authsecretList.addAll(theAuthSecret.map {
                 kmSKByteArrayElement {
                     this.byte = it.toInt()
                 }
             })
-            this.public_key_bytesList.addAll(theEcPublicKeyBytes.map {
+            this.publickeybytesList.addAll(theEcPublicKeyBytes.map {
                 kmSKByteArrayElement {
                     this.byte = it.toInt()
                 }
             })
-            this.private_key_bytesList.addAll(theEcPrivateKeyBytes.map {
+            this.privatekeybytesList.addAll(theEcPrivateKeyBytes.map {
                 kmSKByteArrayElement {
                     this.byte = it.toInt()
                 }
@@ -123,7 +123,7 @@ actual class WebPushKeyManager constructor(
         }
     }
 
-    fun rawGetPublicKey(isAuth: Boolean): ByteArray {
+    actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {
         AndroidKeyStoreRsaUtils.checkKeyExists(keyStore, keychainId, isAuth)
         checkKeyExists(isAuth)
         return Base64.decode(sharedPreferences.getString(toKeyPrefKey(isAuth, true), null))
@@ -145,19 +145,19 @@ actual class WebPushKeyManager constructor(
 
         // Parse the decrypted web push private key.
         val webPushPrivateKey: KMWrappedWebPushPrivateKey = try {
-            KMWrappedWebPushPrivateKey.parseFrom(webPushPrivateKeyBytes)
+            webPushPrivateKeyBytes.toKMWrappedWebPushPrivateKey()
         } catch (e: InvalidProtocolBufferException) {
             throw GeneralSecurityException("unable to load web push private key", e)
         }
         // Create and return web push hybrid decrypter.
         return WebPushHybridDecrypt.Builder()
-            .withAuthSecret(webPushPrivateKey.auth_secretList.map { it.byte.toByte() }.toByteArray())
-            .withRecipientPublicKey(webPushPrivateKey.public_key_bytesList.map { it.byte.toByte() }.toByteArray())
-            .withRecipientPrivateKey(webPushPrivateKey.private_key_bytesList.map { it.byte.toByte() }.toByteArray())
+            .withAuthSecret(webPushPrivateKey.authsecretList.map { it.byte.toByte() }.toByteArray())
+            .withRecipientPublicKey(webPushPrivateKey.publickeybytesList.map { it.byte.toByte() }.toByteArray())
+            .withRecipientPrivateKey(webPushPrivateKey.privatekeybytesList.map { it.byte.toByte() }.toByteArray())
             .build()
     }
 
-    fun rawDeleteKeyPair(isAuth: Boolean) {
+    actual fun rawDeleteKeyPair(isAuth: Boolean) {
         checkKeyExists(isAuth)
         AndroidKeyStoreRsaUtils.deleteKeyPair(keyStore, keychainId, isAuth)
     }
@@ -183,9 +183,9 @@ actual class WebPushKeyManager constructor(
         @Throws(GeneralSecurityException::class)
         fun getInstance(
             context: Context, keychainId: String
-        ): WebPushKeyManager? {
+        ): WebPushKeyManager {
             if (instances.containsKey(keychainId)) {
-                return instances[keychainId]
+                return instances[keychainId]!!
             }
             val newInstance = WebPushKeyManager(context, keychainId)
             instances[keychainId] = newInstance
@@ -201,7 +201,7 @@ actual class WebPushKeyManager constructor(
 }
 
 
-fun KMWrappedWebPushPrivateKey.Companion.parseFrom(byteArray: ByteArray): KMWrappedWebPushPrivateKey {
+fun ByteArray.toKMWrappedWebPushPrivateKey(): KMWrappedWebPushPrivateKey {
     TODO("Not yet implemented")
 }
 

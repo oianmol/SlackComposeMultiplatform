@@ -43,7 +43,7 @@ actual class RsaEcdsaKeyManager constructor(
         val publicKeyBytes: ByteArray = AndroidKeyStoreRsaUtils.getPublicKey(keyStore, keychainId, isAuth).encoded
         return kmWrappedRsaEcdsaPublicKey {
             padding = AndroidKeyStoreRsaUtils.compatibleRsaPadding.name
-            key_bytesList.addAll(publicKeyBytes.map {
+            keybytesList.addAll(publicKeyBytes.map {
                 kmSKByteArrayElement {
                     byte = it.toInt()
                 }
@@ -85,10 +85,10 @@ actual class RsaEcdsaKeyManager constructor(
         @Synchronized
         fun getInstance(
             context: Context, keychainId: String, senderVerificationKey: InputStream
-        ): RsaEcdsaKeyManager? {
+        ): RsaEcdsaKeyManager {
             if (instances.containsKey(keychainId)) {
-                val instance: RsaEcdsaKeyManager? = instances[keychainId]
-                senderVerificationKey.let { instance?.updateSenderVerifier(it) }
+                val instance: RsaEcdsaKeyManager = instances[keychainId]!!
+                senderVerificationKey.let { instance.updateSenderVerifier(it) }
                 return instance
             }
             val newInstance = RsaEcdsaKeyManager(context, keychainId, senderVerificationKey)

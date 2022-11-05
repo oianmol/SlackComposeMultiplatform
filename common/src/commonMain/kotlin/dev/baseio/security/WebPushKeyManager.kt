@@ -1,4 +1,7 @@
 package dev.baseio.security
 
 expect class WebPushKeyManager : KeyManager {
+    fun rawGenerateKeyPair(isAuth: Boolean)
+    fun rawGetPublicKey(isAuth: Boolean): ByteArray
+    fun rawDeleteKeyPair(isAuth: Boolean)
 }

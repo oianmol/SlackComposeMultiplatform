@@ -65,12 +65,12 @@ object HybridRsaUtils {
         val aead = symmetricKeyHandle.getPrimitive(Aead::class.java)
         val payloadCiphertext = aead.encrypt(plaintext, emptyEad)
         return kmHybridRsaCiphertext {
-            this@kmHybridRsaCiphertext.symmetric_key_ciphertextList.addAll(symmetricKeyCiphertext.map { mapByte ->
+            this@kmHybridRsaCiphertext.symmetrickeyciphertextList.addAll(symmetricKeyCiphertext.map { mapByte ->
                 kmSKByteArrayElement {
                     this.byte = mapByte.toInt()
                 }
             })
-            this@kmHybridRsaCiphertext.payload_ciphertextList.addAll(payloadCiphertext.map { mapByte ->
+            this@kmHybridRsaCiphertext.payloadciphertextList.addAll(payloadCiphertext.map { mapByte ->
                 kmSKByteArrayElement {
                     this.byte = mapByte.toInt()
                 }
@@ -90,14 +90,14 @@ object HybridRsaUtils {
      */
     @Throws(GeneralSecurityException::class)
     fun decrypt(
-        ciphertext: ByteArray?,
-        privateKey: PrivateKey?,
+        ciphertext: ByteArray,
+        privateKey: PrivateKey,
         padding: RsaEcdsaConstants.Padding,
-        oaepParams: OAEPParameterSpec?
+        oaepParams: OAEPParameterSpec
     ): ByteArray {
         // Parse encrypted payload bytes.
         val hybridRsaCiphertext: KMHybridRsaCiphertext = try {
-            KMHybridRsaCiphertext.parseFrom(ciphertext)
+            ciphertext.toKMHybridRsaCiphertext()
         } catch (e: InvalidProtocolBufferException) {
             throw GeneralSecurityException("hybrid rsa decryption failed: ", e)
         }
@@ -111,7 +111,7 @@ object HybridRsaUtils {
         }
 
         // Retrieve symmetric key.
-        val symmetricKeyCiphertext: ByteArray = hybridRsaCiphertext.symmetric_key_ciphertextList.map { it.byte.toByte() }.toByteArray()
+        val symmetricKeyCiphertext: ByteArray = hybridRsaCiphertext.symmetrickeyciphertextList.map { it.byte.toByte() }.toByteArray()
         val symmetricKeyBytes = rsaCipher.doFinal(symmetricKeyCiphertext)
         val symmetricKeyHandle: KeysetHandle = try {
             CleartextKeysetHandle.read(BinaryKeysetReader.withBytes(symmetricKeyBytes))
@@ -121,11 +121,11 @@ object HybridRsaUtils {
 
         // Retrieve and return plaintext.
         val aead = symmetricKeyHandle.getPrimitive(Aead::class.java)
-        val payloadCiphertext: ByteArray = hybridRsaCiphertext.payload_ciphertextList.map { it.byte.toByte() }.toByteArray()
+        val payloadCiphertext: ByteArray = hybridRsaCiphertext.payloadciphertextList.map { it.byte.toByte() }.toByteArray()
         return aead.decrypt(payloadCiphertext, emptyEad)
     }
 }
 
-private fun KMHybridRsaCiphertext.Companion.parseFrom(ciphertext: ByteArray?): KMHybridRsaCiphertext {
+fun ByteArray.toKMHybridRsaCiphertext():KMHybridRsaCiphertext{
     TODO("Not yet implemented")
 }

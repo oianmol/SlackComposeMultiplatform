@@ -9,6 +9,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.security.ProviderInstaller
 import com.google.protobuf.ByteString
 import dev.baseio.slackdata.securepush.KMKeyAlgorithm
+import dev.baseio.slackdata.securepush.KMSecureNotification
 import dev.baseio.slackdata.securepush.kmSecureNotification
 import io.grpc.ManagedChannel
 import org.example.common.R
@@ -71,7 +72,7 @@ object Utils {
             id = System.currentTimeMillis().toInt()
             title = messageTitle
             body = java.lang.String.format("Algorithm=%s, IsAuth=%s", keyAlgorithm, isAuthKey)
-        }
+        }.toByteString()
     }
 
     /**
@@ -93,10 +94,9 @@ object Utils {
                         context, RSA_ECDSA_KEYCHAIN_ID, senderVerificationKey
                     )
                 }
-                WebPushKeyManager.getInstance(context, AndroidConstants.WEB_PUSH_KEYCHAIN_ID)
             }
 
-            KMKeyAlgorithm.WEB_PUSH -> WebPushKeyManager.getInstance(context, AndroidConstants.WEB_PUSH_KEYCHAIN_ID)
+            KMKeyAlgorithm.WEB_PUSH -> WebPushKeyManager.getInstance(context, WEB_PUSH_KEYCHAIN_ID)
             else -> throw IllegalArgumentException("unsupported key algorithm")
         }
     }
@@ -138,10 +138,10 @@ object Utils {
         return getSharedPreferences(context).getInt(PORT_KEY, 0)
     }
 
-    /**
+/*    *//**
      * Creates a new gRPC channel to the host and port combination stored in
      * [SharedPreferences].
-     */
+     *//*
     fun createGrpcChannel(context: Context): ManagedChannel {
         val sharedPreferences: SharedPreferences = getSharedPreferences(context)
         val host: String = sharedPreferences.getString(HOST_KEY, null)
@@ -152,7 +152,7 @@ object Utils {
         }
         context.resources.openRawResource(R.raw.tls)
             .use { certStream -> return TlsOkHttpChannelGenerator.generate(host, port, certStream) }
-    }
+    }*/
 
     /**
      * Returns a demo user ID for the current app instance.
@@ -209,4 +209,8 @@ object Utils {
         }
         return keyStore
     }
+}
+
+fun KMSecureNotification.toByteString(): ByteString {
+    TODO("Not yet implemented")
 }

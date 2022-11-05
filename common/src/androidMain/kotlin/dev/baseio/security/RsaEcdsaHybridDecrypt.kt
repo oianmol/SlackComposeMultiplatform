@@ -74,10 +74,10 @@ import javax.crypto.spec.OAEPParameterSpec
  * This implementation of RSA-ECDSA depends on the [Tink](https://github.com/google/tink) crypto library to perform AES-GCM and ECDSA operations.
  */
 class RsaEcdsaHybridDecrypt private constructor(builder: Builder) : HybridDecrypt {
-    private val senderVerifier: PublicKeyVerify?
-    private val recipientPrivateKey: PrivateKey?
-    private val padding: RsaEcdsaConstants.Padding?
-    private val oaepParameterSpec: OAEPParameterSpec?
+    private val senderVerifier: PublicKeyVerify
+    private val recipientPrivateKey: PrivateKey
+    private val padding: RsaEcdsaConstants.Padding
+    private val oaepParameterSpec: OAEPParameterSpec
 
     /**
      * Builder for [RsaEcdsaHybridDecrypt].
@@ -151,11 +151,11 @@ class RsaEcdsaHybridDecrypt private constructor(builder: Builder) : HybridDecryp
 
     init {
         requireNotNull(builder.senderVerifier) { "must set sender's verifier with Builder.withSenderVerificationKey" }
-        senderVerifier = builder.senderVerifier
+        senderVerifier = builder.senderVerifier!!
         requireNotNull(builder.recipientPrivateKey) { "must set recipient's private key with Builder.withRecipientPrivateKey" }
-        recipientPrivateKey = builder.recipientPrivateKey
+        recipientPrivateKey = builder.recipientPrivateKey!!
         requireNotNull(builder.padding) { "must set padding with Builder.withPadding" }
-        padding = builder.padding
+        padding = builder.padding!!
         require(!(padding == RsaEcdsaConstants.Padding.OAEP && builder.oaepParameterSpec == null)) { "must set OAEP parameter spec with Builder.withOaepParameterSpec" }
         oaepParameterSpec = builder.oaepParameterSpec
     }
