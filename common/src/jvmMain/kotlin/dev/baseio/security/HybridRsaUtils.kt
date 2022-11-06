@@ -7,6 +7,7 @@ import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.KeyTemplates
 import com.google.crypto.tink.KeysetHandle
 import com.google.protobuf.InvalidProtocolBufferException
+import dev.baseio.protoextensions.toByteArray
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMHybridRsaCiphertext
 import dev.baseio.slackdata.securepush.kmHybridRsaCiphertext

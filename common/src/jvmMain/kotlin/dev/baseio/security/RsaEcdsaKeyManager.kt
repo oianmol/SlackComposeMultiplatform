@@ -1,6 +1,11 @@
 package dev.baseio.security
 
+import com.google.crypto.tink.BinaryKeysetReader
+import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.HybridDecrypt
+import com.google.crypto.tink.KeysetHandle
+import com.google.crypto.tink.PublicKeyVerify
+import dev.baseio.protoextensions.toByteArray
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.kmWrappedRsaEcdsaPublicKey
 import java.io.IOException
@@ -18,12 +23,13 @@ actual class RsaEcdsaKeyManager constructor(
 ) : KeyManager() {
     private val keychainId = KEY_CHAIN_ID_PREFIX + chainId
     private var keyStore: KeyStore
-    private var senderVerifier: com.google.crypto.tink.PublicKeyVerify
+    private var senderVerifier: PublicKeyVerify
 
     init {
-        val verificationKeyHandle: com.google.crypto.tink.KeysetHandle = com.google.crypto.tink.CleartextKeysetHandle
-            .read(com.google.crypto.tink.BinaryKeysetReader.withInputStream(senderVerificationKey))
-        senderVerifier = com.google.crypto.tink.signature.PublicKeyVerifyFactory.getPrimitive(verificationKeyHandle)
+        val verificationKeyHandle: KeysetHandle = CleartextKeysetHandle
+            .read(BinaryKeysetReader.withInputStream(senderVerificationKey))
+
+        senderVerifier = verificationKeyHandle.getPrimitive(PublicKeyVerify::class.java)
         keyStore = Utils.loadKeyStore()
     }
 
@@ -34,7 +40,7 @@ actual class RsaEcdsaKeyManager constructor(
     }
 
     actual fun rawGenerateKeyPair(isAuth: Boolean) {
-        JVMKeyStoreRsaUtils.generateKeyPair(keychainId)
+        JVMKeyStoreRsaUtils.generateKeyPair(keychainId,keyStore)
     }
 
     actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {

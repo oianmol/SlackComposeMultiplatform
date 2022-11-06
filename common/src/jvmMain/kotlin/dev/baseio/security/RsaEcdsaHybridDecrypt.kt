@@ -134,8 +134,8 @@ class RsaEcdsaHybridDecrypt private constructor(builder: Builder) : HybridDecryp
          * @param val the [OAEPParameterSpec] instance.
          * @return the builder.
          */
-        fun withOaepParameterSpec(`val`: OAEPParameterSpec?): Builder {
-            oaepParameterSpec = `val`
+        fun withOaepParameterSpec(spec: OAEPParameterSpec): Builder {
+            oaepParameterSpec = spec
             return this
         }
 

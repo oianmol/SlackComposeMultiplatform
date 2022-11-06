@@ -6,12 +6,13 @@ import com.google.crypto.tink.subtle.Base64
 import com.google.crypto.tink.subtle.EllipticCurves
 import com.google.crypto.tink.subtle.Random
 import com.google.protobuf.InvalidProtocolBufferException
+import dev.baseio.protoextensions.toByteArray
+import dev.baseio.protoextensions.toKMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.kmWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.kmWrappedWebPushPublicKey
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
-import io.github.timortel.kotlin_multiplatform_grpc_lib.message.KMMessage
 import org.koin.java.KoinJavaComponent.getKoin
 import java.security.GeneralSecurityException
 import java.security.KeyStore
@@ -43,7 +44,7 @@ actual class WebPushKeyManager constructor(
         // com.google.capillary.HybridRsaUtils.java.)
 
         // Generate RSA key pair in Android key store.
-        JVMKeyStoreRsaUtils.generateKeyPair(keychainId)
+        JVMKeyStoreRsaUtils.generateKeyPair(keychainId, keyStore)
 
         // Generate web push key pair.
         val theAuthSecret = Random.randBytes(16)
@@ -115,8 +116,6 @@ actual class WebPushKeyManager constructor(
     }
 
     actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {
-        JVMKeyStoreRsaUtils.checkKeyExists(keyStore, keychainId)
-        checkKeyExists()
         return Base64.decode(getKoin().get<SKLocalKeyValueSource>().get(toKeyPrefKey(true)))
     }
 
@@ -188,13 +187,4 @@ actual class WebPushKeyManager constructor(
             return "no_auth" + suffix
         }
     }
-}
-
-
-fun ByteArray.toKMWrappedWebPushPrivateKey(): KMWrappedWebPushPrivateKey {
-    TODO("Not yet implemented")
-}
-
-fun KMMessage.toByteArray(): ByteArray {
-    TODO("Not yet implemented")
 }
