@@ -2,6 +2,7 @@ package dev.baseio.security
 
 import android.content.Context
 import com.google.crypto.tink.HybridDecrypt
+import dev.baseio.protoextensions.toByteArray
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.kmWrappedRsaEcdsaPublicKey
 import java.io.IOException
@@ -13,8 +14,7 @@ import java.security.PrivateKey
 /**
  * An implementation of [KeyManager] that supports RSA-ECDSA keys.
  */
-actual class RsaEcdsaKeyManager constructor(
-    private val context: Context,
+actual class RsaEcdsaKeyManager(
     chainId: String,
     senderVerificationKey: InputStream
 ) : KeyManager() {
@@ -49,6 +49,10 @@ actual class RsaEcdsaKeyManager constructor(
                 }
             })
         }.toByteArray()
+    }
+
+    actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
+        return rawGetDecrypter(false).decrypt(cipherText, contextInfo)
     }
 
     fun rawGetDecrypter(isAuth: Boolean): HybridDecrypt {
@@ -91,9 +95,13 @@ actual class RsaEcdsaKeyManager constructor(
                 senderVerificationKey.let { instance.updateSenderVerifier(it) }
                 return instance
             }
-            val newInstance = RsaEcdsaKeyManager(context, keychainId, senderVerificationKey)
+            val newInstance = RsaEcdsaKeyManager(keychainId, senderVerificationKey)
             instances[keychainId] = newInstance
             return newInstance
         }
+    }
+
+    override fun getDecrypter(keychainuniqueid: String, keyserialnumber: Int, isauthkey: Boolean): HybridDecrypt {
+        return rawGetDecrypter(isauthkey)
     }
 }

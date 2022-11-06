@@ -6,9 +6,8 @@ import dev.baseio.slackdata.securepush.KMSlackCiphertext
 /**
  * Encapsulates the process of decrypting Capillary ciphertexts.
  */
-actual class DecrypterManager internal actual constructor(
-    private val keyManager: KeyManager
-) {
+actual class DecrypterManager internal actual constructor(private val keyManager: KeyManager) {
+
     actual fun decrypt(ciphertext: KMSlackCiphertext): ByteArray {
         val rawCiphertext: ByteArray = ciphertext.ciphertextList.map { it.byte.toByte() }.toByteArray()
         val data: ByteArray

@@ -8,7 +8,7 @@ import dev.baseio.slackdata.securepush.KMWrappedRsaEcdsaPublicKey
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPublicKey
 
-actual fun KMWrappedWebPushPublicKey.toByteArray(): ByteArray {
+actual fun KMSlackPublicKey.toByteArray(): ByteArray {
     TODO("Not yet implemented")
 }
 
@@ -20,15 +20,15 @@ actual fun ByteArray.toSlackCipherText(): KMSlackCiphertext {
     TODO("Not yet implemented")
 }
 
-actual fun ByteArray.toKMHybridRsaCiphertext(): KMHybridRsaCiphertext {
-    TODO("Not yet implemented")
-}
-
 actual fun ByteArray.toKMWrappedWebPushPrivateKey(): KMWrappedWebPushPrivateKey {
     TODO("Not yet implemented")
 }
 
-actual fun KMSlackPublicKey.toByteArray(): ByteArray {
+actual fun ByteArray.toKMHybridRsaCiphertext(): KMHybridRsaCiphertext {
+    TODO("Not yet implemented")
+}
+
+actual fun KMWrappedWebPushPublicKey.toByteArray(): ByteArray {
     TODO("Not yet implemented")
 }
 

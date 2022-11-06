@@ -6,11 +6,13 @@ import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMHybridRsaCiphertext
 import dev.baseio.slackdata.securepush.KMSecureNotification
 import dev.baseio.slackdata.securepush.KMSlackCiphertext
+import dev.baseio.slackdata.securepush.KMSlackPublicKey
 import dev.baseio.slackdata.securepush.KMWrappedRsaEcdsaPublicKey
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPublicKey
 import dev.baseio.slackdata.securepush.WrappedWebPushPublicKey
 import dev.baseio.slackdata.securepush.WrappedWebPushPrivateKey
+import dev.baseio.slackdata.securepush.SlackPublicKey
 import dev.baseio.slackdata.securepush.kmHybridRsaCiphertext
 import dev.baseio.slackdata.securepush.kmSecureNotification
 import dev.baseio.slackdata.securepush.kmSlackCiphertext
@@ -28,6 +30,16 @@ actual fun KMWrappedWebPushPublicKey.toByteArray(): ByteArray {
         })
         .build().toByteArray()
 }
+
+actual fun KMSlackPublicKey.toByteArray(): ByteArray {
+    val builder = SlackPublicKey.newBuilder()
+    builder.setKeychainuniqueid(keychainuniqueid)
+    builder.setSerialnumber(serialnumber)
+    builder.setIsauth(isauth)
+    builder.addAllKeybytes(keybytesList.map { it.`impl` })
+    return builder.build().toByteArray()
+}
+
 
 actual fun KMWrappedWebPushPrivateKey.toByteArray(): ByteArray {
     return dev.baseio.slackdata.securepush.WrappedWebPushPrivateKey.newBuilder()

@@ -11,7 +11,7 @@ import java.security.KeyStore
  * Contains common helper functions used by the Android classes.
  */
 object Utils {
-    const val KEYSTORE_JVM = "pkcs12"
+    const val KEYSTORE_JVM = "JKS"
 
     /**
      * Initializes the library.

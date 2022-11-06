@@ -10,4 +10,8 @@ actual class WebPushKeyManager : KeyManager() {
 
     actual fun rawDeleteKeyPair(isAuth: Boolean) {
     }
+
+    actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
+        TODO("Not yet implemented")
+    }
 }

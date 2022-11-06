@@ -39,11 +39,11 @@ actual class RsaEcdsaKeyManager constructor(
         senderVerifier = com.google.crypto.tink.signature.PublicKeyVerifyFactory.getPrimitive(verificationKeyHandle)
     }
 
-    actual fun rawGenerateKeyPair(isAuth: Boolean) {
+    actual override fun rawGenerateKeyPair(isAuth: Boolean) {
         JVMKeyStoreRsaUtils.generateKeyPair(keychainId, keyStore)
     }
 
-    actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {
+    actual override fun rawGetPublicKey(isAuth: Boolean): ByteArray {
         val publicKeyBytes: ByteArray = JVMKeyStoreRsaUtils.getPublicKey(keyStore, keychainId).encoded
         return kmWrappedRsaEcdsaPublicKey {
             padding = JVMKeyStoreRsaUtils.compatibleRsaPadding.name
@@ -53,6 +53,10 @@ actual class RsaEcdsaKeyManager constructor(
                 }
             })
         }.toByteArray()
+    }
+
+    override fun rawGetDecrypter(isAuth: Boolean): HybridDecrypt {
+        return rawGetDecrypter()
     }
 
     actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
@@ -68,7 +72,7 @@ actual class RsaEcdsaKeyManager constructor(
             .build()
     }
 
-    actual fun rawDeleteKeyPair(isAuth: Boolean) {
+    actual override fun rawDeleteKeyPair(isAuth: Boolean) {
         JVMKeyStoreRsaUtils.deleteKeyPair(keyStore, keychainId)
     }
 

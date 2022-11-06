@@ -8,6 +8,8 @@ import com.google.crypto.tink.subtle.Base64
 import com.google.crypto.tink.subtle.EllipticCurves
 import com.google.crypto.tink.subtle.Random
 import com.google.protobuf.InvalidProtocolBufferException
+import dev.baseio.protoextensions.toByteArray
+import dev.baseio.protoextensions.toKMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.kmWrappedWebPushPrivateKey
@@ -198,13 +200,12 @@ actual class WebPushKeyManager constructor(
             return prefix + suffix
         }
     }
-}
 
+    actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
+        return rawGetDecrypter(false).decrypt(cipherText, contextInfo)
+    }
 
-fun ByteArray.toKMWrappedWebPushPrivateKey(): KMWrappedWebPushPrivateKey {
-    TODO("Not yet implemented")
-}
-
-fun KMMessage.toByteArray(): ByteArray {
-    TODO("Not yet implemented")
+    override fun getDecrypter(keychainuniqueid: String, keyserialnumber: Int, isauthkey: Boolean): HybridDecrypt {
+        return rawGetDecrypter(isauthkey)
+    }
 }

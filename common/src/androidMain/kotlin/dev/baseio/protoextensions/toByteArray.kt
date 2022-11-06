@@ -6,10 +6,16 @@ import dev.baseio.slackdata.protos.SKByteArrayElement
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMHybridRsaCiphertext
 import dev.baseio.slackdata.securepush.KMSecureNotification
+import dev.baseio.slackdata.securepush.KMSlackCiphertext
+import dev.baseio.slackdata.securepush.KMSlackPublicKey
 import dev.baseio.slackdata.securepush.KMWrappedRsaEcdsaPublicKey
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.WrappedWebPushPublicKey
 import dev.baseio.slackdata.securepush.WrappedWebPushPrivateKey
+import dev.baseio.slackdata.securepush.SlackPublicKey
+import dev.baseio.slackdata.securepush.kmHybridRsaCiphertext
+import dev.baseio.slackdata.securepush.kmSecureNotification
+import dev.baseio.slackdata.securepush.kmSlackCiphertext
 import dev.baseio.slackdata.securepush.kmWrappedWebPushPrivateKey
 
 actual fun KMWrappedWebPushPublicKey.toByteArray(): ByteArray {
@@ -23,6 +29,15 @@ actual fun KMWrappedWebPushPublicKey.toByteArray(): ByteArray {
                 .setByte(it.byte).build()
         })
         .build().toByteArray()
+}
+
+actual fun KMSlackPublicKey.toByteArray(): ByteArray {
+    val builder = SlackPublicKey.newBuilder()
+    builder.setKeychainuniqueid(keychainuniqueid)
+    builder.setSerialnumber(serialnumber)
+    builder.setIsauth(isauth)
+    builder.addAllKeybytes(keybytesList.map { it.`impl` })
+    return builder.build().toByteArray()
 }
 
 actual fun KMWrappedWebPushPrivateKey.toByteArray(): ByteArray {
@@ -86,6 +101,45 @@ actual fun ByteArray.toKMWrappedWebPushPrivateKey(): KMWrappedWebPushPrivateKey 
             }
         })
         this.publickeybytesList.addAll(privateKey.publickeybytesList.map {it->
+            kmSKByteArrayElement {
+                this.byte = it.byte
+            }
+        })
+    }
+}
+
+actual fun ByteArray.toSecureNotification(): KMSecureNotification {
+    val secureNotification = dev.baseio.slackdata.securepush.SecureNotification.parseFrom(this)
+    return kmSecureNotification {
+        this.id = secureNotification.id
+        this.title = secureNotification.title
+        this.body = secureNotification.body
+    }
+}
+
+actual fun ByteArray.toSlackCipherText(): KMSlackCiphertext {
+    val secureNotification = dev.baseio.slackdata.securepush.SlackCiphertext.parseFrom(this)
+    return kmSlackCiphertext {
+        this.ciphertextList.addAll(secureNotification.ciphertextList.map { it ->
+            kmSKByteArrayElement {
+                this.byte = it.byte
+            }
+        })
+        this.isauthkey = secureNotification.isauthkey
+        this.keychainuniqueid = secureNotification.keychainuniqueid
+        this.keyserialnumber = secureNotification.keyserialnumber
+    }
+}
+
+actual fun ByteArray.toKMHybridRsaCiphertext(): KMHybridRsaCiphertext {
+    val secureNotification = dev.baseio.slackdata.securepush.HybridRsaCiphertext.parseFrom(this)
+    return kmHybridRsaCiphertext {
+        symmetrickeyciphertextList.addAll(secureNotification.symmetrickeyciphertextList.map { it ->
+            kmSKByteArrayElement {
+                this.byte = it.byte
+            }
+        })
+        payloadciphertextList.addAll(secureNotification.payloadciphertextList.map { it ->
             kmSKByteArrayElement {
                 this.byte = it.byte
             }

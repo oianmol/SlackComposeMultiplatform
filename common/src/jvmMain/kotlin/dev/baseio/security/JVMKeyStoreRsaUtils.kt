@@ -120,5 +120,5 @@ object JVMKeyStoreRsaUtils {
     }
 
     val compatibleRsaPadding: RsaEcdsaConstants.Padding
-        get() = RsaEcdsaConstants.Padding.OAEP
+        get() = RsaEcdsaConstants.Padding.PKCS1
 }

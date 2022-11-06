@@ -10,4 +10,8 @@ actual class RsaEcdsaKeyManager : KeyManager() {
 
     actual fun rawGenerateKeyPair(isAuth: Boolean) {
     }
+
+    actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
+        TODO("Not yet implemented")
+    }
 }

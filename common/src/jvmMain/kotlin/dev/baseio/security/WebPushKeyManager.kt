@@ -32,7 +32,7 @@ actual class WebPushKeyManager constructor(
     private val keychainId: String = KEY_CHAIN_ID_PREFIX + chainId
     private val keyStore: KeyStore = Utils.loadKeyStore()
 
-    actual fun rawGenerateKeyPair(isAuth: Boolean) {
+    actual override fun rawGenerateKeyPair(isAuth: Boolean) {
         // JVM Keystore does not support Web Push (i.e., ECDH) protocol. So we have to generate the
         // Web Push key pair using the Tink library, and wrap the generated Web Push private key using a
         // private key stored in Android Keystore. The only cipher that Android Keystore consistently
@@ -115,8 +115,12 @@ actual class WebPushKeyManager constructor(
         }
     }
 
-    actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {
+    actual override fun rawGetPublicKey(isAuth: Boolean): ByteArray {
         return Base64.decode(getKoin().get<SKLocalKeyValueSource>().get(toKeyPrefKey(true)))
+    }
+
+    override fun rawGetDecrypter(isAuth: Boolean): HybridDecrypt {
+        return rawGetDecrypter()
     }
 
     actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
@@ -151,7 +155,7 @@ actual class WebPushKeyManager constructor(
             .build()
     }
 
-    actual fun rawDeleteKeyPair(isAuth: Boolean) {
+    actual override fun rawDeleteKeyPair(isAuth: Boolean) {
         checkKeyExists()
         JVMKeyStoreRsaUtils.deleteKeyPair(keyStore, keychainId)
     }
