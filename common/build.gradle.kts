@@ -185,6 +185,8 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             api(kotlinMultiplatformExtension.compose.preview)
             implementation(Deps.Koin.core_jvm)
             implementation(Lib.Decompose.composejb)
+            api("com.google.protobuf:protobuf-java:3.21.6")
+
             implementation("com.google.crypto.tink:tink:1.7.0") {
                 exclude("com.google.protobuf", module = "*")
             }

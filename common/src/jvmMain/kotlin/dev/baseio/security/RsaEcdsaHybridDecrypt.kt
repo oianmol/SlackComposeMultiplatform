@@ -161,14 +161,14 @@ class RsaEcdsaHybridDecrypt private constructor(builder: Builder) : HybridDecryp
     }
 
     @Throws(GeneralSecurityException::class)
-    override fun decrypt(ciphertext: ByteArray, contextInfo: ByteArray): ByteArray {
+    override fun decrypt(ciphertext: ByteArray, contextInfo: ByteArray?): ByteArray {
         if (contextInfo != null) {
             throw GeneralSecurityException("contextInfo must be null because it is unused")
         }
         return try {
             val verifiedCiphertext = deserializeAndVerify(ciphertext)
             decrypt(
-                verifiedCiphertext, recipientPrivateKey, padding!!, oaepParameterSpec
+                verifiedCiphertext, recipientPrivateKey, padding, oaepParameterSpec
             )
         } catch (e: IOException) {
             throw GeneralSecurityException("decryption failed", e)

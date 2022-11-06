@@ -8,6 +8,7 @@ import com.google.crypto.tink.KeyTemplates
 import com.google.crypto.tink.KeysetHandle
 import com.google.protobuf.InvalidProtocolBufferException
 import dev.baseio.protoextensions.toByteArray
+import dev.baseio.protoextensions.toKMHybridRsaCiphertext
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMHybridRsaCiphertext
 import dev.baseio.slackdata.securepush.kmHybridRsaCiphertext
@@ -111,7 +112,8 @@ object HybridRsaUtils {
         }
 
         // Retrieve symmetric key.
-        val symmetricKeyCiphertext: ByteArray = hybridRsaCiphertext.symmetrickeyciphertextList.map { it.byte.toByte() }.toByteArray()
+        val symmetricKeyCiphertext: ByteArray =
+            hybridRsaCiphertext.symmetrickeyciphertextList.map { it.byte.toByte() }.toByteArray()
         val symmetricKeyBytes = rsaCipher.doFinal(symmetricKeyCiphertext)
         val symmetricKeyHandle: KeysetHandle = try {
             CleartextKeysetHandle.read(BinaryKeysetReader.withBytes(symmetricKeyBytes))
@@ -121,11 +123,8 @@ object HybridRsaUtils {
 
         // Retrieve and return plaintext.
         val aead = symmetricKeyHandle.getPrimitive(Aead::class.java)
-        val payloadCiphertext: ByteArray = hybridRsaCiphertext.payloadciphertextList.map { it.byte.toByte() }.toByteArray()
+        val payloadCiphertext: ByteArray =
+            hybridRsaCiphertext.payloadciphertextList.map { it.byte.toByte() }.toByteArray()
         return aead.decrypt(payloadCiphertext, emptyEad)
     }
-}
-
-fun ByteArray.toKMHybridRsaCiphertext():KMHybridRsaCiphertext{
-    TODO("Not yet implemented")
 }

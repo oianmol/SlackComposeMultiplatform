@@ -4,4 +4,6 @@ expect class WebPushKeyManager : KeyManager {
     fun rawGenerateKeyPair(isAuth: Boolean)
     fun rawGetPublicKey(isAuth: Boolean): ByteArray
     fun rawDeleteKeyPair(isAuth: Boolean)
+
+    fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray?
 }

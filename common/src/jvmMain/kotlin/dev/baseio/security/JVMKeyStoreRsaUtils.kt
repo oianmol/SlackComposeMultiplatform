@@ -112,6 +112,7 @@ object JVMKeyStoreRsaUtils {
     fun deleteKeyPair(keyStore: KeyStore, keychainId: String) {
         val alias = toKeyAlias(keychainId)
         keyStore.deleteEntry(alias)
+
     }
 
     private fun toKeyAlias(keychainId: String): String {

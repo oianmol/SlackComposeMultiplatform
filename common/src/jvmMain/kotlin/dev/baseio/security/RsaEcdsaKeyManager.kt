@@ -40,7 +40,7 @@ actual class RsaEcdsaKeyManager constructor(
     }
 
     actual fun rawGenerateKeyPair(isAuth: Boolean) {
-        JVMKeyStoreRsaUtils.generateKeyPair(keychainId,keyStore)
+        JVMKeyStoreRsaUtils.generateKeyPair(keychainId, keyStore)
     }
 
     actual fun rawGetPublicKey(isAuth: Boolean): ByteArray {
@@ -55,7 +55,11 @@ actual class RsaEcdsaKeyManager constructor(
         }.toByteArray()
     }
 
-    fun rawGetDecrypter(isAuth: Boolean): HybridDecrypt {
+    actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
+        return rawGetDecrypter().decrypt(cipherText, contextInfo)
+    }
+
+    fun rawGetDecrypter(): HybridDecrypt {
         val recipientPrivateKey: PrivateKey = JVMKeyStoreRsaUtils.getPrivateKey(keyStore, keychainId)
         return RsaEcdsaHybridDecrypt.Builder()
             .withRecipientPrivateKey(recipientPrivateKey)
@@ -87,7 +91,8 @@ actual class RsaEcdsaKeyManager constructor(
          * @throws IOException if the ECDSA verification key could not be read.
          */
         @Synchronized
-        fun getInstance( keychainId: String, senderVerificationKey: InputStream
+        fun getInstance(
+            keychainId: String, senderVerificationKey: InputStream
         ): RsaEcdsaKeyManager {
             if (instances.containsKey(keychainId)) {
                 val instance: RsaEcdsaKeyManager = instances[keychainId]!!

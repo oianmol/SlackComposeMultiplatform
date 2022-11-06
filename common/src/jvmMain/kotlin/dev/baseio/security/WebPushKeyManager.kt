@@ -119,7 +119,11 @@ actual class WebPushKeyManager constructor(
         return Base64.decode(getKoin().get<SKLocalKeyValueSource>().get(toKeyPrefKey(true)))
     }
 
-    fun rawGetDecrypter(isAuth: Boolean): HybridDecrypt {
+    actual fun decrypt(cipherText: ByteArray, contextInfo: ByteArray?): ByteArray? {
+        return rawGetDecrypter().decrypt(cipherText, contextInfo)
+    }
+
+    fun rawGetDecrypter(): HybridDecrypt {
         checkKeyExists()
         // Load encrypted web push private key.
         val encryptedWebPushPrivateKeyBytes =

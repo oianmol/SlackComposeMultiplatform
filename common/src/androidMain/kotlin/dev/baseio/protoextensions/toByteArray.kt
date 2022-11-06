@@ -3,10 +3,14 @@ package dev.baseio.protoextensions
 import com.google.protobuf.Parser
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPublicKey
 import dev.baseio.slackdata.protos.SKByteArrayElement
+import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMHybridRsaCiphertext
+import dev.baseio.slackdata.securepush.KMSecureNotification
 import dev.baseio.slackdata.securepush.KMWrappedRsaEcdsaPublicKey
 import dev.baseio.slackdata.securepush.KMWrappedWebPushPrivateKey
 import dev.baseio.slackdata.securepush.WrappedWebPushPublicKey
+import dev.baseio.slackdata.securepush.WrappedWebPushPrivateKey
+import dev.baseio.slackdata.securepush.kmWrappedWebPushPrivateKey
 
 actual fun KMWrappedWebPushPublicKey.toByteArray(): ByteArray {
     return WrappedWebPushPublicKey.newBuilder()
@@ -59,6 +63,32 @@ actual fun KMWrappedRsaEcdsaPublicKey.toByteArray(): ByteArray {
         .build().toByteArray()
 }
 
+actual fun KMSecureNotification.toByteArray(): ByteArray{
+    return dev.baseio.slackdata.securepush.SecureNotification.newBuilder()
+        .setId(this.id)
+        .setTitle(this.title)
+        .setBody(this.body)
+        .build()
+        .toByteArray()
+}
+
 actual fun ByteArray.toKMWrappedWebPushPrivateKey(): KMWrappedWebPushPrivateKey {
-    return Parser<WrappedWebPushPrivateKey>.parseFrom(this)
+    val privateKey = WrappedWebPushPrivateKey.parseFrom(this)
+    return kmWrappedWebPushPrivateKey {
+        this.authsecretList.addAll(privateKey.authsecretList.map {it->
+            kmSKByteArrayElement {
+                this.byte = it.byte
+            }
+        })
+        this.privatekeybytesList.addAll(privateKey.privatekeybytesList.map { it->
+            kmSKByteArrayElement {
+                this.byte = it.byte
+            }
+        })
+        this.publickeybytesList.addAll(privateKey.publickeybytesList.map {it->
+            kmSKByteArrayElement {
+                this.byte = it.byte
+            }
+        })
+    }
 }

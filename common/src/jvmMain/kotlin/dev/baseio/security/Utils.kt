@@ -1,8 +1,7 @@
 package dev.baseio.security
 
-import com.google.protobuf.ByteString
+import dev.baseio.protoextensions.toByteArray
 import dev.baseio.slackdata.securepush.KMKeyAlgorithm
-import dev.baseio.slackdata.securepush.KMSecureNotification
 import dev.baseio.slackdata.securepush.kmSecureNotification
 import java.io.IOException
 import java.security.GeneralSecurityException
@@ -35,12 +34,12 @@ object Utils {
      */
     fun createSecureMessageBytes(
         messageTitle: String?, keyAlgorithm: KMKeyAlgorithm?, isAuthKey: Boolean
-    ): ByteString {
+    ): ByteArray {
         return kmSecureNotification {
             id = System.currentTimeMillis().toInt()
             title = messageTitle
             body = java.lang.String.format("Algorithm=%s, IsAuth=%s", keyAlgorithm, isAuthKey)
-        }.toByteString()
+        }.toByteArray()
     }
 
     /**
@@ -71,8 +70,4 @@ object Utils {
         }
         return keyStore
     }
-}
-
-fun KMSecureNotification.toByteString(): ByteString {
-    TODO("Not yet implemented")
 }
