@@ -41,6 +41,7 @@ object Deps {
         object IOS {
             const val coroutinesX64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4"
             const val coroutinesArm64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4"
+            const val coroutinesiossimulatorarm64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iossimulatorarm64:1.6.4"
         }
 
         object Android {
@@ -151,7 +152,7 @@ object Lib {
     object Async {
         private const val COROUTINES_VERSION = "1.6.4"
 
-        const val COROUTINES = "`org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
+        const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
         const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINES_VERSION"
 
         const val COROUTINES_ANDROID =
