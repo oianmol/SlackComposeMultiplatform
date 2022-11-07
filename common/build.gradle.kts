@@ -22,6 +22,7 @@ repositories {
 dependencies {
     implementation("androidx.test:core-ktx:1.4.0")
     commonMainApi(Lib.Multiplatform.mokoPaging)
+    commonMainApi(project(Lib.Project.CAPILLARY_KMP))
 }
 
 kotlin {
@@ -97,7 +98,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         dependencies {
             implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
             implementation(project(Lib.Project.SLACK_DATA_COMMON))
-            implementation(project(Lib.Project.CAPILLARY_KMP))
             implementation(Deps.Kotlinx.datetime)
             implementation(Deps.SqlDelight.runtime)
             implementation(Deps.Koin.core)
