@@ -54,6 +54,7 @@ fun main() {
 
         val ciphertext: ByteArray =
             Base64.getDecoder().decode(response.nothing)
+
         val slackCipherText = ciphertext.toSlackCipherText()
         val decrypted = DecrypterManager(keyManager).decrypt(slackCipherText)
         val securenotification = decrypted.toSecureNotification()
