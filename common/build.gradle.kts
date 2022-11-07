@@ -26,25 +26,27 @@ dependencies {
 }
 
 kotlin {
-    val iosEnabled = true
+    val iosEnabled = false
     targets(iosEnabled)
 
-    cocoapods {
-        version = "1.0"
-        summary = ""
-        homepage = ""
-        framework {
-            baseName = "capillary-ios"
+    if (iosEnabled) {
+        cocoapods {
+            version = "1.0"
+            summary = ""
+            homepage = ""
+            framework {
+                baseName = "capillary-ios"
+            }
+            ios.deploymentTarget = "14.1"
+            pod("Tink", version = "~> 1.6.1", moduleName = "Tink")
         }
-        ios.deploymentTarget = "14.1"
-        pod("Tink", version = "~> 1.6.1", moduleName = "Tink")
     }
 
     sourceSets {
         commonDependencies(this@kotlin)
         androidDependencies()
         jvmDependencies(this@kotlin)
-        configureTest(this@kotlin)
+        configureTest(iosEnabled)
         if (iosEnabled) {
             iosArmDependencies()
             iosSimulatorArmDependencies()
@@ -121,9 +123,9 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 
             // CameraX
             api("androidx.camera:camera-camera2:1.2.0-rc01")
-            api ("androidx.camera:camera-lifecycle:1.2.0-rc01")
-            api ("androidx.camera:camera-view:1.2.0-rc01")
-            api ("androidx.camera:camera-video:1.2.0-rc01")
+            api("androidx.camera:camera-lifecycle:1.2.0-rc01")
+            api("androidx.camera:camera-view:1.2.0-rc01")
+            api("androidx.camera:camera-video:1.2.0-rc01")
 
             // Zxing
             api("com.google.zxing:core:3.5.0")
@@ -157,7 +159,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
     }
 }
 
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosSimulatorArmDependencies(){
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosSimulatorArmDependencies() {
     val iosSimulatorArm64Main by getting {
         dependencies {
             implementation(Lib.Decompose.composejb)
@@ -199,7 +201,9 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 
 }
 
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.configureTest(kotlinMultiplatformExtension: KotlinMultiplatformExtension) {
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.configureTest(
+    iosEnabled: Boolean
+) {
     val commonTest by getting {
         dependencies {
             implementation(Deps.Koin.test)
@@ -211,15 +215,18 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation("dev.icerock.moko:test-core:0.6.1")
         }
     }
-    val iosX64Test by getting
-    val iosArm64Test by getting
-    val iosSimulatorArm64Test by getting
-    val iosTest by creating {
-        dependsOn(commonTest)
-        iosX64Test.dependsOn(this)
-        iosArm64Test.dependsOn(this)
-        iosSimulatorArm64Test.dependsOn(this)
+    if (iosEnabled) {
+        val iosX64Test by getting
+        val iosArm64Test by getting
+        val iosSimulatorArm64Test by getting
+        val iosTest by creating {
+            dependsOn(commonTest)
+            iosX64Test.dependsOn(this)
+            iosArm64Test.dependsOn(this)
+            iosSimulatorArm64Test.dependsOn(this)
+        }
     }
+
     val androidTest by getting {
         dependencies {
             implementation(kotlin("test-junit"))

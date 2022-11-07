@@ -15,11 +15,8 @@
             <option value="$PROJECT_DIR$/android" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/capillary_kmp" />
-            <option value="$PROJECT_DIR$/capillary_kmp/capillary_generate_protos" />
-            <option value="$PROJECT_DIR$/capillary_kmp/capillary_protos" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/desktop" />
-            <option value="$PROJECT_DIR$/iOSApp" />
             <option value="$PROJECT_DIR$/slack_data_layer" />
             <option value="$PROJECT_DIR$/slack_domain_layer" />
             <option value="$PROJECT_DIR$/slack_generate_protos" />
