@@ -71,6 +71,7 @@ object Lib {
     object Project {
         const val SLACK_DOMAIN_COMMON = ":slack_domain_layer"
         const val SLACK_DATA_COMMON = ":slack_data_layer"
+        const val CAPILLARY_KMP = ":capillary_kmp"
         const val common = ":common"
     }
 

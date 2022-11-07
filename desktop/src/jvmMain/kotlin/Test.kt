@@ -2,8 +2,10 @@ import dev.baseio.grpc.GrpcCalls
 import dev.baseio.protoextensions.toSecureNotification
 import dev.baseio.protoextensions.toSlackCipherText
 import dev.baseio.security.Capillary
+import dev.baseio.security.DecrypterManager
 import dev.baseio.security.RsaEcdsaKeyManager
 import dev.baseio.security.Utils
+import dev.baseio.security.WebPushKeyManager
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
@@ -17,15 +19,17 @@ import java.util.Base64
 fun main() {
     runBlocking {
         Capillary.initialize()
+        val skKeyValueData = SKKeyValueData()
+        val valueSource = SKLocalKeyValueSourceImpl(skKeyValueData)
         val keyManager =
             RsaEcdsaKeyManager.getInstance(
-                "test",
+                "1",
                 object {}.javaClass.getResourceAsStream("sender_verification_key.dat")
             )
         keyManager.rawGenerateKeyPair(false)
-        val skKeyValueData = SKKeyValueData()
 
-        val calls = GrpcCalls(port = 8443, skKeyValueData = SKLocalKeyValueSourceImpl(skKeyValueData))
+
+        val calls = GrpcCalls(port = 8443, skKeyValueData = valueSource)
         calls.secureService.addOrUpdatePublicKey(kmAddOrUpdatePublicKeyRequest {
             this.userId = "1"
             this.algorithm = KMKeyAlgorithm.RSA_ECDSA
@@ -51,9 +55,8 @@ fun main() {
         val ciphertext: ByteArray =
             Base64.getDecoder().decode(response.nothing)
         val slackCipherText = ciphertext.toSlackCipherText()
-        val encrypted = slackCipherText.ciphertextList.map { it.byte.toByte() }.toByteArray()
-        val decrypted = keyManager.decrypt(encrypted, null)
-        val securenotification = decrypted?.toSecureNotification()
+        val decrypted = DecrypterManager(keyManager).decrypt(slackCipherText)
+        val securenotification = decrypted.toSecureNotification()
         keyManager.rawDeleteKeyPair(true)
     }
 
