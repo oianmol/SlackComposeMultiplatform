@@ -34,6 +34,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
+import dev.baseio.security.JVMSecurityProvider
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
@@ -48,7 +49,7 @@ import kotlinx.coroutines.flow.onEach
 
 @ExperimentalComposeUiApi
 fun main() = application {
-    JVMSecurityUtils.initialize()
+    JVMSecurityProvider.initialize()
 
     val windowState = rememberWindowState()
     val lifecycle = LifecycleRegistry()

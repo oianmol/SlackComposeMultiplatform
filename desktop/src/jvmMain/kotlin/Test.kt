@@ -17,15 +17,15 @@ fun main() {
         Capillary.initialize()
         val skKeyValueData = SKKeyValueData()
         val valueSource = SKLocalKeyValueSourceImpl(skKeyValueData)
-        val keyManager = RsaEcdsaKeyManager(object {}.javaClass.getResourceAsStream("sender_verification_key.dat"))
+        val keyManager = RsaEcdsaKeyManager(senderVerificationKey = object {}.javaClass.getResourceAsStream("sender_verification_key.dat"))
 
-        keyManager.rawGenerateKeyPair(false)
+        keyManager.rawGenerateKeyPair()
 
 
         val calls = GrpcCalls(port = 8443, skKeyValueData = valueSource)
         calls.secureService.addOrUpdatePublicKey(kmAddOrUpdatePublicKeyRequest {
             this.algorithm = KMKeyAlgorithm.RSA_ECDSA
-            this.keyBytesList.addAll(keyManager.rawGetPublicKey(false).map {
+            this.keyBytesList.addAll(keyManager.rawGetPublicKey().map {
                 kmSKByteArrayElement {
                     this.byte = it.toInt()
                 }
@@ -52,7 +52,7 @@ fun main() {
             RsaEcdsaConstants.OAEP_PARAMETER_SPEC
         )
 
-        keyManager.rawDeleteKeyPair(true)
+        keyManager.rawDeleteKeyPair()
     }
 
 }

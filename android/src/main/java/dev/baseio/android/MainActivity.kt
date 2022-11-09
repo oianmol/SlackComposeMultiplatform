@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.DefaultComponentContext
 import dev.baseio.database.SlackDB
+import dev.baseio.security.AndroidSecurityProvider
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
@@ -31,7 +32,7 @@ import org.koin.core.KoinApplication
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidSecurityUtils.initialize(this)
+        AndroidSecurityProvider.initialize(this)
 
         val defaultComponentContext = DefaultComponentContext(
             lifecycle = lifecycle,
