@@ -17,11 +17,11 @@ buildscript {
 group = "dev.baseio.slackclone"
 version = "1.0"
 
-subprojects {
+/*subprojects {
     if(this.name!="capillary_kmp"){
         apply(plugin = BuildPlugins.KTLINT)
     }
-}
+}*/
 
 apply(from = teamPropsFile("git-hooks.gradle.kts"))
 

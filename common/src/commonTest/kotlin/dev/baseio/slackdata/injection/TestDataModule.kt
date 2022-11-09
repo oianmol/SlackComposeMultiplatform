@@ -15,4 +15,3 @@ val testDataModule = module {
         GrpcCalls("192.168.1.2", skKeyValueData = get())
     }
 }
-
