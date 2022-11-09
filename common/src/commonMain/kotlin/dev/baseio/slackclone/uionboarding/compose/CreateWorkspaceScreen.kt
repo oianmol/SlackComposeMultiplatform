@@ -48,7 +48,7 @@ fun CreateWorkspaceScreen(
             when (size) {
                 WindowSize.Phones -> CreateWorkspacePhoneLayout(component)
                 else -> {
-                    CreateWorkspaceLargeScreenLayout(component,contentPadding = Modifier.padding(12.dp))
+                    CreateWorkspaceLargeScreenLayout(component, contentPadding = Modifier.padding(12.dp))
                 }
             }
         }
@@ -114,8 +114,10 @@ fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
             CircularProgressIndicator(color = SlackGreen)
         } else {
             CreateWorkspaceButton(
-                createWorkspaceComponent
-            )
+                text = if (createWorkspaceComponent.isLogin()) "Let me in..." else "Create Workspace"
+            ) {
+                createWorkspaceComponent.authCreateWorkspaceVM.createWorkspace()
+            }
         }
     }
 }
@@ -144,10 +146,10 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
 }
 
 @Composable
-fun CreateWorkspaceButton(viewModel: CreateWorkspaceComponent) {
+fun CreateWorkspaceButton(text: String, onClick: () -> Unit) {
     Button(
         onClick = {
-            viewModel.authCreateWorkspaceVM.createWorkspace()
+            onClick.invoke()
         },
         Modifier
             .fillMaxWidth()
@@ -155,7 +157,7 @@ fun CreateWorkspaceButton(viewModel: CreateWorkspaceComponent) {
         colors = ButtonDefaults.buttonColors(backgroundColor = SlackGreen)
     ) {
         Text(
-            text = if (viewModel.isLogin()) "Let me in..." else "Create Workspace",
+            text = text,
             style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
         )
     }
