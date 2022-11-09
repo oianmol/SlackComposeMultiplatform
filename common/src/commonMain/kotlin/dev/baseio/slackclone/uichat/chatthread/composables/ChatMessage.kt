@@ -55,7 +55,7 @@ fun ChatMessage(
 fun ChatContent(message: DomainLayerMessages.SKMessage, onClickHash: (String) -> Unit) {
     MentionsText(
         modifier = Modifier,
-        message.message,
+        message.decodedMessage,
         style = SlackCloneTypography.subtitle2.copy(
             color = SlackCloneColorProvider.colors.textSecondary
         )
