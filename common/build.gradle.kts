@@ -22,7 +22,6 @@ repositories {
 dependencies {
     implementation("androidx.test:core-ktx:1.4.0")
     commonMainApi(Lib.Multiplatform.mokoPaging)
-    commonMainApi(project(Lib.Project.CAPILLARY_KMP))
 }
 
 kotlin {

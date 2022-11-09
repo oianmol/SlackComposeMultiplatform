@@ -50,6 +50,9 @@ val dataSourceModule = module {
     single<IGrpcCalls> {
         GrpcCalls("192.168.1.7", skKeyValueData = get())
     }
+    single<KeyManager> {
+
+    }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())
     }
