@@ -20,8 +20,8 @@ dependencies {
     implementation(Lib.AndroidX.ACTIVITY_COMPOSE)
     implementation(Lib.AndroidX.SPLASH_SCREEN)
     implementation(Lib.Grpc.OKHTTP)
-    implementation(project(Lib.Project.SLACK_DATA_COMMON))
-    implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
+    api(project(Lib.Project.SLACK_DATA_COMMON))
+    api(project(Lib.Project.SLACK_DOMAIN_COMMON))
     implementation(Deps.Koin.core)
     implementation(Deps.Koin.android)
     testImplementation(Deps.Koin.test)
@@ -56,6 +56,7 @@ android {
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            pickFirsts += "**/*.pickFirst"
         }
     }
     buildTypes {

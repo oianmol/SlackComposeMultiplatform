@@ -97,8 +97,8 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 ) {
     val commonMain by getting {
         dependencies {
-            implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
-            implementation(project(Lib.Project.SLACK_DATA_COMMON))
+            api(project(Lib.Project.SLACK_DOMAIN_COMMON))
+            api(project(Lib.Project.SLACK_DATA_COMMON))
             implementation(Deps.Kotlinx.datetime)
             implementation(Deps.SqlDelight.runtime)
             implementation(Deps.Koin.core)
@@ -125,7 +125,8 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             api("androidx.camera:camera-lifecycle:1.2.0-rc01")
             api("androidx.camera:camera-view:1.2.0-rc01")
             api("androidx.camera:camera-video:1.2.0-rc01")
-
+            api("androidx.camera:camera-extensions:1.2.0-rc01")
+            implementation("com.google.guava:guava:29.0-android")
             // Zxing
             api("com.google.zxing:core:3.5.0")
             api(ACTIVITY_COMPOSE)

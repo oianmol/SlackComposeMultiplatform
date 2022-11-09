@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.DefaultComponentContext
 import dev.baseio.database.SlackDB
 import dev.baseio.security.AndroidSecurityProvider
+import dev.baseio.security.RsaEcdsaKeyManager
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
@@ -27,7 +28,9 @@ import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.example.android.R
 import org.koin.core.KoinApplication
+import org.koin.dsl.module
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +49,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         val koinApplication =
-            initKoin({ skKeyValueData }, { DriverFactory(this@MainActivity).createDriver(SlackDB.Schema) })
+            initKoin(
+                module {
+                    single { skKeyValueData }
+                    single { SlackDB.invoke(DriverFactory(this@MainActivity).createDriver(SlackDB.Schema)) }
+                    single {
+                        RsaEcdsaKeyManager(
+                            senderVerificationKey = this@MainActivity.resources.openRawResource(R.raw.sender_verification_key),
+                            chainId = "1"
+                        )
+                    }
+                }
+            )
 
         setContent {
             MobileApp({
