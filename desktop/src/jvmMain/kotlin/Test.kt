@@ -8,18 +8,15 @@ import dev.baseio.security.JVMKeyStoreRsaUtils
 import dev.baseio.security.RsaEcdsaConstants
 import dev.baseio.security.RsaEcdsaKeyManager
 import dev.baseio.security.Utils
-import dev.baseio.security.WebPushKeyManager
 import dev.baseio.slackdata.SKKeyValueData
 import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.protos.kmSKByteArrayElement
 import dev.baseio.slackdata.securepush.KMKeyAlgorithm
 import dev.baseio.slackdata.securepush.kmAddOrUpdatePublicKeyRequest
 import dev.baseio.slackdata.securepush.kmSendMessageRequest
-import dev.baseio.slackdata.securepush.kmSlackCiphertext
 import kotlinx.coroutines.runBlocking
 import java.security.PublicKey
 import java.util.Base64
-import javax.crypto.spec.OAEPParameterSpec
 
 fun main() {
     runBlocking {
@@ -57,27 +54,31 @@ fun main() {
             this.keyAlgorithm = KMKeyAlgorithm.RSA_ECDSA
         })
 
+        val decodedSecureNotification = Base64.getDecoder().decode(response.nothing)
+
         val publicKeyBytes: PublicKey =
             JVMKeyStoreRsaUtils.getPublicKey(Utils.loadKeyStore(), RsaEcdsaKeyManager.KEY_CHAIN_ID_PREFIX + "1")
         val privateKey =
             JVMKeyStoreRsaUtils.getPrivateKey(Utils.loadKeyStore(), RsaEcdsaKeyManager.KEY_CHAIN_ID_PREFIX + "1")
 
-        val encrypted = HybridRsaUtils.encrypt("Anmol".toByteArray(),
-            publicKeyBytes, RsaEcdsaConstants.Padding.OAEP, RsaEcdsaConstants.OAEP_PARAMETER_SPEC
+        val encrypted = HybridRsaUtils.encrypt(
+            "Anmol".toByteArray(),
+            publicKeyBytes,
+            RsaEcdsaConstants.Padding.OAEP,
+            RsaEcdsaConstants.OAEP_PARAMETER_SPEC
         )
 
         val decryopted = HybridRsaUtils.decrypt(
-            encrypted,
+            decodedSecureNotification,
             privateKey,
             RsaEcdsaConstants.Padding.OAEP,
             RsaEcdsaConstants.OAEP_PARAMETER_SPEC
         )
 
-       val resuly = String(decryopted)
+        val secureNotification = decryopted.toSecureNotification()
 
         val ciphertext: ByteArray =
             Base64.getDecoder().decode(response.nothing)
-            resuly
         val slackCipherText = ciphertext.toSlackCipherText()
         val decrypted = DecrypterManager(keyManager).decrypt(slackCipherText)
         val securenotification = decrypted.toSecureNotification()
