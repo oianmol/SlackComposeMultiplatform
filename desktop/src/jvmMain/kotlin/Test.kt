@@ -34,7 +34,6 @@ fun main() {
             RsaEcdsaConstants.Padding.OAEP,
             RsaEcdsaConstants.OAEP_PARAMETER_SPEC
         )
-        println(encrypted.takeLast(10).forEach(::print))
         val decryopted = HybridRsaUtils.decrypt(
             encrypted,
             privateKey,
@@ -42,13 +41,15 @@ fun main() {
             RsaEcdsaConstants.OAEP_PARAMETER_SPEC
         )
         val newEnc = encryptor.encrypt(
-            "Anmol".toByteArray(),publicKeyBytes.encoded
+            "Anmol".toByteArray(), publicKeyBytes.encoded
         )
-        println(newEnc.takeLast(10).forEach(::print))
-
-        //val dec = decryptor.decrypt(newEnc)
+        val dec = decryptor.decrypt(newEnc)
 
         if ("Anmol" != String(decryopted)) {
+            throw RuntimeException("faield!")
+        }
+
+        if ("Anmol" != String(dec)) {
             throw RuntimeException("faield!")
         }
 
