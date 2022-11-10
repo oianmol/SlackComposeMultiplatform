@@ -68,6 +68,10 @@ android {
     defaultConfig {
         minSdk = 24
         targetSdk = 33
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")

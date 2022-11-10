@@ -15,7 +15,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.DefaultComponentContext
 import dev.baseio.database.SlackDB
+import dev.baseio.security.AndroidKeyStoreRsaUtils
 import dev.baseio.security.AndroidSecurityProvider
+import dev.baseio.security.HybridRsaUtils
+import dev.baseio.security.RsaEcdsaConstants
 import dev.baseio.security.RsaEcdsaKeyManager
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
@@ -31,11 +34,16 @@ import kotlinx.coroutines.flow.onEach
 import org.example.android.R
 import org.koin.core.KoinApplication
 import org.koin.dsl.module
+import java.security.PublicKey
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidSecurityProvider.initialize(this)
+        val rsaEcdsaKeyManager = RsaEcdsaKeyManager(
+            senderVerificationKey = this@MainActivity.resources.openRawResource(R.raw.sender_verification_key).readBytes(),
+            chainId = "1"
+        )
 
         val defaultComponentContext = DefaultComponentContext(
             lifecycle = lifecycle,
@@ -54,10 +62,7 @@ class MainActivity : AppCompatActivity() {
                     single { skKeyValueData }
                     single { SlackDB.invoke(DriverFactory(this@MainActivity).createDriver(SlackDB.Schema)) }
                     single {
-                        RsaEcdsaKeyManager(
-                            senderVerificationKey = this@MainActivity.resources.openRawResource(R.raw.sender_verification_key),
-                            chainId = "1"
-                        )
+                        rsaEcdsaKeyManager
                     }
                 }
             )

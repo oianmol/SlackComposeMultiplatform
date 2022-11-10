@@ -64,7 +64,7 @@ fun main() = application {
             single { SlackDB.invoke(DriverFactory().createDriver(SlackDB.Schema)) }
             single {
                 RsaEcdsaKeyManager(
-                    senderVerificationKey = object {}.javaClass.getResourceAsStream("sender_verification_key.dat")!!,
+                    senderVerificationKey = object {}.javaClass.getResourceAsStream("sender_verification_key.dat")!!.readBytes(),
                     chainId = "1"
                 )
             }

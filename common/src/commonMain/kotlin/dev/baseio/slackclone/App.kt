@@ -17,6 +17,7 @@ import dev.baseio.slackclone.uiqrscanner.QRScannerUI
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.dataSourceModule
 import dev.baseio.slackdata.injection.dispatcherModule
+import dev.baseio.slackdata.injection.encryptionModule
 import dev.baseio.slackdata.injection.useCaseModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -50,6 +51,7 @@ fun initKoin(module: Module): KoinApplication {
         modules(
             module,
             dataSourceModule,
+            encryptionModule,
             dataMappersModule,
             useCaseModule,
             viewModelDelegateModule,

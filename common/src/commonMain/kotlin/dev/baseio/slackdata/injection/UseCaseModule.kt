@@ -12,7 +12,6 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     factory { UseCaseQRAuthUser(get(), get(), get()) }
-    factory { LoginUseCase(get(), get(), get()) }
     factory { UseCaseGetChannelMembers(get(), get()) }
     factory { FindWorkspacesUseCase(get()) }
     factory { UseCaseFetchAndSaveWorkspaces(get(), get()) }
@@ -27,9 +26,8 @@ val useCaseModule = module {
     factory { UseCaseFetchAndUpdateChangeInUsers(get(), get()) }
     factory { UseCaseFetchAndUpdateChangeInChannels(get(), get()) }
     factory { UseCaseFetchAndSaveMessages(get(), get()) }
-    factory { UseCaseSendMessage(get(), get(), get()) }
-    factory { UseCaseStreamLocalMessages(get()) }
-    factory { UseCaseRegisterUser(get(), get()) }
+    factory { UseCaseSendMessage(get(), get(), get(), get()) }
+    factory { UseCaseStreamLocalMessages(get(), get()) }
     factory { UseCaseFetchAllChannels(get()) }
     factory { UseCaseCreateChannel(get(), get(), get()) }
     factory { UseCaseGetChannel(get()) }

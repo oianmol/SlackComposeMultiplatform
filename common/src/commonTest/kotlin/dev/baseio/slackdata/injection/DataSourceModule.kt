@@ -69,7 +69,7 @@ val fakeDataSourceModule = module {
         SKNetworkSourceChannelImpl(get())
     }
     single<SKNetworkSourceWorkspaces> {
-        SKNetworkSourceWorkspacesImpl(get())
+        SKNetworkSourceWorkspacesImpl(get(),get())
     }
     single<SKAuthNetworkDataSource> {
         SKAuthNetworkDataSourceImpl(get())

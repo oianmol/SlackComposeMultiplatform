@@ -21,7 +21,6 @@ import kotlin.time.Duration.Companion.seconds
 class CreateNewChannelVMTest : SlackKoinUnitTest() {
 
 
-    private val useCaseCreateChannel: UseCaseCreateChannel by inject()
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
     var wasNavigated = false
     private val createNewChannelVM by lazy {

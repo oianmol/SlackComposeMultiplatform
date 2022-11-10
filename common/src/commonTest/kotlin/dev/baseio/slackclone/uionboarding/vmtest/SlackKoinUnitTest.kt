@@ -3,21 +3,30 @@ package dev.baseio.slackclone.uionboarding.vmtest
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackdata.Platform
 import dev.baseio.slackdata.injection.dataMappersModule
+import dev.baseio.slackdata.injection.encryptionModule
 import dev.baseio.slackdata.injection.fakeDataSourceModule
 import dev.baseio.slackdata.injection.testDataModule
 import dev.baseio.slackdata.injection.testDispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
 import dev.baseio.slackdata.platform
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
+import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
+import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
+import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannels
+import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
+import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import dev.icerock.moko.test.AndroidArchitectureInstantTaskExecutorRule
 import dev.icerock.moko.test.TestRule
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.koin.core.KoinApplication
@@ -28,15 +37,21 @@ import org.koin.test.inject
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
+expect fun initializePlatform()
+
 open class SlackKoinUnitTest : KoinTest {
 
     lateinit var koinApplication: KoinApplication
     protected lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
     protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
     protected val useCaseCreateWorkspace: UseCaseCreateWorkspace by inject()
+    protected val useCaseCreateChannel:UseCaseCreateChannel by inject()
+    protected val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch by inject()
     protected val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
     protected val getWorkspaces: UseCaseFetchAndSaveWorkspaces by inject()
     protected val getChannels: UseCaseFetchAndSaveChannels by inject()
+    val skLocalDataSourceChannels:SKLocalDataSourceReadChannels by inject()
+    protected val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers by inject()
     protected val getUsers: UseCaseFetchAndSaveUsers by inject()
 
     @BeforeTest
@@ -47,10 +62,12 @@ open class SlackKoinUnitTest : KoinTest {
                 useCaseModule,
                 viewModelDelegateModule,
                 dataMappersModule,
+                encryptionModule,
                 fakeDataSourceModule,
                 testDispatcherModule
             )
         }
+        initializePlatform()
         when (platform()) {
             Platform.ANDROID -> {
                 Dispatchers.setMain(coroutineDispatcherProvider.main)
@@ -63,10 +80,14 @@ open class SlackKoinUnitTest : KoinTest {
     }
 
     suspend fun authorizeUserFirst() {
-        useCaseCreateWorkspace.invoke("anmol.verma4@gmail.com", "password", "gmail")
+        useCaseCreateWorkspace.invoke("pp@pp.com", "pp", "pp")
         getWorkspaces.invoke()
         selectedWorkspace = useCaseGetSelectedWorkspace.invoke()!!
         getChannels.invoke(selectedWorkspace.uuid, 0, 20)
+        val channels = skLocalDataSourceChannels.fetchAllChannels(selectedWorkspace.uuid).first()
+        channels.forEach {
+            useCaseFetchAndSaveChannelMembers.invoke(UseCaseWorkspaceChannelRequest(it.workspaceId,it.channelId))
+        }
         getUsers.invoke(selectedWorkspace.uuid)
     }
 
