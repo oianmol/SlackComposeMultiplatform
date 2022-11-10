@@ -62,7 +62,7 @@ class ChatViewModelTest : SlackKoinUnitTest() {
                 }
                 awaitItem().apply {
                     asserter.assertTrue("failed, found no items!", this.isNotEmpty())
-                    asserter.assertTrue("failed, can't find $message ", this.find { it.message == message } != null)
+                    asserter.assertTrue("failed, can't find $message ", this.find { it.message == message.toByteArray() } != null)
                 }
             }
 
