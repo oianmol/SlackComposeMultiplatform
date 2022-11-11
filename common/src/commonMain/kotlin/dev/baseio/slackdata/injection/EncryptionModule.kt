@@ -10,10 +10,10 @@ import org.koin.dsl.module
 
 val encryptionModule = module {
   factory<IDataEncrypter> {
-    IDataEncrypterImpl(get())
+    IDataEncrypterImpl()
   }
   factory<IDataDecryptor> {
-    IDataDecryptorImpl(get())
+    IDataDecryptorImpl()
   }
   factory<PublicKeyRetriever> {
     PublicKeyRetrieverImpl(get(), get(), get())

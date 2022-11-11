@@ -60,7 +60,7 @@ val dataSourceModule = module {
     SKNetworkSourceChannelImpl(get())
   }
   single<SKNetworkSourceWorkspaces> {
-    SKNetworkSourceWorkspacesImpl(get(), get())
+    SKNetworkSourceWorkspacesImpl(get())
   }
   single<SKAuthNetworkDataSource> {
     SKAuthNetworkDataSourceImpl(get())

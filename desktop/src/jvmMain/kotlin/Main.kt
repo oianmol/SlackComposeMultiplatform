@@ -35,7 +35,6 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
 import dev.baseio.security.JVMSecurityProvider
-import dev.baseio.security.RsaEcdsaKeyManager
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
@@ -62,12 +61,6 @@ fun main() = application {
         initKoin(module = module {
             single { skKeyValueData }
             single { SlackDB.invoke(DriverFactory().createDriver(SlackDB.Schema)) }
-            single {
-                RsaEcdsaKeyManager(
-                    senderVerificationKey = object {}.javaClass.getResourceAsStream("sender_verification_key.dat")!!.readBytes(),
-                    chainId = "1"
-                )
-            }
         })
 
     Window(onCloseRequest = ::exitApplication, state = windowState) {
