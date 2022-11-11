@@ -49,7 +49,7 @@ class SendMessageDelegateImpl(
         sortedList?.firstOrNull()?.let {
           if (it.tag == MentionsPatterns.INVITE_TAG) {
             val user = sortedList[1].spanText.replace("@", "")
-            val result = useCaseInviteUserToChannel(user, channel.channelName!!)
+            val result = useCaseInviteUserToChannel.invoke(user, channel.channelName!!, channel.workspaceId)
             when {
               result.isSuccess -> {
                 this.message.value =

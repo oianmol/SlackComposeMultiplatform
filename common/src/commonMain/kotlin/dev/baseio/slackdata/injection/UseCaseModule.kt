@@ -21,7 +21,7 @@ val useCaseModule = module {
     factory { UseCaseFetchRecentChannels(get()) }
     factory { UseCaseGetSelectedWorkspace(get()) }
     factory { UseCaseFetchAndSaveChannels(get(), get()) }
-    factory { UseCaseFetchChannelsWithLastMessage(get(), get()) }
+    factory { UseCaseFetchChannelsWithLastMessage(get()) }
     factory { UseCaseFetchAndUpdateChangeInMessages(get(), get()) }
     factory { UseCaseFetchAndUpdateChangeInUsers(get(), get()) }
     factory { UseCaseFetchAndUpdateChangeInChannels(get(), get()) }
