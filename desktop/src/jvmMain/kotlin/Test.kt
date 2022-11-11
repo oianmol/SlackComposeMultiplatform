@@ -12,9 +12,9 @@ fun main() {
     keyManager.rawGenerateKeyPair()
 
     val publicKeyBytes: PublicKey =
-      JVMKeyStoreRsaUtils.getPublicKey()
+      JVMKeyStoreRsaUtils.getPublicKey("test")
     val privateKey =
-      JVMKeyStoreRsaUtils.getPrivateKey()
+      JVMKeyStoreRsaUtils.getPrivateKey("test")
 
     val decryptor = IDataDecryptorImpl()
     val encryptor = IDataEncrypterImpl()
