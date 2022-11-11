@@ -32,9 +32,9 @@ fun main() {
       RsaEcdsaConstants.OAEP_PARAMETER_SPEC
     )
     val newEnc = encryptor.encrypt(
-      "Anmol".toByteArray(), publicKeyBytes.encoded, "test"
+      "Anmol".toByteArray(), publicKeyBytes.encoded
     )
-    val dec = decryptor.decrypt(newEnc, "test")
+    val dec = decryptor.decrypt(newEnc,privateKey.encoded)
 
     if ("Anmol" != String(decryopted)) {
       throw RuntimeException("faield!")

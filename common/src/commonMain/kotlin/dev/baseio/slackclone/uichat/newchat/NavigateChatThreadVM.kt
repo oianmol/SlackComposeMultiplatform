@@ -4,6 +4,7 @@ import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
+import dev.baseio.slackdomain.usecases.channels.UseCaseInviteUserToChannel
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
@@ -25,6 +26,7 @@ class NavigateChatThreadVM(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseCreateChannel: UseCaseCreateChannel,
     private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch,
+    private val useCaseInviteUserToChannel: UseCaseInviteUserToChannel,
     private val navigationPopWith: (DomainLayerChannels.SKChannel) -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
     val search = MutableStateFlow("")
@@ -73,6 +75,7 @@ class NavigateChatThreadVM(
             } ?: run {
                 val result = useCaseCreateChannel.invoke(channel)
                 val channelNew = result.getOrThrow()
+                useCaseInviteUserToChannel.addUsersToChannelOnceCreated(channelNew)
                 navigate(channelNew)
             }
         }

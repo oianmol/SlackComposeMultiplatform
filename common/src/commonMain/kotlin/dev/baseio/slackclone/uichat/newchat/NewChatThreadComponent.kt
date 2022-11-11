@@ -17,6 +17,7 @@ class NewChatThreadComponent(
             koinApp.koin.get(),
             koinApp.koin.get(),
             koinApp.koin.get(),
+            koinApp.koin.get(),
             koinApp.koin.get()
         ) {
             navigationPopWith(it)

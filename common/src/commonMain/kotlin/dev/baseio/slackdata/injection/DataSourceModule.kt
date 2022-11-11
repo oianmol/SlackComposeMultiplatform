@@ -57,7 +57,7 @@ val dataSourceModule = module {
     SKLocalKeyValueSourceImpl(get())
   }
   single<SKNetworkSourceChannel> {
-    SKNetworkSourceChannelImpl(get())
+    SKNetworkSourceChannelImpl(get(), get(), get(), get(), get(), get())
   }
   single<SKNetworkSourceWorkspaces> {
     SKNetworkSourceWorkspacesImpl(get())
@@ -72,7 +72,7 @@ val dataSourceModule = module {
     SKNetworkDataSourceReadChannelMembersImpl(get())
   }
   single<SKNetworkDataSourceMessages> {
-    SKNetworkDataSourceMessagesImpl(get())
+    SKNetworkDataSourceMessagesImpl(get(), get(), get())
   }
   single<SKNetworkDataSourceReadUsers> {
     SKNetworkDataSourceReadUsersImpl(get(), get())
@@ -117,7 +117,7 @@ val dataSourceModule = module {
     SKLocalDataSourceMessagesImpl(
       get(),
       get(SlackMessageMessageQualifier),
-      get()
+      get(), get(), get(), get(), get()
     )
   }
   single<SKLocalDataSourceChannelLastMessage> {
@@ -128,7 +128,7 @@ val dataSourceModule = module {
       get(SlackChannelChannelQualifier),
       get(SlackChannelDMChannelQualifier),
       get(),
-      get()
+      get(), get(), get()
     )
   }
 }

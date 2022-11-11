@@ -13,6 +13,6 @@ val viewModelDelegateModule = module {
         UserProfileDelegateImpl(getKoin().get(), getKoin().get())
     }
     single<SendMessageDelegate> {
-        SendMessageDelegateImpl(get(), get(), get())
+        SendMessageDelegateImpl(get(), get(), get(), get())
     }
 }

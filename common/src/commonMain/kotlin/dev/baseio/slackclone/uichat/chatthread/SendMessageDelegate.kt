@@ -5,6 +5,7 @@ import dev.baseio.slackclone.commonui.reusable.MentionsPatterns
 import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.usecases.channels.UseCaseInviteUserToChannel
@@ -27,7 +28,9 @@ interface SendMessageDelegate {
 class SendMessageDelegateImpl(
   private val useCaseInviteUserToChannel: UseCaseInviteUserToChannel,
   private val skKeyValueData: SKLocalKeyValueSource,
-  private val useCaseSendMessage: UseCaseSendMessage
+  private val useCaseSendMessage: UseCaseSendMessage,
+  private val localSource: SKLocalDataSourceChannelMembers
+
 ) : SendMessageDelegate {
   override var message: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
   override var spanInfoList: MutableStateFlow<List<SpanInfos>> = MutableStateFlow(emptyList())
@@ -49,7 +52,7 @@ class SendMessageDelegateImpl(
         sortedList?.firstOrNull()?.let {
           if (it.tag == MentionsPatterns.INVITE_TAG) {
             val user = sortedList[1].spanText.replace("@", "")
-            val result = useCaseInviteUserToChannel.invoke(user, channel.channelName!!, channel.workspaceId)
+            val result = useCaseInviteUserToChannel.inviteUserToChannelFromOtherDeviceOrUser(channel, user)
             when {
               result.isSuccess -> {
                 this.message.value =
