@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+            android:name="dev.baseio.android.SlackApp"
             android:allowBackup="false"
             android:usesCleartextTraffic="true"
             android:supportsRtl="true"

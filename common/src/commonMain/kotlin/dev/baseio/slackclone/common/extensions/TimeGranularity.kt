@@ -69,7 +69,7 @@ fun timeAgo(currentDate: Long, pastDate: Long): String {
         if (kotlin.math.round((msExpired / 1000).toFloat()) == 1f) {
             kotlin.math.round((msExpired / 1000).toFloat()).toString() + " second ago"
         } else {
-            (kotlin.math.round((msExpired / 1000).toFloat()).toString() + " seconds ago...").toString()
+            (kotlin.math.round((msExpired / 1000).toFloat()).toString() + " seconds ago").toString()
         }
     } else if (msExpired < milliSecPerHour) {
         if (kotlin.math.round((msExpired / milliSecPerMinute).toFloat()) == 1f) {

@@ -9,13 +9,13 @@ import dev.baseio.slackdomain.datasources.PublicKeyRetriever
 import org.koin.dsl.module
 
 val encryptionModule = module {
-    factory<IDataEncrypter> {
-        IDataEncrypterImpl(get())
-    }
-    factory<IDataDecryptor> {
-        IDataDecryptorImpl(get())
-    }
-    factory<PublicKeyRetriever> {
-        PublicKeyRetrieverImpl(get(), get())
-    }
+  factory<IDataEncrypter> {
+    IDataEncrypterImpl(get())
+  }
+  factory<IDataDecryptor> {
+    IDataDecryptorImpl(get())
+  }
+  factory<PublicKeyRetriever> {
+    PublicKeyRetrieverImpl(get(), get(), get())
+  }
 }

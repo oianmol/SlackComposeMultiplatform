@@ -48,7 +48,7 @@ import org.koin.dsl.module
 
 val fakeDataSourceModule = module {
     single<IGrpcCalls> {
-        GrpcCalls("192.168.1.2", skKeyValueData = get())
+        GrpcCalls("192.168.1.9", skKeyValueData = get())
     }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())

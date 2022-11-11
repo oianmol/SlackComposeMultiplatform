@@ -73,7 +73,8 @@ class SendMessageDelegateImpl(
                     createdDate = Clock.System.now().toEpochMilliseconds(),
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),
                     isDeleted = false,
-                    isSynced = false
+                    isSynced = false,
+                    localMessage = message.toByteArray()
                 )
             )
             this.message.value = TextFieldValue()
