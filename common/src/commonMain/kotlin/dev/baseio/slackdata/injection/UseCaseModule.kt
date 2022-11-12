@@ -29,7 +29,7 @@ val useCaseModule = module {
     factory { UseCaseSendMessage(get(), get()) }
     factory { UseCaseStreamLocalMessages(get()) }
     factory { UseCaseFetchAllChannels(get()) }
-    factory { UseCaseCreateChannel(get(), get(), get(), get()) }
+    factory { UseCaseCreateChannel(get(), get(), get()) }
     factory { UseCaseGetChannel(get()) }
     factory { UseCaseFetchChannelCount(get()) }
     factory { UseCaseInviteUserToChannel(get()) }
