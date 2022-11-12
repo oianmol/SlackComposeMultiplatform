@@ -12,9 +12,9 @@ fun main() {
     keyManager.rawGenerateKeyPair()
 
     val publicKeyBytes: PublicKey =
-      JVMKeyStoreRsaUtils.getPublicKey("test")
+      JVMKeyStoreRsaUtils.getPublicKey(keyManager.keychainId)
     val privateKey =
-      JVMKeyStoreRsaUtils.getPrivateKey("test")
+      JVMKeyStoreRsaUtils.getPrivateKey(keyManager.keychainId)
 
     val decryptor = IDataDecryptorImpl()
     val encryptor = IDataEncrypterImpl()
@@ -31,18 +31,16 @@ fun main() {
       RsaEcdsaConstants.Padding.OAEP,
       RsaEcdsaConstants.OAEP_PARAMETER_SPEC
     )
-    val newEnc = encryptor.encrypt(
-      "Anmol".toByteArray(), publicKeyBytes.encoded
-    )
-    val dec = decryptor.decrypt(newEnc,privateKey.encoded)
 
     if ("Anmol" != String(decryopted)) {
       throw RuntimeException("faield!")
     }
 
-    if ("Anmol" != String(dec)) {
-      throw RuntimeException("faield!")
-    }
+    val newEnc = encryptor.encrypt(
+      privateKey.encoded, publicKeyBytes.encoded
+    )
+    val dec = decryptor.decrypt(newEnc, privateKey.encoded)
+
 
     keyManager.rawDeleteKeyPair()
   }
