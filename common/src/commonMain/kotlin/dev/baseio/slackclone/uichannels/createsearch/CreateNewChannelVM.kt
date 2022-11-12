@@ -3,6 +3,7 @@ package dev.baseio.slackclone.uichannels.createsearch
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -26,7 +27,8 @@ class CreateNewChannelVM(
                     name = "",
                     createdDate = Clock.System.now().toEpochMilliseconds(),
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),
-                    deleted = false
+                    deleted = false,
+                    channelPublicKey = DomainLayerUsers.SKUserPublicKey(emptyArray<Byte>().toByteArray())
                 ), false
             )
         )

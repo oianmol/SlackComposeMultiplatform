@@ -68,13 +68,9 @@ class NavigateChatThreadVM(
                 errorStream.value = throwable
             }
         ) {
-            channel.channelId.takeIf { it.isNotEmpty() }?.let {
-                navigate(channel)
-            } ?: run {
-                val result = useCaseCreateChannel.invoke(channel)
-                val channelNew = result.getOrThrow()
-                navigate(channelNew)
-            }
+            val result = useCaseCreateChannel.invoke(channel)
+            val channelNew = result.getOrThrow()
+            navigate(channelNew)
         }
     }
 }

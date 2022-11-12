@@ -5,7 +5,6 @@ import dev.baseio.slackclone.commonui.reusable.MentionsPatterns
 import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
-import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.usecases.channels.UseCaseInviteUserToChannel
@@ -28,8 +27,7 @@ interface SendMessageDelegate {
 class SendMessageDelegateImpl(
     private val useCaseInviteUserToChannel: UseCaseInviteUserToChannel,
     private val skKeyValueData: SKLocalKeyValueSource,
-    private val useCaseSendMessage: UseCaseSendMessage,
-    private val localSource: SKLocalDataSourceChannelMembers
+    private val useCaseSendMessage: UseCaseSendMessage
 
 ) : SendMessageDelegate {
     override var message: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
