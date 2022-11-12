@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapConcat
 
 class DirectMessagesVM(
-    private val useCaseFetchChannels: UseCaseFetchChannelsWithLastMessage,
-    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-    coroutineDispatcherProvider: CoroutineDispatcherProvider
+  private val useCaseFetchChannels: UseCaseFetchChannelsWithLastMessage,
+  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
+  coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : SlackViewModel(coroutineDispatcherProvider) {
-    val channels = MutableStateFlow(fetchFlow())
+  val channels = MutableStateFlow(fetchFlow())
 
-    @OptIn(FlowPreview::class)
-    fun fetchFlow(): Flow<List<DomainLayerMessages.SKLastMessage>> {
-        return useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
-            useCaseFetchChannels(it!!.uuid)
-        }
+  @OptIn(FlowPreview::class)
+  fun fetchFlow(): Flow<List<DomainLayerMessages.SKLastMessage>> {
+    return useCaseGetSelectedWorkspace.invokeFlow().flatMapConcat {
+      useCaseFetchChannels(it!!.uuid)
     }
+  }
 }

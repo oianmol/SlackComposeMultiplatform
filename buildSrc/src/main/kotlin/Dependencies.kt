@@ -41,6 +41,7 @@ object Deps {
         object IOS {
             const val coroutinesX64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64:1.6.4"
             const val coroutinesArm64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64:1.6.4"
+            const val coroutinesiossimulatorarm64 = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iossimulatorarm64:1.6.4"
         }
 
         object Android {
@@ -71,6 +72,7 @@ object Lib {
     object Project {
         const val SLACK_DOMAIN_COMMON = ":slack_domain_layer"
         const val SLACK_DATA_COMMON = ":slack_data_layer"
+        const val CAPILLARY_KMP = ":capillary_kmp"
         const val common = ":common"
     }
 

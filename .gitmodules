@@ -10,3 +10,6 @@
 [submodule "slack_protos"]
 	path = slack_protos
 	url = https://github.com/oianmol/slack_multiplatform_protos
+[submodule "capillary_kmp"]
+	path = capillary_kmp
+	url = https://github.com/oianmol/capillary-kmp

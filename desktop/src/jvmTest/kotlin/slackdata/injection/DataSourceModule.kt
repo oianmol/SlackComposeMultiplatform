@@ -3,7 +3,6 @@ package dev.baseio.slackdata.injection
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackdata.datasources.local.SKLocalDatabaseSourceImpl
-import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceChannelMembersImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceCreateChannelsImpl
@@ -48,7 +47,7 @@ import org.koin.dsl.module
 
 val fakeDataSourceModule = module {
     single<IGrpcCalls> {
-        GrpcCalls("192.168.1.7", skKeyValueData = get())
+        GrpcCalls(skKeyValueData = get())
     }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())
@@ -71,7 +70,7 @@ val fakeDataSourceModule = module {
         }
     }
     single<SKNetworkSourceChannel> {
-        SKNetworkSourceChannelImpl(get())
+        SKNetworkSourceChannelImpl(get(), get(), get(), get(), get(), get())
     }
     single<SKNetworkSourceWorkspaces> {
         SKNetworkSourceWorkspacesImpl(get())
@@ -86,7 +85,7 @@ val fakeDataSourceModule = module {
         SKNetworkDataSourceReadChannelMembersImpl(get())
     }
     single<SKNetworkDataSourceMessages> {
-        SKNetworkDataSourceMessagesImpl(get())
+        SKNetworkDataSourceMessagesImpl(get(), get())
     }
     single<SKNetworkDataSourceReadUsers> {
         SKNetworkDataSourceReadUsersImpl(get(), get())
@@ -131,7 +130,7 @@ val fakeDataSourceModule = module {
         SKLocalDataSourceMessagesImpl(
             get(),
             get(SlackMessageMessageQualifier),
-            get()
+            get(), get(), get(), get(), get()
         )
     }
     single<SKLocalDataSourceChannelLastMessage> {
@@ -142,7 +141,7 @@ val fakeDataSourceModule = module {
             get(SlackChannelChannelQualifier),
             get(SlackChannelDMChannelQualifier),
             get(),
-            get()
+            get(),get()
         )
     }
 }

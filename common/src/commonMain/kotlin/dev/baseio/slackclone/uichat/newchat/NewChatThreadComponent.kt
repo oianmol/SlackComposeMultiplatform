@@ -13,11 +13,11 @@ class NewChatThreadComponent(
 
     val viewModel = instanceKeeper.getOrCreate {
         NavigateChatThreadVM(
-            koinApp.koin.get(),
-            koinApp.koin.get(),
-            koinApp.koin.get(),
-            koinApp.koin.get(),
-            koinApp.koin.get()
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get(),
+          koinApp.koin.get()
         ) {
             navigationPopWith(it)
         }

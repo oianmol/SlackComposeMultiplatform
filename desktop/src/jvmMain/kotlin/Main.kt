@@ -34,6 +34,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
+import dev.baseio.security.JVMSecurityProvider
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
@@ -45,16 +46,22 @@ import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.dsl.module
 
 @ExperimentalComposeUiApi
 fun main() = application {
+    JVMSecurityProvider.initialize()
+
     val windowState = rememberWindowState()
     val lifecycle = LifecycleRegistry()
 
     val skKeyValueData = SKKeyValueData()
     val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)) }
     val koinApplication =
-    initKoin({ skKeyValueData }, { DriverFactory().createDriver(SlackDB.Schema) })
+        initKoin(module = module {
+            single { skKeyValueData }
+            single { SlackDB.invoke(DriverFactory().createDriver(SlackDB.Schema)) }
+        })
 
     Window(onCloseRequest = ::exitApplication, state = windowState) {
         var rememberedComposeWindow by remember(this.window) {

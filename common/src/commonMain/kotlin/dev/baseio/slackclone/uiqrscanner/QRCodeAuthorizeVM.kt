@@ -20,7 +20,7 @@ class QRCodeAuthorizeVM(
         private set
 
     fun authorize(code: String) {
-        viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
             exception.value = throwable
         }) {
             iGrpcCalls.authorizeQrCode(kmSKQRAuthVerify {

@@ -20,8 +20,8 @@ dependencies {
     implementation(Lib.AndroidX.ACTIVITY_COMPOSE)
     implementation(Lib.AndroidX.SPLASH_SCREEN)
     implementation(Lib.Grpc.OKHTTP)
-    implementation(project(Lib.Project.SLACK_DATA_COMMON))
-    implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
+    api(project(Lib.Project.SLACK_DATA_COMMON))
+    api(project(Lib.Project.SLACK_DOMAIN_COMMON))
     implementation(Deps.Koin.core)
     implementation(Deps.Koin.android)
     testImplementation(Deps.Koin.test)
@@ -33,7 +33,6 @@ dependencies {
         Lib.AndroidX.COMPOSE_TEST_MANIFEST
     )
     androidTestImplementation(TestLib.JUNIT)
-    //androidTestImplementation(TestLib.RUNNER)
     implementation(compose.uiTestJUnit4)
 }
 
@@ -50,6 +49,9 @@ android {
         targetSdk = ProjectProperties.TARGET_SDK
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -57,6 +59,7 @@ android {
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            pickFirsts += "**/*.pickFirst"
         }
     }
     buildTypes {

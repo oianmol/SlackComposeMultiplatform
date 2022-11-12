@@ -17,9 +17,11 @@ buildscript {
 group = "dev.baseio.slackclone"
 version = "1.0"
 
-subprojects {
-    apply(plugin = BuildPlugins.KTLINT)
-}
+/*subprojects {
+    if(this.name!="capillary_kmp"){
+        apply(plugin = BuildPlugins.KTLINT)
+    }
+}*/
 
 apply(from = teamPropsFile("git-hooks.gradle.kts"))
 
@@ -33,6 +35,5 @@ allprojects {
         google()
         mavenLocal()
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }

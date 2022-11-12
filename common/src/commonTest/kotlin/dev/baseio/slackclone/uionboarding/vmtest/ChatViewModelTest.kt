@@ -3,9 +3,7 @@ package dev.baseio.slackclone.uionboarding.vmtest
 import app.cash.turbine.test
 import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
-import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
-import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
@@ -19,9 +17,9 @@ import org.koin.test.inject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.asserter
+import kotlin.time.Duration.Companion.seconds
 
 class ChatViewModelTest : SlackKoinUnitTest() {
-    private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers by inject()
     private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages by inject()
     private val useCaseChannelMembers: UseCaseGetChannelMembers by inject()
     private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages by inject()
@@ -56,13 +54,13 @@ class ChatViewModelTest : SlackKoinUnitTest() {
 
             chatViewModel.sendMessageNow(message)
 
-            chatViewModel.chatMessagesFlow.test {
+            chatViewModel.chatMessagesFlow.test(15.seconds) {
                 awaitItem().apply {
                     asserter.assertTrue("failed, found items!", this.isEmpty())
                 }
                 awaitItem().apply {
                     asserter.assertTrue("failed, found no items!", this.isNotEmpty())
-                    asserter.assertTrue("failed, can't find $message ", this.find { it.message == message } != null)
+                    asserter.assertTrue("failed, can't find $message ", this.find { it.decodedMessage == message } != null)
                 }
             }
 

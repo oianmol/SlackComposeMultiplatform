@@ -2,6 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="SlackJetpackCompose.capillary_protos.main" target="18" />
+      <module name="SlackJetpackCompose.capillary_protos.test" target="18" />
+      <module name="SlackJetpackCompose.iOSApp" target="18" />
       <module name="SlackJetpackCompose.slack-data-lib" target="17" />
     </bytecodeTargetLevel>
   </component>

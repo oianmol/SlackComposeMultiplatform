@@ -117,14 +117,9 @@ fun DMLastMessageItem(
 }
 
 @Composable
-private fun textStyleFieldSecondary() = SlackCloneTypography.subtitle2.copy(
-    color = SlackCloneColorProvider.colors.textSecondary, fontWeight = FontWeight.Normal, textAlign = TextAlign.Start
-)
-
-@Composable
 private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
     Text(
-        text = slackMessage.message,
+        text = slackMessage.decodedMessage,
         style = SlackCloneTypography.caption.copy(
             color = textSecondary.copy(
                 alpha = 0.8f
