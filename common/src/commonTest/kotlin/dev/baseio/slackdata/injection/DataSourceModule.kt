@@ -1,7 +1,6 @@
 package dev.baseio.slackdata.injection
 
 import dev.baseio.slackdata.datasources.local.SKLocalDatabaseSourceImpl
-import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceChannelMembersImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceCreateChannelsImpl
@@ -66,10 +65,15 @@ val fakeDataSourceModule = module {
         }
     }
     single<SKNetworkSourceChannel> {
-        SKNetworkSourceChannelImpl(get())
+        SKNetworkSourceChannelImpl(get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get())
     }
     single<SKNetworkSourceWorkspaces> {
-        SKNetworkSourceWorkspacesImpl(get(),get())
+        SKNetworkSourceWorkspacesImpl(get())
     }
     single<SKAuthNetworkDataSource> {
         SKAuthNetworkDataSourceImpl(get())
@@ -81,7 +85,9 @@ val fakeDataSourceModule = module {
         SKNetworkDataSourceReadChannelMembersImpl(get())
     }
     single<SKNetworkDataSourceMessages> {
-        SKNetworkDataSourceMessagesImpl(get())
+        SKNetworkDataSourceMessagesImpl(get(),
+            get(),
+            get())
     }
     single<SKNetworkDataSourceReadUsers> {
         SKNetworkDataSourceReadUsersImpl(get(), get())
@@ -126,6 +132,10 @@ val fakeDataSourceModule = module {
         SKLocalDataSourceMessagesImpl(
             get(),
             get(SlackMessageMessageQualifier),
+            get(),
+            get(),
+            get(),
+            get(),
             get()
         )
     }
@@ -136,6 +146,7 @@ val fakeDataSourceModule = module {
             get(SlackMessageMessageQualifier),
             get(SlackChannelChannelQualifier),
             get(SlackChannelDMChannelQualifier),
+            get(),
             get(),
             get()
         )

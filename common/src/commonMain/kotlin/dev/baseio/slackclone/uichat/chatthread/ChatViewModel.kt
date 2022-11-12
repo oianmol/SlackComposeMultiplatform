@@ -137,7 +137,7 @@ class ChatViewModel(
 
     fun deleteMessage() {
         viewModelScope.launch {
-            sendMessageDelegate.deleteMessageNow()
+            sendMessageDelegate.deleteMessageNow(channel)
         }
     }
 
