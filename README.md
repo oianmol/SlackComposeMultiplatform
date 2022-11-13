@@ -1,10 +1,7 @@
-# SlackComposeMultiplatform (Experimental & In-Development)
+# SlackComposeMultiplatform (KMP with gRPC & In-Development)
 
 
 ![Component 1](https://user-images.githubusercontent.com/4393101/197988428-87a04d5e-94e0-4f7e-9c34-48d04983b081.png)
-
-
-### This is a jetpack compose Slack Client & Server Clone written in Kotlin and for Multiplatform.
 
 
 ## 🏗️️ Built with 💪🏼 using Jetpack Compose And Kotlin Multiplatform 😁
