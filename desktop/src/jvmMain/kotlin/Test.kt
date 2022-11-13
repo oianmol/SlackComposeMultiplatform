@@ -25,7 +25,7 @@ fun main() {
 
         val userPair = with(userKeyManager) {
             val publicKeyBytes: PublicKey =
-                JVMKeyStoreRsaUtils.getPublicKey(keychainId)
+                JVMKeyStoreRsaUtils.getPublicKey(keychainId).publicKey
             val privateKey =
                 JVMKeyStoreRsaUtils.getPrivateKey(keychainId)
             Pair(publicKeyBytes, privateKey)
@@ -33,13 +33,13 @@ fun main() {
 
         val channelPair = with(channelKeyManager) {
             val publicKeyBytes: PublicKey =
-                JVMKeyStoreRsaUtils.getPublicKey(keychainId)
+                JVMKeyStoreRsaUtils.getPublicKey(keychainId).publicKey
             val privateKey =
                 JVMKeyStoreRsaUtils.getPrivateKey(keychainId)
             Pair(publicKeyBytes, privateKey)
         }
         val encryptedChannelPrivateKey = encryptor.encrypt(
-            channelPair.second.encoded, userPair.first.encoded
+            channelPair.second.privateKey.encoded, userPair.first.encoded
         )
 
         val channelMemberStore = SKLocalDataSourceChannelMembersImpl(
@@ -61,7 +61,7 @@ fun main() {
         channelMember?.channelEncryptedPrivateKey?.keyBytes!!
         val encryptedMessage = encryptor.encrypt("anmol".toByteArray(), channelPair.first.encoded)
 
-        val decryptedPrivateKey = decryptor.decrypt(channelMember.channelEncryptedPrivateKey.keyBytes, userPair.second.encoded)
+        val decryptedPrivateKey = decryptor.decrypt(channelMember.channelEncryptedPrivateKey.keyBytes, userPair.second.privateKey.encoded)
         val spec = PKCS8EncodedKeySpec(decryptedPrivateKey)
         val kf = KeyFactory.getInstance("RSA")
         val privateKey = kf.generatePrivate(spec)
