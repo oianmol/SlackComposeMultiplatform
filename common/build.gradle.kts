@@ -25,7 +25,7 @@ dependencies {
 }
 
 kotlin {
-    val iosEnabled = false
+    val iosEnabled = true
     targets(iosEnabled)
 
     if (iosEnabled) {

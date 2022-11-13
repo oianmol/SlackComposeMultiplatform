@@ -73,7 +73,7 @@ class SendMessageDelegateImpl(
                     uuid = Clock.System.now().toEpochMilliseconds().toString(),
                     workspaceId = channel.workspaceId,
                     channelId = channel.channelId,
-                    message = message.toByteArray(),
+                    message = message.encodeToByteArray(),
                     sender = skKeyValueData.skUser().uuid,
                     createdDate = Clock.System.now().toEpochMilliseconds(),
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),

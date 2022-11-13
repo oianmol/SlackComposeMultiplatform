@@ -43,6 +43,7 @@ kotlin {
                 implementation(Lib.Decompose.core)
                 api(project(Lib.Project.SLACK_DATA_COMMON))
                 api(project(Lib.Project.SLACK_DOMAIN_COMMON))
+                implementation(Deps.Koin.core)
             }
         }
         val uikitX64Main by getting {

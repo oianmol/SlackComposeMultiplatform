@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/capillary_kmp/protos" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/desktop" />
+            <option value="$PROJECT_DIR$/iOSApp" />
             <option value="$PROJECT_DIR$/slack_data_layer" />
             <option value="$PROJECT_DIR$/slack_domain_layer" />
             <option value="$PROJECT_DIR$/slack_generate_protos" />

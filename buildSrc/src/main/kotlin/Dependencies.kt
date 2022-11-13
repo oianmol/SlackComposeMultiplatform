@@ -92,7 +92,7 @@ object Lib {
 
     object AndroidX {
         val securityCrypto = "androidx.security:security-crypto-ktx:1.1.0-alpha03"
-        const val COMPOSE_VERSION = "1.2.0"
+        const val COMPOSE_VERSION = "1.2.1"
         const val COMPOSE_COMPILER_VERSION = COMPOSE_VERSION
         private const val COMPOSE_ACTIVITY_VERSION = "1.6.0"
         private const val COMPOSE_CONSTRAINT_LAYOUT_VERSION = "1.0.0"
