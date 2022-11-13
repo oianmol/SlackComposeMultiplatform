@@ -40,7 +40,7 @@ import platform.UIKit.UIInterfaceOrientationMask
 import platform.UIKit.UIInterfaceOrientationMaskAll
 import platform.UIKit.UIScreen
 import platform.UIKit.UIApplicationMain
-
+import org.koin.dsl.module
 fun main() {
     val args = emptyArray<String>()
     memScoped {
@@ -89,7 +89,10 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
                 mutableStateOf(windowInfo)
             }
             val koinApplication =
-                initKoin({ skKeyValueData }, { DriverFactory().createDriver(SlackDB.Schema) })
+                initKoin(module = module {
+                    single{ skKeyValueData }
+                    single { DriverFactory().createDriver(SlackDB.Schema) }
+                })
 
             CompositionLocalProvider(
                 LocalWindow provides rememberedComposeWindow
