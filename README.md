@@ -44,8 +44,7 @@ The android and jvm platform run's fine, make sure you match the ip address in G
 
 ## Architecture
 
-![image](https://user-images.githubusercontent.com/4393101/201503458-35c5c44a-dc3a-4b49-a8f6-3850e9902a00.png)
-
+![image](https://user-images.githubusercontent.com/4393101/201503478-78720caf-a91b-4fee-a3b2-61531fb73898.png)
 
 
 
