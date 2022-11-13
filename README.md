@@ -23,19 +23,20 @@
 
 ### Dependent Projects
 
-1. [Protos](https://github.com/oianmol/slack_multiplatform_protos)
-2. [GenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
+1. [SlackProtos](https://github.com/oianmol/slack_multiplatform_protos)
+2. [SlackGenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
 3. [Slack Domain Layer](https://github.com/oianmol/slack_multiplatform_domain.git)
 4. [Slack Data Layer](https://github.com/oianmol/slack_multiplatform_client_data_lib)
-5. [This project](https://github.com/oianmol/slackcomposemultiplatform)
-6. [Backend Server in Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
-7. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)(Note: On Mac's Use Xcode 13.0 only! 14.0.* doesnt work with grpc!)
+5. [This KMP project](https://github.com/oianmol/slackcomposemultiplatform)
+6. [Backend Server in gRPC Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
+7. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)
+8. [Capillary-kmp](https://github.com/oianmol/capillary-kmp)
 
 ## Instructions to compile and get running
 
 Execute `git submodule update --init --recursive` and to update `git submodule update --recursive --remote` once the project is cloned to get all the dependent client projects.
 
-## iOS support with gRPC
+## iOS support with gRPC protobuf
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
 There's a specific task to deploy on iPad and iPhones, but composeiOS build fails with ref issue. 
 https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform/issues/11
