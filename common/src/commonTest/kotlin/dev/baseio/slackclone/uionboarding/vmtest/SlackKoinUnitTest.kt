@@ -1,18 +1,16 @@
 package dev.baseio.slackclone.uionboarding.vmtest
 
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
-import dev.baseio.slackdata.Platform
+import dev.baseio.slackclone.Platform.ANDROID
+import dev.baseio.slackclone.platformType
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.encryptionModule
 import dev.baseio.slackdata.injection.fakeDataSourceModule
 import dev.baseio.slackdata.injection.testDataModule
 import dev.baseio.slackdata.injection.testDispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
-import dev.baseio.slackdata.platform
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
-import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
@@ -23,8 +21,6 @@ import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-import dev.icerock.moko.test.AndroidArchitectureInstantTaskExecutorRule
-import dev.icerock.moko.test.TestRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
@@ -68,8 +64,8 @@ open class SlackKoinUnitTest : KoinTest {
             )
         }
         initializePlatform()
-        when (platform()) {
-            Platform.ANDROID -> {
+        when (platformType()) {
+            ANDROID -> {
                 Dispatchers.setMain(coroutineDispatcherProvider.main)
             }
 
@@ -95,8 +91,8 @@ open class SlackKoinUnitTest : KoinTest {
     @AfterTest
     fun tearDown() {
         stopKoin()
-        when (platform()) {
-            Platform.ANDROID -> {
+        when (platformType()) {
+            ANDROID -> {
                 Dispatchers.resetMain()
             }
 

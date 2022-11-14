@@ -47,9 +47,7 @@ kotlin {
         jvmDependencies(this@kotlin)
         configureTest(iosEnabled)
         if (iosEnabled) {
-            iosArmDependencies()
-            iosSimulatorArmDependencies()
-            iosX64Dependencies()
+            iosDependencies()
         }
     }
 }
@@ -125,14 +123,16 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         dependencies {
 
             // CameraX
-            api("androidx.camera:camera-camera2:1.2.0-rc01")
-            api("androidx.camera:camera-lifecycle:1.2.0-rc01")
-            api("androidx.camera:camera-view:1.2.0-rc01")
-            api("androidx.camera:camera-video:1.2.0-rc01")
-            api("androidx.camera:camera-extensions:1.2.0-rc01")
+            api("androidx.camera:camera-camera2:1.3.0-alpha01")
+            api("androidx.camera:camera-lifecycle:1.3.0-alpha01")
+            api("androidx.camera:camera-view:1.3.0-alpha01")
+            api("androidx.camera:camera-video:1.3.0-alpha01")
+            api("androidx.camera:camera-extensions:1.3.0-alpha01")
             implementation("com.google.guava:guava:29.0-android")
             // Zxing
             api("com.google.zxing:core:3.5.0")
+
+            implementation("com.google.mlkit:barcode-scanning:17.0.2")
             api(ACTIVITY_COMPOSE)
             api("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
             implementation("com.google.crypto.tink:tink-android:1.7.0") {
@@ -155,25 +155,15 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
     }
 }
 
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosArmDependencies() {
-    val iosArm64Main by getting {
-        dependencies {
-            implementation(Lib.Decompose.composejb)
-        }
-    }
-}
+fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosDependencies() {
+    val iosSimulatorArm64Main by getting
+    val iosX64Main by getting
+    val iosArm64Main by getting
+    val iosMain by creating {
+        iosSimulatorArm64Main.dependsOn(this)
+        iosArm64Main.dependsOn(this)
+        iosX64Main.dependsOn(this)
 
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosSimulatorArmDependencies() {
-    val iosSimulatorArm64Main by getting {
-        dependencies {
-            implementation(Lib.Decompose.composejb)
-        }
-    }
-}
-
-
-fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosX64Dependencies() {
-    val iosX64Main by getting {
         dependencies {
             implementation(Lib.Decompose.composejb)
         }

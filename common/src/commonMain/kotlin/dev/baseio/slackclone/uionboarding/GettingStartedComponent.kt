@@ -11,25 +11,35 @@ import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
 class GettingStartedComponent(
-    componentContext: ComponentContext,
-    val onCreateWorkspaceRequested: (Boolean) -> Unit,
-    val navigateDashboard: () -> Unit
+  componentContext: ComponentContext,
+  val onCreateWorkspaceRequested: (Boolean) -> Unit,
+  val navigateBack: () -> Unit,
+  private val navigateDashboard: () -> Unit,
 ) : ComponentContext by componentContext {
 
-    val viewModel =
-        instanceKeeper.getOrCreate { GettingStartedVM(koinApp.koin.get(),koinApp.koin.get(), navigateDashboard = navigateDashboard) }
+  val viewModel =
+    instanceKeeper.getOrCreate {
+      GettingStartedVM(
+        koinApp.koin.get(),
+        navigateDashboard = navigateDashboard,
+        navigateBackNow = {
+          navigateBack.invoke()
+        },
+        koinApp.koin.get(),
+      )
+    }
 
-    data class GettingStartedState(
-        val introTextExpanded: Boolean,
-        val isStartAnimation: Boolean,
-        val showSlackAnim: Boolean
-    )
+  data class GettingStartedState(
+    val introTextExpanded: Boolean,
+    val isStartAnimation: Boolean,
+    val showSlackAnim: Boolean
+  )
 }
 
 fun CoroutineScope(context: CoroutineContext, lifecycle: Lifecycle): CoroutineScope {
-    val scope = CoroutineScope(context)
-    lifecycle.doOnDestroy(scope::cancel)
-    return scope
+  val scope = CoroutineScope(context)
+  lifecycle.doOnDestroy(scope::cancel)
+  return scope
 }
 
 fun LifecycleOwner.coroutineScope(context: CoroutineContext): CoroutineScope = CoroutineScope(context, lifecycle)

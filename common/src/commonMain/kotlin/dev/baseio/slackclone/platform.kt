@@ -1,8 +1,7 @@
 package dev.baseio.slackclone
 
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.unit.Dp
+enum class Platform {
+  ANDROID,IOS,JVM
+}
 
-data class WindowInfo(val width: Dp, val height: Dp, val minDimen: Dp? = null, val maxDimen: Dp? = null)
-
-val LocalWindow = compositionLocalOf { WindowInfo(Dp.Unspecified, Dp.Unspecified) }
+expect fun platformType() :Platform
