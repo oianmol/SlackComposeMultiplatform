@@ -1,19 +1,21 @@
 package dev.baseio.android
 
-import android.os.Bundle // ktlint-disable import-ordering
+import android.Manifest
+import android.annotation.SuppressLint
+import android.os.Build
+import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.DefaultComponentContext
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import dev.baseio.android.util.showToast
 import dev.baseio.slackclone.App
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
@@ -22,10 +24,12 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.example.android.R
 import org.koin.core.KoinApplication
 
 class MainActivity : AppCompatActivity() {
 
+  @OptIn(ExperimentalPermissionsApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val defaultComponentContext = DefaultComponentContext(
@@ -38,9 +42,32 @@ class MainActivity : AppCompatActivity() {
       RootComponent(defaultComponentContext)
     }
     setContent {
+      askForPostNotificationPermission()
       MobileApp({
         root
       }, (application as SlackApp).koinApplication)
+    }
+  }
+
+  @SuppressLint("ComposableNaming", "InlinedApi")
+  @OptIn(ExperimentalPermissionsApi::class)
+  @Composable
+  private fun askForPostNotificationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      val context = LocalContext.current
+      val cameraPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS) { permissionGranted ->
+        if (!permissionGranted) {
+          showToast(
+            msg = context.getString(R.string.post_notification_permission_not_allowed_msg),
+            isLongToast = true
+          )
+        }
+      }
+      LaunchedEffect(Unit) {
+        if (!cameraPermissionState.status.isGranted) {
+          cameraPermissionState.launchPermissionRequest()
+        }
+      }
     }
   }
 }
