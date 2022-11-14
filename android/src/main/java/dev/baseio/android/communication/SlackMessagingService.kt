@@ -39,6 +39,7 @@ class SlackMessagingService : FirebaseMessagingService() {
                     .setContentTitle(nnNotification.title)
                     .setSmallIcon(R.drawable.slack)
                     .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
