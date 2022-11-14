@@ -5,11 +5,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.QrCodeScanner
 import dev.baseio.slackclone.commonui.reusable.QrCodeView
@@ -17,7 +15,6 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.platformType
 import dev.baseio.slackclone.uionboarding.QrCodeDelegate
 
 enum class QrScannerMode {
@@ -25,21 +22,21 @@ enum class QrScannerMode {
 }
 
 @Composable
-fun QRScannerUI(mode: QrScannerMode, viewModel: QrCodeDelegate, navigateBack: () -> Unit) {
+fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelegate: QrCodeDelegate, navigateBack: () -> Unit) {
   val coroutineScope = rememberCoroutineScope()
-  Scaffold {
+  Scaffold(modifier) {
     when (mode) {
       QrScannerMode.CAMERA -> {
         QrCodeScanner(Modifier.fillMaxSize().padding(it)) { code ->
-          viewModel.authorize(code, coroutineScope)
+          qrCodeDelegate.authorize(code, coroutineScope)
         }
       }
 
       QrScannerMode.QR_DISPLAY -> {
-        val qrResponse by viewModel.qrCode.collectAsState()
+        val qrResponse by qrCodeDelegate.qrCode.collectAsState()
 
         LaunchedEffect(Unit) {
-          viewModel.loadQrCode(this)
+          qrCodeDelegate.loadQrCode(this)
         }
 
         SlackCloneSurface(

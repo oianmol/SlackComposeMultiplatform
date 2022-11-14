@@ -41,7 +41,7 @@ fun App(
             is Root.Child.CreateNewChannel -> CreateNewChannelUI(child.component)
             is Root.Child.NewChatThread -> NewChatThreadScreen(child.component)
             is Root.Child.SearchCreateChannel -> SearchCreateChannelUI(child.component)
-            is Root.Child.QrScanner -> QRScannerUI(child.mode, koinApp.koin.get()) {
+            is Root.Child.QrScanner -> QRScannerUI(mode = child.mode, qrCodeDelegate = koinApp.koin.get()) {
                 rootComponent().navigationPop()
             }
         }

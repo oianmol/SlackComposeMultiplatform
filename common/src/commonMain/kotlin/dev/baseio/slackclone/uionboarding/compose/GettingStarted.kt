@@ -53,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.Platform
-import dev.baseio.slackclone.commonui.reusable.QrCodeView
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
@@ -148,7 +147,7 @@ private fun LargeScreenLayout(
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       if (scanMode) {
-        QRScannerUI(QrScannerMode.CAMERA, koinApp.koin.get()) {
+        QRScannerUI(mode = QrScannerMode.CAMERA, qrCodeDelegate = koinApp.koin.get()) {
           gettingStartedVM.navigateBack()
         }
       } else {
@@ -162,7 +161,7 @@ private fun LargeScreenLayout(
 private fun PhoneLayout(
   gettingStartedVM: GettingStartedComponent
 ) {
-  val qrResponse by gettingStartedVM.viewModel.qrCode.collectAsState()
+  val scanMode by gettingStartedVM.viewModel.scanningMode.collectAsState()
 
   val density = LocalDensity.current
   Column(
@@ -175,7 +174,12 @@ private fun PhoneLayout(
     }) {
       IntroExitTransitionHorizontal()
     }
-    qrResponse?.let { it1 -> QrCodeView(Modifier.weight(1f, fill = false), it1) } ?: kotlin.run {
+
+    if (scanMode) {
+      QRScannerUI(modifier = Modifier.weight(1f, fill = false), QrScannerMode.CAMERA, koinApp.koin.get()) {
+        gettingStartedVM.navigateBack()
+      }
+    } else {
       CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
     }
     Spacer(Modifier.padding(8.dp))
