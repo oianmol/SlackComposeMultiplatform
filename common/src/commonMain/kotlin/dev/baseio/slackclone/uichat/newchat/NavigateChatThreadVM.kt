@@ -20,57 +20,61 @@ import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class NavigateChatThreadVM(
-    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-    private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
-    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    private val useCaseCreateChannel: UseCaseCreateChannel,
-    private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch,
-    private val navigationPopWith: (DomainLayerChannels.SKChannel) -> Unit
+  private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
+  private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
+  private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
+  private val useCaseCreateChannel: UseCaseCreateChannel,
+  private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch,
+  private val navigationPopWith: (DomainLayerChannels.SKChannel) -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
-    val search = MutableStateFlow("")
-    var channelsStream = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
-        private set
+  val search = MutableStateFlow("")
+  var channelsStream = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
+    private set
 
-    var errorStream = MutableStateFlow<Throwable?>(null)
-        private set
+  var errorStream = MutableStateFlow<Throwable?>(null)
+    private set
 
-    init {
-        viewModelScope.launch {
-            useCaseGetSelectedWorkspace.invokeFlow().onEach { workspace ->
-                workspace?.uuid?.let { useCaseFetchAndSaveUsers(it) }
-            }.launchIn(this)
+  init {
+    viewModelScope.launch {
+      useCaseGetSelectedWorkspace.invokeFlow().onEach { workspace ->
+        workspace?.uuid?.let { useCaseFetchAndSaveUsers(it) }
+      }.launchIn(this)
 
-            search.collectLatest { search ->
-                useCaseGetSelectedWorkspace.invokeFlow()
-                    .mapNotNull { it }
-                    .flatMapConcat { workspace ->
-                        useCaseFetchChannelsWithSearch(workspace.uuid, search)
-                    }.flowOn(coroutineDispatcherProvider.io)
-                    .onEach {
-                        channelsStream.value = it
-                    }.flowOn(coroutineDispatcherProvider.main)
-                    .launchIn(viewModelScope)
-            }
+      search.collectLatest { search ->
+        useCaseGetSelectedWorkspace.invokeFlow()
+          .mapNotNull { it }
+          .flatMapConcat { workspace ->
+            useCaseFetchChannelsWithSearch(workspace.uuid, search)
+          }.flowOn(coroutineDispatcherProvider.io)
+          .onEach {
+            channelsStream.value = it
+          }.flowOn(coroutineDispatcherProvider.main)
+          .launchIn(viewModelScope)
+      }
+    }
+  }
+
+  fun search(newValue: String) {
+    search.value = newValue
+  }
+
+  private fun navigate(channel: DomainLayerChannels.SKChannel) {
+    navigationPopWith(channel)
+  }
+
+  fun createChannel(channel: DomainLayerChannels.SKChannel) {
+    if (channel is DomainLayerChannels.SKChannel.SkGroupChannel) {
+      navigate(channel)
+    } else {
+      viewModelScope.launch(
+        CoroutineExceptionHandler { _, throwable ->
+          errorStream.value = throwable
         }
+      ) {
+        val result = useCaseCreateChannel.invoke(channel)
+        val channelNew = result.getOrThrow()
+        navigate(channelNew)
+      }
     }
-
-    fun search(newValue: String) {
-        search.value = newValue
-    }
-
-    private fun navigate(channel: DomainLayerChannels.SKChannel) {
-        navigationPopWith(channel)
-    }
-
-    fun createChannel(channel: DomainLayerChannels.SKChannel) {
-        viewModelScope.launch(
-            CoroutineExceptionHandler { _, throwable ->
-                errorStream.value = throwable
-            }
-        ) {
-            val result = useCaseCreateChannel.invoke(channel)
-            val channelNew = result.getOrThrow()
-            navigate(channelNew)
-        }
-    }
+  }
 }
