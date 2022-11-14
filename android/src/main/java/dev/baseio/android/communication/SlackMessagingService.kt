@@ -10,11 +10,20 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dev.baseio.android.MainActivity
+import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.example.android.R
+import org.koin.android.ext.android.getKoin
 
 class SlackMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        GlobalScope.launch(context = CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
+        } + Dispatchers.IO) { getKoin().get<UseCaseSaveFCMToken>().invoke(token) }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

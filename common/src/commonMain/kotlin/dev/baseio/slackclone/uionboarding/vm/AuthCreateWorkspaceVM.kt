@@ -1,7 +1,9 @@
 package dev.baseio.slackclone.uionboarding.vm
 
 import dev.baseio.slackclone.SlackViewModel
+import dev.baseio.slackclone.fcmToken
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +12,7 @@ import kotlinx.coroutines.launch
 class AuthCreateWorkspaceVM(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
+    private val useCaseSaveFCMToken:UseCaseSaveFCMToken,
     val navigateDashboard: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
     val state = MutableStateFlow(AuthCreateWorkspaceVMState())
@@ -32,6 +35,7 @@ class AuthCreateWorkspaceVM(
                 else -> {
                     state.value = state.value.copy(error = null, loading = true)
                     useCaseCreateWorkspace(state.value.email, state.value.password, state.value.domain)
+                    useCaseSaveFCMToken.invoke(fcmToken())
                     state.value = state.value.copy(loading = false)
                     navigateDashboard()
                 }

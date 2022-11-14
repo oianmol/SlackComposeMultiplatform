@@ -15,7 +15,7 @@ class CreateWorkspaceComponent(
             AuthCreateWorkspaceVM(
                 koinApp.koin.get(),
                 navigateDashboard = navigateDashboard,
-                useCaseCreateWorkspace = koinApp.koin.get()
+                useCaseCreateWorkspace = koinApp.koin.get(), useCaseSaveFCMToken = koinApp.koin.get(),
             )
         }
 

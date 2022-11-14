@@ -5,3 +5,4 @@ enum class Platform {
 }
 
 expect fun platformType() :Platform
+expect suspend fun fcmToken():String
