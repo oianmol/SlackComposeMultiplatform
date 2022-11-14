@@ -2,5 +2,8 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="app_name">SlackClone</string>
     <string name="default_notification_channel_id">Push Notifications</string>
+    <string name="post_notification_permission_not_allowed_msg">Notification permission needs to be allowed to receive
+        push notifications!
+    </string>
 
 </resources>

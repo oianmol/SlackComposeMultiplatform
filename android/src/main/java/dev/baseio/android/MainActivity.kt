@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.DefaultComponentContext
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -22,6 +24,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.example.android.R
 import org.koin.core.KoinApplication
 
 class MainActivity : AppCompatActivity() {
@@ -51,12 +54,16 @@ class MainActivity : AppCompatActivity() {
   @Composable
   private fun askForPostNotificationPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      val context = LocalContext.current
       val cameraPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS) { permissionGranted ->
         if (!permissionGranted) {
-          showToast("Notification permission needs to be allowed to receive push notifications!")
+          showToast(
+            msg = context.getString(R.string.post_notification_permission_not_allowed_msg),
+            isLongToast = true
+          )
         }
       }
-      LaunchedEffect(cameraPermissionState.status) {
+      LaunchedEffect(Unit) {
         if (!cameraPermissionState.status.isGranted) {
           cameraPermissionState.launchPermissionRequest()
         }
