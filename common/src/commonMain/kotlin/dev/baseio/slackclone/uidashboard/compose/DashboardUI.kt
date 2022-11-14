@@ -324,7 +324,7 @@ private fun DashboardScaffold(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     DashboardChildren(
-                        modifier,
+                        Modifier,
                         dashboardComponent,
                         appBarIconClick,
                         onItemClick

@@ -12,7 +12,7 @@ import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
-import dev.baseio.slackclone.uiqrscanner.QRCodeComponent
+import dev.baseio.slackclone.uiqrscanner.QrScannerMode
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
@@ -22,7 +22,7 @@ interface Root {
   fun navigateCreateWorkspace(isLogin: Boolean)
   fun navigateDashboard()
 
-  fun navigateQRScanner(mode:QRCodeComponent.QrScannerMode)
+  fun navigateQRScanner(mode: QrScannerMode)
   fun navigatePush(config: RootComponent.Config)
   fun navigationPop()
   fun navigationClear()
@@ -34,7 +34,7 @@ interface Root {
     data class NewChatThread(val component: NewChatThreadComponent) : Child()
     data class CreateWorkspace(val component: CreateWorkspaceComponent) : Child()
     data class DashboardScreen(val component: DashboardComponent) : Child()
-    data class QrScanner(val qrCodeComponent: QRCodeComponent) : Child()
+    data class QrScanner(val mode: QrScannerMode) : Child()
   }
 }
 
@@ -74,7 +74,7 @@ class RootComponent(
     }
   }
 
-  override fun navigateQRScanner(mode: QRCodeComponent.QrScannerMode) {
+  override fun navigateQRScanner(mode: QrScannerMode) {
     navigation.push(Config.QrScanner(mode))
   }
 
@@ -177,19 +177,14 @@ class RootComponent(
         )
       )
 
-      is Config.QrScanner -> Root.Child.QrScanner(QRCodeComponent(
-        componentContext.childContext(QRCodeComponent::class.qualifiedName.toString()), mode = config.mode
-      ) {
-        navigation.pop()
-      })
+      is Config.QrScanner -> Root.Child.QrScanner(mode = config.mode)
     }
 
 
   sealed class Config : Parcelable {
 
     @Parcelize
-    data class QrScanner(val mode: QRCodeComponent.QrScannerMode) : Config()
-
+    data class QrScanner(val mode: QrScannerMode) : Config()
     @Parcelize
     object GettingStarted : Config()
 

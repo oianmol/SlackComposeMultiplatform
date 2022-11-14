@@ -18,7 +18,7 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uidashboard.home.HomeScreenComponent
 import dev.baseio.slackclone.uidashboard.home.SearchMessagesComponent
 import dev.baseio.slackclone.uidashboard.home.UserProfileComponent
-import dev.baseio.slackclone.uiqrscanner.QRCodeComponent
+import dev.baseio.slackclone.uiqrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 interface Dashboard {
@@ -40,7 +40,7 @@ interface Dashboard {
 class DashboardComponent(
     componentContext: ComponentContext,
     val navigateOnboarding: () -> Unit,
-    val navigateQrScanner:(QRCodeComponent.QrScannerMode)->Unit,
+    val navigateQrScanner:(QrScannerMode)->Unit,
     val navigateRoot: (RootComponent.Config) -> Unit
 ) : Dashboard, ComponentContext by componentContext {
 

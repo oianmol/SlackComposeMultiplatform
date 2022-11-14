@@ -20,14 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.platformType
 import dev.baseio.slackclone.uidashboard.vm.SideNavComponent
-import dev.baseio.slackclone.uiqrscanner.QRCodeComponent
+import dev.baseio.slackclone.uiqrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
@@ -36,7 +34,7 @@ fun SideNavigation(
     sideNavComponent: SideNavComponent,
     onClose: () -> Unit,
     navigateOnboardingClearRoutes: () -> Unit,
-    navigateQrScanner: (QRCodeComponent.QrScannerMode) -> Unit
+    navigateQrScanner: (QrScannerMode) -> Unit
 ) {
     val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
     SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
@@ -66,7 +64,7 @@ fun SideNavigation(
                 sideNavComponent.viewModel.logout()
                 navigateOnboardingClearRoutes()
             }, openQrScanner = {
-                navigateQrScanner(QRCodeComponent.QrScannerMode.QR_DISPLAY)
+                navigateQrScanner(QrScannerMode.QR_DISPLAY)
             })
         }
     }

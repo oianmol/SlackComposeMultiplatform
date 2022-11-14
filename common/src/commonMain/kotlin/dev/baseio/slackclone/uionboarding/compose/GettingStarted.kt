@@ -66,8 +66,8 @@ import dev.baseio.slackclone.uidashboard.compose.WindowSize
 import dev.baseio.slackclone.uidashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
 import dev.baseio.slackclone.uionboarding.GettingStartedVM
-import dev.baseio.slackclone.uiqrscanner.QRCodeComponent
 import dev.baseio.slackclone.uiqrscanner.QRScannerUI
+import dev.baseio.slackclone.uiqrscanner.QrScannerMode
 
 @Composable
 fun GettingStartedUI(
@@ -148,7 +148,7 @@ private fun LargeScreenLayout(
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       if (scanMode) {
-        QRScannerUI(QRCodeComponent.QrScannerMode.CAMERA, koinApp.koin.get()) {
+        QRScannerUI(QrScannerMode.CAMERA, koinApp.koin.get()) {
           gettingStartedVM.navigateBack()
         }
       } else {

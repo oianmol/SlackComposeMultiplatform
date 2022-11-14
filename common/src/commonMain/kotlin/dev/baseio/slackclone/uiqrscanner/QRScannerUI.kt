@@ -20,18 +20,22 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.platformType
 import dev.baseio.slackclone.uionboarding.QrCodeDelegate
 
+enum class QrScannerMode {
+  CAMERA, QR_DISPLAY
+}
+
 @Composable
-fun QRScannerUI(mode: QRCodeComponent.QrScannerMode, viewModel: QrCodeDelegate, navigateBack: () -> Unit) {
+fun QRScannerUI(mode: QrScannerMode, viewModel: QrCodeDelegate, navigateBack: () -> Unit) {
   val coroutineScope = rememberCoroutineScope()
   Scaffold {
     when (mode) {
-      QRCodeComponent.QrScannerMode.CAMERA -> {
+      QrScannerMode.CAMERA -> {
         QrCodeScanner(Modifier.fillMaxSize().padding(it)) { code ->
           viewModel.authorize(code, coroutineScope)
         }
       }
 
-      QRCodeComponent.QrScannerMode.QR_DISPLAY -> {
+      QrScannerMode.QR_DISPLAY -> {
         val qrResponse by viewModel.qrCode.collectAsState()
 
         LaunchedEffect(Unit) {
