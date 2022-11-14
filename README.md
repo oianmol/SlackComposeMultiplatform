@@ -48,9 +48,10 @@ The android and jvm platform run's fine, make sure you match the ip address in G
 
 
 
-Video Demo for JVM Desktop with Responsive UI
+Video Demo for JVM Desktop and Android
 
-https://user-images.githubusercontent.com/4393101/188278261-4553ea2b-e80f-4515-be85-e2eba646930b.mp4
+https://user-images.githubusercontent.com/4393101/201595781-c8669824-d774-4c82-b1e2-4814913357a8.mp4
+
 
 Video Demo for Jetpack Compose for iOS
 
