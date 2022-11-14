@@ -16,6 +16,7 @@ import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceUsersImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.auth.SKAuthNetworkDataSourceImpl
+import dev.baseio.slackdata.datasources.remote.auth.SKNetworkSaveFcmTokenImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelMembersImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceWriteChannelsImpl
@@ -39,6 +40,7 @@ import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceReadWorkspaces
 import dev.baseio.slackdomain.datasources.remote.auth.SKAuthNetworkDataSource
+import dev.baseio.slackdomain.datasources.remote.auth.SKNetworkSaveFcmToken
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannelMembers
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannels
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceWriteChannels
@@ -54,6 +56,7 @@ val dataSourceModule = module {
     single<IGrpcCalls> {
         GrpcCalls(skKeyValueData = get())
     }
+    single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(),get()) }
     single<SKPublicKeyRetriever> {
         SKPublicKeyRetrieverImpl()
     }

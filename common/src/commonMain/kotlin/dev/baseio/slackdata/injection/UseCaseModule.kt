@@ -11,6 +11,7 @@ import dev.baseio.slackdomain.usecases.workspaces.*
 import org.koin.dsl.module
 
 val useCaseModule = module {
+    factory { UseCaseSaveFCMToken(get(), get()) }
     factory { UseCaseQRAuthUser(get(), get(), get()) }
     factory { UseCaseGetChannelMembers(get(), get(), get()) }
     factory { FindWorkspacesUseCase(get()) }
@@ -38,7 +39,7 @@ val useCaseModule = module {
     factory { UseCaseFindChannelById(get(), get(), get()) }
     factory { UseCaseFetchAndSaveUsers(get(), get()) }
     factory { UseCaseLogout(get(), get()) }
-    factory { UseCaseFetchChannelsWithSearch(get(), get(), get(), get(),get()) }
+    factory { UseCaseFetchChannelsWithSearch(get(), get(), get(), get(), get()) }
     factory { UseCaseCurrentUser(get()) }
     factory { UseCaseCreateWorkspace(get(), get(), get(), get()) }
 }
