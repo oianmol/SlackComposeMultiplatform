@@ -2,6 +2,7 @@ plugins {
     id("org.jetbrains.compose") version Lib.AndroidX.COMPOSE_VERSION
     id("com.android.application")
     kotlin("android")
+    id("com.google.gms.google-services")
 }
 
 group = ProjectProperties.APPLICATION_ID
@@ -34,6 +35,13 @@ dependencies {
     )
     androidTestImplementation(TestLib.JUNIT)
     implementation(compose.uiTestJUnit4)
+
+    // Firebase
+    implementation(platform(Lib.Firebase.BOM))
+    implementation(Lib.Firebase.CLOUD_MESSAGING)
+
+    // Accompanist Permissions
+    implementation(Lib.AndroidX.ACCOMPANIST_PERMISSION)
 }
 
 android {

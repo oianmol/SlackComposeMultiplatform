@@ -2,11 +2,13 @@ package dev.baseio.slackclone.uidashboard.vm
 
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
+import dev.baseio.slackclone.fcmToken
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
+import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndUpdateChangeInChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
@@ -32,8 +34,9 @@ class DashboardVM(
     private val useCaseFetchChannels: UseCaseFetchAndSaveChannels,
     private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
     private val skKeyValueData: SKLocalKeyValueSource,
-    private val grpcCalls: IGrpcCalls
-) :
+    private val grpcCalls: IGrpcCalls,
+    private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
+    ) :
     SlackViewModel(coroutineDispatcherProvider) {
     val selectedChatChannel = MutableStateFlow<DomainLayerChannels.SKChannel?>(null)
     var selectedWorkspace = MutableStateFlow<DomainLayerWorkspaces.SKWorkspace?>(null)
@@ -66,6 +69,7 @@ class DashboardVM(
 
         viewModelScope.launch {
             useCaseFetchAndSaveWorkspaces.invoke()
+            useCaseSaveFCMToken.invoke(fcmToken())
         }
         useCaseGetSelectedWorkspace.invokeFlow().onEach {
             if (selectedWorkspace.value != it) {

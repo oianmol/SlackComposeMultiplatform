@@ -11,6 +11,7 @@ buildscript {
         classpath(BuildPlugins.KOTLIN_GRADLE_PLUGIN)
         classpath(BuildPlugins.SQLDELIGHT)
         classpath(BuildPlugins.KTLINT_GRADLE_PLUGIN)
+        classpath(BuildPlugins.GOOGLE_SERVICES)
     }
 }
 

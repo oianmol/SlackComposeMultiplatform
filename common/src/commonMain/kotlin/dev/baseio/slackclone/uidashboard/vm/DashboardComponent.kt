@@ -72,6 +72,7 @@ class DashboardComponent(
             koinApp.koin.get(),
             koinApp.koin.get(),
             koinApp.koin.get(),
+            koinApp.koin.get(),
             koinApp.koin.get()
         )
     }

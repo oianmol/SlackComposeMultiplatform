@@ -63,18 +63,15 @@ class NavigateChatThreadVM(
   }
 
   fun createChannel(channel: DomainLayerChannels.SKChannel) {
-    if (channel is DomainLayerChannels.SKChannel.SkGroupChannel) {
-      navigate(channel)
-    } else {
-      viewModelScope.launch(
-        CoroutineExceptionHandler { _, throwable ->
-          errorStream.value = throwable
-        }
-      ) {
-        val result = useCaseCreateChannel.invoke(channel)
-        val channelNew = result.getOrThrow()
-        navigate(channelNew)
+    viewModelScope.launch(
+      CoroutineExceptionHandler { _, throwable ->
+        errorStream.value = throwable
+        navigate(channel)
       }
+    ) {
+      val result = useCaseCreateChannel.invoke(channel)
+      val channelNew = result.getOrThrow()
+      navigate(channelNew)
     }
   }
 }

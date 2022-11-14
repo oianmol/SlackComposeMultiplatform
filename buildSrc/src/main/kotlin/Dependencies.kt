@@ -6,6 +6,7 @@ object BuildPlugins {
     private const val TOOLS_BUILD = "7.2.2"
     private const val KT_LINT = "11.0.0"
     private const val SAFE_ARGS = "2.3.5"
+    private const val GOOGLE_SERVICES_VERSION = "4.3.13"
 
     const val ANDROID_TOOLS_BUILD_GRADLE = "com.android.tools.build:gradle:$TOOLS_BUILD"
     const val KTLINT_GRADLE_PLUGIN = "org.jlleitschuh.gradle:ktlint-gradle:$KT_LINT"
@@ -22,6 +23,7 @@ object BuildPlugins {
     const val SERIALIZATION = "plugin.serialization"
     const val MULTIPLATFORM = "multiplatform"
     const val SAFE_ARGS_KOTLIN = "androidx.navigation.safeargs.kotlin"
+    const val GOOGLE_SERVICES = "com.google.gms:google-services:$GOOGLE_SERVICES_VERSION"
 }
 
 
@@ -192,6 +194,12 @@ object Lib {
 
         const val kamelImage = "com.alialbaali.kamel:kamel-image:0.4.0"
         const val mokoPaging = "dev.icerock.moko:paging:0.7.2"
+    }
+
+    object Firebase {
+        private const val BOM_VERSION = "31.0.2"
+        const val BOM = "com.google.firebase:firebase-bom:$BOM_VERSION"
+        const val CLOUD_MESSAGING = "com.google.firebase:firebase-messaging-ktx"
     }
 }
 

@@ -121,7 +121,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.androidDependencies() {
     val androidMain by getting {
         dependencies {
-
             // CameraX
             api("androidx.camera:camera-camera2:1.3.0-alpha01")
             api("androidx.camera:camera-lifecycle:1.3.0-alpha01")
@@ -143,6 +142,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             }
             implementation("com.google.firebase:firebase-core:21.1.1")
             implementation("com.google.firebase:firebase-messaging:23.1.0")
+            implementation("com.google.firebase:firebase-messaging-ktx:21.0.0")
             implementation(Deps.Koin.android)
             implementation(Lib.Async.COROUTINES)
             implementation(Deps.AndroidX.lifecycleViewModelKtx)
