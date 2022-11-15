@@ -2,6 +2,8 @@ package dev.baseio.android
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -30,6 +32,9 @@ import org.koin.core.KoinApplication
 
 class MainActivity : AppCompatActivity() {
 
+    fun Intent.channelId() = this.extras?.getString(MainActivity.EXTRA_CHANNEL_ID)
+
+
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             viewModelStore = viewModelStore,
             onBackPressedDispatcher = onBackPressedDispatcher
         )
+
         val root by lazy {
             RootComponent(defaultComponentContext)
         }
@@ -47,6 +53,9 @@ class MainActivity : AppCompatActivity() {
             MobileApp({
                 root
             }, (application as SlackApp).koinApplication)
+            LaunchedEffect(intent?.channelId()){
+                intent?.channelId()?.let { root.navigateChannel(it) }
+            }
         }
     }
 
@@ -71,6 +80,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        fun channelChatIntent(channelId: String, context: Context): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                putExtra(EXTRA_CHANNEL_ID, channelId)
+            }
+        }
+
+        const val EXTRA_CHANNEL_ID: String = "channel_id"
+        const val INTENT_KEY_NOT_ID: String = "notification_id"
     }
 }
 
