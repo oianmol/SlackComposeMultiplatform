@@ -15,6 +15,7 @@ class ChatScreenComponent(
             koinApp.koin.get(),
             koinApp.koin.get(),
             koinApp.koin.get(),
+            koinApp.koin.get(),
             koinApp.koin.get()
         )
     }

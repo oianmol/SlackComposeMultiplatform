@@ -1,68 +1,71 @@
 package dev.baseio.android.communication
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import androidx.core.app.NotificationCompat
+import android.util.Base64
+import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dev.baseio.android.MainActivity
+import dev.baseio.slackclone.koinApp
+import dev.baseio.slackdata.datasources.local.channels.skUser
+import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
+import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.example.android.R
 import org.koin.android.ext.android.getKoin
 
 class SlackMessagingService : FirebaseMessagingService() {
+
+    val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+    private val skPushNotificationNotifier by lazy {
+        SKPushNotificationNotifier(
+            this.applicationContext,
+            applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        )
+    }
+
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        GlobalScope.launch(context = CoroutineExceptionHandler { _, throwable ->
+        coroutineScope.launch(context = CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
         } + Dispatchers.IO) { getKoin().get<UseCaseSaveFCMToken>().invoke(token) }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        showNotification(notificationData = message.notification)
-    }
-
-    private fun showNotification(notificationData: RemoteMessage.Notification?) {
-        notificationData?.let { nnNotification ->
-            val intent = Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
-            val pendingIntent =
-                PendingIntent.getActivity(
-                    this,
-                    0,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
+        Log.e("message", message.data.toString())
+        val type = message.data["type"]
+        if (type == "new_message") {
+            val user = koinApp.koin.get<SKLocalKeyValueSource>().skUser()
+            coroutineScope.launch(CoroutineExceptionHandler { _, throwable ->
+                throwable.printStackTrace()
+            }) {
+                val channel =
+                    koinApp.koin.get<SKLocalDataSourceReadChannels>().getChannelById(
+                        user.workspaceId,
+                        message.data["channelId"]!!
+                    )
+                skPushNotificationNotifier.createReplyNotification(
+                    DomainLayerMessages.SKMessage(
+                        uuid = message.data["uuid"]!!,
+                        workspaceId = message.data["workspaceId"]!!,
+                        channelId = message.data["channelId"]!!,
+                        message = Base64.decode(message.data["message"]!!, Base64.DEFAULT),
+                        sender = message.data["sender"]!!,
+                        createdDate = message.data["createdDate"]!!.toLong(),
+                        modifiedDate = message.data["modifiedDate"]!!.toLong(),
+                        isDeleted = message.data["isDeleted"].toBoolean(),
+                    ), channel!!
                 )
-            val notificationBuilder =
-                NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
-                    .setContentTitle(nnNotification.title)
-                    .setSmallIcon(R.drawable.slack)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channelId = getString(R.string.default_notification_channel_id)
-                val channel = NotificationChannel(
-                    channelId,
-                    getString(R.string.default_notification_channel_id),
-                    NotificationManager.IMPORTANCE_HIGH
-                )
-                notificationManager.createNotificationChannel(channel)
-                notificationBuilder.setChannelId(channelId)
             }
 
-            notificationManager.notify(0, notificationBuilder.build())
         }
     }
+
 }

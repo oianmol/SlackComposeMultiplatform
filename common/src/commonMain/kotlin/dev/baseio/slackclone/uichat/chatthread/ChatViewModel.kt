@@ -3,6 +3,7 @@ package dev.baseio.slackclone.uichat.chatthread
 import com.arkivanov.decompose.value.MutableValue
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
@@ -25,7 +26,8 @@ class ChatViewModel(
     private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
     private val useCaseChannelMembers: UseCaseGetChannelMembers,
     private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
-    private val sendMessageDelegate: SendMessageDelegate
+    private val sendMessageDelegate: SendMessageDelegate,
+    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels
 ) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
@@ -147,6 +149,16 @@ class ChatViewModel(
 
     fun showChannelDetailsRequested() {
         showChannelDetails.value = !showChannelDetails.value
+    }
+
+    fun requestFetch(channelId: String, function: (DomainLayerChannels.SKChannel) -> Unit) {
+        viewModelScope.launch {
+            val channel = skLocalDataSourceReadChannels.getChannelByChannelId(channelId)
+            channel?.let {
+                requestFetch(it)
+                function(channel)
+            }
+        }
     }
 }
 

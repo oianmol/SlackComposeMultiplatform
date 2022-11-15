@@ -19,11 +19,13 @@ import dev.baseio.slackclone.uidashboard.home.HomeScreenComponent
 import dev.baseio.slackclone.uidashboard.home.SearchMessagesComponent
 import dev.baseio.slackclone.uidashboard.home.UserProfileComponent
 import dev.baseio.slackclone.uiqrscanner.QrScannerMode
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 interface Dashboard {
     fun navigate(child: DashboardComponent.Config)
     fun onChannelSelected(channel: DomainLayerChannels.SKChannel)
+    fun navigateChannel(channelId: String)
 
     val phoneStack: Value<ChildStack<*, Child>>
     val desktopStack: Value<ChildStack<*, Child>>
@@ -123,6 +125,12 @@ class DashboardComponent(
     override fun onChannelSelected(channel: DomainLayerChannels.SKChannel) {
         chatScreenComponent.chatViewModel.requestFetch(channel)
         dashboardVM.onChannelSelected(channel)
+    }
+
+    override fun navigateChannel(channelId: String) {
+        chatScreenComponent.chatViewModel.requestFetch(channelId) { skChannel ->
+            dashboardVM.onChannelSelected(skChannel)
+        }
     }
 
     sealed class Config(val name: String) : Parcelable {

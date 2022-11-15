@@ -1,6 +1,8 @@
 package dev.baseio.android
 
 import android.app.Application
+import android.app.NotificationManager
+import android.content.Context
 import dev.baseio.database.SlackDB
 import dev.baseio.security.AndroidSecurityProvider
 import dev.baseio.slackclone.initKoin
@@ -20,6 +22,7 @@ class SlackApp : Application() {
       initKoin(
         module {
           single { skKeyValueData }
+          single { this@SlackApp.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
           single { SlackDB.invoke(DriverFactory(this@SlackApp).createDriver(SlackDB.Schema)) }
         }
       )

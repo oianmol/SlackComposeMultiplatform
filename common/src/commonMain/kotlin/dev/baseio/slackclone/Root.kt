@@ -26,6 +26,7 @@ interface Root {
   fun navigatePush(config: RootComponent.Config)
   fun navigationPop()
   fun navigationClear()
+  fun navigateChannel(channelId: String)
 
   sealed class Child {
     data class GettingStarted(val component: GettingStartedComponent) : Child()
@@ -48,7 +49,7 @@ class RootComponent(
   override val childStack: Value<ChildStack<*, Root.Child>> = childStack(
     source = navigation,
     initialConfiguration = skKeyValueData.get(AUTH_TOKEN)?.let {
-      Config.DashboardScreen
+      Config.DashboardScreen()
     } ?: run {
       Config.GettingStarted
     },
@@ -64,13 +65,17 @@ class RootComponent(
     navigation.popWhile { true }
   }
 
+  override fun navigateChannel(channelId: String) {
+    navigation.push(Config.DashboardScreen(channelId))
+  }
+
   override fun navigateCreateWorkspace(isLogin: Boolean) {
     navigation.push(Config.CreateWorkspace(isLogin))
   }
 
   override fun navigateDashboard() {
     navigation.navigate {
-      listOf(Config.DashboardScreen)
+      listOf(Config.DashboardScreen())
     }
   }
 
@@ -104,7 +109,7 @@ class RootComponent(
         }
       )
 
-      Config.DashboardScreen -> Root.Child.DashboardScreen(
+     is Config.DashboardScreen -> Root.Child.DashboardScreen(
         DashboardComponent(
           componentContext.childContext(DashboardComponent::class.qualifiedName.toString()),
           {
@@ -117,7 +122,9 @@ class RootComponent(
           {
             navigation.push(it)
           }
-        )
+        ).also { dashboardComponent ->
+          config.channelId?.let { channelId -> dashboardComponent.navigateChannel(channelId) }
+        }
       )
 
       Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
@@ -128,7 +135,7 @@ class RootComponent(
           },
           { channel ->
             navigation.popWhile {
-              it != Config.DashboardScreen
+              it !is Config.DashboardScreen
             }
             (childStack.value.active.instance as? Root.Child.CreateNewChannel)?.component?.onChannelSelected(
               channel
@@ -148,7 +155,7 @@ class RootComponent(
           },
           { channel ->
             navigation.popWhile {
-              it != Config.DashboardScreen
+              it !is Config.DashboardScreen
             }
             (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(
               channel
@@ -168,7 +175,7 @@ class RootComponent(
           },
           { channel ->
             navigation.popWhile {
-              it != Config.DashboardScreen
+              it !is Config.DashboardScreen
             }
             (childStack.value.active.instance as? Root.Child.DashboardScreen)?.component?.onChannelSelected(
               channel
@@ -189,7 +196,7 @@ class RootComponent(
     object GettingStarted : Config()
 
     @Parcelize
-    object DashboardScreen : Config()
+    data class DashboardScreen(val channelId: String? = null) : Config()
 
     @Parcelize
     data class CreateWorkspace(var isLogin: Boolean) : Config()
