@@ -21,3 +21,4 @@ local.properties
 /common/src/jvmMain/resources/sender_verification_key.dat
 /capillary_kmp/build/
 /common/src/commonTest/resources/sender_verification_key.dat
+/capillaryios/Podfile.lock

@@ -12,6 +12,9 @@ pluginManagement {
 }
 rootProject.name = "SlackJetpackCompose"
 
+include(":capillaryios")
+project(":capillaryios").projectDir = file("capillary_kmp/capillaryios")
+
 include(":android")
 include(":desktop")
 include(":common")

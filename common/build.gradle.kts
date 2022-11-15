@@ -28,19 +28,6 @@ kotlin {
     val iosEnabled = true
     targets(iosEnabled)
 
-    if (iosEnabled) {
-        cocoapods {
-            version = "1.0"
-            summary = ""
-            homepage = ""
-            framework {
-                baseName = "capillary-ios"
-            }
-            ios.deploymentTarget = "14.1"
-            pod("Tink", version = "~> 1.6.1", moduleName = "Tink")
-        }
-    }
-
     sourceSets {
         commonDependencies(this@kotlin)
         androidDependencies()
