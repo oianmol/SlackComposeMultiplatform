@@ -2,7 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/capillary_kmp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/capillaryios" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_data_layer" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_data_layer/protos" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/slack_domain_layer" vcs="Git" />

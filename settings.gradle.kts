@@ -21,11 +21,3 @@ include(":slack_domain_layer")
 
 include(":slack_generate_protos")
 include(":slack_protos")
-
-include(":capillary_kmp")
-
-include(":generate_protos")
-project(":generate_protos").projectDir = file("capillary_kmp/generate_protos")
-
-include(":protos")
-project(":protos").projectDir = file("capillary_kmp/protos")
