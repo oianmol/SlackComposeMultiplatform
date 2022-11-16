@@ -14,10 +14,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/android" />
             <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/capillary_kmp" />
-            <option value="$PROJECT_DIR$/capillary_kmp/capillaryios" />
-            <option value="$PROJECT_DIR$/capillary_kmp/generate_protos" />
-            <option value="$PROJECT_DIR$/capillary_kmp/protos" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/desktop" />
             <option value="$PROJECT_DIR$/iOSApp" />
