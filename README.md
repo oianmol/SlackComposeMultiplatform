@@ -32,7 +32,9 @@
 
 ## Instructions to compile and get running
 
-Execute `git submodule update --init --recursive` and to update `git submodule update --recursive --remote` once the project is cloned to get all the dependent client projects.
+1. Execute `git submodule update --init --recursive` and to update `git submodule update --recursive --remote` once the project is cloned to get all the dependent client projects.
+2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
+3. Clone [Capillary-kmp](https://github.com/oianmol/capillary-kmp) and install to mavenLocal()
 
 ## iOS support with gRPC protobuf
 Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
