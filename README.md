@@ -28,6 +28,7 @@
 6. [Backend Server in gRPC Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
 7. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)
 8. [Capillary-kmp](https://github.com/oianmol/capillary-kmp)
+9. [Capillary-iOS-forNativeInterop](https://github.com/oianmol/slack_capillary_ios)
 
 ## Instructions to compile and get running
 
