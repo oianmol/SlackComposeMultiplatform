@@ -27,12 +27,14 @@ kotlin {
     val iosEnabled = true
     targets(iosEnabled)
 
-  /*  cocoapods {
+    cocoapods {
+        summary = "GRPC Kotlin Multiplatform test library"
+        homepage = "https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform"
         ios.deploymentTarget = "14.0"
 
         pod("gRPC-ProtoRPC", moduleName = "GRPCClient")
         pod("Protobuf")
-    }*/
+    }
 
     sourceSets {
         commonDependencies(this@kotlin)
@@ -220,3 +222,5 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         }
     }
 }
+
+tasks.replace("podGenIOS", PatchedPodGenTask::class)
