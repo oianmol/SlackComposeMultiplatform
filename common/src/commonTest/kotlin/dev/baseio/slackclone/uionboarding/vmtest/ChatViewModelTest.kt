@@ -37,7 +37,7 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             useCaseFetchAndSaveMessages,
             useCaseChannelMembers,
             useCaseStreamLocalMessages,
-            sendMessageDelegate
+            sendMessageDelegate,koinApplication.koin.get()
         )
     }
 

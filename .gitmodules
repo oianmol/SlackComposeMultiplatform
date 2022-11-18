@@ -13,6 +13,3 @@
 [submodule "capillary_kmp"]
 	path = capillary_kmp
 	url = https://github.com/oianmol/capillary-kmp
-[submodule "capillaryios"]
-	path = capillaryios
-	url = https://github.com/oianmol/slack_capillary_ios.git

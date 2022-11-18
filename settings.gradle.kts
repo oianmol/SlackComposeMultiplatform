@@ -18,6 +18,5 @@ include(":common")
 include(":iOSApp")
 include(":slack_data_layer")
 include(":slack_domain_layer")
-
 include(":slack_generate_protos")
 include(":slack_protos")

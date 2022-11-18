@@ -8,8 +8,9 @@ Pod::Spec.new do |spec|
     spec.summary                  = ''
     spec.vendored_frameworks      = 'build/cocoapods/framework/common.framework'
     spec.libraries                = 'c++'
-                
-                
+    spec.ios.deployment_target = '14.0'
+    spec.dependency 'Protobuf'
+    spec.dependency 'gRPC-ProtoRPC'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':common',
@@ -28,7 +29,7 @@ Pod::Spec.new do |spec|
                 fi
                 set -ev
                 REPO_ROOT="$PODS_TARGET_SRCROOT"
-                "$REPO_ROOT/../../../../../private/var/folders/4p/fb_50f255sbb0j2cqnjf_6j40000gn/T/wrap149loc/gradlew" -p "$REPO_ROOT" $KOTLIN_PROJECT_PATH:syncFramework \
+                "$REPO_ROOT/../../../../../private/var/folders/4p/fb_50f255sbb0j2cqnjf_6j40000gn/T/wrap4loc/gradlew" -p "$REPO_ROOT" $KOTLIN_PROJECT_PATH:syncFramework \
                     -Pkotlin.native.cocoapods.platform=$PLATFORM_NAME \
                     -Pkotlin.native.cocoapods.archs="$ARCHS" \
                     -Pkotlin.native.cocoapods.configuration="$CONFIGURATION"

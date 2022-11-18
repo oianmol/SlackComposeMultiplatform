@@ -15,9 +15,8 @@ import java.security.spec.PKCS8EncodedKeySpec
 
 fun main() {
     runBlocking {
-        JVMSecurityProvider.initialize()
-        val userKeyManager = RsaEcdsaKeyManagerInstances.getInstance("test1")
-        val channelKeyManager = RsaEcdsaKeyManagerInstances.getInstance("test2")
+        val userKeyManager = CapillaryInstances.getInstance("test1")
+        val channelKeyManager = CapillaryInstances.getInstance("test2")
 
 
         val decryptor = IDataDecryptorImpl()

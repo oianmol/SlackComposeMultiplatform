@@ -27,6 +27,13 @@ kotlin {
     val iosEnabled = true
     targets(iosEnabled)
 
+    cocoapods {
+        ios.deploymentTarget = "14.0"
+
+        pod("gRPC-ProtoRPC", moduleName = "GRPCClient")
+        pod("Protobuf")
+    }
+
     sourceSets {
         commonDependencies(this@kotlin)
         androidDependencies()
@@ -74,9 +81,7 @@ fun KotlinMultiplatformExtension.targets(iosEnabled: Boolean = true) {
         }
     }
     if (iosEnabled) {
-        iosArm64()
-        iosSimulatorArm64()
-        iosX64()
+        ios()
     }
 }
 
@@ -142,14 +147,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 }
 
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosDependencies() {
-    val iosSimulatorArm64Main by getting
-    val iosX64Main by getting
-    val iosArm64Main by getting
-    val iosMain by creating {
-        iosSimulatorArm64Main.dependsOn(this)
-        iosArm64Main.dependsOn(this)
-        iosX64Main.dependsOn(this)
-
+    val iosMain by getting {
         dependencies {
             implementation(Lib.Decompose.composejb)
         }
@@ -191,19 +189,12 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(kotlin("test-common"))
             implementation(kotlin("test-annotations-common"))
             implementation(Lib.Async.COROUTINES_TEST)
-            implementation("app.cash.turbine:turbine:0.12.0")
+            implementation("app.cash.turbine:turbine:0.12.1")
             implementation("dev.icerock.moko:test-core:0.6.1")
         }
     }
     if (iosEnabled) {
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
+        val iosTest by getting {
         }
     }
 
@@ -229,3 +220,5 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         }
     }
 }
+
+tasks.replace("podGenIOS", PatchedPodGenTask::class)

@@ -1,7 +1,7 @@
 package dev.baseio.slackclone.uionboarding.vmtest
 
-import dev.baseio.security.JVMSecurityProvider
+import dev.baseio.security.Capillary
 
 actual fun initializePlatform() {
-    JVMSecurityProvider.initialize()
+    Capillary.initialize()
 }
