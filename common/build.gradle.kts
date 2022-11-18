@@ -27,12 +27,12 @@ kotlin {
     val iosEnabled = true
     targets(iosEnabled)
 
-    cocoapods {
+  /*  cocoapods {
         ios.deploymentTarget = "14.0"
 
         pod("gRPC-ProtoRPC", moduleName = "GRPCClient")
         pod("Protobuf")
-    }
+    }*/
 
     sourceSets {
         commonDependencies(this@kotlin)
@@ -220,5 +220,3 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         }
     }
 }
-
-tasks.replace("podGenIOS", PatchedPodGenTask::class)

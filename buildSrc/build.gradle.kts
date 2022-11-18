@@ -14,7 +14,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20") {
         exclude("org.antlr")
     }
-    implementation("com.android.tools.build:gradle:7.0.4") {
+    implementation("com.android.tools.build:gradle:7.2.2") {
         exclude("org.antlr")
     }
 
