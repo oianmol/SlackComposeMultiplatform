@@ -86,7 +86,7 @@ object Lib {
     }
 
     object Kotlin {
-        const val KOTLIN_VERSION = "1.7.10"
+        const val KOTLIN_VERSION = "1.7.20"
         private const val KTX_CORE_VERSION = "1.7.0"
         const val KT_STD = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
         const val KTX_CORE = "androidx.core:core-ktx:$KTX_CORE_VERSION"

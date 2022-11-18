@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.20"
 
     id("java")
 }
@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10") {
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20") {
         exclude("org.antlr")
     }
     implementation("com.android.tools.build:gradle:7.2.2") {
