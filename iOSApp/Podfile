@@ -1,0 +1,7 @@
+target 'iosApp' do
+  use_frameworks!
+  platform :ios, '14.1'
+  pod 'slack_data_layer', :path => '../slack_data_layer'
+  pod 'slack_domain_layer', :path => '../slack_domain_layer'
+  pod 'common', :path => '../common'
+end

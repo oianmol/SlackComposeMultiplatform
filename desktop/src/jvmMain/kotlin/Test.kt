@@ -23,18 +23,14 @@ fun main() {
         val encryptor = IDataEncrypterImpl()
 
         val userPair = with(userKeyManager) {
-            val publicKeyBytes: PublicKey =
-                JVMKeyStoreRsaUtils.getPublicKey(keychainId).publicKey
-            val privateKey =
-                JVMKeyStoreRsaUtils.getPrivateKey(keychainId)
+            val publicKeyBytes: PublicKey = publicKey().publicKey
+            val privateKey = privateKey()
             Pair(publicKeyBytes, privateKey)
         }
 
         val channelPair = with(channelKeyManager) {
-            val publicKeyBytes: PublicKey =
-                JVMKeyStoreRsaUtils.getPublicKey(keychainId).publicKey
-            val privateKey =
-                JVMKeyStoreRsaUtils.getPrivateKey(keychainId)
+            val publicKeyBytes: PublicKey = publicKey().publicKey
+            val privateKey = privateKey()
             Pair(publicKeyBytes, privateKey)
         }
         val encryptedChannelPrivateKey = encryptor.encrypt(
@@ -56,11 +52,14 @@ fun main() {
                 )
             )
         )
-       val channelMember =  channelMemberStore.getNow("1","1").firstOrNull()
+        val channelMember = channelMemberStore.getNow("1", "1").firstOrNull()
         channelMember?.channelEncryptedPrivateKey?.keyBytes!!
         val encryptedMessage = encryptor.encrypt("anmol".toByteArray(), channelPair.first.encoded)
 
-        val decryptedPrivateKey = decryptor.decrypt(channelMember.channelEncryptedPrivateKey.keyBytes, userPair.second.privateKey.encoded)
+        val decryptedPrivateKey = decryptor.decrypt(
+            channelMember.channelEncryptedPrivateKey.keyBytes,
+            userPair.second.privateKey.encoded
+        )
         val spec = PKCS8EncodedKeySpec(decryptedPrivateKey)
         val kf = KeyFactory.getInstance("RSA")
         val privateKey = kf.generatePrivate(spec)

@@ -1,8 +1,6 @@
 package dev.baseio.slackclone.uichat.chatthread
 
 import androidx.compose.ui.text.input.TextFieldValue
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns
-import dev.baseio.slackclone.commonui.reusable.SpanInfos
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels

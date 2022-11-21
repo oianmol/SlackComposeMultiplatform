@@ -6,7 +6,6 @@ plugins {
     id(BuildPlugins.ANDROID_LIBRARY_PLUGIN)
     id(BuildPlugins.KOTLIN_PARCELABLE_PLUGIN)
     kotlin("native.cocoapods")
-    id(BuildPlugins.COMPOSE_ID) version Lib.AndroidX.COMPOSE_VERSION
     kotlin(BuildPlugins.SERIALIZATION) version Lib.Kotlin.KOTLIN_VERSION
 }
 
@@ -28,10 +27,15 @@ kotlin {
     targets(iosEnabled)
 
     cocoapods {
-        ios.deploymentTarget = "14.0"
-        pod("gRPC-ProtoRPC", moduleName = "GRPCClient")
-        pod("Protobuf")
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "common"
+        }
     }
+
 
     sourceSets {
         commonDependencies(this@kotlin)
@@ -94,16 +98,12 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Deps.Kotlinx.datetime)
             implementation(Deps.SqlDelight.runtime)
             implementation(Deps.Koin.core)
-            api(kotlinMultiplatformExtension.compose.runtime)
-            api(kotlinMultiplatformExtension.compose.foundation)
-            api(kotlinMultiplatformExtension.compose.material)
             implementation(Deps.Kotlinx.datetime)
             implementation(Deps.SqlDelight.runtime)
             implementation(Lib.Async.COROUTINES)
             implementation(Deps.Koin.core)
             implementation(kotlin("stdlib-common"))
             implementation(Lib.Decompose.core)
-            implementation(Lib.Decompose.composejb)
         }
     }
 }
@@ -132,7 +132,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             }
             implementation("com.google.firebase:firebase-core:21.1.1")
             implementation("com.google.firebase:firebase-messaging:23.1.0")
-            implementation("com.google.firebase:firebase-messaging-ktx:21.0.0")
+            implementation("com.google.firebase:firebase-messaging-ktx:23.1.0")
             implementation(Deps.Koin.android)
             implementation(Lib.Async.COROUTINES)
             implementation(Deps.AndroidX.lifecycleViewModelKtx)
@@ -140,7 +140,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Lib.AndroidX.ACCOMPANIST_SYSTEM_UI_CONTROLLER)
             implementation(Lib.Async.COROUTINES_ANDROID)
             implementation(Lib.AndroidX.COIL_COMPOSE)
-            implementation(Lib.Decompose.composejb)
         }
     }
 }
@@ -148,7 +147,6 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
 fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet>.iosDependencies() {
     val iosMain by getting {
         dependencies {
-            implementation(Lib.Decompose.composejb)
         }
     }
 }
@@ -161,10 +159,7 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
             implementation(Lib.Async.COROUTINES)
             implementation(Deps.Kotlinx.JVM.coroutinesSwing)
             implementation("io.ktor:ktor-client-java:2.1.0")
-            implementation(Lib.Multiplatform.kamelImage)
-            api(kotlinMultiplatformExtension.compose.preview)
             implementation(Deps.Koin.core_jvm)
-            implementation(Lib.Decompose.composejb)
             api("com.google.protobuf:protobuf-java:3.21.6")
 
             implementation("com.google.crypto.tink:tink:1.7.0") {
@@ -219,5 +214,3 @@ fun NamedDomainObjectContainer<org.jetbrains.kotlin.gradle.plugin.KotlinSourceSe
         }
     }
 }
-
-tasks.replace("podGenIOS", PatchedPodGenTask::class)
