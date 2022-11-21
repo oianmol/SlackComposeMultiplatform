@@ -16,11 +16,11 @@ import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.directmessages.DirectMessagesComponent
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uidashboard.home.HomeScreenComponent
-import dev.baseio.slackclone.uidashboard.home.SearchMessagesComponent
 import dev.baseio.slackclone.uidashboard.home.UserProfileComponent
 import dev.baseio.slackclone.uiqrscanner.QrScannerMode
-import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+
+class SearchMessagesComponent(componentContext: ComponentContext) : ComponentContext by componentContext
 
 interface Dashboard {
     fun navigate(child: DashboardComponent.Config)

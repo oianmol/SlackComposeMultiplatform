@@ -6,7 +6,6 @@ import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
-import dev.baseio.slackclone.uionboarding.compose.SlackAnimSpec
 import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
@@ -62,14 +61,18 @@ class GettingStartedVM(
       componentState.reduce {
         it.copy(isStartAnimation = true)
       }
-      delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(700))
+      delay(SlackAnim.ANIM_DURATION.toLong().plus(700))
       componentState.reduce {
         it.copy(isStartAnimation = false)
       }
-      delay(SlackAnimSpec.ANIM_DURATION.toLong().plus(800))
+      delay(SlackAnim.ANIM_DURATION.toLong().plus(800))
       endAnimation()
     }
   }
 
 
+}
+
+object SlackAnim {
+  const val ANIM_DURATION = 1500
 }

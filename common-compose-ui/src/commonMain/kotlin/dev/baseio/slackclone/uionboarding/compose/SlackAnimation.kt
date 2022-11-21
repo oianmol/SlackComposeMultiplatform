@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uionboarding.GettingStartedComponent
+import dev.baseio.slackclone.uionboarding.SlackAnim
+import dev.baseio.slackclone.uionboarding.SlackAnim.ANIM_DURATION
 
 val loaderYellow = Color(226, 179, 75)
 val loaderPinkish = Color(206, 54, 92)
@@ -53,12 +55,12 @@ fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
 
         val animatedRotateLogo by animateFloatAsState(
             targetValue = if (shouldStartLogoAnimation.isStartAnimation) 0f else 360f,
-            tween(durationMillis = SlackAnimSpec.ANIM_DURATION)
+            tween(durationMillis = SlackAnim.ANIM_DURATION)
         )
 
         val animatedMoveLogo by animateDpAsState(
             targetValue = if (shouldStartLogoAnimation.isStartAnimation) (-120).dp else 0.dp,
-            tween(SlackAnimSpec.ANIM_DURATION)
+            tween(SlackAnim.ANIM_DURATION)
         )
 
         SKTextLoader(Modifier.align(Alignment.Center), shouldStartLogoAnimation.isStartAnimation)
@@ -94,23 +96,8 @@ private fun SKFourColorLoader(
     }
 }
 
-data class CircularRectBlockData(
-    val rectBlockWidth: Dp = 32.dp,
-    val rectBlockHeight: Dp = 8.dp,
-    val roundedCornerPercentage: Int = 30,
-    val color: Color,
-    val rotation: Int,
-    var offsetX: Dp = 0.dp,
-    var offsetY: Dp = 0.dp,
-    var dropX: Dp = 0.dp,
-    var dropY: Dp = 0.dp,
-    val dropRotation: Int,
-    val dropSize: Dp = 16.dp,
-    val dropScaleDelay: Int
-)
-
 @Composable
-fun CircularRectBlock(block: CircularRectBlockData, isMoveLeft: Boolean) {
+fun CircularRectBlock(block: SlackAnimSpec.CircularRectBlockData, isMoveLeft: Boolean) {
     val dropScale by animateFloatAsState(
         targetValue = if (isMoveLeft) 1f else 0f,
         SlackAnimSpec.dropSizeKeyFrames(block.dropScaleDelay, isMoveLeft)
@@ -118,7 +105,7 @@ fun CircularRectBlock(block: CircularRectBlockData, isMoveLeft: Boolean) {
 
     val animatedWidth by animateDpAsState(
         targetValue = if (isMoveLeft) block.rectBlockWidth else block.rectBlockHeight,
-        tween(durationMillis = SlackAnimSpec.ANIM_DURATION.times(2))
+        tween(durationMillis = SlackAnim.ANIM_DURATION.times(2))
     )
 
     Droplet(block, dropScale)
@@ -128,7 +115,7 @@ fun CircularRectBlock(block: CircularRectBlockData, isMoveLeft: Boolean) {
 
 @Composable
 private fun Block(
-    block: CircularRectBlockData,
+    block: SlackAnimSpec.CircularRectBlockData,
     animatedWidth: Dp
 ) {
     Box(
@@ -142,7 +129,7 @@ private fun Block(
 }
 
 @Composable
-fun Droplet(block: CircularRectBlockData, dropSize: Float) {
+fun Droplet(block: SlackAnimSpec.CircularRectBlockData, dropSize: Float) {
     Box(
         Modifier
             .offset(block.dropX, block.dropY)
@@ -167,10 +154,10 @@ private fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
         modifier = modifier.offset(x = 40.dp)
     ) {
         Row {
-            AnimatedLetter("s", isStartAnimation, delay = SlackAnimSpec.ANIM_DURATION.times(0.6).toInt())
-            AnimatedLetter("l", isStartAnimation, delay = SlackAnimSpec.ANIM_DURATION.times(0.3).toInt())
-            AnimatedLetter("a", isStartAnimation, delay = SlackAnimSpec.ANIM_DURATION.times(0.2).toInt())
-            AnimatedLetter("c", isStartAnimation, delay = SlackAnimSpec.ANIM_DURATION.times(0.1).toInt())
+            AnimatedLetter("s", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.6).toInt())
+            AnimatedLetter("l", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.3).toInt())
+            AnimatedLetter("a", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.2).toInt())
+            AnimatedLetter("c", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.1).toInt())
             AnimatedLetter("k", isStartAnimation, delay = 0)
         }
     }
@@ -180,7 +167,7 @@ private fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
 private fun AnimatedLetter(letter: String, isVisible: Boolean, delay: Int) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
-        tween(durationMillis = SlackAnimSpec.ANIM_DURATION.div(2), delayMillis = delay)
+        tween(durationMillis = SlackAnim.ANIM_DURATION.div(2), delayMillis = delay)
     )
     Text(
         text = letter,
@@ -197,7 +184,21 @@ private fun slackTextStyle() = SlackCloneTypography.h2.copy(
 )
 
 object SlackAnimSpec {
-    const val ANIM_DURATION = 1500
+
+    data class CircularRectBlockData(
+        val rectBlockWidth: Dp = 32.dp,
+        val rectBlockHeight: Dp = 8.dp,
+        val roundedCornerPercentage: Int = 30,
+        val color: Color,
+        val rotation: Int,
+        var offsetX: Dp = 0.dp,
+        var offsetY: Dp = 0.dp,
+        var dropX: Dp = 0.dp,
+        var dropY: Dp = 0.dp,
+        val dropRotation: Int,
+        val dropSize: Dp = 16.dp,
+        val dropScaleDelay: Int
+    )
 
     fun dropSizeKeyFrames(scaleDelay: Int, isMoveLeft: Boolean): AnimationSpec<Float> {
         if (isMoveLeft) {

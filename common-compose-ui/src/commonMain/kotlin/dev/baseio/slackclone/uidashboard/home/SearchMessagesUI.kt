@@ -38,8 +38,6 @@ fun SearchMessagesUI() {
     }
 }
 
-class SearchMessagesComponent(componentContext: ComponentContext) : ComponentContext by componentContext
-
 @Composable
 private fun SearchTopAppBar() {
     SlackSurfaceAppBar(
