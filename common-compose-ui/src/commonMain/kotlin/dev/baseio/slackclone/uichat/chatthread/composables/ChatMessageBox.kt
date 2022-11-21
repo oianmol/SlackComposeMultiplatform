@@ -18,16 +18,16 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.Keyboard
+import dev.baseio.slackclone.commonui.material.toTextFieldValue
 import dev.baseio.slackclone.commonui.reusable.MentionsTextField
-import dev.baseio.slackclone.commonui.reusable.SpanInfos
+import dev.baseio.slackclone.commonui.reusable.range
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.uichat.chatthread.BoxState
-import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
-import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
+import dev.baseio.slackclone.uichat.chatthread.*
 import dev.keyboardAsState
 import mainDispatcher
 
@@ -61,8 +61,8 @@ fun ChatMessageBox(
         )
         AnimatedVisibility(
             keyboard is Keyboard.Opened ||
-                keyboard is Keyboard.HardwareKeyboard ||
-                focusState?.hasFocus == true
+                    keyboard is Keyboard.HardwareKeyboard ||
+                    focusState?.hasFocus == true
         ) {
             ChatOptions(
                 viewModel,
@@ -128,11 +128,11 @@ private fun MessageTFRow(
             modifier
         ) {
             MentionsTextField(
-                mentionText = mentionText,
+                mentionText = mentionText.toTextFieldValue(),
                 onSpanUpdate = { _, spans, range ->
                     viewModel.setSpanInfo(spans)
                     spans.firstOrNull { infos ->
-                        range.intersects(infos.range) || range.end == infos.range.end
+                        range.intersects(infos.range()) || range.end == infos.range().end
                     }?.let { infos ->
                         currentlyEditing = infos
                     } ?: kotlin.run {
@@ -140,7 +140,7 @@ private fun MessageTFRow(
                     }
                 },
                 onValueChange = {
-                    viewModel.message.value = it
+                    viewModel.message.value = dev.baseio.slackclone.uichat.chatthread.TextFieldValue(it.text)
                 },
                 maxLines = 4,
                 cursorBrush = SolidColor(SlackCloneColorProvider.colors.textPrimary),
@@ -173,7 +173,7 @@ private fun MessageTFRow(
 
 @OptIn(ExperimentalComposeUiApi::class)
 private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type == KeyEventType.KeyUp &&
-    event.key == Key.Enter
+        event.key == Key.Enter
 
 @Composable
 fun CollapseExpandButton(viewModel: ChatViewModel) {

@@ -145,5 +145,3 @@ private fun ChatAppBar(onBackClick: () -> Unit, viewModel: ChatViewModel) {
         }
     }
 }
-
-enum class BoxState { Collapsed, Expanded }

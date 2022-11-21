@@ -34,7 +34,7 @@ kotlin {
     sourceSets {
         val uikitMain by creating {
             dependencies {
-                implementation(project(Lib.Project.common))
+                implementation(project(Lib.Project.commonComposeUI))
                 implementation(compose.ui)
                 implementation(compose.foundation)
                 implementation(compose.material)

@@ -17,7 +17,7 @@ repositories {
 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 dependencies {
     api(Lib.Decompose.core)
-    implementation(project(Lib.Project.common))
+    implementation(project(Lib.Project.commonComposeUI))
     implementation(Lib.AndroidX.ACTIVITY_COMPOSE)
     implementation(Lib.AndroidX.SPLASH_SCREEN)
     implementation(Lib.Grpc.OKHTTP)

@@ -19,7 +19,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(Lib.Grpc.NETTY)
-                implementation(project(Lib.Project.common))
+                implementation(project(Lib.Project.commonComposeUI))
                 implementation(compose.desktop.currentOs)
                 api(Lib.Decompose.core)
                 api(Lib.Decompose.coreJvm)

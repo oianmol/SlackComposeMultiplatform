@@ -76,6 +76,7 @@ object Lib {
         const val SLACK_DATA_COMMON = ":slack_data_layer"
         const val CAPILLARY_KMP = ":capillary_kmp"
         const val common = ":common"
+        const val commonComposeUI = ":common-compose-ui"
     }
 
     object Decompose {

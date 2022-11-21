@@ -21,34 +21,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.AT_THE_RATE
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.HASH_TAG
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.INVITE_TAG
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.URL_TAG
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.hashTagPattern
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.inviteTagPattern
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.mentionTagPattern
-import dev.baseio.slackclone.commonui.reusable.MentionsPatterns.urlPattern
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-
-object MentionsPatterns {
-
-    const val HASH_TAG = "HASH"
-    const val INVITE_TAG = "INVITE_TAG"
-    const val URL_TAG = "URL"
-    const val AT_THE_RATE = "AT_RATE"
-    val urlPattern = Regex(
-        "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" +
-            "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" +
-            "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
-        hashSetOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE)
-    )
-
-    val hashTagPattern = Regex("\\B(\\#[a-zA-Z0-9._]+\\b)(?!;)")
-    val inviteTagPattern = Regex("\\B(\\/[invite]+\\b)(?!;)")
-    val mentionTagPattern = Regex("\\B(\\@[a-zA-Z0-9._]+\\b)(?!;)")
-}
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.AT_THE_RATE
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.HASH_TAG
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.INVITE_TAG
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.URL_TAG
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.urlPattern
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.mentionTagPattern
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.hashTagPattern
+import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.inviteTagPattern
+import dev.baseio.slackclone.uichat.chatthread.SpanInfos
 
 @Composable
 fun MentionsTextField(
@@ -181,14 +164,8 @@ fun extractSpans(
     return spans
 }
 
-data class SpanInfos(
-    val spanText: String,
-    val start: Int,
-    val end: Int,
-    val tag: String
-) {
-    var range = TextRange(start, end)
-}
+fun SpanInfos.range() = TextRange(start, end)
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -210,12 +187,12 @@ fun MentionsTF() {
                     ListItem(text = {
                         Text(text = span.spanText)
                     }, secondaryText = {
-                            if (currentlyEditing?.spanText == span.spanText) {
-                                Text(text = "Currently Editing")
-                            } else {
-                                Text(text = span.tag)
-                            }
-                        })
+                        if (currentlyEditing?.spanText == span.spanText) {
+                            Text(text = "Currently Editing")
+                        } else {
+                            Text(text = span.tag)
+                        }
+                    })
                 }
             })
 
@@ -223,15 +200,15 @@ fun MentionsTF() {
                 spanInfoList = spans
                 mentionText = TextFieldValue(text)
                 spanInfoList.firstOrNull { infos ->
-                    range.intersects(infos.range) || range.end == infos.range.end
+                    range.intersects(infos.range()) || range.end == infos.range().end
                 }?.let { infos ->
                     currentlyEditing = infos
                 } ?: kotlin.run {
                     currentlyEditing = null
                 }
             }, mentionText = mentionText, onValueChange = {
-                    mentionText = it
-                })
+                mentionText = it
+            })
 
             MentionsText(
                 mentionText = mentionText.text,
