@@ -1,16 +1,15 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'composeiOS'
     spec.version                  = '1.0.0'
-    spec.homepage                 = '...'
+    spec.homepage                 = ''
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = '...'
+    spec.summary                  = ''
     spec.vendored_frameworks      = 'build/cocoapods/framework/composeiOS.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target = '14.1'
-    spec.dependency 'Protobuf'
-    spec.dependency 'gRPC-ProtoRPC'
+                
+                
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':composeiOS',

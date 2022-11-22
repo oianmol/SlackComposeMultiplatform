@@ -1,17 +1,25 @@
 {
   "name": "common",
   "version": "1.0",
-  "homepage": "Link to the Shared Module homepage",
+  "homepage": "https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform",
   "source": {
     "http": ""
   },
   "authors": "",
   "license": "",
-  "summary": "Some description for the Shared Module",
+  "summary": "GRPC Kotlin Multiplatform test library",
   "vendored_frameworks": "build/cocoapods/framework/common.framework",
   "libraries": "c++",
   "platforms": {
     "ios": "14.1"
+  },
+  "dependencies": {
+    "Protobuf": [
+
+    ],
+    "gRPC-ProtoRPC": [
+
+    ]
   },
   "pod_target_xcconfig": {
     "KOTLIN_PROJECT_PATH": ":common",

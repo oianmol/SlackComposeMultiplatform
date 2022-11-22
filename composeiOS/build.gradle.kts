@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin(BuildPlugins.MULTIPLATFORM)
     id(BuildPlugins.SQLDELIGHT_ID)
+    kotlin("native.cocoapods")
     id(BuildPlugins.COMPOSE_ID) version Lib.AndroidX.COMPOSE_VERSION
 }
 
@@ -18,13 +19,42 @@ repositories {
 
 kotlin {
     listOf(iosX64("uikitX64"), iosArm64("uikitArm64")).forEach {
+        val platform = if (it.targetName == "iosArm64") "iphoneos" else "iphonesimulator"
+
         it.binaries {
             executable {
+                listOf(
+                    "abseil",
+                    "BoringSSL-GRPC",
+                    "gRPC",
+                    "gRPC-Core",
+                    "gRPC-ProtoRPC",
+                    "gRPC-RxLibrary"
+                ).forEach { name ->
+                    linkerOpts("-F/Users/anmolverma/IdeaProjects/SlackComposeMultiplatform/common/build/cocoapods/synthetic/IOS/build/Release-${platform}/$name")
+                    linkerOpts(
+                        "-rpath",
+                        "/Users/anmolverma/IdeaProjects/SlackComposeMultiplatform/common/build/cocoapods/synthetic/IOS/build/Release-${platform}/$name"
+                    )
+                    linkerOpts(
+                        "-framework", when (name) {
+                            "abseil" -> "absl"
+                            "BoringSSL-GRPC" -> "openssl_grpc"
+                            "gRPC" -> "GRPCClient"
+                            "gRPC-Core" -> "grpc"
+                            "gRPC-ProtoRPC" -> "ProtoRPC"
+                            "gRPC-RxLibrary" -> "RxLibrary"
+                            else -> name
+                        }
+                    )
+
+                }
+
                 entryPoint = "main"
                 freeCompilerArgs += listOf(
                     "-linker-option", "-framework", "-linker-option", "Metal",
                     "-linker-option", "-framework", "-linker-option", "CoreText",
-                    "-linker-option", "-framework", "-linker-option", "CoreGraphics"
+                    "-linker-option", "-framework", "-linker-option", "CoreGraphics",
                 )
             }
         }

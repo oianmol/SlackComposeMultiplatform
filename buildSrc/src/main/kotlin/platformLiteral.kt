@@ -157,8 +157,6 @@ open class PatchedPodGenTask : PodGenTask() {
           }
         }
       }.forEach { appendLine("\t$it") }
-      appendLine("\t${extracted("gRPC-ProtoRPC")}")
-      appendLine("\t${extracted("Protobuf")}")
       appendLine("end\n")
     }
 

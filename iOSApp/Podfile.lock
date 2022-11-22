@@ -566,7 +566,9 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - common (1.0)
+  - common (1.0):
+    - gRPC-ProtoRPC
+    - Protobuf
   - gRPC-Core (1.50.0):
     - gRPC-Core/Implementation (= 1.50.0)
     - gRPC-Core/Interface (= 1.50.0)
@@ -651,7 +653,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  common: 7b9ef703eb6c49a3f71e0ff50e37571c057e2a93
+  common: 9c8b39dbe7997338f2cc2d06888b442734120979
   gRPC: cbba61b0bd8a6b0317d21250ac0df9a38983a783
   gRPC-Core: c093325643a2dc3b37d3871bb9ceccbabc4fe9ee
   gRPC-ProtoRPC: aa06302e48f79b9791e8f35ed22c8366d81676bd
