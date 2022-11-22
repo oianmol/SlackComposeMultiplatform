@@ -1,6 +1,4 @@
 import Lib.AndroidX.ACTIVITY_COMPOSE
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
 
 plugins {
@@ -34,15 +32,52 @@ kotlin {
             kotlinOptions.jvmTarget = "11"
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
+    val iosx64 = iosX64()
+    val iosarm64 = iosArm64()
+    val iossimulatorarm64 = iosSimulatorArm64()
+
+
+    configure(listOf(iosx64, iosarm64,iossimulatorarm64)) {
+        binaries.framework {
+            baseName = "common"
+            embedBitcode("disable")
+        }
+    }
+
+    // Create a task to build a fat framework.
+    tasks.register<FatFrameworkTask>("debugFatFramework") {
+        // The fat framework must have the same base name as the initial frameworks.
+        baseName = "common"
+        // The default destination directory is "<build directory>/fat-framework".
+        destinationDir = buildDir.resolve("fat-framework/debug")
+        // Specify the frameworks to be merged.
+        from(
+            //iosarm64.binaries.getFramework("DEBUG"),
+            //iosx64.binaries.getFramework("DEBUG"),
+            iossimulatorarm64.binaries.getFramework("DEBUG")
+        )
+    }
+
+    // Create a task to build a fat framework.
+    tasks.register<FatFrameworkTask>("releaseFatFramework") {
+        // The fat framework must have the same base name as the initial frameworks.
+        baseName = "common"
+        // The default destination directory is "<build directory>/fat-framework".
+        destinationDir = buildDir.resolve("fat-framework/release")
+        // Specify the frameworks to be merged.
+        from(
+            iosarm64.binaries.getFramework("RELEASE"),
+            iosx64.binaries.getFramework("RELEASE"),
+            //iossimulatorarm64.binaries.getFramework("RELEASE")
+        )
+    }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(Lib.Project.SLACK_DOMAIN_COMMON))
-                api(project(Lib.Project.SLACK_DATA_COMMON))
+                implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
+                implementation(project(Lib.Project.SLACK_DATA_COMMON))
                 implementation(Deps.Kotlinx.datetime)
                 implementation(Deps.SqlDelight.runtime)
                 implementation(Deps.Koin.core)
@@ -82,9 +117,7 @@ kotlin {
                 implementation(Lib.Async.COROUTINES)
                 implementation(Deps.AndroidX.lifecycleViewModelKtx)
                 implementation(Lib.AndroidX.securityCrypto)
-                implementation(Lib.AndroidX.ACCOMPANIST_SYSTEM_UI_CONTROLLER)
                 implementation(Lib.Async.COROUTINES_ANDROID)
-                implementation(Lib.AndroidX.COIL_COMPOSE)
             }
         }
         val jvmMain by getting {
@@ -93,7 +126,7 @@ kotlin {
                 implementation(Deps.Kotlinx.JVM.coroutinesSwing)
                 implementation("io.ktor:ktor-client-java:2.1.0")
                 implementation(Deps.Koin.core_jvm)
-                api("com.google.protobuf:protobuf-java:3.21.6")
+                api("com.google.protobuf:protobuf-java:3.21.9")
 
                 implementation("com.google.crypto.tink:tink:1.7.0") {
                     exclude("com.google.protobuf", module = "*")
@@ -156,17 +189,6 @@ kotlin {
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
-        }
-    }
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "common"
         }
     }
 }

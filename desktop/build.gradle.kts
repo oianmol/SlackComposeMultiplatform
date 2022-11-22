@@ -20,6 +20,7 @@ kotlin {
             dependencies {
                 implementation(Lib.Grpc.NETTY)
                 implementation(project(Lib.Project.commonComposeUI))
+                implementation(project(Lib.Project.common))
                 implementation(compose.desktop.currentOs)
                 api(Lib.Decompose.core)
                 api(Lib.Decompose.coreJvm)

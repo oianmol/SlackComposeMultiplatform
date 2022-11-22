@@ -1,6 +1,6 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import org.example.common.R
+import dev.baseio.composeui.R
 
 actual object PainterRes {
     @Composable

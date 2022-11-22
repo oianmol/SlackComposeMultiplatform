@@ -5,7 +5,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin(BuildPlugins.MULTIPLATFORM)
     id(BuildPlugins.SQLDELIGHT_ID)
-    kotlin("native.cocoapods")
     id(BuildPlugins.COMPOSE_ID) version Lib.AndroidX.COMPOSE_VERSION
 }
 
@@ -93,5 +92,3 @@ kotlin {
         }
     }
 }
-
-tasks.replace("podGenIOS", PatchedPodGenTask::class)

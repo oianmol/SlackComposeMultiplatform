@@ -93,9 +93,9 @@ class DesktopAuthCreateWorkspaceUITest {
                         }
                         .launchIn(this)
                 }
-                DesktopApp(rememberedComposeWindow, {
+                DesktopApp(rememberedComposeWindow) {
                     rootComponent
-                }, koinApplication)
+                }
             }
             onNodeWithText("Let me in...").performClick()
             waitUntilExists(hasText("check the form", substring = true, ignoreCase = true))

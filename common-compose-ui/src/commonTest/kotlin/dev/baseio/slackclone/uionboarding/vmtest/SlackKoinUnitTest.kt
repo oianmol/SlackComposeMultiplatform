@@ -33,8 +33,6 @@ import org.koin.test.inject
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-expect fun initializePlatform()
-
 open class SlackKoinUnitTest : KoinTest {
 
     lateinit var koinApplication: KoinApplication
@@ -63,7 +61,6 @@ open class SlackKoinUnitTest : KoinTest {
                 testDispatcherModule
             )
         }
-        initializePlatform()
         when (platformType()) {
             ANDROID -> {
                 Dispatchers.setMain(coroutineDispatcherProvider.main)

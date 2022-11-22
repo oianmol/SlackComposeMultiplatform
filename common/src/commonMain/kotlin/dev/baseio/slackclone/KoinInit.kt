@@ -22,5 +22,7 @@ fun initKoin(module: Module): KoinApplication {
             viewModelDelegateModule,
             dispatcherModule
         )
+    }.also {
+        koinApp = it
     }
 }

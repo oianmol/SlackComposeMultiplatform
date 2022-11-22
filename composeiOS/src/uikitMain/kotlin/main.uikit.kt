@@ -88,11 +88,10 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
                 }
                 mutableStateOf(windowInfo)
             }
-            val koinApplication =
-                initKoin(module = module {
-                    single{ skKeyValueData }
-                    single { DriverFactory().createDriver(SlackDB.Schema) }
-                })
+            initKoin(module = module {
+                single{ skKeyValueData }
+                single { DriverFactory().createDriver(SlackDB.Schema) }
+            })
 
             CompositionLocalProvider(
                 LocalWindow provides rememberedComposeWindow
@@ -100,9 +99,9 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
                 SlackCloneTheme(isDarkTheme = true) {
                     Column {
                         Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
-                        App(rootComponent = {
+                        App {
                             root
-                        }, koinApplication = koinApplication)
+                        }
                     }
                 }
             }

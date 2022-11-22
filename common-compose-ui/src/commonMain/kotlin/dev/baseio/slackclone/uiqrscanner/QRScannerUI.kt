@@ -17,10 +17,6 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uionboarding.QrCodeDelegate
 
-enum class QrScannerMode {
-  CAMERA, QR_DISPLAY
-}
-
 @Composable
 fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelegate: QrCodeDelegate, navigateBack: () -> Unit) {
   val coroutineScope = rememberCoroutineScope()

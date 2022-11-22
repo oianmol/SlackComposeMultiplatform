@@ -75,9 +75,9 @@ fun main() = application {
                 .launchIn(this)
         }
 
-        DesktopApp(rememberedComposeWindow, {
+        DesktopApp(rememberedComposeWindow) {
             rootComponent
-        }, koinApplication)
+        }
     }
 }
 
@@ -85,16 +85,14 @@ fun main() = application {
 @Composable
 fun DesktopApp(
     rememberedComposeWindow: WindowInfo,
-    rootComponent: () -> RootComponent,
-    koinApplication: org.koin.core.KoinApplication
+    rootComponent: () -> RootComponent
 ) {
     SlackCloneTheme {
         CompositionLocalProvider(
             LocalWindow provides rememberedComposeWindow
         ) {
             App(
-                rootComponent = rootComponent,
-                koinApplication = koinApplication
+                rootComponent = rootComponent
             )
         }
     }

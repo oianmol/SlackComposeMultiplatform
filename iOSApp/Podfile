@@ -2,4 +2,6 @@ target 'iosApp' do
   use_frameworks!
   platform :ios, '14.1'
   pod 'common', :path => '../common'
+  pod 'Protobuf'
+  pod 'gRPC-ProtoRPC'
 end
