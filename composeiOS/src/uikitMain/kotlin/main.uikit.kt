@@ -88,10 +88,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
                 }
                 mutableStateOf(windowInfo)
             }
-            initKoin(module = module {
-                single{ skKeyValueData }
-                single { DriverFactory().createDriver(SlackDB.Schema) }
-            })
+            initKoin()
 
             CompositionLocalProvider(
                 LocalWindow provides rememberedComposeWindow

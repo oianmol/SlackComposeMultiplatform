@@ -11,10 +11,13 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
 lateinit var koinApp: KoinApplication
-fun initKoin(module: Module): KoinApplication {
+
+expect fun platformModule(): Module
+
+fun initKoin(): KoinApplication {
     return startKoin {
         modules(
-            module,
+            platformModule(),
             dataSourceModule,
             encryptionModule,
             dataMappersModule,

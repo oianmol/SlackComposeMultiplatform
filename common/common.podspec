@@ -1,14 +1,14 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'common'
     spec.version                  = '1.0'
-    spec.homepage                 = ''
+    spec.homepage                 = 'https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = ''
+    spec.summary                  = 'GRPC Kotlin Multiplatform test library'
     spec.vendored_frameworks      = 'build/cocoapods/framework/common.framework'
     spec.libraries                = 'c++'
-                
+    spec.ios.deployment_target = '14.1'
                 
                 
     spec.pod_target_xcconfig = {

@@ -13,14 +13,6 @@
   "platforms": {
     "ios": "14.1"
   },
-  "dependencies": {
-    "Protobuf": [
-
-    ],
-    "gRPC-ProtoRPC": [
-
-    ]
-  },
   "pod_target_xcconfig": {
     "KOTLIN_PROJECT_PATH": ":common",
     "PRODUCT_MODULE_NAME": "common"
