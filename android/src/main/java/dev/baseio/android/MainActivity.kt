@@ -22,13 +22,10 @@ import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.fcmToken
-import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.example.android.R
-import org.koin.core.KoinApplication
 
 class MainActivity : AppCompatActivity() {
 
@@ -50,10 +47,10 @@ class MainActivity : AppCompatActivity() {
         }
         setContent {
             askForPostNotificationPermission()
-            MobileApp({
+            MobileApp {
                 root
-            }, (application as SlackApp).koinApplication)
-            LaunchedEffect(intent?.channelId()){
+            }
+            LaunchedEffect(intent?.channelId()) {
                 intent?.channelId()?.let { root.navigateChannel(it) }
             }
         }
@@ -95,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun MobileApp(root: () -> RootComponent, koinApplication: KoinApplication) {
+fun MobileApp(root: () -> RootComponent) {
     val config = LocalConfiguration.current
 
     var rememberedComposeWindow by remember {
@@ -112,11 +109,9 @@ fun MobileApp(root: () -> RootComponent, koinApplication: KoinApplication) {
         LocalWindow provides rememberedComposeWindow
     ) {
         SlackCloneTheme {
-            App(
-                rootComponent = {
-                    root.invoke()
-                }, koinApplication = koinApplication
-            )
+            App {
+                root.invoke()
+            }
         }
     }
 }

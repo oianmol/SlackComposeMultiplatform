@@ -4,9 +4,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="delegatedBuild" value="true" />
         <option name="testRunner" value="GRADLE" />
-        <option name="distributionType" value="WRAPPED" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="corretto-18" />
         <option name="modules">
@@ -15,8 +14,9 @@
             <option value="$PROJECT_DIR$/android" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common-compose-ui" />
+            <option value="$PROJECT_DIR$/composeiOS" />
             <option value="$PROJECT_DIR$/desktop" />
-            <option value="$PROJECT_DIR$/iOSApp" />
             <option value="$PROJECT_DIR$/slack_data_layer" />
             <option value="$PROJECT_DIR$/slack_domain_layer" />
             <option value="$PROJECT_DIR$/slack_generate_protos" />

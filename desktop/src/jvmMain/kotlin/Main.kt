@@ -52,13 +52,8 @@ fun main() = application {
     val windowState = rememberWindowState()
     val lifecycle = LifecycleRegistry()
 
-    val skKeyValueData = SKKeyValueData()
     val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)) }
-    val koinApplication =
-        initKoin(module = module {
-            single { skKeyValueData }
-            single { SlackDB.invoke(DriverFactory().createDriver(SlackDB.Schema)) }
-        })
+    initKoin()
 
     Window(onCloseRequest = ::exitApplication, state = windowState) {
         var rememberedComposeWindow by remember(this.window) {
@@ -75,9 +70,9 @@ fun main() = application {
                 .launchIn(this)
         }
 
-        DesktopApp(rememberedComposeWindow, {
+        DesktopApp(rememberedComposeWindow) {
             rootComponent
-        }, koinApplication)
+        }
     }
 }
 
@@ -85,16 +80,14 @@ fun main() = application {
 @Composable
 fun DesktopApp(
     rememberedComposeWindow: WindowInfo,
-    rootComponent: () -> RootComponent,
-    koinApplication: org.koin.core.KoinApplication
+    rootComponent: () -> RootComponent
 ) {
     SlackCloneTheme {
         CompositionLocalProvider(
             LocalWindow provides rememberedComposeWindow
         ) {
             App(
-                rootComponent = rootComponent,
-                koinApplication = koinApplication
+                rootComponent = rootComponent
             )
         }
     }
