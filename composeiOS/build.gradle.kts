@@ -29,7 +29,8 @@ kotlin {
                     "gRPC",
                     "gRPC-Core",
                     "gRPC-ProtoRPC",
-                    "gRPC-RxLibrary"
+                    "gRPC-RxLibrary",
+                    "Protobuf"
                 ).forEach { name ->
                     linkerOpts("-F/Users/anmolverma/IdeaProjects/SlackComposeMultiplatform/common/build/cocoapods/synthetic/IOS/build/Release-${platform}/$name")
                     linkerOpts(
@@ -92,7 +93,7 @@ kotlin {
 compose.experimental {
     uikit.application {
         bundleIdPrefix = "dev.baseio"
-        projectName = "SlackComposeClone"
+        projectName = "slackclone"
         deployConfigurations {
             simulator("IPhone13Pro") {
                 // Usage: ./gradlew iosDeployIPhone8Debug
@@ -104,7 +105,7 @@ compose.experimental {
             }
             connectedDevice("Device") {
                 // Usage: ./gradlew iosDeployDeviceRelease
-                this.teamId = "***"
+                this.teamId = "4FGQMH8WW3"
             }
         }
     }

@@ -36,12 +36,7 @@
 2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
 3. Clone [Capillary-kmp](https://github.com/oianmol/capillary-kmp) and install to mavenLocal()
 
-## iOS support with gRPC protobuf
-Once the gradle sync is successful you need to run the task which deploys the app on simulator. 
-There's a specific task to deploy on iPad and iPhones, but composeiOS build fails with ref issue. 
-https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform/issues/11
-
-`./gradlew iosDeployIPhone8Debug`
+`./gradlew iosDeployIPhone13ProDebug`
 
 The android and jvm platform run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
 

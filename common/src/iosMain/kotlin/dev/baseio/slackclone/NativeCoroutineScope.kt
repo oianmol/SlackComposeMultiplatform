@@ -6,4 +6,4 @@ import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.CoroutineContext
 
 internal actual fun NativeCoroutineScope(context: CoroutineContext): CoroutineScope =
-    CoroutineScope(SupervisorJob() + Dispatchers.Default + context)
+    CoroutineScope(SupervisorJob() + Dispatchers.Main + context)

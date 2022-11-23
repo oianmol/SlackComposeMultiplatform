@@ -20,8 +20,7 @@ fun SlackAllChannels(
     channelVM: SlackChannelVM = component.viewModel
 ) {
     val recent = "Channels"
-    val channelsFlow = channelVM.allChannels().collectAsState(mainDispatcher)
-    val channels by channelsFlow.value.collectAsState(emptyList(), mainDispatcher)
+    val channels by channelVM.allChannels().collectAsState(emptyList(), mainDispatcher)
 
     var expandCollapseModel by remember {
         mutableStateOf(

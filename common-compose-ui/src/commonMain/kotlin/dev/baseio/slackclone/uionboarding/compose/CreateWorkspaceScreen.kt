@@ -124,7 +124,7 @@ fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
 
 @Composable
 fun ErrorText(modifier: Modifier, error: Throwable?) {
-    Text(error?.message ?: "", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
+    Text(error?.message ?: "No idea", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
 }
 
 @Composable
