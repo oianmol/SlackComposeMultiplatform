@@ -1,0 +1,6 @@
+framework module ProtoRPC {
+  umbrella header "gRPC-ProtoRPC-umbrella.h"
+
+  export *
+  module * { export * }
+}

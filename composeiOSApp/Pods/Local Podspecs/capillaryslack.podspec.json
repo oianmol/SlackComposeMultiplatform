@@ -1,0 +1,29 @@
+{
+  "name": "capillaryslack",
+  "version": "1.0.0",
+  "summary": "Public key RSA encryption.",
+  "description": "Encrypt with a RSA public key, decrypt with a RSA private key.",
+  "homepage": "https://github.com/oianmol/slack_capillary_ios",
+  "license": "MIT",
+  "authors": {
+    "Anmol Verma": "anmol.verma4@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/oianmol/slack_capillary_ios.git",
+    "branch": "master"
+  },
+  "source_files": "capillaryslack/*.{swift,m,h}",
+  "frameworks": "Security",
+  "requires_arc": true,
+  "swift_versions": "5.0",
+  "platforms": {
+    "ios": "14.0"
+  },
+  "subspecs": [
+    {
+      "name": "ObjC",
+      "source_files": "capillaryslack/*.{swift,m,h}"
+    }
+  ],
+  "swift_version": "5.0"
+}
