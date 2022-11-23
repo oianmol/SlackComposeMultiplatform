@@ -1,5 +1,6 @@
 package dev.baseio.slackclone.uichannels.directmessages
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesIgnore
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
@@ -14,7 +15,8 @@ class DirectMessagesVM(
   private val useCaseFetchChannels: UseCaseFetchChannelsWithLastMessage,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   coroutineDispatcherProvider: CoroutineDispatcherProvider
-) : SlackViewModel(coroutineDispatcherProvider) {
+) : SlackViewModel() {
+  @NativeCoroutinesIgnore
   val channels = MutableStateFlow(fetchFlow())
 
   @OptIn(FlowPreview::class)

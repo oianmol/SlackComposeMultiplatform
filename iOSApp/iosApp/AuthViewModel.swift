@@ -8,15 +8,31 @@
 
 import Foundation
 import common
+import Combine
+import KMPNativeCoroutinesCombine
 
 let authComponent = AuthKoinComponents()
 
 class AuthViewModel : ObservableObject{
+
+    @Published
+    var isLoading:Bool  = false
     
     func login(){
-        authComponent.provideUseCaseCreateWorkspace().invoke(email: "anmol.verma4@gmail.com", password: "password", domain: "mutualmobileios") { error in
-            debugPrint(error ?? "no error")
+        self.isLoading = true
+       let publisher = createPublisher(for: authComponent.provideUseCaseCreateWorkspace()
+            .invokeNative(email: "anmol.verma4@gmail.com", password: "password", domain: "mutualmobileios"))        
+        _ = publisher
+            .receive(on: DispatchQueue.main)
+            .subscribe(on: DispatchQueue.global(qos: .default))
+            .sink { [self] completion in
+            print("Received completion: \(completion)")
+            self.isLoading = false
+        } receiveValue: { [self] value in
+            print("Received value: \(value)")
+            self.isLoading = false
         }
+       
     }
     
 }

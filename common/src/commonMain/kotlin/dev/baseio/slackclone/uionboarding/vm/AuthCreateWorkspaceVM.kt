@@ -14,7 +14,7 @@ class AuthCreateWorkspaceVM(
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
     private val useCaseSaveFCMToken:UseCaseSaveFCMToken,
     val navigateDashboard: () -> Unit
-) : SlackViewModel(coroutineDispatcherProvider) {
+) : SlackViewModel() {
     val state = MutableStateFlow(AuthCreateWorkspaceVMState())
 
     fun createWorkspace() {

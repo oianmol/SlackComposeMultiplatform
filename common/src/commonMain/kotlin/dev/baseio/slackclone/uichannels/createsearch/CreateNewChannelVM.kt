@@ -16,7 +16,7 @@ class CreateNewChannelVM(
     private val useCaseCreateChannel: UseCaseCreateChannel,
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val navigationWith: (DomainLayerChannels.SKChannel) -> Unit
-) : SlackViewModel(coroutineDispatcherProvider) {
+) : SlackViewModel() {
     var createChannelState =
         MutableStateFlow(
             UiState(

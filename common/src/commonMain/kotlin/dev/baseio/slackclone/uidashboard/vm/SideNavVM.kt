@@ -15,7 +15,7 @@ class SideNavVM(
     private val userProfileDelegate: UserProfileDelegate,
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
     navigateOnboardingRoot: () -> Unit
-) : SlackViewModel(coroutineDispatcherProvider), UserProfileDelegate by userProfileDelegate {
+) : SlackViewModel(), UserProfileDelegate by userProfileDelegate {
     var workspacesFlow = MutableStateFlow(flow())
         private set
 

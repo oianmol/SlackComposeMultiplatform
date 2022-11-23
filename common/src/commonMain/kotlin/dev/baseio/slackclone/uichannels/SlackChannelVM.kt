@@ -8,8 +8,6 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseFetchRecentChannels
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 
 class SlackChannelVM(
@@ -17,7 +15,7 @@ class SlackChannelVM(
     private val ucFetchChannels: UseCaseFetchAllChannels,
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val ucFetchRecentChannels: UseCaseFetchRecentChannels
-) : SlackViewModel(coroutineDispatcherProvider) {
+) : SlackViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun allChannels(): Flow<List<DomainLayerChannels.SKChannel>> {

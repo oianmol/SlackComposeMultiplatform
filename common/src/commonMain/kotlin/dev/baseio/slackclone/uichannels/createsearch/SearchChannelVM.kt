@@ -18,7 +18,7 @@ class SearchChannelVM(
     private val useCaseFetchChannelCount: UseCaseFetchChannelCount,
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider
-) : SlackViewModel(coroutineDispatcherProvider) {
+) : SlackViewModel() {
     val search = MutableStateFlow("")
     val channelCount = MutableStateFlow(0)
     var channels = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())

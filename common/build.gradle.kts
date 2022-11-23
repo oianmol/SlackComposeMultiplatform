@@ -6,7 +6,7 @@ plugins {
     id(BuildPlugins.ANDROID_LIBRARY_PLUGIN)
     id(BuildPlugins.KOTLIN_PARCELABLE_PLUGIN)
     kotlin("native.cocoapods")
-    //id("com.rickclephas.kmp.nativecoroutines")
+    id("com.rickclephas.kmp.nativecoroutines")
     kotlin(BuildPlugins.SERIALIZATION) version Lib.Kotlin.KOTLIN_VERSION
 }
 

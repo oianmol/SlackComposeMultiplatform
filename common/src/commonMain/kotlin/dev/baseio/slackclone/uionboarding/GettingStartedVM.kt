@@ -2,21 +2,9 @@ package dev.baseio.slackclone.uionboarding
 
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.reduce
-import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
-import dev.baseio.slackclone.koinApp
-import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
-import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import dev.baseio.slackdomain.model.users.DomainLayerUsers
-import dev.baseio.slackdomain.usecases.auth.UseCaseQRAuthUser
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class GettingStartedVM(
@@ -26,7 +14,7 @@ class GettingStartedVM(
   private val navigateBackNow:()->Unit,
   private val qrCodeDelegate: QrCodeDelegate
 ) :
-  SlackViewModel(coroutineDispatcherProvider), QrCodeDelegate by qrCodeDelegate {
+  SlackViewModel(), QrCodeDelegate by qrCodeDelegate {
 
   init {
     qrCodeDelegate.navigateDashboardNow = {
