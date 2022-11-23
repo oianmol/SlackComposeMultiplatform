@@ -1,4 +1,4 @@
-package dev
+package dev.baseio.slackclone
 
 import android.content.res.Configuration // ktlint-disable import-ordering
 import android.content.res.Resources
@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import dev.baseio.slackclone.Keyboard
 
 @Composable
 actual fun keyboardAsState(): State<Keyboard> {
