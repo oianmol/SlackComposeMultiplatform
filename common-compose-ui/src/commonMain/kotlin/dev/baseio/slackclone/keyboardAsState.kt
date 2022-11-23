@@ -10,4 +10,4 @@ sealed class Keyboard {
 }
 
 @Composable
-expect fun keyboardAsState(): State<Keyboard>
+expect fun KeyboardAsState(): State<Keyboard>

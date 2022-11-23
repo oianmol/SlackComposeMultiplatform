@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import dev.baseio.slackclone.Keyboard
 
 @Composable
-actual fun keyboardAsState(): State<Keyboard> {
+actual fun KeyboardAsState(): State<Keyboard> {
     val keyboardState = remember { mutableStateOf<Keyboard>(Keyboard.Closed) }
     return keyboardState
 }

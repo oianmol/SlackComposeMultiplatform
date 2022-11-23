@@ -27,7 +27,7 @@ import dev.baseio.slackclone.commonui.reusable.range
 import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.*
-import dev.baseio.slackclone.keyboardAsState
+import dev.baseio.slackclone.KeyboardAsState
 import mainDispatcher
 
 @Composable
@@ -36,7 +36,7 @@ fun ChatMessageBox(
     viewModel: ChatViewModel = screenComponent.chatViewModel,
     modifier: Modifier
 ) {
-    val keyboard by keyboardAsState()
+    val keyboard by KeyboardAsState()
     var focusState by remember { mutableStateOf<FocusState?>(null) }
     val focusRequester = FocusRequester()
 

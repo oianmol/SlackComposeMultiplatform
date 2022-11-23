@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalView
 import dev.baseio.slackclone.Keyboard
 
 @Composable
-actual fun keyboardAsState(): State<Keyboard> {
+actual fun KeyboardAsState(): State<Keyboard> {
     val resources = LocalContext.current.resources
     val keyboardState =
         remember { mutableStateOf(if (isHardwareKeyboardAvailable(resources)) Keyboard.HardwareKeyboard else Keyboard.Closed) }
