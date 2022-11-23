@@ -19,7 +19,11 @@ struct AuthCreateWorkspace : View{
     
     var body: some View{
         VStack{
-            
+            if(viewModel.isLoading){
+                ProgressView()
+            }else{
+                Text("Idle")
+            }
         }
     }
 }
