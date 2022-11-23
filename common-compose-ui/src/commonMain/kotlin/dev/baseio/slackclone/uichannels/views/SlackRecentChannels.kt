@@ -20,12 +20,7 @@ fun SlackRecentChannels(
     channelVM: SlackChannelVM = component.viewModel
 ) {
     val recent = "Recent"
-    val channelsFlow = channelVM.channels.collectAsState(mainDispatcher)
-    val channels by channelsFlow.value.collectAsState(emptyList(), mainDispatcher)
-
-    LaunchedEffect(key1 = Unit) {
-        channelVM.loadRecentChannels()
-    }
+    val channels by channelVM.loadRecentChannels().collectAsState(initial = emptyList(), mainDispatcher)
 
     var expandCollapseModel by remember {
         mutableStateOf(

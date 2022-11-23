@@ -10,6 +10,7 @@ buildscript {
         classpath(BuildPlugins.ANDROID_TOOLS_BUILD_GRADLE)
         classpath(BuildPlugins.KOTLIN_GRADLE_PLUGIN)
         classpath(BuildPlugins.SQLDELIGHT)
+        classpath(BuildPlugins.KMP_NATIVE_COROUTINES)
         classpath(BuildPlugins.KTLINT_GRADLE_PLUGIN)
         classpath(BuildPlugins.GOOGLE_SERVICES)
     }

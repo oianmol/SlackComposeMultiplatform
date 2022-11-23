@@ -11,6 +11,7 @@ object BuildPlugins {
     const val ANDROID_TOOLS_BUILD_GRADLE = "com.android.tools.build:gradle:$TOOLS_BUILD"
     const val KTLINT_GRADLE_PLUGIN = "org.jlleitschuh.gradle:ktlint-gradle:$KT_LINT"
     const val SQLDELIGHT = "com.squareup.sqldelight:gradle-plugin:1.5.3"
+    const val KMP_NATIVE_COROUTINES = "com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:0.13.1"
     const val KOTLIN_GRADLE_PLUGIN = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Lib.Kotlin.KOTLIN_VERSION}"
     const val ANDROID_APPLICATION_PLUGIN = "com.android.application"
     const val ANDROID_LIBRARY_PLUGIN = "com.android.library"

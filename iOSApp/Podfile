@@ -4,6 +4,8 @@ target 'iosApp' do
   pod 'common', :path => '../common'
   pod 'Protobuf'
   pod 'gRPC-ProtoRPC'
+  pod 'KMPNativeCoroutinesAsync', '0.13.1'
+  pod 'KMPNativeCoroutinesCombine', '0.13.1'
 end
 
 post_install do |installer|

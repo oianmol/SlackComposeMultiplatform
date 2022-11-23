@@ -18,19 +18,17 @@ class SlackChannelVM(
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val ucFetchRecentChannels: UseCaseFetchRecentChannels
 ) : SlackViewModel(coroutineDispatcherProvider) {
-    val channels = MutableStateFlow<Flow<List<DomainLayerChannels.SKChannel>>>(emptyFlow())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun allChannels() {
-        channels.value = useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
+    fun allChannels(): Flow<List<DomainLayerChannels.SKChannel>> {
+        return useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
             ucFetchChannels(it!!.uuid)
         }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun loadRecentChannels() {
-        channels.value =
-            useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
+    fun loadRecentChannels(): Flow<List<DomainLayerChannels.SKChannel>> {
+        return useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
                 ucFetchRecentChannels(it!!.uuid)
             }
     }

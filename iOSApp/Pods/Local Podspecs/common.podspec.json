@@ -1,13 +1,13 @@
 {
   "name": "common",
   "version": "1.0",
-  "homepage": "https://github.com/TimOrtel/GRPC-Kotlin-Multiplatform",
+  "homepage": "https://github.com/oianmol",
   "source": {
     "http": ""
   },
   "authors": "",
   "license": "",
-  "summary": "GRPC Kotlin Multiplatform test library",
+  "summary": "Slack Common library",
   "vendored_frameworks": "build/cocoapods/framework/common.framework",
   "libraries": "c++",
   "platforms": {

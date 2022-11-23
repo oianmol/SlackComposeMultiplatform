@@ -1,4 +1,7 @@
 ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KMPNativeCoroutinesAsync.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KMPNativeCoroutinesCombine.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KMPNativeCoroutinesCore.framework
 ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework
 ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/absl.framework
 ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework

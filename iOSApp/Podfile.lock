@@ -627,11 +627,18 @@ PODS:
     - gRPC/Interface-Legacy (= 1.50.0)
   - gRPC/Interface-Legacy (1.50.0):
     - gRPC-RxLibrary/Interface (= 1.50.0)
+  - KMPNativeCoroutinesAsync (0.13.1):
+    - KMPNativeCoroutinesCore (= 0.13.1)
+  - KMPNativeCoroutinesCombine (0.13.1):
+    - KMPNativeCoroutinesCore (= 0.13.1)
+  - KMPNativeCoroutinesCore (0.13.1)
   - Protobuf (3.21.9)
 
 DEPENDENCIES:
   - common (from `../common`)
   - gRPC-ProtoRPC
+  - KMPNativeCoroutinesAsync (= 0.13.1)
+  - KMPNativeCoroutinesCombine (= 0.13.1)
   - Protobuf
 
 SPEC REPOS:
@@ -642,6 +649,9 @@ SPEC REPOS:
     - gRPC-Core
     - gRPC-ProtoRPC
     - gRPC-RxLibrary
+    - KMPNativeCoroutinesAsync
+    - KMPNativeCoroutinesCombine
+    - KMPNativeCoroutinesCore
     - Protobuf
 
 EXTERNAL SOURCES:
@@ -651,13 +661,16 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  common: a01876691ab26bd9e11f2e30e8e925b5108635aa
+  common: e583514aa355d755d2f2235db72a6b0b1a11dccb
   gRPC: cbba61b0bd8a6b0317d21250ac0df9a38983a783
   gRPC-Core: c093325643a2dc3b37d3871bb9ceccbabc4fe9ee
   gRPC-ProtoRPC: aa06302e48f79b9791e8f35ed22c8366d81676bd
   gRPC-RxLibrary: 411c822ebd4803ea48b7f1205bbb2198e7d54dbc
+  KMPNativeCoroutinesAsync: 52d2aea7ae1d85309ec6d72caeda923ec34af544
+  KMPNativeCoroutinesCombine: faa5064e9467f2fc406780de9171d0c9bb8704f5
+  KMPNativeCoroutinesCore: af011852578ab7abdad5e5c17a25d272efb3516b
   Protobuf: 02524ec14183fe08fb259741659e79683788158b
 
-PODFILE CHECKSUM: a9a365d1dd02c8df022d0cc82320885f8fee1dde
+PODFILE CHECKSUM: 7352aeb93ee665f55ba2dc90758b53df92b96dc0
 
 COCOAPODS: 1.11.3
