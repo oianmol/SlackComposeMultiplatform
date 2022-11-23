@@ -21,6 +21,7 @@ import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.Keyboard
+import dev.baseio.slackclone.commonui.material.toCommonTextRange
 import dev.baseio.slackclone.commonui.material.toTextFieldValue
 import dev.baseio.slackclone.commonui.reusable.MentionsTextField
 import dev.baseio.slackclone.commonui.reusable.range
@@ -139,7 +140,12 @@ internal fun MessageTFRow(
                     }
                 },
                 onValueChange = {
-                    viewModel.message.value = dev.baseio.slackclone.uichat.chatthread.TextFieldValue(it.text)
+                    viewModel.message.value =
+                        TextFieldValue(
+                            it.text,
+                            it.selection.toCommonTextRange(),
+                            it.composition?.toCommonTextRange()
+                        )
                 },
                 maxLines = 4,
                 cursorBrush = SolidColor(LocalSlackCloneColor.current.textPrimary),
@@ -171,8 +177,9 @@ internal fun MessageTFRow(
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type == KeyEventType.KeyUp &&
-        event.key == Key.Enter
+private fun eventIsEnter(event: KeyEvent) =
+    !event.isShiftPressed && event.type == KeyEventType.KeyUp &&
+            event.key == Key.Enter
 
 @Composable
 internal fun CollapseExpandButton(viewModel: ChatViewModel) {
