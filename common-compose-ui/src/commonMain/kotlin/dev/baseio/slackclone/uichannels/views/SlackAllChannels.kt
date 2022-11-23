@@ -13,7 +13,7 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import mainDispatcher
 
 @Composable
-fun SlackAllChannels(
+internal fun SlackAllChannels(
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
     onClickAdd: () -> Unit,
     component: SlackChannelComponent,

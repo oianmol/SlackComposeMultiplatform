@@ -4,5 +4,5 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-actual fun QrCodeScanner(modifier: Modifier, onQrCodeScanned: (String) -> Unit) {
+internal actual fun QrCodeScanner(modifier: Modifier, onQrCodeScanned: (String) -> Unit) {
 }

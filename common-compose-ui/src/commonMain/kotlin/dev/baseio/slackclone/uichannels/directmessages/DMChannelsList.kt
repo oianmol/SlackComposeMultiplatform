@@ -10,7 +10,7 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import mainDispatcher
 
 @Composable
-fun DMChannelsList(
+internal fun DMChannelsList(
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
     component: DirectMessagesComponent
 ) {

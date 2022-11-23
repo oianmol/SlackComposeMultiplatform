@@ -12,13 +12,13 @@ import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.QrCodeScanner
 import dev.baseio.slackclone.commonui.reusable.QrCodeView
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uionboarding.QrCodeDelegate
 
 @Composable
-fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelegate: QrCodeDelegate, navigateBack: () -> Unit) {
+internal fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelegate: QrCodeDelegate, navigateBack: () -> Unit) {
   val coroutineScope = rememberCoroutineScope()
   Scaffold(modifier) {
     when (mode) {
@@ -46,7 +46,7 @@ fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelega
               title = {
                 Text(
                   text = "QR Scanner",
-                  style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
+                  style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.appBarTextTitleColor)
                 )
               },
               navigationIcon = {
@@ -57,11 +57,11 @@ fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelega
                     imageVector = Icons.Filled.Clear,
                     contentDescription = "Clear",
                     modifier = Modifier.padding(start = 8.dp),
-                    tint = SlackCloneColorProvider.colors.appBarIconColor
+                    tint = LocalSlackCloneColor.current.appBarIconColor
                   )
                 }
               },
-              backgroundColor = SlackCloneColorProvider.colors.appBarColor
+              backgroundColor = LocalSlackCloneColor.current.appBarColor
             )
             Column(Modifier.fillMaxSize()) {
               qrResponse?.let { it1 -> QrCodeView(Modifier.size(300.dp), it1) }

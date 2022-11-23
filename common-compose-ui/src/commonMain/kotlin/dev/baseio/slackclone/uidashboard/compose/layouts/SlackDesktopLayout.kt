@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SlackDesktopLayout(
+internal fun SlackDesktopLayout(
     modifier: Modifier = Modifier,
     sideBar: @Composable (Modifier) -> Unit,
     workSpaceAndChannels: @Composable (Modifier) -> Unit,

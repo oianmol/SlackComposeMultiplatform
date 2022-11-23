@@ -11,17 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 
 @Composable
-fun SlackSurfaceAppBar(
+internal fun SlackSurfaceAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = SlackCloneColorProvider.colors.appBarColor,
-    contentColor: Color = SlackCloneColorProvider.colors.appBarTextTitleColor,
+    backgroundColor: Color = LocalSlackCloneColor.current.appBarColor,
+    contentColor: Color = LocalSlackCloneColor.current.appBarTextTitleColor,
     elevation: Dp = AppBarDefaults.TopAppBarElevation
 ) {
     SlackCloneSurface(
@@ -42,7 +42,7 @@ fun SlackSurfaceAppBar(
 }
 
 @Composable
-fun SlackSurfaceAppBar(
+internal fun SlackSurfaceAppBar(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),

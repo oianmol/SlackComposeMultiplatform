@@ -21,7 +21,7 @@ import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 
 @Composable
-fun ChatScreenContent(
+internal fun ChatScreenContent(
     modifier: Modifier,
     screenComponent: ChatScreenComponent,
     viewModel: ChatViewModel = screenComponent.chatViewModel
@@ -64,7 +64,7 @@ fun ChatScreenContent(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun DeleteMessageAlert(viewModel: ChatViewModel) {
+internal fun DeleteMessageAlert(viewModel: ChatViewModel) {
     SlackCloneSurface(
         modifier = Modifier.shadow(4.dp),
         shape = RoundedCornerShape(4.dp)
@@ -88,7 +88,7 @@ private fun DeleteMessageAlert(viewModel: ChatViewModel) {
 }
 
 @Composable
-private fun ChatMessageBoxWrapped(
+internal fun ChatMessageBoxWrapped(
     screenComponent: ChatScreenComponent,
     checkBoxState: BoxState,
     change: Float
@@ -111,7 +111,7 @@ private fun ChatMessageBoxWrapped(
 }
 
 @Composable
-private fun Modifier.animateDrag(
+internal fun Modifier.animateDrag(
     onExpand: () -> Unit,
     onCollapse: () -> Unit
 ): Modifier =

@@ -39,6 +39,7 @@ kotlin {
         ios.deploymentTarget = "14.1"
         framework {
             baseName = "common"
+            isStatic = true
         }
     }
 

@@ -17,7 +17,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.baseio.android.util.showToast
-import dev.baseio.slackclone.App
+import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun MobileApp(root: () -> RootComponent) {
+internal fun MobileApp(root: () -> RootComponent) {
     val config = LocalConfiguration.current
 
     var rememberedComposeWindow by remember {
@@ -109,7 +109,7 @@ fun MobileApp(root: () -> RootComponent) {
         LocalWindow provides rememberedComposeWindow
     ) {
         SlackCloneTheme {
-            App {
+            SlackApp {
                 root.invoke()
             }
         }

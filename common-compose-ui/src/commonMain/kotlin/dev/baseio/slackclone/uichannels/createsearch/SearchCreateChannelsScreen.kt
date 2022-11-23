@@ -25,14 +25,14 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import mainDispatcher
 
 @Composable
-fun SearchCreateChannelUI(
+internal fun SearchCreateChannelUI(
     searchChannelsComponent: SearchChannelsComponent
 ) {
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
-        backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-        contentColor = SlackCloneColorProvider.colors.textSecondary,
+        backgroundColor = LocalSlackCloneColor.current.uiBackground,
+        contentColor = LocalSlackCloneColor.current.textSecondary,
         modifier = Modifier,
         scaffoldState = scaffoldState,
         topBar = {
@@ -54,7 +54,7 @@ fun SearchCreateChannelUI(
 }
 
 @Composable
-private fun SearchContent(
+internal fun SearchContent(
     innerPadding: PaddingValues,
     searchChannelsComponent: SearchChannelsComponent,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit
@@ -73,7 +73,7 @@ private fun SearchContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllChannels(
+internal fun ListAllChannels(
     searchChannelsComponent: SearchChannelsComponent,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
@@ -104,22 +104,22 @@ fun canDrawHeader(lastDrawnChannel: String?, name: String?): Boolean {
 }
 
 @Composable
-fun SlackChannelHeader(title: String) {
+internal fun SlackChannelHeader(title: String) {
     Box(
         Modifier
             .fillMaxWidth()
-            .background(SlackCloneColorProvider.colors.lineColor)
+            .background(LocalSlackCloneColor.current.lineColor)
     ) {
         Text(
             text = title.toUpperCase(Locale.current),
             modifier = Modifier.padding(12.dp),
-            style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.textSecondary)
+            style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.textSecondary)
         )
     }
 }
 
 @Composable
-private fun SearchChannelsTF(searchChannelsComponent: SearchChannelsComponent) {
+internal fun SearchChannelsTF(searchChannelsComponent: SearchChannelsComponent) {
     val searchChannel by searchChannelsComponent.viewModel.search.collectAsState(mainDispatcher)
 
     TextField(
@@ -127,44 +127,44 @@ private fun SearchChannelsTF(searchChannelsComponent: SearchChannelsComponent) {
         onValueChange = { newValue ->
             searchChannelsComponent.viewModel.search.value = (newValue)
         },
-        textStyle = textStyleFieldPrimary(),
+        textStyle = textStyleFieldPrimaryChannelsScreen(),
         placeholder = {
             Text(
                 text = "Search for channels",
-                style = textStyleFieldSecondary(),
+                style = textStyleFieldSecondaryChannelsScreen(),
                 textAlign = TextAlign.Start
             )
         },
-        colors = textFieldColors(),
+        colors = textFieldColorsChannelsScreen(),
         singleLine = true,
         maxLines = 1
     )
 }
 
 @Composable
-private fun textStyleFieldPrimary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textPrimary,
+internal fun textStyleFieldPrimaryChannelsScreen() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.textPrimary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )
 
 @Composable
-private fun textStyleFieldSecondary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textSecondary,
+internal fun textStyleFieldSecondaryChannelsScreen() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.textSecondary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )
 
 @Composable
-private fun textFieldColors() = TextFieldDefaults.textFieldColors(
+internal fun textFieldColorsChannelsScreen() = TextFieldDefaults.textFieldColors(
     backgroundColor = Color.Transparent,
-    cursorColor = SlackCloneColorProvider.colors.textPrimary,
+    cursorColor = LocalSlackCloneColor.current.textPrimary,
     unfocusedIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent
 )
 
 @Composable
-private fun NewChannelFAB(newChannel: () -> Unit) {
+internal fun NewChannelFAB(newChannel: () -> Unit) {
     FloatingActionButton(onClick = {
         newChannel()
     }, backgroundColor = Color.White) {
@@ -177,7 +177,7 @@ private fun NewChannelFAB(newChannel: () -> Unit) {
 }
 
 @Composable
-private fun SearchAppBar(searchChannelsComponent: SearchChannelsComponent) {
+internal fun SearchAppBar(searchChannelsComponent: SearchChannelsComponent) {
     val channelCount by searchChannelsComponent.viewModel.channelCount.collectAsState(mainDispatcher)
 
     SlackSurfaceAppBar(
@@ -187,26 +187,26 @@ private fun SearchAppBar(searchChannelsComponent: SearchChannelsComponent) {
         navigationIcon = {
             NavBackIcon(searchChannelsComponent)
         },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+        backgroundColor = LocalSlackCloneColor.current.appBarColor
     )
 }
 
 @Composable
-private fun SearchNavTitle(count: Int) {
+internal fun SearchNavTitle(count: Int) {
     Column {
         Text(
             text = "Channel Browser",
-            style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
+            style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.appBarTextTitleColor)
         )
         Text(
             text = "$count channels",
-            style = SlackCloneTypography.subtitle2.copy(color = SlackCloneColorProvider.colors.appBarTextSubTitleColor)
+            style = SlackCloneTypography.subtitle2.copy(color = LocalSlackCloneColor.current.appBarTextSubTitleColor)
         )
     }
 }
 
 @Composable
-private fun NavBackIcon(searchChannelsComponent: SearchChannelsComponent) {
+internal fun NavBackIcon(searchChannelsComponent: SearchChannelsComponent) {
     IconButton(onClick = {
         searchChannelsComponent.navigationPop()
     }) {
@@ -214,7 +214,7 @@ private fun NavBackIcon(searchChannelsComponent: SearchChannelsComponent) {
             imageVector = Icons.Filled.Clear,
             contentDescription = "Clear",
             modifier = Modifier.padding(start = 8.dp),
-            tint = SlackCloneColorProvider.colors.appBarIconColor
+            tint = LocalSlackCloneColor.current.appBarIconColor
         )
     }
 }

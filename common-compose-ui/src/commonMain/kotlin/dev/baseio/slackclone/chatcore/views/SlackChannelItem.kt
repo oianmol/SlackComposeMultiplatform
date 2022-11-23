@@ -21,17 +21,17 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.common.extensions.calculateTimeAgo
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import kotlinx.datetime.Clock
 
 @Composable
-fun SlackChannelItem(
+internal fun SlackChannelItem(
     modifier: Modifier = Modifier.fillMaxWidth(),
     slackChannel: DomainLayerChannels.SKChannel,
-    textColor: Color = SlackCloneColorProvider.colors.textPrimary,
+    textColor: Color = LocalSlackCloneColor.current.textPrimary,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
     when (slackChannel) {
@@ -46,7 +46,7 @@ fun SlackChannelItem(
 }
 
 @Composable
-private fun GroupChannelItem(
+internal fun GroupChannelItem(
     slackChannel: DomainLayerChannels.SKChannel.SkGroupChannel,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
     textColor: Color
@@ -57,7 +57,7 @@ private fun GroupChannelItem(
 }
 
 @Composable
-private fun DirectMessageChannel(
+internal fun DirectMessageChannel(
     modifier: Modifier = Modifier.fillMaxWidth(),
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
     slackChannel: DomainLayerChannels.SKChannel.SkDMChannel,
@@ -75,7 +75,7 @@ private fun DirectMessageChannel(
 }
 
 @Composable
-fun DMLastMessageItem(
+internal fun DMLastMessageItem(
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
     slackChannel: DomainLayerChannels.SKChannel,
     slackMessage: DomainLayerMessages.SKMessage
@@ -92,7 +92,7 @@ fun DMLastMessageItem(
                     Icon(
                         imageVector = Icons.Default.Lock,
                         contentDescription = null,
-                        tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
+                        tint = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.4f),
                         modifier = Modifier.size(28.dp).padding(4.dp)
                     )
                 }
@@ -105,8 +105,8 @@ fun DMLastMessageItem(
             }
         }, center = {
             Column(it.weight(1f).padding(4.dp)) {
-                ChannelText(slackChannel, SlackCloneColorProvider.colors.textPrimary)
-                ChannelMessage(slackMessage, SlackCloneColorProvider.colors.textSecondary)
+                ChannelText(slackChannel, LocalSlackCloneColor.current.textPrimary)
+                ChannelMessage(slackMessage, LocalSlackCloneColor.current.textSecondary)
             }
         }, trailingItem = {
             RelativeTime(slackMessage.createdDate)
@@ -117,7 +117,7 @@ fun DMLastMessageItem(
 }
 
 @Composable
-private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
+internal fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
     Text(
         text = slackMessage.decodedMessage,
         style = SlackCloneTypography.caption.copy(
@@ -132,18 +132,18 @@ private fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSeco
 }
 
 @Composable
-fun RelativeTime(createdDate: Long) {
+internal fun RelativeTime(createdDate: Long) {
     Text(
         calculateTimeAgo(Clock.System.now().toEpochMilliseconds(), createdDate),
         style = SlackCloneTypography.caption.copy(
-            color = SlackCloneColorProvider.colors.textSecondary
+            color = LocalSlackCloneColor.current.textSecondary
         ),
         modifier = Modifier.padding(4.dp)
     )
 }
 
 @Composable
-private fun ChannelText(slackChannel: DomainLayerChannels.SKChannel, textColor: Color) {
+internal fun ChannelText(slackChannel: DomainLayerChannels.SKChannel, textColor: Color) {
     Text(
         text = "${slackChannel.channelName}",
         style = SlackCloneTypography.caption.copy(

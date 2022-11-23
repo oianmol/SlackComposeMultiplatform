@@ -22,13 +22,13 @@ import dev.baseio.slackclone.commonui.theme.*
 import mainDispatcher
 
 @Composable
-fun NewChatThreadScreen(
+internal fun NewChatThreadScreen(
     newChatThread: NewChatThreadComponent
 ) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
-        backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-        contentColor = SlackCloneColorProvider.colors.textSecondary,
+        backgroundColor = LocalSlackCloneColor.current.uiBackground,
+        contentColor = LocalSlackCloneColor.current.textSecondary,
         modifier = Modifier,
         scaffoldState = scaffoldState,
         topBar = {
@@ -43,7 +43,7 @@ fun NewChatThreadScreen(
 }
 
 @Composable
-private fun SearchContent(
+internal fun SearchContent(
     innerPadding: PaddingValues,
     newChatThread: NewChatThreadComponent
 ) {
@@ -59,7 +59,7 @@ private fun SearchContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ListAllUsers(newChatThreadComponent: NewChatThreadComponent) {
+internal fun ListAllUsers(newChatThreadComponent: NewChatThreadComponent) {
     val channelsFlow by newChatThreadComponent.viewModel.channelsStream.collectAsState(mainDispatcher)
     val errorFlow by newChatThreadComponent.viewModel.errorStream.collectAsState()
 
@@ -94,22 +94,22 @@ fun canDrawHeader(lastDrawnChannel: String?, name: String?): Boolean {
 }
 
 @Composable
-fun SlackChannelHeader(title: String) {
+internal fun SlackChannelHeader(title: String) {
     Box(
         Modifier
             .fillMaxWidth()
-            .background(SlackCloneColorProvider.colors.lineColor)
+            .background(LocalSlackCloneColor.current.lineColor)
     ) {
         Text(
             text = title.toUpperCase(Locale.current),
             modifier = Modifier.padding(12.dp),
-            style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.textSecondary)
+            style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.textSecondary)
         )
     }
 }
 
 @Composable
-private fun SearchUsersTF(newChatThread: NewChatThreadComponent) {
+internal fun SearchUsersTF(newChatThread: NewChatThreadComponent) {
     val searchChannel by newChatThread.viewModel.search.collectAsState(mainDispatcher)
 
     TextField(
@@ -132,29 +132,29 @@ private fun SearchUsersTF(newChatThread: NewChatThreadComponent) {
 }
 
 @Composable
-private fun textStyleFieldPrimary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textPrimary,
+internal fun textStyleFieldPrimary() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.textPrimary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )
 
 @Composable
-private fun textStyleFieldSecondary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textSecondary,
+internal fun textStyleFieldSecondary() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.textSecondary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )
 
 @Composable
-private fun textFieldColors() = TextFieldDefaults.textFieldColors(
+internal fun textFieldColors() = TextFieldDefaults.textFieldColors(
     backgroundColor = Color.Transparent,
-    cursorColor = SlackCloneColorProvider.colors.textPrimary,
+    cursorColor = LocalSlackCloneColor.current.textPrimary,
     unfocusedIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent
 )
 
 @Composable
-private fun SearchAppBar(newChatThread: NewChatThreadComponent) {
+internal fun SearchAppBar(newChatThread: NewChatThreadComponent) {
     SlackSurfaceAppBar(
         title = {
             SearchNavTitle()
@@ -162,20 +162,20 @@ private fun SearchAppBar(newChatThread: NewChatThreadComponent) {
         navigationIcon = {
             NavBackIcon(newChatThread)
         },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+        backgroundColor = LocalSlackCloneColor.current.appBarColor
     )
 }
 
 @Composable
-private fun SearchNavTitle() {
+internal fun SearchNavTitle() {
     Text(
         text = "New Message",
-        style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
+        style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.appBarTextTitleColor)
     )
 }
 
 @Composable
-private fun NavBackIcon(newChatThread: NewChatThreadComponent) {
+internal fun NavBackIcon(newChatThread: NewChatThreadComponent) {
     IconButton(onClick = {
         newChatThread.navigationPop()
     }) {
@@ -183,7 +183,7 @@ private fun NavBackIcon(newChatThread: NewChatThreadComponent) {
             imageVector = Icons.Filled.Clear,
             contentDescription = "clear",
             modifier = Modifier.padding(start = 8.dp),
-            tint = SlackCloneColorProvider.colors.appBarIconColor
+            tint = LocalSlackCloneColor.current.appBarIconColor
         )
     }
 }

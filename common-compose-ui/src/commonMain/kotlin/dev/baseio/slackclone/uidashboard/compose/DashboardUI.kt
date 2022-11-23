@@ -33,7 +33,7 @@ import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.reusable.SlackDragComposableView
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
@@ -51,14 +51,14 @@ import mainDispatcher
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalDecomposeApi::class)
 @Composable
-fun DashboardUI(
+internal fun DashboardUI(
     dashboardComponent: DashboardComponent,
     chatScreenComponent: ChatScreenComponent = dashboardComponent.chatScreenComponent,
     dashboardVM: DashboardVM = dashboardComponent.dashboardVM
 ) {
     val scaffoldState = rememberScaffoldState()
 
-    val colors = SlackCloneColorProvider.colors
+    val colors = LocalSlackCloneColor.current
     PlatformSideEffects.PlatformColors(colors.appBarColor, colors.uiBackground)
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -233,7 +233,7 @@ fun DashboardUI(
                         )
                     } ?: run {
                         SlackCloneSurface(
-                            color = SlackCloneColorProvider.colors.uiBackground,
+                            color = LocalSlackCloneColor.current.uiBackground,
                             modifier = contentModifier
                         ) {
                             Children(stack = dashboardComponent.desktopStack, animation = stackAnimation(fade())) {
@@ -272,7 +272,7 @@ fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
 }
 
 @Composable
-private fun SlackDualPaneLayoutView(
+internal fun SlackDualPaneLayoutView(
     leftViewComposable: @Composable (Modifier) -> Unit,
     rightViewComposable: @Composable (Modifier) -> Unit,
     mainContent: @Composable (Modifier) -> Unit
@@ -292,7 +292,7 @@ private fun checkChatViewClosed(
 ) = lastChannel == null || isChatViewClosed
 
 @Composable
-private fun DashboardScaffold(
+internal fun DashboardScaffold(
     needsOverlay: Boolean,
     scaffoldState: ScaffoldState,
     modifier: Modifier,
@@ -302,8 +302,8 @@ private fun DashboardScaffold(
 ) {
     Box(modifier) {
         Scaffold(
-            backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-            contentColor = SlackCloneColorProvider.colors.textSecondary,
+            backgroundColor = LocalSlackCloneColor.current.uiBackground,
+            contentColor = LocalSlackCloneColor.current.textSecondary,
             modifier = Modifier,
             scaffoldState = scaffoldState,
             bottomBar = {
@@ -320,7 +320,7 @@ private fun DashboardScaffold(
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 SlackCloneSurface(
-                    color = SlackCloneColorProvider.colors.uiBackground,
+                    color = LocalSlackCloneColor.current.uiBackground,
                     modifier = Modifier.fillMaxSize()
                 ) {
                     DashboardChildren(
@@ -340,7 +340,7 @@ private fun DashboardScaffold(
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
-private fun DashboardChildren(
+internal fun DashboardChildren(
     modifier: Modifier,
     dashboardComponent: DashboardComponent,
     appBarIconClick: () -> Unit,
@@ -372,7 +372,7 @@ private fun DashboardChildren(
 }
 
 @Composable
-fun FloatingDM(onClick: () -> Unit) {
+internal fun FloatingDM(onClick: () -> Unit) {
     FloatingActionButton(onClick = {
         onClick()
     }, backgroundColor = Color.White) {
@@ -385,7 +385,7 @@ fun FloatingDM(onClick: () -> Unit) {
 }
 
 @Composable
-private fun OverlayDark(appBarIconClick: () -> Unit) {
+internal fun OverlayDark(appBarIconClick: () -> Unit) {
     Box(
         Modifier
             .fillMaxSize()
@@ -398,13 +398,13 @@ private fun OverlayDark(appBarIconClick: () -> Unit) {
 }
 
 @Composable
-fun DashboardBottomNavBar(dashboardComponent: DashboardComponent) {
-    Column(Modifier.background(color = SlackCloneColorProvider.colors.uiBackground)) {
+internal fun DashboardBottomNavBar(dashboardComponent: DashboardComponent) {
+    Column(Modifier.background(color = LocalSlackCloneColor.current.uiBackground)) {
         Divider(
-            color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f),
+            color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.2f),
             thickness = 0.5.dp
         )
-        BottomNavigation(backgroundColor = SlackCloneColorProvider.colors.uiBackground) {
+        BottomNavigation(backgroundColor = LocalSlackCloneColor.current.uiBackground) {
             val navBackStackEntry = dashboardComponent.phoneStack.active.instance
             val dashTabs = mutableListOf(
                 DashboardComponent.Config.Home,
@@ -421,14 +421,14 @@ fun DashboardBottomNavBar(dashboardComponent: DashboardComponent) {
 }
 
 @Composable
-private fun RowScope.BottomNavItem(
+internal fun RowScope.BottomNavItem(
     screen: DashboardComponent.Config,
     navBackStackEntry: Dashboard.Child,
     dashboardComponent: DashboardComponent
 ) {
     BottomNavigationItem(
-        selectedContentColor = SlackCloneColorProvider.colors.bottomNavSelectedColor,
-        unselectedContentColor = SlackCloneColorProvider.colors.bottomNavUnSelectedColor,
+        selectedContentColor = LocalSlackCloneColor.current.bottomNavSelectedColor,
+        unselectedContentColor = LocalSlackCloneColor.current.bottomNavUnSelectedColor,
         icon = { Icon(Icons.Default.Home, contentDescription = null, Modifier.size(24.dp)) },
         label = {
             Text(

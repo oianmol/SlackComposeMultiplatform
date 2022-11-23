@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.AT_THE_RATE
 import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.HASH_TAG
@@ -34,7 +34,7 @@ import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.inviteTagPattern
 import dev.baseio.slackclone.uichat.chatthread.SpanInfos
 
 @Composable
-fun MentionsTextField(
+internal fun MentionsTextField(
     onSpanUpdate: (String, List<SpanInfos>, TextRange) -> Unit,
     mentionText: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
@@ -74,7 +74,7 @@ fun MentionsTextField(
 }
 
 @Composable
-fun MentionsText(
+internal fun MentionsText(
     modifier: Modifier,
     mentionText: String,
     style: TextStyle,
@@ -103,7 +103,7 @@ fun MentionsText(
 }
 
 @Composable
-private fun buildAnnotatedString(
+internal fun buildAnnotatedString(
     mentionText: String,
     spans: List<SpanInfos>
 ) = buildAnnotatedString {
@@ -169,7 +169,7 @@ fun SpanInfos.range() = TextRange(start, end)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MentionsTF() {
+internal fun MentionsTF() {
     Box {
         var mentionText by remember {
             mutableStateOf(TextFieldValue())
@@ -213,7 +213,7 @@ fun MentionsTF() {
             MentionsText(
                 mentionText = mentionText.text,
                 style = SlackCloneTypography.subtitle2.copy(
-                    color = SlackCloneColorProvider.colors.textSecondary
+                    color = LocalSlackCloneColor.current.textSecondary
                 ),
                 modifier = Modifier.padding(4.dp),
                 onClick = {

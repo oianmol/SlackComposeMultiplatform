@@ -6,12 +6,12 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 
 actual object PainterRes {
     @Composable
-    actual fun gettingStarted(): Painter {
+    internal actual fun gettingStarted(): Painter {
         return rememberVectorPainter(Icons.Default.Home)
     }
 
     @Composable
-    actual fun slackLogo(): Painter {
+    internal actual fun slackLogo(): Painter {
         return rememberVectorPainter(Icons.Default.Home)
     }
 }

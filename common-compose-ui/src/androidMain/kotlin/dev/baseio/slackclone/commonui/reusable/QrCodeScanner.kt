@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @Composable
-actual fun QrCodeScanner(modifier: Modifier, onQrCodeScanned: (String) -> Unit) {
+internal actual fun QrCodeScanner(modifier: Modifier, onQrCodeScanned: (String) -> Unit) {
   val context = LocalContext.current
   val lifecycleOwner = LocalLifecycleOwner.current
   var preview by remember { mutableStateOf<Preview?>(null) }

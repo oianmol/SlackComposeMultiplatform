@@ -5,15 +5,15 @@ import androidx.compose.ui.graphics.Color
 
 actual object PlatformSideEffects {
     @Composable
-    actual fun GettingStartedScreen() {
+    internal actual fun GettingStartedScreen() {
     }
 
     @Composable
-    actual fun SkipTypingScreen() {
+    internal actual fun SkipTypingScreen() {
     }
 
     @Composable
-    actual fun PlatformColors(
+    internal actual fun PlatformColors(
         topColor: Color,
         bottomColor: Color
     ) {

@@ -33,19 +33,15 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import dev.baseio.database.SlackDB
-import dev.baseio.slackclone.App
+import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.initKoin
-import dev.baseio.slackdata.DriverFactory
-import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.dsl.module
 
 @ExperimentalComposeUiApi
 fun main() = application {
@@ -78,7 +74,7 @@ fun main() = application {
 
 
 @Composable
-fun DesktopApp(
+internal fun DesktopApp(
     rememberedComposeWindow: WindowInfo,
     rootComponent: () -> RootComponent
 ) {
@@ -86,7 +82,7 @@ fun DesktopApp(
         CompositionLocalProvider(
             LocalWindow provides rememberedComposeWindow
         ) {
-            App(
+            SlackApp(
                 rootComponent = rootComponent
             )
         }
@@ -94,60 +90,3 @@ fun DesktopApp(
 }
 
 
-@Composable
-@ExperimentalComposeUiApi
-private fun FrameWindowScope.AppWindowTitleBar(windowState: WindowState, applicationScope: ApplicationScope) =
-    WindowDraggableArea {
-        Box(Modifier.fillMaxWidth().height(24.dp).background(Color.DarkGray)) {
-            Row {
-                CommonCircleShape(
-                    Modifier.clickable {
-                        applicationScope.exitApplication()
-                    },
-                    Color.Red
-                )
-                CommonCircleShape(
-                    Modifier.clickable {
-                        this@AppWindowTitleBar.window.isMinimized = true
-                    },
-                    Color.Yellow
-                )
-                CommonCircleShape(
-                    Modifier.clickable {
-                        when (windowState.placement) {
-                            WindowPlacement.Fullscreen -> {
-                                windowState.placement = WindowPlacement.Floating
-                            }
-
-                            WindowPlacement.Floating -> {
-                                windowState.placement = WindowPlacement.Fullscreen
-                            }
-
-                            WindowPlacement.Maximized -> {
-                                windowState.placement = WindowPlacement.Floating
-                            }
-                        }
-                    },
-                    Color.Green
-                )
-            }
-        }
-    }
-
-@ExperimentalComposeUiApi
-@Composable
-private fun CommonCircleShape(modifier: Modifier, color: Color) {
-    var enter by remember { mutableStateOf(false) }
-    val alpha by animateFloatAsState(if (enter) 0.5f else 1f)
-    Box(
-        modifier.padding(4.dp).clip(CircleShape).size(16.dp).background(color.copy(alpha = alpha))
-            .onPointerEvent(PointerEventType.Enter) {
-                enter = true
-            }
-            .onPointerEvent(
-                PointerEventType.Exit
-            ) {
-                enter = false
-            }
-    )
-}

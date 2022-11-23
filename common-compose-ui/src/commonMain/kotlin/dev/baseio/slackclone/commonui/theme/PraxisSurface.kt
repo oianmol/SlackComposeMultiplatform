@@ -23,11 +23,11 @@ import kotlin.math.ln
  * An alternative to [androidx.compose.material.Surface]
  */
 @Composable
-fun SlackCloneSurface(
+internal fun SlackCloneSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
-    color: Color = SlackCloneColorProvider.colors.uiBackground,
-    contentColor: Color = SlackCloneColorProvider.colors.textSecondary,
+    color: Color = LocalSlackCloneColor.current.uiBackground,
+    contentColor: Color = LocalSlackCloneColor.current.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
@@ -48,7 +48,7 @@ fun SlackCloneSurface(
 }
 
 @Composable
-private fun getBackgroundColorForElevation(
+internal fun getBackgroundColorForElevation(
     color: Color,
     elevation: Dp
 ): Color {

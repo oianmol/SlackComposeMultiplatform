@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 
 @Composable
-actual fun QrCodeView(
+internal actual fun QrCodeView(
     modifier: Modifier,
     response: KMSKQrCodeResponse
 ) {

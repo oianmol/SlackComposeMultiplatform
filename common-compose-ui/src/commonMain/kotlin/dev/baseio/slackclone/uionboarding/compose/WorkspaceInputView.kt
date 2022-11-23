@@ -13,15 +13,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-fun TextHttps() {
+internal fun TextHttps() {
     Text(
         text = "https://",
         style = textStyleField().copy(
-            color = SlackCloneColorProvider.colors.textPrimary.copy(
+            color = LocalSlackCloneColor.current.textPrimary.copy(
                 alpha = 0.4f
             )
         )
@@ -29,11 +29,11 @@ fun TextHttps() {
 }
 
 @Composable
-fun TextSlackCom() {
+internal fun TextSlackCom() {
     Text(
         ".slack.com",
         style = textStyleField().copy(
-            color = SlackCloneColorProvider.colors.textPrimary.copy(
+            color = LocalSlackCloneColor.current.textPrimary.copy(
                 alpha = 0.4f
             )
         ),
@@ -43,7 +43,7 @@ fun TextSlackCom() {
 }
 
 @Composable
-fun WorkspaceTF(workspace: String, onUpdate: (String) -> Unit) {
+internal fun WorkspaceTF(workspace: String, onUpdate: (String) -> Unit) {
     BasicTextField(
         value = workspace,
         onValueChange = { newEmail ->
@@ -55,7 +55,7 @@ fun WorkspaceTF(workspace: String, onUpdate: (String) -> Unit) {
             .width(IntrinsicSize.Min)
             .padding(top = 12.dp, bottom = 12.dp),
         maxLines = 1,
-        cursorBrush = SolidColor(SlackCloneColorProvider.colors.textPrimary),
+        cursorBrush = SolidColor(LocalSlackCloneColor.current.textPrimary),
         decorationBox = { inputTf ->
             Box {
                 if (workspace.isEmpty()) {
@@ -74,8 +74,8 @@ fun WorkspaceTF(workspace: String, onUpdate: (String) -> Unit) {
 }
 
 @Composable
-private fun textStyleField() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.7f),
+internal fun textStyleField() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.7f),
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )

@@ -31,17 +31,17 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 @Composable
-fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfileVM = component.viewModel) {
+internal fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfileVM = component.viewModel) {
     val user by profileVM.currentLoggedInUser.collectAsState()
 
     SlackCloneSurface(
-        color = SlackCloneColorProvider.colors.uiBackground,
+        color = LocalSlackCloneColor.current.uiBackground,
         modifier = Modifier.fillMaxSize()
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -52,7 +52,7 @@ fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfileVM = co
             }
             SlackListItem(icon = Icons.Default.Notifications, title = "Pause Notifications")
             SlackListItem(icon = Icons.Default.Person, title = "Set Away")
-            Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+            Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
             SlackListItem(icon = Icons.Default.FavoriteBorder, title = "Saved Items")
             SlackListItem(icon = Icons.Default.Person, title = "View Profile")
             SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
@@ -65,7 +65,7 @@ fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfileVM = co
 }
 
 @Composable
-private fun SearchTopAppBar() {
+internal fun SearchTopAppBar() {
     SlackSurfaceAppBar(
         title = {
             Text(
@@ -76,12 +76,12 @@ private fun SearchTopAppBar() {
                 )
             )
         },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+        backgroundColor = LocalSlackCloneColor.current.appBarColor
     )
 }
 
 @Composable
-fun SlackListItemTrailingView(
+internal fun SlackListItemTrailingView(
     icon: ImageVector,
     title: String,
     trailingView: @Composable () -> Unit = {}
@@ -94,7 +94,7 @@ fun SlackListItemTrailingView(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
+            tint = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.4f),
             modifier = Modifier
                 .size(24.dp)
                 .padding(4.dp)
@@ -102,7 +102,7 @@ fun SlackListItemTrailingView(
         Text(
             text = title,
             style = SlackCloneTypography.subtitle1.copy(
-                color = SlackCloneColorProvider.colors.textPrimary.copy(
+                color = LocalSlackCloneColor.current.textPrimary.copy(
                     alpha = 0.8f
                 )
             ),
@@ -115,7 +115,7 @@ fun SlackListItemTrailingView(
 }
 
 @Composable
-fun UserHeader(user: DomainLayerUsers.SKUser?) {
+internal fun UserHeader(user: DomainLayerUsers.SKUser?) {
     Row(Modifier.padding(12.dp)) {
         SlackImageBox(
             Modifier.size(72.dp),
@@ -129,7 +129,7 @@ fun UserHeader(user: DomainLayerUsers.SKUser?) {
                 text = "Active",
                 style = SlackCloneTypography.subtitle1.copy(
                     fontWeight = FontWeight.Bold,
-                    color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f)
+                    color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.4f)
                 )
             )
         }
@@ -137,7 +137,7 @@ fun UserHeader(user: DomainLayerUsers.SKUser?) {
 }
 
 @Composable
-fun StatusBox() {
+internal fun StatusBox() {
     RoundedCornerBoxDecoration {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -148,7 +148,7 @@ fun StatusBox() {
                 text = "Out on a vacation",
                 style = SlackCloneTypography.body1.copy(
                     fontWeight = FontWeight.Normal,
-                    color = SlackCloneColorProvider.colors.textPrimary
+                    color = LocalSlackCloneColor.current.textPrimary
                 ),
                 modifier = Modifier
                     .padding(2.dp)
@@ -158,19 +158,19 @@ fun StatusBox() {
             Icon(
                 imageVector = Icons.Default.Clear,
                 contentDescription = null,
-                tint = SlackCloneColorProvider.colors.textPrimary
+                tint = LocalSlackCloneColor.current.textPrimary
             )
         }
     }
 }
 
 @Composable
-fun RoundedCornerBoxDecoration(content: @Composable () -> Unit) {
+internal fun RoundedCornerBoxDecoration(content: @Composable () -> Unit) {
     Box(
         Modifier
             .border(
                 width = 1.dp,
-                color = SlackCloneColorProvider.colors.lineColor,
+                color = LocalSlackCloneColor.current.lineColor,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(12.dp)

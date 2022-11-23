@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichannels.SlackChannelComponent
@@ -32,7 +32,7 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun HomeScreenUI(
+internal fun HomeScreenUI(
     homeScreenComponent: HomeScreenComponent,
     appBarIconClick: () -> Unit,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
@@ -42,7 +42,7 @@ fun HomeScreenUI(
 ) {
     val selectedWorkspace by homeScreenComponent.lastSelectedWorkspace.value.collectAsState(null)
     SlackCloneSurface(
-        color = SlackCloneColorProvider.colors.uiBackground,
+        color = LocalSlackCloneColor.current.uiBackground,
         modifier = Modifier.fillMaxSize()
     ) {
         Column {
@@ -67,12 +67,12 @@ fun HomeScreenUI(
 }
 
 @Composable
-fun ThreadsTile() {
+internal fun ThreadsTile() {
     SlackListItem(icon = Icons.Default.MailOutline, title = "Threads")
 }
 
 @Composable
-fun JumpToText() {
+internal fun JumpToText() {
     Box(
         Modifier
             .fillMaxWidth()
@@ -82,7 +82,7 @@ fun JumpToText() {
         RoundedCornerBoxDecoration {
             Text(
                 text = "Jump to...",
-                style = SlackCloneTypography.subtitle2.copy(color = SlackCloneColorProvider.colors.textPrimary),
+                style = SlackCloneTypography.subtitle2.copy(color = LocalSlackCloneColor.current.textPrimary),
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -90,7 +90,7 @@ fun JumpToText() {
 }
 
 @Composable
-private fun SlackWorkspaceTopAppBar(
+internal fun SlackWorkspaceTopAppBar(
     appBarIconClick: () -> Unit,
     selectedWorkspace: DomainLayerWorkspaces.SKWorkspace?
 ) {
@@ -101,12 +101,12 @@ private fun SlackWorkspaceTopAppBar(
         navigationIcon = {
             WorkspaceImageButton(appBarIconClick, selectedWorkspace)
         },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+        backgroundColor = LocalSlackCloneColor.current.appBarColor
     )
 }
 
 @Composable
-fun WorkspaceImageButton(appBarIconClick: () -> Unit, selectedWorkspace: DomainLayerWorkspaces.SKWorkspace?) {
+internal fun WorkspaceImageButton(appBarIconClick: () -> Unit, selectedWorkspace: DomainLayerWorkspaces.SKWorkspace?) {
     IconButton(onClick = {
         appBarIconClick()
     }) {

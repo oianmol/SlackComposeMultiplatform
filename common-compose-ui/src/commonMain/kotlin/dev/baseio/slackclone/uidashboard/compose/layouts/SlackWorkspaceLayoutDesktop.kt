@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.uichannels.SlackChannelComponent
 import dev.baseio.slackclone.uichannels.views.SlackAllChannels
@@ -25,7 +25,7 @@ import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @Composable
-fun SlackWorkspaceLayoutDesktop(
+internal fun SlackWorkspaceLayoutDesktop(
     modifier: Modifier = Modifier,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
     onCreateChannelRequest: () -> Unit = {},
@@ -34,8 +34,8 @@ fun SlackWorkspaceLayoutDesktop(
     dashboardComponent: DashboardComponent
 ) {
     Scaffold(
-        backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-        contentColor = SlackCloneColorProvider.colors.textSecondary,
+        backgroundColor = LocalSlackCloneColor.current.uiBackground,
+        contentColor = LocalSlackCloneColor.current.textSecondary,
         floatingActionButton = {
             FloatingDM {
                 dashboardComponent.navigateRoot(RootComponent.Config.NewChatThreadScreen)
@@ -44,14 +44,14 @@ fun SlackWorkspaceLayoutDesktop(
         modifier = modifier
     ) {
         SlackCloneSurface(
-            color = SlackCloneColorProvider.colors.uiBackground, modifier = Modifier.padding(it)
+            color = LocalSlackCloneColor.current.uiBackground, modifier = Modifier.padding(it)
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 WorkspacesBar()
                 JumpToText()
                 Spacer(modifier = Modifier.height(8.dp))
                 ThreadsTile()
-                Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+                Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
                 SlackRecentChannels({ skChannel ->
                     onItemClick(skChannel)
                 }, onClickAdd = {

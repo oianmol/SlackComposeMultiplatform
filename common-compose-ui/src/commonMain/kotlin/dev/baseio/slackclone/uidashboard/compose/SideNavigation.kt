@@ -29,7 +29,7 @@ import dev.baseio.slackclone.uiqrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun SideNavigation(
+internal fun SideNavigation(
     modifier: Modifier,
     sideNavComponent: SideNavComponent,
     onClose: () -> Unit,
@@ -37,7 +37,7 @@ fun SideNavigation(
     navigateQrScanner: (QrScannerMode) -> Unit
 ) {
     val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
-    SlackCloneSurface(color = SlackCloneColorProvider.colors.uiBackground, modifier = modifier.fillMaxSize()) {
+    SlackCloneSurface(color = LocalSlackCloneColor.current.uiBackground, modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxHeight(),
@@ -71,9 +71,9 @@ fun SideNavigation(
 }
 
 @Composable
-private fun SideNavFooter(logout: () -> Unit, openQrScanner: () -> Unit) {
+internal fun SideNavFooter(logout: () -> Unit, openQrScanner: () -> Unit) {
     Column(modifier = Modifier) {
-        Divider(color = SlackCloneColorProvider.colors.lineColor)
+        Divider(color = LocalSlackCloneColor.current.lineColor)
         SlackListItem(
             icon = Icons.Filled.AddCircle,
             title = "Authorize other device(s)",
@@ -92,10 +92,10 @@ private fun SideNavFooter(logout: () -> Unit, openQrScanner: () -> Unit) {
 }
 
 @Composable
-private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected: Boolean) {
+internal fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected: Boolean) {
     Box(
         Modifier.background(
-            color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
+            color = if (lastSelected) LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
             shape = RoundedCornerShape(12.dp)
         )
     ) {
@@ -115,14 +115,14 @@ private fun Workspace(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected
             Icon(
                 imageVector = Icons.Filled.MoreVert,
                 contentDescription = null,
-                tint = SlackCloneColorProvider.colors.textPrimary
+                tint = LocalSlackCloneColor.current.textPrimary
             )
         }
     }
 }
 
 @Composable
-fun OrganizationDetails(workspace: DomainLayerWorkspaces.SKWorkspace) {
+internal fun OrganizationDetails(workspace: DomainLayerWorkspaces.SKWorkspace) {
     Column(
         modifier = Modifier
             .padding(start = 8.dp),
@@ -132,7 +132,7 @@ fun OrganizationDetails(workspace: DomainLayerWorkspaces.SKWorkspace) {
         Text(
             text = workspace.name,
             style = SlackCloneTypography.h6.copy(
-                color = SlackCloneColorProvider.colors.textPrimary,
+                color = LocalSlackCloneColor.current.textPrimary,
                 fontWeight = FontWeight.SemiBold
             )
         )
@@ -140,14 +140,14 @@ fun OrganizationDetails(workspace: DomainLayerWorkspaces.SKWorkspace) {
             workspace.domain,
             style = SlackCloneTypography.subtitle1.copy(
                 fontWeight = FontWeight.Normal,
-                color = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f)
+                color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.4f)
             )
         )
     }
 }
 
 @Composable
-fun OrganizationLogo(
+internal fun OrganizationLogo(
     modifierParent: Modifier = Modifier.size(68.dp),
     modifierChild: Modifier = Modifier.size(64.dp),
     picUrl: String?,
@@ -157,7 +157,7 @@ fun OrganizationLogo(
         modifierParent
             .border(
                 width = 3.dp,
-                color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary else Color.Transparent,
+                color = if (lastSelected) LocalSlackCloneColor.current.textPrimary else Color.Transparent,
                 shape = RoundedCornerShape(12.dp)
             )
     ) {
@@ -169,15 +169,15 @@ fun OrganizationLogo(
 }
 
 @Composable
-fun WorkspacesBar() {
+internal fun WorkspacesBar() {
     SlackSurfaceAppBar(
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor,
+        backgroundColor = LocalSlackCloneColor.current.appBarColor,
         elevation = 0.dp
     ) {
         Text(
             text = "Workspaces",
             style = SlackCloneTypography.h5.copy(
-                color = SlackCloneColorProvider.colors.appBarTextTitleColor,
+                color = LocalSlackCloneColor.current.appBarTextTitleColor,
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier.padding(start = 8.dp)

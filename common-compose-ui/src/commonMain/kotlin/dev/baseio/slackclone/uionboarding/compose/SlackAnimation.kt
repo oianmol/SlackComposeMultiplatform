@@ -42,7 +42,7 @@ val loaderGreen = Color(91, 178, 128)
 val slackWhite = Color(255, 255, 255)
 
 @Composable
-fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
+internal fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +75,7 @@ fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
 }
 
 @Composable
-private fun SKFourColorLoader(
+internal fun SKFourColorLoader(
     modifier: Modifier,
     animatedRotateLogo: Float,
     animatedMoveLogo: Dp,
@@ -97,7 +97,7 @@ private fun SKFourColorLoader(
 }
 
 @Composable
-fun CircularRectBlock(block: SlackAnimSpec.CircularRectBlockData, isMoveLeft: Boolean) {
+internal fun CircularRectBlock(block: SlackAnimSpec.CircularRectBlockData, isMoveLeft: Boolean) {
     val dropScale by animateFloatAsState(
         targetValue = if (isMoveLeft) 1f else 0f,
         SlackAnimSpec.dropSizeKeyFrames(block.dropScaleDelay, isMoveLeft)
@@ -114,7 +114,7 @@ fun CircularRectBlock(block: SlackAnimSpec.CircularRectBlockData, isMoveLeft: Bo
 }
 
 @Composable
-private fun Block(
+internal fun Block(
     block: SlackAnimSpec.CircularRectBlockData,
     animatedWidth: Dp
 ) {
@@ -129,7 +129,7 @@ private fun Block(
 }
 
 @Composable
-fun Droplet(block: SlackAnimSpec.CircularRectBlockData, dropSize: Float) {
+internal fun Droplet(block: SlackAnimSpec.CircularRectBlockData, dropSize: Float) {
     Box(
         Modifier
             .offset(block.dropX, block.dropY)
@@ -149,7 +149,7 @@ fun Droplet(block: SlackAnimSpec.CircularRectBlockData, dropSize: Float) {
 }
 
 @Composable
-private fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
+internal fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
     Box(
         modifier = modifier.offset(x = 40.dp)
     ) {
@@ -164,7 +164,7 @@ private fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
 }
 
 @Composable
-private fun AnimatedLetter(letter: String, isVisible: Boolean, delay: Int) {
+internal fun AnimatedLetter(letter: String, isVisible: Boolean, delay: Int) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
         tween(durationMillis = SlackAnim.ANIM_DURATION.div(2), delayMillis = delay)
@@ -178,7 +178,7 @@ private fun AnimatedLetter(letter: String, isVisible: Boolean, delay: Int) {
 }
 
 @Composable
-private fun slackTextStyle() = SlackCloneTypography.h2.copy(
+internal fun slackTextStyle() = SlackCloneTypography.h2.copy(
     color = slackWhite,
     letterSpacing = 4.sp
 )

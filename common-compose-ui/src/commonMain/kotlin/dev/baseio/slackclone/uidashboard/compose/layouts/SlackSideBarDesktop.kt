@@ -30,14 +30,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.commonui.reusable.SlackOnlineBox
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.uidashboard.compose.OrganizationLogo
 import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
 import dev.baseio.slackclone.uidashboard.vm.SideNavComponent
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 @Composable
-fun SlackSideBarLayoutDesktop(
+internal fun SlackSideBarLayoutDesktop(
     modifier: Modifier = Modifier,
     sideNavComponent: SideNavComponent,
     openDM: () -> Unit,
@@ -50,7 +50,7 @@ fun SlackSideBarLayoutDesktop(
     val user by sideNavComponent.viewModel.currentLoggedInUser.collectAsState()
     val state by dashboardComponent.desktopStack.subscribeAsState()
 
-    Surface(modifier = modifier, color = SlackCloneColorProvider.colors.appBarColor) {
+    Surface(modifier = modifier, color = LocalSlackCloneColor.current.appBarColor) {
         Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(Modifier.height(4.dp))
@@ -98,7 +98,7 @@ fun SlackSideBarLayoutDesktop(
 }
 
 @Composable
-private fun WorkSpacesDesktop(
+internal fun WorkSpacesDesktop(
     workspaces: List<DomainLayerWorkspaces.SKWorkspace>,
     component: SideNavComponent
 ) {
@@ -117,10 +117,10 @@ private fun WorkSpacesDesktop(
 }
 
 @Composable
-private fun WorkspaceDesktop(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected: Boolean) {
+internal fun WorkspaceDesktop(workspace: DomainLayerWorkspaces.SKWorkspace, lastSelected: Boolean) {
     Box(
         Modifier.background(
-            color = if (lastSelected) SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
+            color = if (lastSelected) LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.2f) else Color.Transparent,
             shape = RoundedCornerShape(12.dp)
         )
     ) {
@@ -142,11 +142,11 @@ private fun WorkspaceDesktop(workspace: DomainLayerWorkspaces.SKWorkspace, lastS
 }
 
 @Composable
-private fun SelectedSideBarIcon(modifier: Modifier = Modifier, icon: ImageVector, isSelected: Boolean) {
+internal fun SelectedSideBarIcon(modifier: Modifier = Modifier, icon: ImageVector, isSelected: Boolean) {
     Box(
         modifier.size(48.dp)
             .background(
-                if (isSelected) SlackCloneColorProvider.colors.onUiBackground else Color.Transparent,
+                if (isSelected) LocalSlackCloneColor.current.onUiBackground else Color.Transparent,
                 shape = RoundedCornerShape(30)
             )
     ) {
@@ -154,7 +154,7 @@ private fun SelectedSideBarIcon(modifier: Modifier = Modifier, icon: ImageVector
             icon,
             contentDescription = null,
             modifier = Modifier.align(Alignment.Center).size(36.dp),
-            tint = SlackCloneColorProvider.colors.appBarIconColor
+            tint = LocalSlackCloneColor.current.appBarIconColor
         )
     }
 }

@@ -7,11 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-fun DefaultSnackbar(
+internal fun DefaultSnackbar(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = { }
@@ -24,7 +24,7 @@ fun DefaultSnackbar(
                     Text(
                         text = data.message,
                         style = SlackCloneTypography.body1,
-                        color = SlackCloneColorProvider.colors.textPrimary
+                        color = LocalSlackCloneColor.current.textPrimary
                     )
                 },
                 action = {
@@ -32,7 +32,7 @@ fun DefaultSnackbar(
                         TextButton(onClick = onDismiss) {
                             Text(
                                 text = actionLabel,
-                                color = SlackCloneColorProvider.colors.textPrimary,
+                                color = LocalSlackCloneColor.current.textPrimary,
                                 style = SlackCloneTypography.body2
                             )
                         }

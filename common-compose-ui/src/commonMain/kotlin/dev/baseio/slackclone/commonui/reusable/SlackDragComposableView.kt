@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun SlackDragComposableView(
+internal fun SlackDragComposableView(
     isLeftNavOpen: Boolean,
     isChatViewClosed: Boolean,
     mainScreenOffset: Float,
@@ -73,7 +73,7 @@ fun SlackDragComposableView(
 }
 
 @Composable
-private fun InitialOffsetsSideEffect(
+internal fun InitialOffsetsSideEffect(
     coroutineScope: CoroutineScope,
     sideNavOffX: Animatable<Float, AnimationVector1D>,
     isLeftNavOpen: Boolean,
@@ -96,7 +96,7 @@ private fun viewOffset(needsOpen: Boolean, offset: Float) =
     if (needsOpen) offset else 0f
 
 @Composable
-private fun chatScreenModifier(
+internal fun chatScreenModifier(
     offsetX: Animatable<Float, AnimationVector1D>,
     requiredOffset: Float,
     coroutineScope: CoroutineScope,

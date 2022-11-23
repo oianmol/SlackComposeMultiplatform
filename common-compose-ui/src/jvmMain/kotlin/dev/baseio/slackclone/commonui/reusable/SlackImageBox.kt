@@ -9,7 +9,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.lazyPainterResource
 
 @Composable
-actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
+internal actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
     KamelImage(
         resource = lazyPainterResource(
             data = imageUrl

@@ -15,7 +15,7 @@ import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedTime
 import dev.baseio.slackclone.commonui.reusable.MentionsText
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
@@ -23,7 +23,7 @@ import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ChatMessage(
+internal fun ChatMessage(
     message: DomainLayerMessages.SKMessage,
     alertLongClick: (DomainLayerMessages.SKMessage) -> Unit,
     user: DomainLayerUsers.SKUser?,
@@ -52,12 +52,12 @@ fun ChatMessage(
 }
 
 @Composable
-fun ChatContent(message: DomainLayerMessages.SKMessage, onClickHash: (String) -> Unit) {
+internal fun ChatContent(message: DomainLayerMessages.SKMessage, onClickHash: (String) -> Unit) {
     MentionsText(
         modifier = Modifier,
         message.decodedMessage,
         style = SlackCloneTypography.subtitle2.copy(
-            color = SlackCloneColorProvider.colors.textSecondary
+            color = LocalSlackCloneColor.current.textSecondary
         )
     ) { range ->
         when (range.tag) {
@@ -73,20 +73,20 @@ fun ChatContent(message: DomainLayerMessages.SKMessage, onClickHash: (String) ->
 }
 
 @Composable
-fun ChatUserDateTime(message: DomainLayerMessages.SKMessage, user: DomainLayerUsers.SKUser?) {
+internal fun ChatUserDateTime(message: DomainLayerMessages.SKMessage, user: DomainLayerUsers.SKUser?) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             (user?.name ?: "Who ?") + " \uD83C\uDF34",
             style = SlackCloneTypography.subtitle1.copy(
                 fontWeight = FontWeight.Bold,
-                color = SlackCloneColorProvider.colors.textPrimary
+                color = LocalSlackCloneColor.current.textPrimary
             ),
             modifier = Modifier.padding(4.dp)
         )
         Text(
             message.createdDate.calendar().formattedTime(),
             style = SlackCloneTypography.overline.copy(
-                color = SlackCloneColorProvider.colors.textSecondary.copy(alpha = 0.8f)
+                color = LocalSlackCloneColor.current.textSecondary.copy(alpha = 0.8f)
             ),
             modifier = Modifier.padding(4.dp)
         )

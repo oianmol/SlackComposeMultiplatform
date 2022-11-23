@@ -3,8 +3,8 @@ import androidx.compose.ui.graphics.painter.Painter
 
 expect object PainterRes {
     @Composable
-    fun gettingStarted(): Painter
+    internal fun gettingStarted(): Painter
 
     @Composable
-    fun slackLogo(): Painter
+    internal fun slackLogo(): Painter
 }

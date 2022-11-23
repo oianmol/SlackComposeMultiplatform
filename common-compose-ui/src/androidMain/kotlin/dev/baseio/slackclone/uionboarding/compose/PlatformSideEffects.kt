@@ -9,7 +9,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 actual object PlatformSideEffects {
 
     @Composable
-    actual fun GettingStartedScreen() {
+    internal actual fun GettingStartedScreen() {
         val sysUiController = rememberSystemUiController()
 
         SideEffect {
@@ -19,7 +19,7 @@ actual object PlatformSideEffects {
     }
 
     @Composable
-    actual fun SkipTypingScreen() {
+    internal actual fun SkipTypingScreen() {
         val sysUiController = rememberSystemUiController()
 
         SideEffect {
@@ -29,7 +29,7 @@ actual object PlatformSideEffects {
     }
 
     @Composable
-    actual fun PlatformColors(
+    internal actual fun PlatformColors(
         topColor: Color,
         bottomColor: Color
     ) {

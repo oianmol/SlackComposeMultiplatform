@@ -19,7 +19,7 @@ import dev.baseio.slackclone.App
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.LocalWindow
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.initKoin
 import dev.baseio.slackdata.DriverFactory
@@ -95,7 +95,7 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
             ) {
                 SlackCloneTheme(isDarkTheme = true) {
                     Column {
-                        Box(Modifier.height(48.dp).background(SlackCloneColorProvider.colors.appBarColor))
+                        Box(Modifier.height(48.dp).background(LocalSlackCloneColor.current.appBarColor))
                         App {
                             root
                         }

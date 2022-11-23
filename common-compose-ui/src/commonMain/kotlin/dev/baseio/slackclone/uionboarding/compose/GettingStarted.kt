@@ -54,7 +54,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.commonui.theme.SlackGreen
@@ -69,7 +69,7 @@ import dev.baseio.slackclone.uiqrscanner.QRScannerUI
 import dev.baseio.slackclone.uiqrscanner.QrScannerMode
 
 @Composable
-fun GettingStartedUI(
+internal fun GettingStartedUI(
   gettingStartedVM: GettingStartedComponent,
   viewModel: GettingStartedVM = gettingStartedVM.viewModel
 ) {
@@ -80,7 +80,7 @@ fun GettingStartedUI(
 
   Scaffold(
     backgroundColor = SlackCloneColor,
-    contentColor = SlackCloneColorProvider.colors.textSecondary,
+    contentColor = LocalSlackCloneColor.current.textSecondary,
     modifier = Modifier.fillMaxSize(),
     scaffoldState = scaffoldState,
     snackbarHost = {
@@ -111,7 +111,7 @@ fun GettingStartedUI(
 }
 
 @Composable
-private fun LargeScreenLayout(
+internal fun LargeScreenLayout(
   gettingStartedVM: GettingStartedComponent
 
 ) {
@@ -158,7 +158,7 @@ private fun LargeScreenLayout(
 }
 
 @Composable
-private fun PhoneLayout(
+internal fun PhoneLayout(
   gettingStartedVM: GettingStartedComponent
 ) {
   val scanMode by gettingStartedVM.viewModel.scanningMode.collectAsState()
@@ -190,7 +190,7 @@ private fun PhoneLayout(
 }
 
 @Composable
-private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
+internal fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
   ClickableText(
     text = buildAnnotatedString {
       withStyle(
@@ -219,7 +219,7 @@ private fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
+internal fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
   val painter = PainterRes.gettingStarted()
   val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
   AnimatedVisibility(
@@ -237,10 +237,10 @@ fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedC
 }
 
 @Composable
-private fun ImageExitTrans() = shrinkOut() + fadeOut()
+internal fun ImageExitTrans() = shrinkOut() + fadeOut()
 
 @Composable
-private fun ImageEnterTransition() = expandIn(
+internal fun ImageEnterTransition() = expandIn(
   expandFrom = Alignment.Center
 ) + fadeIn(
   // Fade in with the initial alpha of 0.3f.
@@ -248,7 +248,7 @@ private fun ImageEnterTransition() = expandIn(
 )
 
 @Composable
-private fun GetStartedButton(
+internal fun GetStartedButton(
   gettingStartedComponent: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
   exitAnim: @Composable () -> ExitTransition
@@ -288,7 +288,7 @@ private fun GetStartedButton(
 }
 
 @Composable
-fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
+internal fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
   Button(
     onClick = {
       onClick()
@@ -307,7 +307,7 @@ fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
 
 
 @Composable
-private fun LoginButton(
+internal fun LoginButton(
   gettingStartedVM: GettingStartedComponent
 ) {
   Button(
@@ -327,10 +327,10 @@ private fun LoginButton(
 }
 
 @Composable
-private fun GetStartedExitTransHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
+internal fun GetStartedExitTransHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
 
 @Composable
-private fun GetStartedEnterTransitionHorizontal(density: Density) =
+internal fun GetStartedEnterTransitionHorizontal(density: Density) =
   slideInHorizontally {
     // Slide in from 40 dp from the bottom.
     with(density) { +5680.dp.roundToPx() }
@@ -343,10 +343,10 @@ private fun GetStartedEnterTransitionHorizontal(density: Density) =
   )
 
 @Composable
-private fun GetStartedExitTransVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
+internal fun GetStartedExitTransVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
 
 @Composable
-private fun GetStartedEnterTransitionVertical(density: Density) =
+internal fun GetStartedEnterTransitionVertical(density: Density) =
   slideInVertically {
     // Slide in from 40 dp from the bottom.
     with(density) { +5680.dp.roundToPx() }
@@ -359,7 +359,7 @@ private fun GetStartedEnterTransitionVertical(density: Density) =
   )
 
 @Composable
-private fun IntroText(
+internal fun IntroText(
   modifier: Modifier = Modifier,
   gettingStartedVM: GettingStartedComponent,
   enterAnim: @Composable () -> EnterTransition,
@@ -421,10 +421,10 @@ private fun IntroText(
 }
 
 @Composable
-private fun IntroExitTransitionHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
+internal fun IntroExitTransitionHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
 
 @Composable
-private fun IntroEnterTransitionHorizontal(density: Density) = slideInHorizontally {
+internal fun IntroEnterTransitionHorizontal(density: Density) = slideInHorizontally {
   // Slide in from 12580 dp from the left.
   with(density) { -12580.dp.roundToPx() }
 } + expandHorizontally(
@@ -436,10 +436,10 @@ private fun IntroEnterTransitionHorizontal(density: Density) = slideInHorizontal
 )
 
 @Composable
-private fun IntroExitTransitionVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
+internal fun IntroExitTransitionVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
 
 @Composable
-private fun IntroEnterTransitionVertical(density: Density) = slideInVertically {
+internal fun IntroEnterTransitionVertical(density: Density) = slideInVertically {
   // Slide in from 12580 dp from the left.
   with(density) { -12580.dp.roundToPx() }
 } + expandVertically(

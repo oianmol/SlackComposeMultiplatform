@@ -41,6 +41,7 @@ kotlin {
         ios.deploymentTarget = "14.1"
         framework {
             baseName = "common-compose-ui"
+            isStatic = true
         }
     }
 
@@ -151,9 +152,21 @@ kotlin {
                 }
             }
         }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
+        val iosX64Main by getting{
+            dependencies{
+                implementation(Lib.AndroidX.COMPOSE_RUNTIME_SAVEABLE_uikitx64)
+            }
+        }
+        val iosArm64Main by getting{
+            dependencies{
+                implementation(Lib.AndroidX.COMPOSE_RUNTIME_SAVEABLE_uikitarm64)
+            }
+        }
+        val iosSimulatorArm64Main by getting{
+            dependencies{
+                implementation(Lib.AndroidX.COMPOSE_RUNTIME_SAVEABLE_uikitsimarm64)
+            }
+        }
 
         val iosMain by creating {
             dependsOn(commonMain)

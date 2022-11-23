@@ -20,28 +20,28 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uidashboard.home.search.SearchCancel
 
 @Composable
-fun SearchMessagesUI() {
+internal fun SearchMessagesUI() {
     SlackCloneSurface(
-        color = SlackCloneColorProvider.colors.uiBackground,
+        color = LocalSlackCloneColor.current.uiBackground,
         modifier = Modifier.fillMaxSize()
     ) {
         Column {
-            SearchTopAppBar()
+            SearchTopAppBarMessages()
             Content()
         }
     }
 }
 
 @Composable
-private fun SearchTopAppBar() {
+internal fun SearchTopAppBarMessages() {
     SlackSurfaceAppBar(
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor,
+        backgroundColor = LocalSlackCloneColor.current.appBarColor,
         contentPadding = PaddingValues(8.dp)
     ) {
         SearchCancel()
@@ -49,7 +49,7 @@ private fun SearchTopAppBar() {
 }
 
 @Composable
-private fun Content() {
+internal fun Content() {
     Column(Modifier.verticalScroll(rememberScrollState())) {
         SlackListItem(
             icon = Icons.Default.ShoppingCart,
@@ -82,7 +82,7 @@ private fun Content() {
 }
 
 @Composable
-private fun SearchText(title: String) {
+internal fun SearchText(title: String) {
     Text(
         text = title,
         style = SlackCloneTypography.caption.copy(fontWeight = FontWeight.SemiBold),
@@ -91,6 +91,6 @@ private fun SearchText(title: String) {
 }
 
 @Composable
-fun SlackListDivider() {
-    Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+internal fun SlackListDivider() {
+    Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
 }

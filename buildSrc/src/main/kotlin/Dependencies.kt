@@ -81,7 +81,7 @@ object Lib {
     }
 
     object Decompose {
-        const val VERSION = "1.0.0-alpha-07"
+        const val VERSION = "1.0.0-beta-01"
         const val core = "com.arkivanov.decompose:decompose:$VERSION"
         const val coreJvm = "com.arkivanov.decompose:decompose-jvm:$VERSION"
         const val composejb = "com.arkivanov.decompose:extensions-compose-jetbrains:$VERSION-native-compose"
@@ -116,6 +116,11 @@ object Lib {
         const val CONSTRAINT_LAYOUT_COMPOSE =
             "androidx.constraintlayout:constraintlayout-compose:$COMPOSE_CONSTRAINT_LAYOUT_VERSION"
         const val COMPOSE_TOOLING = "androidx.compose.ui:ui-tooling:$COMPOSE_VERSION"
+        const val COMPOSE_RUNTIME_SAVEABLE_uikitarm64 ="org.jetbrains.compose.runtime:runtime-saveable-uikitarm64:$COMPOSE_VERSION"
+        const val COMPOSE_RUNTIME_SAVEABLE_uikitsimarm64 ="org.jetbrains.compose.runtime:runtime-saveable-uikitsimarm64:$COMPOSE_VERSION"
+        const val COMPOSE_RUNTIME_SAVEABLE_uikitx64 ="org.jetbrains.compose.runtime:runtime-saveable-uikitx64:$COMPOSE_VERSION"
+
+
         const val COMPOSE_TOOLING_PREVIEW = "androidx.compose.ui:ui-tooling-preview:$COMPOSE_VERSION"
         const val COMPOSE_UI_UTIL = "androidx.compose.ui:ui-util:$COMPOSE_VERSION"
         const val ACCOMPANIST_SYSTEM_UI_CONTROLLER =

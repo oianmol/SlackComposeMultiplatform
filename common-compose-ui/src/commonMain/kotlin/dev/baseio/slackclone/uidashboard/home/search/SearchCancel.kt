@@ -19,7 +19,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchCancel() {
+internal fun SearchCancel() {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Row {
@@ -41,7 +41,7 @@ fun SearchCancel() {
 }
 
 @Composable
-private fun SearchMessagesTF(modifier: Modifier, search: String, onValueChange: (String) -> Unit) {
+internal fun SearchMessagesTF(modifier: Modifier, search: String, onValueChange: (String) -> Unit) {
     BasicTextField(
         value = search,
         singleLine = true,

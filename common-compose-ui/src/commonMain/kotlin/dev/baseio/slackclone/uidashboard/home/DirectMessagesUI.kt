@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichannels.directmessages.DMChannelsList
@@ -19,9 +19,9 @@ import dev.baseio.slackclone.uichannels.directmessages.DirectMessagesComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @Composable
-fun DirectMessagesUI(onItemClick: (DomainLayerChannels.SKChannel) -> Unit, component: DirectMessagesComponent) {
+internal fun DirectMessagesUI(onItemClick: (DomainLayerChannels.SKChannel) -> Unit, component: DirectMessagesComponent) {
     SlackCloneSurface(
-        color = SlackCloneColorProvider.colors.uiBackground,
+        color = LocalSlackCloneColor.current.uiBackground,
         modifier = Modifier.fillMaxSize()
     ) {
         Column {
@@ -35,7 +35,7 @@ fun DirectMessagesUI(onItemClick: (DomainLayerChannels.SKChannel) -> Unit, compo
 }
 
 @Composable
-fun DMTopAppBar() {
+internal fun DMTopAppBar() {
     SlackSurfaceAppBar(
         title = {
             Text(
@@ -43,6 +43,6 @@ fun DMTopAppBar() {
                 style = SlackCloneTypography.h5.copy(color = Color.White, fontWeight = FontWeight.Bold)
             )
         },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor
+        backgroundColor = LocalSlackCloneColor.current.appBarColor
     )
 }

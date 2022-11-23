@@ -21,12 +21,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @ExperimentalComposeUiApi
 @Composable
-fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
+internal fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = modifier,
@@ -38,18 +38,18 @@ fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> 
             onValueChange = { newEmail ->
                 onChange(newEmail)
             },
-            textStyle = textStyleField(),
+            textStyle = textStyleFieldEmailInput(),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Email,
                     contentDescription = null,
-                    tint = SlackCloneColorProvider.colors.appBarTextTitleColor
+                    tint = LocalSlackCloneColor.current.appBarTextTitleColor
                 )
             },
             placeholder = {
                 Text(
                     text = "your email address",
-                    style = textStyleField(),
+                    style = textStyleFieldEmailInput(),
                     textAlign = TextAlign.Start
                 )
             },
@@ -68,7 +68,7 @@ fun EmailTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> 
 
 @ExperimentalComposeUiApi
 @Composable
-fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
+internal fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = modifier,
@@ -80,18 +80,18 @@ fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) 
             onValueChange = { newEmail ->
                 onChange(newEmail)
             },
-            textStyle = textStyleField(),
+            textStyle = textStyleFieldEmailInput(),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
                     contentDescription = null,
-                    tint = SlackCloneColorProvider.colors.appBarTextTitleColor
+                    tint = LocalSlackCloneColor.current.appBarTextTitleColor
                 )
             },
             placeholder = {
                 Text(
                     text = "your password",
-                    style = textStyleField(),
+                    style = textStyleFieldEmailInput(),
                     textAlign = TextAlign.Start
                 )
             },
@@ -110,16 +110,16 @@ fun PasswordTF(modifier: Modifier = Modifier, value: String, onChange: (String) 
 }
 
 @Composable
-private fun textFieldColors() = TextFieldDefaults.textFieldColors(
+internal fun textFieldColors() = TextFieldDefaults.textFieldColors(
     backgroundColor = Color.Transparent,
-    cursorColor = SlackCloneColorProvider.colors.appBarTextTitleColor,
+    cursorColor = LocalSlackCloneColor.current.appBarTextTitleColor,
     unfocusedIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent
 )
 
 @Composable
-private fun textStyleField() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.appBarTextTitleColor,
+internal fun textStyleFieldEmailInput() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.appBarTextTitleColor,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )

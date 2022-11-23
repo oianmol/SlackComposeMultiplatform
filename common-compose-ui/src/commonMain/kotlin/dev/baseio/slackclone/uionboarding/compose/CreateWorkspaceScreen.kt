@@ -26,7 +26,7 @@ import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
 import mainDispatcher
 
 @Composable
-fun CreateWorkspaceScreen(
+internal fun CreateWorkspaceScreen(
     component: CreateWorkspaceComponent
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -35,7 +35,7 @@ fun CreateWorkspaceScreen(
 
     Scaffold(
         backgroundColor = SlackCloneColor,
-        contentColor = SlackCloneColorProvider.colors.textSecondary,
+        contentColor = LocalSlackCloneColor.current.textSecondary,
         modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
         snackbarHost = {
@@ -58,26 +58,26 @@ fun CreateWorkspaceScreen(
 }
 
 @Composable
-fun Title(title: String) {
+internal fun Title(title: String) {
     Text(
         title,
         style = SlackCloneTypography.h5.copy(
             fontWeight = FontWeight.Bold,
-            color = SlackCloneColorProvider.colors.appBarTextTitleColor
+            color = LocalSlackCloneColor.current.appBarTextTitleColor
         )
     )
 }
 
 @Composable
-fun SubTitle(text: String) {
+internal fun SubTitle(text: String) {
     Text(
         text,
-        style = SlackCloneTypography.h6.copy(color = SlackCloneColorProvider.colors.appBarTextSubTitleColor)
+        style = SlackCloneTypography.h6.copy(color = LocalSlackCloneColor.current.appBarTextSubTitleColor)
     )
 }
 
 @Composable
-fun Heading(isLogin: Boolean) {
+internal fun Heading(isLogin: Boolean) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
         Image(
             modifier = Modifier.size(128.dp),
@@ -94,7 +94,7 @@ fun Heading(isLogin: Boolean) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
+internal fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
     val state by createWorkspaceComponent.authCreateWorkspaceVM.state.collectAsState(mainDispatcher)
 
 
@@ -125,12 +125,12 @@ fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
 }
 
 @Composable
-fun ErrorText(modifier: Modifier, error: Throwable?) {
+internal fun ErrorText(modifier: Modifier, error: Throwable?) {
     Text(error?.stackTraceToString()?:"", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
 }
 
 @Composable
-private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWorkspaceComponent) {
+internal fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWorkspaceComponent) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -148,7 +148,7 @@ private fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWor
 }
 
 @Composable
-fun CreateWorkspaceButton(text: String, onClick: () -> Unit) {
+internal fun CreateWorkspaceButton(text: String, onClick: () -> Unit) {
     Button(
         onClick = {
             onClick.invoke()
@@ -166,7 +166,7 @@ fun CreateWorkspaceButton(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent, contentPadding: Modifier) {
+internal fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent, contentPadding: Modifier) {
     Row(
         Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
@@ -197,7 +197,7 @@ fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent, conten
 }
 
 @Composable
-fun CreateWorkspacePhoneLayout(viewModel: CreateWorkspaceComponent) {
+internal fun CreateWorkspacePhoneLayout(viewModel: CreateWorkspaceComponent) {
     Column(
         Modifier.padding(8.dp).fillMaxSize(),
         verticalArrangement = Arrangement.Top,

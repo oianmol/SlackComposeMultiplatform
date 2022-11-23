@@ -8,7 +8,7 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 
 @Composable
-actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
+internal actual fun SlackImageBox(modifier: Modifier, imageUrl: String) {
     AsyncImage(
         model = imageUrl,
         modifier = modifier.clip(RoundedCornerShape(25)),

@@ -24,19 +24,19 @@ import dev.baseio.slackclone.Keyboard
 import dev.baseio.slackclone.commonui.material.toTextFieldValue
 import dev.baseio.slackclone.commonui.reusable.MentionsTextField
 import dev.baseio.slackclone.commonui.reusable.range
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.*
-import dev.baseio.slackclone.KeyboardAsState
+import dev.baseio.slackclone.keyboardAsState
 import mainDispatcher
 
 @Composable
-fun ChatMessageBox(
+internal fun ChatMessageBox(
     screenComponent: ChatScreenComponent,
     viewModel: ChatViewModel = screenComponent.chatViewModel,
     modifier: Modifier
 ) {
-    val keyboard by KeyboardAsState()
+    val keyboard by keyboardAsState()
     var focusState by remember { mutableStateOf<FocusState?>(null) }
     val focusRequester = FocusRequester()
 
@@ -47,7 +47,7 @@ fun ChatMessageBox(
     }
 
     Column(
-        modifier.background(SlackCloneColorProvider.colors.uiBackground),
+        modifier.background(LocalSlackCloneColor.current.uiBackground),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         MessageTFRow(
@@ -72,7 +72,7 @@ fun ChatMessageBox(
 }
 
 @Composable
-fun ChatOptions(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
+internal fun ChatOptions(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
     val search by viewModel.message.collectAsState(mainDispatcher)
 
     Row(
@@ -110,7 +110,7 @@ private fun chatOptionIconSize() = Modifier.size(20.dp)
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun MessageTFRow(
+internal fun MessageTFRow(
     viewModel: ChatViewModel,
     modifier: Modifier
 ) {
@@ -122,7 +122,7 @@ private fun MessageTFRow(
     }
 
     Column {
-        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+        Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
         Row(
             modifier
         ) {
@@ -142,9 +142,9 @@ private fun MessageTFRow(
                     viewModel.message.value = dev.baseio.slackclone.uichat.chatthread.TextFieldValue(it.text)
                 },
                 maxLines = 4,
-                cursorBrush = SolidColor(SlackCloneColorProvider.colors.textPrimary),
+                cursorBrush = SolidColor(LocalSlackCloneColor.current.textPrimary),
                 textStyle = SlackCloneTypography.subtitle1.copy(
-                    color = SlackCloneColorProvider.colors.textPrimary
+                    color = LocalSlackCloneColor.current.textPrimary
                 ),
                 decorationBox = { innerTextField ->
                     ChatTFPlusPlaceHolder(mentionText.text, Modifier, innerTextField, viewModel)
@@ -175,7 +175,7 @@ private fun eventIsEnter(event: KeyEvent) = !event.isShiftPressed && event.type 
         event.key == Key.Enter
 
 @Composable
-fun CollapseExpandButton(viewModel: ChatViewModel) {
+internal fun CollapseExpandButton(viewModel: ChatViewModel) {
     val isExpanded by viewModel.chatBoxState.collectAsState()
     IconButton(
         onClick = {
@@ -193,7 +193,7 @@ fun CollapseExpandButton(viewModel: ChatViewModel) {
 }
 
 @Composable
-private fun SendMessageButton(
+internal fun SendMessageButton(
     viewModel: ChatViewModel,
     search: String,
     modifier: Modifier = Modifier
@@ -208,13 +208,13 @@ private fun SendMessageButton(
         Icon(
             Icons.Default.Send,
             contentDescription = null,
-            tint = if (search.isEmpty()) SlackCloneColorProvider.colors.sendButtonDisabled else SlackCloneColorProvider.colors.sendButtonEnabled
+            tint = if (search.isEmpty()) LocalSlackCloneColor.current.sendButtonDisabled else LocalSlackCloneColor.current.sendButtonEnabled
         )
     }
 }
 
 @Composable
-private fun ChatTFPlusPlaceHolder(
+internal fun ChatTFPlusPlaceHolder(
     search: String,
     modifier: Modifier = Modifier,
     innerTextField: @Composable () -> Unit,
@@ -230,7 +230,7 @@ private fun ChatTFPlusPlaceHolder(
             Text(
                 text = "Message ${channel.channelName}",
                 style = SlackCloneTypography.subtitle1.copy(
-                    color = SlackCloneColorProvider.colors.textSecondary
+                    color = LocalSlackCloneColor.current.textSecondary
                 ),
                 modifier = Modifier.weight(1f)
             )

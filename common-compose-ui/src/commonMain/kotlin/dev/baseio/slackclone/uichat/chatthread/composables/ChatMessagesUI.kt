@@ -16,14 +16,14 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedMonthDate
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.uichat.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @Composable
-fun ChatMessagesUI(
+internal fun ChatMessagesUI(
     screenComponent: ChatScreenComponent,
     viewModel: ChatViewModel = screenComponent.chatViewModel,
     modifier: Modifier,
@@ -72,13 +72,13 @@ private fun isLastMessage(
 ) = messageIndex == messages.size.minus(1)
 
 @Composable
-private fun ChatHeader(createdDate: Long) {
+internal fun ChatHeader(createdDate: Long) {
     Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
         Text(
             createdDate.calendar().formattedMonthDate(), style = SlackCloneTypography.subtitle2.copy(
-                fontWeight = FontWeight.Bold, color = SlackCloneColorProvider.colors.textPrimary
+                fontWeight = FontWeight.Bold, color = LocalSlackCloneColor.current.textPrimary
             ), modifier = Modifier.padding(4.dp)
         )
-        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+        Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
     }
 }

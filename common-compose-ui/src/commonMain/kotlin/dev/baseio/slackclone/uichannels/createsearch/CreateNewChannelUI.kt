@@ -31,20 +31,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import mainDispatcher
 
 @Composable
-fun CreateNewChannelUI(
+internal fun CreateNewChannelUI(
     createNewChannelComponent: CreateNewChannelComponent
 ) {
     val scaffoldState = rememberScaffoldState()
     Box {
         Scaffold(
-            backgroundColor = SlackCloneColorProvider.colors.uiBackground,
-            contentColor = SlackCloneColorProvider.colors.textSecondary,
+            backgroundColor = LocalSlackCloneColor.current.uiBackground,
+            contentColor = LocalSlackCloneColor.current.textSecondary,
             modifier = Modifier,
             scaffoldState = scaffoldState,
             topBar = {
@@ -60,7 +60,7 @@ fun CreateNewChannelUI(
 }
 
 @Composable
-private fun NewChannelContent(innerPadding: PaddingValues, createNewChannelComponent: CreateNewChannelComponent) {
+internal fun NewChannelContent(innerPadding: PaddingValues, createNewChannelComponent: CreateNewChannelComponent) {
     Box(modifier = Modifier.padding(innerPadding)) {
         SlackCloneSurface(
             modifier = Modifier.fillMaxSize()
@@ -70,7 +70,7 @@ private fun NewChannelContent(innerPadding: PaddingValues, createNewChannelCompo
             Column(Modifier.verticalScroll(scroll)) {
                 Name()
                 NameField(createNewChannelComponent)
-                Divider(color = SlackCloneColorProvider.colors.lineColor)
+                Divider(color = LocalSlackCloneColor.current.lineColor)
                 Spacer(modifier = Modifier.padding(bottom = 8.dp))
             }
         }
@@ -78,7 +78,7 @@ private fun NewChannelContent(innerPadding: PaddingValues, createNewChannelCompo
 }
 
 @Composable
-private fun Name() {
+internal fun Name() {
     Text(
         text = "Name",
         style = textStyleFieldPrimary(),
@@ -87,7 +87,7 @@ private fun Name() {
 }
 
 @Composable
-private fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
+internal fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
     val searchChannel by createNewChannelComponent.viewModel.createChannelState.collectAsState(mainDispatcher)
 
     TextField(
@@ -121,29 +121,29 @@ private fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
 }
 
 @Composable
-private fun textStyleFieldPrimary() = SlackCloneTypography.subtitle1.copy(
-    color = SlackCloneColorProvider.colors.textPrimary,
+internal fun textStyleFieldPrimary() = SlackCloneTypography.subtitle1.copy(
+    color = LocalSlackCloneColor.current.textPrimary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )
 
 @Composable
-private fun textStyleFieldSecondary() = SlackCloneTypography.subtitle2.copy(
-    color = SlackCloneColorProvider.colors.textSecondary,
+internal fun textStyleFieldSecondary() = SlackCloneTypography.subtitle2.copy(
+    color = LocalSlackCloneColor.current.textSecondary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
 )
 
 @Composable
-private fun textFieldColors() = TextFieldDefaults.textFieldColors(
+internal fun textFieldColors() = TextFieldDefaults.textFieldColors(
     backgroundColor = Color.Transparent,
-    cursorColor = SlackCloneColorProvider.colors.textPrimary,
+    cursorColor = LocalSlackCloneColor.current.textPrimary,
     unfocusedIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent
 )
 
 @Composable
-private fun NewChannelAppBar(
+internal fun NewChannelAppBar(
     createNewChannelComponent: CreateNewChannelComponent
 ) {
     val haptic = LocalHapticFeedback.current
@@ -154,7 +154,7 @@ private fun NewChannelAppBar(
         navigationIcon = {
             NavBackIcon(createNewChannelComponent)
         },
-        backgroundColor = SlackCloneColorProvider.colors.appBarColor,
+        backgroundColor = LocalSlackCloneColor.current.appBarColor,
         actions = {
             TextButton(onClick = {
                 createNewChannelComponent.viewModel.createChannelState.value.channel.name.takeIf { it.isNotEmpty() }?.let {
@@ -165,7 +165,7 @@ private fun NewChannelAppBar(
             }) {
                 Text(
                     "Create",
-                    style = textStyleFieldSecondary().copy(color = SlackCloneColorProvider.colors.appBarTextSubTitleColor)
+                    style = textStyleFieldSecondary().copy(color = LocalSlackCloneColor.current.appBarTextSubTitleColor)
                 )
             }
         }
@@ -173,15 +173,15 @@ private fun NewChannelAppBar(
 }
 
 @Composable
-private fun NavTitle() {
+internal fun NavTitle() {
     Text(
         text = "New Channel",
-        style = SlackCloneTypography.subtitle1.copy(color = SlackCloneColorProvider.colors.appBarTextTitleColor)
+        style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.appBarTextTitleColor)
     )
 }
 
 @Composable
-private fun NavBackIcon(createNewChannelComponent: CreateNewChannelComponent) {
+internal fun NavBackIcon(createNewChannelComponent: CreateNewChannelComponent) {
     IconButton(onClick = {
         createNewChannelComponent.navigationPop()
     }) {
@@ -189,7 +189,7 @@ private fun NavBackIcon(createNewChannelComponent: CreateNewChannelComponent) {
             imageVector = Icons.Filled.ArrowBack,
             contentDescription = "Clear",
             modifier = Modifier.padding(start = 8.dp),
-            tint = SlackCloneColorProvider.colors.appBarIconColor
+            tint = LocalSlackCloneColor.current.appBarIconColor
         )
     }
 }

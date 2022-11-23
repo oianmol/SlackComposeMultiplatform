@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 
 @Composable
-fun SlackOnlineBox(
+internal fun SlackOnlineBox(
     imageUrl: String,
     parentModifier: Modifier = Modifier.size(34.dp),
     imageModifier: Modifier = Modifier.size(28.dp),
@@ -30,7 +30,7 @@ fun SlackOnlineBox(
 
         SlackCloneSurface(
             shape = CircleShape,
-            border = BorderStroke(3.dp, color = SlackCloneColorProvider.colors.uiBackground),
+            border = BorderStroke(3.dp, color = LocalSlackCloneColor.current.uiBackground),
             modifier = onlineIndicatorParent.align(Alignment.BottomEnd)
         ) {
             Box(

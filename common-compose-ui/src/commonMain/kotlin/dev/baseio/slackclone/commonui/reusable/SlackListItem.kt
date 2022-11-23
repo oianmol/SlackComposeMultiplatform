@@ -15,16 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-fun SlackListItem(
+internal fun SlackListItem(
     modifier: Modifier = Modifier.fillMaxWidth(),
     icon: ImageVector,
     title: String,
     subtitle: String? = null,
-    textColor: Color = SlackCloneColorProvider.colors.textPrimary,
+    textColor: Color = LocalSlackCloneColor.current.textPrimary,
     trailingItem: ImageVector? = null,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
@@ -59,7 +59,7 @@ fun SlackListItem(
             Icon(
                 imageVector = safeIcon,
                 contentDescription = null,
-                tint = SlackCloneColorProvider.colors.textPrimary.copy(alpha = 0.4f),
+                tint = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.4f),
                 modifier = Modifier
                     .size(24.dp)
                     .padding(4.dp)
@@ -70,7 +70,7 @@ fun SlackListItem(
 
 
 @Composable
-fun SubTitleText(title: String, textColor: Color) {
+internal fun SubTitleText(title: String, textColor: Color) {
     Text(
         text = title,
         style = SlackCloneTypography.caption.copy(
@@ -84,7 +84,7 @@ fun SubTitleText(title: String, textColor: Color) {
 }
 
 @Composable
-private fun TitleText(title: String, textColor: Color) {
+internal fun TitleText(title: String, textColor: Color) {
     Text(
         text = title,
         style = SlackCloneTypography.subtitle2.copy(
@@ -98,7 +98,7 @@ private fun TitleText(title: String, textColor: Color) {
 }
 
 @Composable
-fun SlackListItem(
+internal fun SlackListItem(
     modifier: Modifier = Modifier.padding(8.dp),
     icon: @Composable () -> Unit,
     center: @Composable (Modifier) -> Unit,

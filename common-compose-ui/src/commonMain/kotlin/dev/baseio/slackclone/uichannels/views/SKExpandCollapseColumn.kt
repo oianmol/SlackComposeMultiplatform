@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
-import dev.baseio.slackclone.commonui.theme.SlackCloneColorProvider
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SKExpandCollapseColumn(
+internal fun SKExpandCollapseColumn(
     expandCollapseModel: ExpandCollapseModel,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
     onExpandCollapse: (isChecked: Boolean) -> Unit,
@@ -48,12 +48,12 @@ fun SKExpandCollapseColumn(
             ToggleButton(expandCollapseModel, onExpandCollapse)
         }
         ChannelsList(expandCollapseModel, onItemClick, channels)
-        Divider(color = SlackCloneColorProvider.colors.lineColor, thickness = 0.5.dp)
+        Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
     }
 }
 
 @Composable
-private fun ColumnScope.ChannelsList(
+internal fun ColumnScope.ChannelsList(
     expandCollapseModel: ExpandCollapseModel,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit = {},
     channels: List<DomainLayerChannels.SKChannel>
@@ -71,7 +71,7 @@ private fun ColumnScope.ChannelsList(
 }
 
 @Composable
-private fun AddButton(
+internal fun AddButton(
     expandCollapseModel: ExpandCollapseModel,
     onClickAdd: () -> Unit
 ) {
@@ -80,14 +80,14 @@ private fun AddButton(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = null,
-                tint = SlackCloneColorProvider.colors.lineColor
+                tint = LocalSlackCloneColor.current.lineColor
             )
         }
     }
 }
 
 @Composable
-private fun ToggleButton(
+internal fun ToggleButton(
     expandCollapseModel: ExpandCollapseModel,
     onExpandCollapse: (isChecked: Boolean) -> Unit
 ) {
@@ -97,7 +97,7 @@ private fun ToggleButton(
         Icon(
             imageVector = if (expandCollapseModel.isOpen) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
             contentDescription = null,
-            tint = SlackCloneColorProvider.colors.lineColor
+            tint = LocalSlackCloneColor.current.lineColor
         )
     }
 }
