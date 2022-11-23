@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -339,6 +339,41 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"Combine\"",
+					"-framework",
+					"\"GRPCClient\"",
+					"-framework",
+					"\"KMPNativeCoroutinesAsync\"",
+					"-framework",
+					"\"KMPNativeCoroutinesCombine\"",
+					"-framework",
+					"\"KMPNativeCoroutinesCore\"",
+					"-framework",
+					"\"ProtoRPC\"",
+					"-framework",
+					"\"Protobuf\"",
+					"-framework",
+					"\"RxLibrary\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"absl\"",
+					"-framework",
+					"\"capillaryslack\"",
+					"-framework",
+					"\"commoncomposeui\"",
+					"-framework",
+					"\"grpc\"",
+					"-framework",
+					"\"openssl_grpc\"",
+					"-lsqlite3",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.baseio.SlackCompose${TEAM_ID}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -362,6 +397,41 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"Combine\"",
+					"-framework",
+					"\"GRPCClient\"",
+					"-framework",
+					"\"KMPNativeCoroutinesAsync\"",
+					"-framework",
+					"\"KMPNativeCoroutinesCombine\"",
+					"-framework",
+					"\"KMPNativeCoroutinesCore\"",
+					"-framework",
+					"\"ProtoRPC\"",
+					"-framework",
+					"\"Protobuf\"",
+					"-framework",
+					"\"RxLibrary\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"absl\"",
+					"-framework",
+					"\"capillaryslack\"",
+					"-framework",
+					"\"commoncomposeui\"",
+					"-framework",
+					"\"grpc\"",
+					"-framework",
+					"\"openssl_grpc\"",
+					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.baseio.SlackCompose${TEAM_ID}";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -569,7 +569,7 @@ PODS:
   - capillaryslack (1.0.0):
     - capillaryslack/ObjC (= 1.0.0)
   - capillaryslack/ObjC (1.0.0)
-  - common_compose_ui (1.0)
+  - commoncomposeui (1.0)
   - gRPC-Core (1.50.0):
     - gRPC-Core/Implementation (= 1.50.0)
     - gRPC-Core/Interface (= 1.50.0)
@@ -639,7 +639,7 @@ PODS:
 
 DEPENDENCIES:
   - capillaryslack (from `https://github.com/oianmol/slack_capillary_ios.git`)
-  - common_compose_ui (from `../common-compose-ui`)
+  - commoncomposeui (from `../commoncomposeui`)
   - gRPC-ProtoRPC
   - KMPNativeCoroutinesAsync (= 0.13.1)
   - KMPNativeCoroutinesCombine (= 0.13.1)
@@ -661,8 +661,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   capillaryslack:
     :git: https://github.com/oianmol/slack_capillary_ios.git
-  common_compose_ui:
-    :path: "../common-compose-ui"
+  commoncomposeui:
+    :path: "../commoncomposeui"
 
 CHECKOUT OPTIONS:
   capillaryslack:
@@ -673,7 +673,7 @@ SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   capillaryslack: 51ff4e10386812609c5a77e4bf4984778cd53595
-  common_compose_ui: 431cc3cc67462577350589d9ea9bf447620e4bb3
+  commoncomposeui: ea144877c260d76595d65e639152e9bbcff1a8db
   gRPC: cbba61b0bd8a6b0317d21250ac0df9a38983a783
   gRPC-Core: c093325643a2dc3b37d3871bb9ceccbabc4fe9ee
   gRPC-ProtoRPC: aa06302e48f79b9791e8f35ed22c8366d81676bd
@@ -683,6 +683,6 @@ SPEC CHECKSUMS:
   KMPNativeCoroutinesCore: af011852578ab7abdad5e5c17a25d272efb3516b
   Protobuf: 02524ec14183fe08fb259741659e79683788158b
 
-PODFILE CHECKSUM: 3f5741f5aa1fb2c71735fa21d52c51d53b2d718b
+PODFILE CHECKSUM: f1c17494943d5694bfe205bd54d52e4099860aa4
 
 COCOAPODS: 1.11.3

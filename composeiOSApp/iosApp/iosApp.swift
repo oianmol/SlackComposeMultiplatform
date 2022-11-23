@@ -1,5 +1,5 @@
 import UIKit
-import common
+import commoncomposeui
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -7,21 +7,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let mainViewController = Main_iosKt.MainViewController(window)
+        let mainViewController = Main_iosKt.MainViewController(window: window!)
         window?.rootViewController = mainViewController
         window?.makeKeyAndVisible()
         return true
     }
 
-     override fun applicationDidBecomeActive(application: UIApplication) {
-            Main_iosKt.lifecycle.resume()
+    func applicationDidBecomeActive(_ application: UIApplication) {
+            //Main_iosKt.lifecycle.resume()
         }
 
-        override fun applicationWillResignActive(application: UIApplication) {
-              Main_iosKt.lifecycle.stop()
+    func applicationWillResignActive(_ application: UIApplication) {
+             // Main_iosKt.lifecycle.stop()
         }
 
-        override fun applicationWillTerminate(application: UIApplication) {
-              Main_iosKt.lifecycle.destroy()
+    func applicationWillTerminate(_ application: UIApplication) {
+             // Main_iosKt.lifecycle.destroy()
         }
 }
