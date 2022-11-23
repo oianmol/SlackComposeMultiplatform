@@ -37,7 +37,7 @@ class DashboardVM(
     private val grpcCalls: IGrpcCalls,
     private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
     ) :
-    SlackViewModel() {
+    SlackViewModel(coroutineDispatcherProvider) {
     val selectedChatChannel = MutableStateFlow<DomainLayerChannels.SKChannel?>(null)
     var selectedWorkspace = MutableStateFlow<DomainLayerWorkspaces.SKWorkspace?>(null)
     val isChatViewClosed = MutableStateFlow(true)

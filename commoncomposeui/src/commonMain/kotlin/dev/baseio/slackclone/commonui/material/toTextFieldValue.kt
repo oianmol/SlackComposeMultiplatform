@@ -12,7 +12,7 @@ fun dev.baseio.slackclone.uichat.chatthread.TextFieldValue.toTextFieldValue(): T
 }
 
 fun TextRange.toCommonComposition(): androidx.compose.ui.text.TextRange {
-    return androidx.compose.ui.text.TextRange(this.start)
+    return androidx.compose.ui.text.TextRange(this.start,this.end)
 }
 
 fun TextRange.toCommonTextSelection(): androidx.compose.ui.text.TextRange {

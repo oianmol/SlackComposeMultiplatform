@@ -28,7 +28,7 @@ class ChatViewModel(
     private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
     private val sendMessageDelegate: SendMessageDelegate,
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels
-) : SlackViewModel(), SendMessageDelegate by sendMessageDelegate {
+) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
     val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())

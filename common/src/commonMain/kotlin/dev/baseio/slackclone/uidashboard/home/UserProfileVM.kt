@@ -8,7 +8,7 @@ class UserProfileVM(
     private val userProfileDelegate: UserProfileDelegate,
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
     navigateOnboardingRoot: () -> Unit
-) : SlackViewModel(), UserProfileDelegate by userProfileDelegate {
+) : SlackViewModel(coroutineDispatcherProvider), UserProfileDelegate by userProfileDelegate {
     init {
         getCurrentUser(viewModelScope, navigateOnboardingRoot)
     }

@@ -341,6 +341,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-lsqlite3",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -372,7 +373,6 @@
 					"\"grpc\"",
 					"-framework",
 					"\"openssl_grpc\"",
-					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.baseio.SlackCompose${TEAM_ID}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -400,6 +400,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-lsqlite3",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"z\"",
@@ -431,7 +432,6 @@
 					"\"grpc\"",
 					"-framework",
 					"\"openssl_grpc\"",
-					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.baseio.SlackCompose${TEAM_ID}";
 				PRODUCT_NAME = "$(TARGET_NAME)";

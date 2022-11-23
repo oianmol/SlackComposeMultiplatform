@@ -24,22 +24,17 @@ import platform.UIKit.UIWindow
 import platform.UIKit.UIViewController
 
 val lifecycle = LifecycleRegistry()
-val skKeyValueData = SKKeyValueData()
-val root by lazy {
-    RootComponent(
-        context = DefaultComponentContext(lifecycle = lifecycle),
-    )
-}
 
 fun MainViewController(window:UIWindow): UIViewController =
     Application("SlackComposeiOS") {
+        initKoin()
+
         val rememberedComposeWindow by remember(window) {
             val windowInfo = window.frame.useContents {
                 WindowInfo(this.size.width.dp, this.size.height.dp)
             }
             mutableStateOf(windowInfo)
         }
-        initKoin()
 
         CompositionLocalProvider(
             LocalWindow provides rememberedComposeWindow
@@ -48,7 +43,9 @@ fun MainViewController(window:UIWindow): UIViewController =
                 Column {
                     Box(Modifier.height(48.dp).background(LocalSlackCloneColor.current.appBarColor))
                     SlackApp {
-                        root
+                        RootComponent(
+                            context = DefaultComponentContext(lifecycle = lifecycle),
+                        )
                     }
                 }
             }

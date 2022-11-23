@@ -14,7 +14,7 @@ class GettingStartedVM(
   private val navigateBackNow:()->Unit,
   private val qrCodeDelegate: QrCodeDelegate
 ) :
-  SlackViewModel(), QrCodeDelegate by qrCodeDelegate {
+  SlackViewModel(coroutineDispatcherProvider), QrCodeDelegate by qrCodeDelegate {
 
   init {
     qrCodeDelegate.navigateDashboardNow = {

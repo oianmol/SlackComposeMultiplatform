@@ -15,7 +15,7 @@ class SlackChannelVM(
     private val ucFetchChannels: UseCaseFetchAllChannels,
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val ucFetchRecentChannels: UseCaseFetchRecentChannels
-) : SlackViewModel() {
+) : SlackViewModel(coroutineDispatcherProvider) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun allChannels(): Flow<List<DomainLayerChannels.SKChannel>> {

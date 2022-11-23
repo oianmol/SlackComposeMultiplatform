@@ -26,7 +26,7 @@ class NavigateChatThreadVM(
   private val useCaseCreateChannel: UseCaseCreateChannel,
   private val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch,
   private val navigationPopWith: (DomainLayerChannels.SKChannel) -> Unit
-) : SlackViewModel() {
+) : SlackViewModel(coroutineDispatcherProvider) {
   val search = MutableStateFlow("")
   var channelsStream = MutableStateFlow<List<DomainLayerChannels.SKChannel>>(emptyList())
     private set

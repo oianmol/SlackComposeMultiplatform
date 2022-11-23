@@ -76,7 +76,7 @@ internal fun ChatContent(message: DomainLayerMessages.SKMessage, onClickHash: (S
 internal fun ChatUserDateTime(message: DomainLayerMessages.SKMessage, user: DomainLayerUsers.SKUser?) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
-            (user?.name ?: "Who ?") + " \uD83C\uDF34",
+            (user?.name ?: "Member") + " \uD83C\uDF34",
             style = SlackCloneTypography.subtitle1.copy(
                 fontWeight = FontWeight.Bold,
                 color = LocalSlackCloneColor.current.textPrimary

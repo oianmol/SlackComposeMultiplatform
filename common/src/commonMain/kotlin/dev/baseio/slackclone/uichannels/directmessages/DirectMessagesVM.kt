@@ -15,7 +15,7 @@ class DirectMessagesVM(
   private val useCaseFetchChannels: UseCaseFetchChannelsWithLastMessage,
   private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
   coroutineDispatcherProvider: CoroutineDispatcherProvider
-) : SlackViewModel() {
+) : SlackViewModel(coroutineDispatcherProvider) {
   @NativeCoroutinesIgnore
   val channels = MutableStateFlow(fetchFlow())
 

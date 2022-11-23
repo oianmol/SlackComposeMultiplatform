@@ -3,25 +3,21 @@ import commoncomposeui
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
+    var myWindow: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let mainViewController = Main_iosKt.MainViewController(window: window!)
-        window?.rootViewController = mainViewController
-        window?.makeKeyAndVisible()
-        return true
+        myWindow = UIWindow(frame: UIScreen.main.bounds)
+            let mainViewController = Main_iosKt.MainViewController(window: myWindow!)
+        myWindow?.rootViewController = mainViewController
+        myWindow?.makeKeyAndVisible()
+            return true
+        }
+    
+     func application(
+        _ application: UIApplication,
+        supportedInterfaceOrientationsFor supportedInterfaceOrientationsForWindow: UIWindow?
+     ) -> UIInterfaceOrientationMask {
+         return UIInterfaceOrientationMask.all
     }
 
-    func applicationDidBecomeActive(_ application: UIApplication) {
-            //Main_iosKt.lifecycle.resume()
-        }
-
-    func applicationWillResignActive(_ application: UIApplication) {
-             // Main_iosKt.lifecycle.stop()
-        }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-             // Main_iosKt.lifecycle.destroy()
-        }
 }
