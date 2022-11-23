@@ -4,6 +4,7 @@
     <bytecodeTargetLevel target="1.8">
       <module name="SlackJetpackCompose.capillary_protos.main" target="18" />
       <module name="SlackJetpackCompose.capillary_protos.test" target="18" />
+      <module name="SlackJetpackCompose.composeiOS" target="18" />
       <module name="SlackJetpackCompose.grpc-multiplatform-lib" target="18" />
       <module name="SlackJetpackCompose.iOSApp" target="18" />
       <module name="SlackJetpackCompose.protos" target="18" />

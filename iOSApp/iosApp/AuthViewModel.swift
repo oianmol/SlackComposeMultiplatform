@@ -20,10 +20,9 @@ class AuthViewModel : ObservableObject{
     
     func login(){
         self.isLoading = true
-       let publisher = createPublisher(for: authComponent.provideUseCaseCreateWorkspace()
-            .invokeNative(email: "anmol.verma4@gmail.com", password: "password", domain: "mutualmobileios"))        
-        _ = publisher
-            .receive(on: DispatchQueue.main)
+       createPublisher(for: authComponent.provideUseCaseCreateWorkspace()
+            .invokeNative(email: "anmol.verma4@gmail.com", password: "password", domain: "mutualmobileios"))
+       .receive(on: DispatchQueue.main)
             .subscribe(on: DispatchQueue.global(qos: .default))
             .sink { [self] completion in
             print("Received completion: \(completion)")
@@ -31,7 +30,21 @@ class AuthViewModel : ObservableObject{
         } receiveValue: { [self] value in
             print("Received value: \(value)")
             self.isLoading = false
+            
+            createPublisher(for: authComponent.provideUseCaseCurrentUser()
+                 .invokeNative())
+            .receive(on: DispatchQueue.main)
+                 .subscribe(on: DispatchQueue.global(qos: .default))
+                 .sink { [self] completion in
+                 print("Received completion: \(completion)")
+             } receiveValue: { [self] value in
+                 print("Received value: \(value)")
+                 
+                 
+             }
         }
+        
+     
        
     }
     

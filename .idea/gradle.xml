@@ -15,7 +15,6 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/common-compose-ui" />
-            <option value="$PROJECT_DIR$/composeiOS" />
             <option value="$PROJECT_DIR$/desktop" />
             <option value="$PROJECT_DIR$/slack_data_layer" />
             <option value="$PROJECT_DIR$/slack_domain_layer" />

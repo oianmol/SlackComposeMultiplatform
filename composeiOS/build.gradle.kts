@@ -50,12 +50,23 @@ kotlin {
                     )
 
                 }
+                val capillaryFrameworkName = "capillaryslack"
+                val capillaryFramework = "/Users/anmolverma/IdeaProjects/capillary-kmp/build/cocoapods/synthetic/IOS/build"
+                linkerOpts("-F$capillaryFramework/Release-${platform}/$capillaryFrameworkName")
+                linkerOpts(
+                    "-rpath",
+                    "$capillaryFramework/Release-${platform}/$capillaryFrameworkName"
+                )
+                linkerOpts(
+                    "-framework", capillaryFrameworkName
+                )
 
                 entryPoint = "main"
                 freeCompilerArgs += listOf(
                     "-linker-option", "-framework", "-linker-option", "Metal",
                     "-linker-option", "-framework", "-linker-option", "CoreText",
                     "-linker-option", "-framework", "-linker-option", "CoreGraphics",
+                    "-linker-option", "-framework", "-linker-option", "Security",
                 )
             }
         }

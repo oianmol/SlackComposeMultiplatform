@@ -3,6 +3,8 @@ package dev.baseio.slackclone.uionboarding.compose
 import PainterRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -96,7 +98,7 @@ fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
     val state by createWorkspaceComponent.authCreateWorkspaceVM.state.collectAsState(mainDispatcher)
 
 
-    Column {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
         EmailTF(Modifier.padding(4.dp), state.email) { emailNew ->
             createWorkspaceComponent.authCreateWorkspaceVM.state.apply {
                 this.value = this.value.copy(email = emailNew)
@@ -124,7 +126,7 @@ fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceComponent) {
 
 @Composable
 fun ErrorText(modifier: Modifier, error: Throwable?) {
-    Text(error?.message ?: "No idea", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
+    Text(error?.stackTraceToString()?:"", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
 }
 
 @Composable

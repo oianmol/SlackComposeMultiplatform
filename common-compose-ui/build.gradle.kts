@@ -5,6 +5,8 @@ plugins {
     kotlin(BuildPlugins.MULTIPLATFORM)
     id(BuildPlugins.ANDROID_LIBRARY_PLUGIN)
     id(BuildPlugins.KOTLIN_PARCELABLE_PLUGIN)
+    kotlin("native.cocoapods")
+    id("com.rickclephas.kmp.nativecoroutines")
     id(BuildPlugins.COMPOSE_ID) version Lib.AndroidX.COMPOSE_VERSION
     kotlin(BuildPlugins.SERIALIZATION) version Lib.Kotlin.KOTLIN_VERSION
 }
@@ -32,6 +34,15 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+
+    cocoapods {
+        summary = "Slack common-compose-ui library"
+        homepage = "https://github.com/oianmol"
+        ios.deploymentTarget = "14.1"
+        framework {
+            baseName = "common-compose-ui"
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -192,3 +203,5 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+
+tasks.replace("podGenIOS", PatchedPodGenTask::class)
