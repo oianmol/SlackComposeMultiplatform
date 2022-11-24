@@ -149,6 +149,7 @@ class CryptoExportImportManager: NSObject {
         derKey.append(rawPublicKeyBytes) // public key raw data.
         return derKey
     }
+    
 
     /**
      * This function prepares a RSA public key generated with Apple SecKeyGeneratePair to be exported

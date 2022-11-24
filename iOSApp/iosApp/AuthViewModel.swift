@@ -39,6 +39,32 @@ class AuthViewModel : ObservableObject{
                  print("Received completion: \(completion)")
              } receiveValue: { [self] value in
                  print("Received value: \(value)")
+             }
+            
+            
+            
+            createPublisher(for: authComponent.providerUseCaseGetSelectedWorkspace()
+                 .invokeNative())
+            .receive(on: DispatchQueue.main)
+                 .subscribe(on: DispatchQueue.global(qos: .default))
+                 .sink { [self] completion in
+                 print("Received completion: \(completion)")
+             } receiveValue: { [self] value in
+                 print("Received value: \(value)")
+                 
+                 createPublisher(for: authComponent.providerUseCaseFetchChannelsWithLastMessage()
+                    .invokeNative(workspaceId: (value?.uuid ?? "") as String))
+                 .receive(on: DispatchQueue.main)
+                      .subscribe(on: DispatchQueue.global(qos: .default))
+                      .sink { [self] completion in
+                      print("Received completion: \(completion)")
+                  } receiveValue: { [self] value in
+                      print("Received value: \(value)")
+                      
+                      
+                      
+                      
+                  }
                  
                  
              }

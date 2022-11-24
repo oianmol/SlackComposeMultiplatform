@@ -134,9 +134,6 @@ val fakeDataSourceModule = module {
             get(),
             get(SlackMessageMessageQualifier),
             get(),
-            get(),
-            get(),
-            get(),
             get()
         )
     }

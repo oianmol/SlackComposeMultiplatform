@@ -127,7 +127,7 @@ val dataSourceModule = module {
         SKLocalDataSourceMessagesImpl(
             get(),
             get(SlackMessageMessageQualifier),
-            get(), get(), get(), get(), get()
+            get(), get()
         )
     }
     single<IMessageDecrypter> {

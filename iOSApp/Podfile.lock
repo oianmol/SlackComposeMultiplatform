@@ -666,7 +666,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   capillaryslack:
-    :commit: c028e65399a5268e7477a25184715ebf69bdc4cd
+    :commit: e95c3a6125d0b04566978280f6bd1f3b2dcc6129
     :git: https://github.com/oianmol/slack_capillary_ios.git
 
 SPEC CHECKSUMS:
