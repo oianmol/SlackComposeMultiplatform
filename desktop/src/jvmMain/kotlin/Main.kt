@@ -53,7 +53,7 @@ fun main() = application {
 
 
 @Composable
-internal fun DesktopApp(
+fun DesktopApp(
     rememberedComposeWindow: WindowInfo,
     rootComponent: () -> RootComponent
 ) {
