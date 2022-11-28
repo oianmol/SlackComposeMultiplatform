@@ -1,5 +1,4 @@
 import Lib.AndroidX.ACTIVITY_COMPOSE
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
     kotlin(BuildPlugins.MULTIPLATFORM)
