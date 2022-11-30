@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class AuthCreateWorkspaceVM(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseCreateWorkspace: UseCaseCreateWorkspace,
-    private val useCaseSaveFCMToken:UseCaseSaveFCMToken,
+    private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
     val navigateDashboard: () -> Unit
 ) : SlackViewModel(coroutineDispatcherProvider) {
     val state = MutableStateFlow(AuthCreateWorkspaceVMState())
@@ -34,7 +34,11 @@ class AuthCreateWorkspaceVM(
 
                 else -> {
                     state.value = state.value.copy(error = null, loading = true)
-                    useCaseCreateWorkspace(state.value.email, state.value.password, state.value.domain)
+                    useCaseCreateWorkspace(
+                        state.value.email,
+                        state.value.password,
+                        state.value.domain,
+                    )
                     useCaseSaveFCMToken.invoke(fcmToken())
                     state.value = state.value.copy(loading = false)
                     navigateDashboard()
@@ -45,7 +49,8 @@ class AuthCreateWorkspaceVM(
     }
 
     private fun validationFailed() =
-        state.value.email.trim().isEmpty() || state.value.password.trim().isEmpty() || state.value.domain.trim()
+        state.value.email.trim().isEmpty() || state.value.password.trim()
+            .isEmpty() || state.value.domain.trim()
             .isEmpty()
 }
 

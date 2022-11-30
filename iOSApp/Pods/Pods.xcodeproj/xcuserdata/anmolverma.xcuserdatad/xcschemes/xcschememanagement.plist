@@ -34,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Tink.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>abseil.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -70,6 +75,11 @@
 			<false/>
 		</dict>
 		<key>gRPC.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>rapidjson.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

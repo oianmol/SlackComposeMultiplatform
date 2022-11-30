@@ -315,6 +315,7 @@ public enum SwiftyRSA {
             throw SwiftyRSAError.x509CertificateFailed
         }
     }
+
     
     static func addPKCS8Header(_ derKey: Data) -> Data {
         var result = Data()

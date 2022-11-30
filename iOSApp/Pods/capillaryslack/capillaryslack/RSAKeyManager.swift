@@ -8,11 +8,23 @@
 import Foundation
 import Security
 
+public class RSAUtilsError: NSError {
+    init(_ message: String) {
+        super.init(domain: "\(Bundle.main.bundleIdentifier ?? "")", code: 500, userInfo: [
+            NSLocalizedDescriptionKey: message
+            ])
+    }
+    
+    @available(*, unavailable)
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class RSAKeyManager {
     public static let KEY_SIZE = 2048
     var isTest: Bool = false
     private var publicKey, privateKey: SecKey?
-        
     static let shared = RSAKeyManager()
     let exportImportManager = CryptoExportImportManager()
     
@@ -31,10 +43,10 @@ class RSAKeyManager {
     
     public func encrypt(data:Data,publicKey:Data) -> Data? {
         do {
-           let publicKeyRef = exportImportManager.exportRSAPublicKeyToDER(publicKey, keyType: kSecAttrKeyTypeRSA as String, keySize: RSAKeyManager.KEY_SIZE)
-            let clear = ClearMessage(data: data)
-            let encryptedMessage = try clear.encrypted(with: PublicKey(data: publicKeyRef), padding: .OAEP)
-            return encryptedMessage.data
+            let error: UnsafeMutablePointer<Unmanaged<CFError>?>? = nil
+            let publicSecKey = try PublicKey(data: stripPublicKeyHeader(publicKey)!)
+            let encryptedMessageData:Data = SecKeyCreateEncryptedData(publicSecKey.reference, .rsaEncryptionOAEPSHA256, data as CFData,error)! as Data
+            return encryptedMessageData
         } catch let error {
             //Log error
             debugPrint(error)
@@ -45,15 +57,125 @@ class RSAKeyManager {
     
     public func decrypt(encryptedMessage:Data,privateKey:Data) -> Data? {
         do {
-            let encrypted = EncryptedMessage(data: encryptedMessage)
-            let clear = try encrypted.decrypted(with: PrivateKey(data:privateKey), padding: .OAEP)
-            return clear.data
+            let error:UnsafeMutablePointer<Unmanaged<CFError>?>? = nil
+            let privateKey = try PrivateKey(data:stripPrivateKeyHeader(privateKey)!)
+            let decryptedMessage:Data = SecKeyCreateDecryptedData(privateKey.reference, .rsaEncryptionOAEPSHA256, encryptedMessage as CFData,error)! as Data
+            return decryptedMessage
         } catch let error {
-            //Log error
+            //Log Error
             debugPrint(error)
             return nil
         }
     }
+    
+    private func stripPublicKeyHeader(_ pubkey: Data) throws -> Data? {
+        if ( pubkey.count == 0 ) {
+            return nil
+        }
+        
+        var keyAsArray = [UInt8](repeating: 0, count: pubkey.count / MemoryLayout<UInt8>.size)
+        (pubkey as NSData).getBytes(&keyAsArray, length: pubkey.count)
+        
+        var idx = 0
+        if (keyAsArray[idx] != 0x30) {
+            throw RSAUtilsError("Provided key doesn't have a valid ASN.1 structure (first byte should be 0x30).")
+            //return nil
+        }
+        idx += 1
+        
+        if (keyAsArray[idx] > 0x80) {
+            idx += Int(keyAsArray[idx]) - 0x80 + 1
+        } else {
+            idx += 1
+        }
+        
+        /*
+         * If current byte is 0x02, it means the key doesn't have a X509 header (it contains only modulo & public exponent). In this case, we can just return the provided DER data as is
+         */
+        if (Int(keyAsArray[idx]) == 0x02) {
+            return pubkey
+        }
+        
+        let seqiod = [UInt8](arrayLiteral: 0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00)
+        
+        for i in idx..<idx+seqiod.count {
+            if ( keyAsArray[i] != seqiod[i-idx] ) {
+                throw RSAUtilsError("Provided key doesn't have a valid X509 header.")
+                //return nil
+            }
+        }
+        idx += seqiod.count
+        
+        if (keyAsArray[idx] != 0x03) {
+            throw RSAUtilsError("Invalid byte at index \(idx) (\(keyAsArray[idx])) for public key header.")
+            //return nil
+        }
+        idx += 1
+        
+        if (keyAsArray[idx] > 0x80) {
+            idx += Int(keyAsArray[idx]) - 0x80 + 1;
+        } else {
+            idx += 1
+        }
+        
+        if (keyAsArray[idx] != 0x00) {
+            throw RSAUtilsError("Invalid byte at index \(idx) (\(keyAsArray[idx])) for public key header.")
+            //return nil
+        }
+        idx += 1
+        return pubkey.subdata(in: idx..<keyAsArray.count)
+        //return pubkey.subdata(in: NSMakeRange(idx, keyAsArray.count - idx).toRange()!)
+    }
+    
+    
+    private func stripPrivateKeyHeader(_ privkey: Data) throws -> Data? {
+        if ( privkey.count == 0 ) {
+            return nil
+        }
+        
+        var keyAsArray = [UInt8](repeating: 0, count: privkey.count / MemoryLayout<UInt8>.size)
+        (privkey as NSData).getBytes(&keyAsArray, length: privkey.count)
+        
+        //PKCS#8: magic byte at offset 22, check if it's actually ASN.1
+        var idx = 22
+        if ( keyAsArray[idx] != 0x04 ) {
+            return privkey
+        }
+        idx += 1
+        
+        //now we need to find out how long the key is, so we can extract the correct hunk
+        //of bytes from the buffer.
+        var len = Int(keyAsArray[idx])
+        idx += 1
+        let det = len & 0x80 //check if the high bit set
+        if (det == 0) {
+            //no? then the length of the key is a number that fits in one byte, (< 128)
+            len = len & 0x7f
+        } else {
+            //otherwise, the length of the key is a number that doesn't fit in one byte (> 127)
+            var byteCount = Int(len & 0x7f)
+            if (byteCount + idx > privkey.count) {
+                return nil
+            }
+            //so we need to snip off byteCount bytes from the front, and reverse their order
+            var accum: UInt = 0
+            var idx2 = idx
+            idx += byteCount
+            while (byteCount > 0) {
+                //after each byte, we shove it over, accumulating the value into accum
+                accum = (accum << 8) + UInt(keyAsArray[idx2])
+                idx2 += 1
+                byteCount -= 1
+            }
+            // now we have read all the bytes of the key length, and converted them to a number,
+            // which is the number of bytes in the actual key.  we use this below to extract the
+            // key bytes and operate on them
+            len = Int(accum)
+        }
+        return privkey.subdata(in: idx..<idx+len)
+        //return privkey.subdata(in: NSMakeRange(idx, len).toRange()!)
+    }
+    
     
     public func getMyPublicKey(chainId:String) -> PublicKey? {
         do {
@@ -97,42 +219,18 @@ class RSAKeyManager {
         return nil
     }
     
-    public func getPublicKey(pemEncoded: String) -> PublicKey? {
+    public func getPublicKey(data: Data) -> Data? {
         do {
-            return try PublicKey(pemEncoded: pemEncoded)
+            return try! PublicKey(data: stripPublicKeyHeader(data)!).data()
         } catch let error {
             debugPrint(error)
             return nil
         }
     }
     
-    public func getPublicKey(data: Data) -> PublicKey? {
+    public func getPrivateKey(data: Data) -> Data? {
         do {
-            let publicKey_with_X509_header = try SwiftyRSA.prependX509KeyHeader(keyData: data)
-            let publicKey = try PublicKey(data: publicKey_with_X509_header)
-            return publicKey
-        } catch let error {
-            debugPrint(error)
-            return nil
-        }
-    }
-    
-    public func getPublicKey(secRef: SecKey) -> PublicKey? {
-        do {
-            let publicKey = try PublicKey(reference: secRef)
-            let publicKeyData = try publicKey.data()
-            let publicKey_with_X509_header = try SwiftyRSA.prependX509KeyHeader(keyData: publicKeyData)
-            return try PublicKey(data: publicKey_with_X509_header)
-        } catch let error {
-            debugPrint(error)
-            return nil
-        }
-    }
-    
-    public func getPrivateKey(data: Data) -> PrivateKey? {
-        do {
-            let privateKey =  try PrivateKey(data: data)
-            return privateKey
+            return try! PrivateKey(data: stripPrivateKeyHeader(data)!).data()
         } catch let error {
             debugPrint(error)
             return nil
@@ -167,10 +265,13 @@ class RSAKeyManager {
     
     //Generate private and public keys
     public func generateKeyPair(chainId:String) {
+        if getKeysFromKeychain(chainId:chainId){
+            return
+        }
         do{
             let keyPair = try SwiftyRSA.generateRSAKeyPair(sizeInBits: RSAKeyManager.KEY_SIZE,applyUnitTestWorkaround: isTest,tagData: chainId)
-            publicKey =  try  SwiftyRSA.addKey(keyPair.publicKey.data(), isPublic: true, tag: chainId)
-            privateKey =  try SwiftyRSA.addKey(keyPair.privateKey.data(), isPublic: false, tag: chainId)
+            publicKey =  keyPair.publicKey.reference
+            privateKey =  keyPair.privateKey.reference
         } catch let error {
             debugPrint(error)
         }
@@ -179,7 +280,7 @@ class RSAKeyManager {
         guard let pubKey = self.getMyPublicKey(chainId:chainId)  else {
             return nil
         }
-        return exportImportManager.exportRSAPublicKeyToDER(try! pubKey.data(), keyType: kSecAttrKeyTypeRSA as String, keySize: RSAKeyManager.KEY_SIZE)
+        return try! SwiftyRSA.prependX509KeyHeader(keyData: pubKey.data())
     }
     
     public func getMyPrivateKeyData(chainId:String) -> Data? {

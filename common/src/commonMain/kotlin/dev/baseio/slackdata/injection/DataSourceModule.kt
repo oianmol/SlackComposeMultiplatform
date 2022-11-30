@@ -2,7 +2,6 @@ package dev.baseio.slackdata.injection
 
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.slackdata.datasources.SKPublicKeyRetrieverImpl
 import dev.baseio.slackdata.datasources.local.SKLocalDatabaseSourceImpl
 import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceChannelMembersImpl
@@ -26,7 +25,6 @@ import dev.baseio.slackdata.datasources.remote.users.SKNetworkDataSourceReadUser
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkSourceWorkspacesImpl
-import dev.baseio.slackdomain.datasources.SKPublicKeyRetriever
 import dev.baseio.slackdomain.datasources.local.SKLocalDatabaseSource
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelLastMessage
@@ -57,9 +55,6 @@ val dataSourceModule = module {
         GrpcCalls(skKeyValueData = get(), address = "192.168.1.14")
     }
     single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(),get()) }
-    single<SKPublicKeyRetriever> {
-        SKPublicKeyRetrieverImpl()
-    }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())
     }
@@ -67,7 +62,7 @@ val dataSourceModule = module {
         SKLocalKeyValueSourceImpl(get())
     }
     single<SKNetworkSourceChannel> {
-        SKNetworkSourceChannelImpl(get(), get(), get(), get(), get(), get())
+        SKNetworkSourceChannelImpl(get(), get(), get(), get(), get())
     }
     single<SKNetworkSourceWorkspaces> {
         SKNetworkSourceWorkspacesImpl(get())

@@ -44,13 +44,13 @@ class SKPushNotificationNotifier(
         }
     }
 
-    fun createReplyNotification(skMessage: DomainLayerMessages.SKMessage, channel: DomainLayerChannels.SKChannel) {
+    suspend fun createReplyNotification(skMessage: DomainLayerMessages.SKMessage, channel: DomainLayerChannels.SKChannel) {
         val channelMessagesMap = HashMap<DomainLayerChannels.SKChannel, ArrayList<DomainLayerMessages.SKMessage>>()
         addToChannelMessageMap(channel, skMessage, channelMessagesMap)
         processChannelMessageMapForGroupNotification(channelMessagesMap)
     }
 
-    private fun processChannelMessageMapForGroupNotification(channelMessagesMap: HashMap<DomainLayerChannels.SKChannel, ArrayList<DomainLayerMessages.SKMessage>>) {
+    private suspend fun processChannelMessageMapForGroupNotification(channelMessagesMap: HashMap<DomainLayerChannels.SKChannel, ArrayList<DomainLayerMessages.SKMessage>>) {
         channelMessagesMap.forEach {
             val channel = it.key
             val messages = it.value

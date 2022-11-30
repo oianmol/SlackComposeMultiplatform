@@ -568,7 +568,9 @@ PODS:
   - BoringSSL-GRPC/Interface (0.0.24)
   - capillaryslack (1.0.0):
     - capillaryslack/ObjC (= 1.0.0)
-  - capillaryslack/ObjC (1.0.0)
+    - Tink
+  - capillaryslack/ObjC (1.0.0):
+    - Tink
   - common (1.0)
   - gRPC-Core (1.50.0):
     - gRPC-Core/Implementation (= 1.50.0)
@@ -636,6 +638,9 @@ PODS:
     - KMPNativeCoroutinesCore (= 0.13.1)
   - KMPNativeCoroutinesCore (0.13.1)
   - Protobuf (3.21.9)
+  - rapidjson (1.1.0)
+  - Tink (1.6.1):
+    - rapidjson (~> 1.1.0)
 
 DEPENDENCIES:
   - capillaryslack (from `https://github.com/oianmol/slack_capillary_ios.git`)
@@ -644,6 +649,7 @@ DEPENDENCIES:
   - KMPNativeCoroutinesAsync (= 0.13.1)
   - KMPNativeCoroutinesCombine (= 0.13.1)
   - Protobuf
+  - Tink
 
 SPEC REPOS:
   trunk:
@@ -657,6 +663,8 @@ SPEC REPOS:
     - KMPNativeCoroutinesCombine
     - KMPNativeCoroutinesCore
     - Protobuf
+    - rapidjson
+    - Tink
 
 EXTERNAL SOURCES:
   capillaryslack:
@@ -666,13 +674,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   capillaryslack:
-    :commit: e95c3a6125d0b04566978280f6bd1f3b2dcc6129
+    :commit: 70166a72696b45bf9861e03196d4a24348764f4a
     :git: https://github.com/oianmol/slack_capillary_ios.git
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  capillaryslack: 51ff4e10386812609c5a77e4bf4984778cd53595
+  capillaryslack: 23b44eb8f1ebd742812744314ae607b1e554dbb8
   common: e583514aa355d755d2f2235db72a6b0b1a11dccb
   gRPC: cbba61b0bd8a6b0317d21250ac0df9a38983a783
   gRPC-Core: c093325643a2dc3b37d3871bb9ceccbabc4fe9ee
@@ -682,7 +690,9 @@ SPEC CHECKSUMS:
   KMPNativeCoroutinesCombine: faa5064e9467f2fc406780de9171d0c9bb8704f5
   KMPNativeCoroutinesCore: af011852578ab7abdad5e5c17a25d272efb3516b
   Protobuf: 02524ec14183fe08fb259741659e79683788158b
+  rapidjson: 926ddeea70d7a0987b6d746cd9fa51f165467cd3
+  Tink: 6bc1e1c5381a750ca2ee7e897cc3ee448bfe175d
 
-PODFILE CHECKSUM: ccb465caf14eabfcbbdd7d73f7bb9ae03e0bc3bc
+PODFILE CHECKSUM: fc4294f462b35f43323cf981bdd4e2d7239eacd0
 
 COCOAPODS: 1.11.3

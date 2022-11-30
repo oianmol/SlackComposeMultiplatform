@@ -2,6 +2,12 @@
   "name": "capillaryslack",
   "version": "1.0.0",
   "summary": "Public key RSA encryption.",
+  "dependencies": {
+    "Tink": [
+
+    ]
+  },
+  "static_framework": true,
   "description": "Encrypt with a RSA public key, decrypt with a RSA private key.",
   "homepage": "https://github.com/oianmol/slack_capillary_ios",
   "license": "MIT",
