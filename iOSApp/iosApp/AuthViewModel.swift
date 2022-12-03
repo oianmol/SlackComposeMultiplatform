@@ -63,6 +63,16 @@ class AuthViewModel : ObservableObject{
              print("Received value: \(value)")
              value.forEach { channel in
                  sendMessage(workspaceId: workspace?.uuid ?? "", channelId: channel.channelId, senderId: authComponent.localUser().uuid, channelPublicKey: channel.publicKey)
+                 createPublisher(for: authComponent.provideUseCaseGetMessages().invokeNative(useCaseWorkspaceChannelRequest: Slack_domain_layerUseCaseWorkspaceChannelRequest(workspaceId: workspace?.uuid ?? "", channelId: channel.channelId, limit: 0, offset: 0))).receive(on: DispatchQueue.main)
+                    .subscribe(on: DispatchQueue.global(qos: .default))
+                    .sink { [self] completion in
+                    print("Received completion: \(completion)")
+                    self.isLoading = false
+                } receiveValue: { [self] value in
+                    print("decrypted value: \(value)")
+                    self.isLoading = false
+                            
+                }
              }
              
              createPublisher(for: authComponent.providerUseCaseFetchChannelsWithLastMessage().invokeNative(workspaceId: workspace?.uuid ?? ""))
@@ -109,7 +119,7 @@ class AuthViewModel : ObservableObject{
     }
     
     func createChannel(workspace: Slack_domain_layerDomainLayerWorkspacesSKWorkspace?){
-        let channel = Slack_domain_layerDomainLayerChannelsSKChannel.SkGroupChannel(uuid: UUID.init().uuidString, workId: workspace?.uuid ?? "", name: "asdfasdfsdfsdf\(UUID.init().uuidString)", createdDate: 0, modifiedDate: 0, avatarUrl: "", deleted: false, channelPublicKey: Slack_domain_layerDomainLayerUsersSKUserPublicKey(keyBytes: KotlinByteArray(size: 0)))
+        let channel = Slack_domain_layerDomainLayerChannelsSKChannel.SkGroupChannel(uuid: UUID.init().uuidString, workId: workspace?.uuid ?? "", name: "asdfasdfsdfsdf\(UUID.init().uuidString)", createdDate: 0, modifiedDate: 0, avatarUrl: "", deleted: false, channelPublicKey: Slack_domain_layerDomainLayerUsersSKSlackKey(keyBytes: KotlinByteArray(size: 0)))
         createPublisher(for: authComponent.provideUseCaseCreateChannel().invokeNative(params: channel))
             .receive(on: DispatchQueue.main)
             .subscribe(on: DispatchQueue.global(qos: .default))
@@ -138,19 +148,42 @@ class AuthViewModel : ObservableObject{
         }
     }
     
-    func sendMessage(workspaceId:String,channelId:String,senderId:String,channelPublicKey:Slack_domain_layerDomainLayerUsersSKUserPublicKey){
-
-        createPublisher(for: authComponent.provideUseCaseSendMessage().invokeNative(params: Slack_domain_layerDomainLayerMessagesSKMessage(uuid:  UUID.init().uuidString, workspaceId: workspaceId, channelId: channelId, message: KotlinByteArray.from(data: "Anmol".data(using: .utf8) ?? Data()), sender: senderId, createdDate: 0, modifiedDate: 0, isDeleted: false, isSynced: false, decodedMessage: ""), publicKey: channelPublicKey))
+    func sendMessage(workspaceId:String,channelId:String,senderId:String,channelPublicKey:Slack_domain_layerDomainLayerUsersSKSlackKey){
+        
+        createPublisher(for: authComponent.provideUseCaseFetchAndSaveChannelMembers().invokeNative(useCaseWorkspaceChannelRequest: Slack_domain_layerUseCaseWorkspaceChannelRequest(workspaceId: workspaceId, channelId: channelId, limit: 0, offset: 0)))
             .receive(on: DispatchQueue.main)
             .subscribe(on: DispatchQueue.global(qos: .default))
             .sink { [self] completion in
             print("Received completion: \(completion)")
             self.isLoading = false
         } receiveValue: { [self] value in
-            print("message value: \(value)")
+            print("Received value: \(value)")
             self.isLoading = false
-                    
+            createPublisher(for: authComponent.provideUseCaseSendMessage().invokeNative(params: Slack_domain_layerDomainLayerMessagesSKMessage(uuid:  UUID.init().uuidString, workspaceId: workspaceId, channelId: channelId, messageFirst: "",messageSecond: "", sender: senderId, createdDate: 0, modifiedDate: 0, isDeleted: false, isSynced: false, decodedMessage: "Anmol"), publicKey: channelPublicKey))
+                .receive(on: DispatchQueue.main)
+                .subscribe(on: DispatchQueue.global(qos: .default))
+                .sink { [self] completion in
+                print("Received completion: \(completion)")
+                self.isLoading = false
+            } receiveValue: { [self] value in
+                print("message value: \(value)")
+                self.isLoading = false
+                        
+                
+                createPublisher(for: authComponent.provideIMessageDecrypter().decryptedNative(message: value)) .receive(on: DispatchQueue.main)
+                    .subscribe(on: DispatchQueue.global(qos: .default))
+                    .sink { [self] completion in
+                    print("Received completion: \(completion)")
+                    self.isLoading = false
+                } receiveValue: { [self] value in
+                    print("decrypted message value: \(value)")
+                    self.isLoading = false
+                            
+                }
+            }
         }
+
+     
         
      
     }

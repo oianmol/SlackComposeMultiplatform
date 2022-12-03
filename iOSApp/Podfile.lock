@@ -637,7 +637,7 @@ PODS:
   - KMPNativeCoroutinesCombine (0.13.1):
     - KMPNativeCoroutinesCore (= 0.13.1)
   - KMPNativeCoroutinesCore (0.13.1)
-  - Protobuf (3.21.9)
+  - Protobuf (3.21.10)
   - rapidjson (1.1.0)
   - Tink (1.6.1):
     - rapidjson (~> 1.1.0)
@@ -674,7 +674,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   capillaryslack:
-    :commit: 70166a72696b45bf9861e03196d4a24348764f4a
+    :commit: 1a3104d30ae173f0efdb5279bac795e194a9f311
     :git: https://github.com/oianmol/slack_capillary_ios.git
 
 SPEC CHECKSUMS:
@@ -689,7 +689,7 @@ SPEC CHECKSUMS:
   KMPNativeCoroutinesAsync: 52d2aea7ae1d85309ec6d72caeda923ec34af544
   KMPNativeCoroutinesCombine: faa5064e9467f2fc406780de9171d0c9bb8704f5
   KMPNativeCoroutinesCore: af011852578ab7abdad5e5c17a25d272efb3516b
-  Protobuf: 02524ec14183fe08fb259741659e79683788158b
+  Protobuf: ced4c17d029d7566cbfc51cfb44193e4aaafae27
   rapidjson: 926ddeea70d7a0987b6d746cd9fa51f165467cd3
   Tink: 6bc1e1c5381a750ca2ee7e897cc3ee448bfe175d
 

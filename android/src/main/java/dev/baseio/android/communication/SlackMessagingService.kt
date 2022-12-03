@@ -56,11 +56,12 @@ class SlackMessagingService : FirebaseMessagingService() {
                         uuid = message.data["uuid"]!!,
                         workspaceId = message.data["workspaceId"]!!,
                         channelId = message.data["channelId"]!!,
-                        message = Base64.decode(message.data["message"]!!, Base64.DEFAULT),
+                        decodedMessage = message.data["message"]!!,
                         sender = message.data["sender"]!!,
                         createdDate = message.data["createdDate"]!!.toLong(),
                         modifiedDate = message.data["modifiedDate"]!!.toLong(),
                         isDeleted = message.data["isDeleted"].toBoolean(),
+                        messageSecond = "", messageFirst = ""
                     ), channel!!
                 )
             }

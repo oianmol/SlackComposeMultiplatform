@@ -66,12 +66,12 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
                                 uuid = System.currentTimeMillis().toString(),
                                 workspaceId = user.workspaceId,
                                 channelId = channelId,
-                                message = quickReplyResult.toString().encodeToByteArray(),
+                                decodedMessage = quickReplyResult.toString(),
                                 sender = user.uuid,
                                 createdDate = System.currentTimeMillis(),
                                 modifiedDate = System.currentTimeMillis(),
                                 isDeleted = false,
-                                isSynced = false,
+                                isSynced = false, messageFirst = "", messageSecond = ""
                             ), channel!!.publicKey
                         )
                         notificationId?.let { it1 ->
