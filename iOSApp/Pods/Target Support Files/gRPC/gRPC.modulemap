@@ -1,6 +1,0 @@
-framework module GRPCClient {
-  umbrella header "gRPC-umbrella.h"
-
-  export *
-  module * { export * }
-}
