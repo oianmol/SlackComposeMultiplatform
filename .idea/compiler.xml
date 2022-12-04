@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="18">
+    <bytecodeTargetLevel target="1.8">
       <module name="SlackJetpackCompose.capillary_protos.main" target="18" />
       <module name="SlackJetpackCompose.capillary_protos.test" target="18" />
       <module name="SlackJetpackCompose.common-compose-ui" target="18" />
       <module name="SlackJetpackCompose.composeiOS" target="18" />
-      <module name="SlackJetpackCompose.encryptionlib" target="18" />
       <module name="SlackJetpackCompose.grpc-multiplatform-lib" target="18" />
       <module name="SlackJetpackCompose.iOSApp" target="18" />
       <module name="SlackJetpackCompose.protos" target="18" />
       <module name="SlackJetpackCompose.protos.main" target="18" />
       <module name="SlackJetpackCompose.protos.test" target="18" />
       <module name="SlackJetpackCompose.slack-data-lib" target="17" />
-      <module name="SlackJetpackCompose.slack_data_layer" target="18" />
-      <module name="SlackJetpackCompose.slack_domain_layer" target="18" />
       <module name="SlackJetpackCompose.slack_multiplatform_grpc_server.main" target="18" />
       <module name="SlackJetpackCompose.slack_multiplatform_grpc_server.test" target="18" />
     </bytecodeTargetLevel>

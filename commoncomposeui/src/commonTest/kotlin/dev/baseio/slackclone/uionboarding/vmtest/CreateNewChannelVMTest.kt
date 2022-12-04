@@ -11,8 +11,6 @@ import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
 class CreateNewChannelVMTest : SlackKoinUnitTest() {
-
-
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
     var wasNavigated = false
     private val createNewChannelVM by lazy {

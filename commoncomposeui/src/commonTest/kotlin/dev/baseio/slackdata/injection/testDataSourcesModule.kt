@@ -1,16 +1,20 @@
 package dev.baseio.slackdata.injection
 
+import dev.baseio.grpc.IGrpcCalls
+import dev.baseio.grpc.MockIGrpcCalls
 import dev.baseio.slackdata.datasources.local.SKLocalDatabaseSourceImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceChannelMembersImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceCreateChannelsImpl
 import dev.baseio.slackdata.datasources.local.channels.SlackSKLocalDataSourceChannelLastMessage
+import dev.baseio.slackdata.datasources.local.messages.IMessageDecrypterImpl
 import dev.baseio.slackdata.datasources.local.messages.SKLocalDataSourceMessagesImpl
 import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceCreateUsersImpl
 import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceUsersImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.auth.SKAuthNetworkDataSourceImpl
+import dev.baseio.slackdata.datasources.remote.auth.SKNetworkSaveFcmTokenImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelMembersImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceWriteChannelsImpl
@@ -20,18 +24,21 @@ import dev.baseio.slackdata.datasources.remote.users.SKNetworkDataSourceReadUser
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.workspaces.SKNetworkSourceWorkspacesImpl
+import dev.baseio.slackdata.localdata.FakeKeyValueSource
 import dev.baseio.slackdomain.datasources.local.SKLocalDatabaseSource
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelLastMessage
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceCreateChannels
+import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
 import dev.baseio.slackdomain.datasources.local.messages.SKLocalDataSourceMessages
 import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceWriteUsers
 import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceReadWorkspaces
 import dev.baseio.slackdomain.datasources.remote.auth.SKAuthNetworkDataSource
+import dev.baseio.slackdomain.datasources.remote.auth.SKNetworkSaveFcmToken
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannelMembers
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannels
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceWriteChannels
@@ -41,37 +48,22 @@ import dev.baseio.slackdomain.datasources.remote.users.SKNetworkDataSourceReadUs
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkDataSourceReadWorkspaces
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkSourceWorkspaces
+import org.kodein.mock.Mocker
 import org.koin.dsl.module
 
-val fakeDataSourceModule = module {
+fun testDataSourcesModule(mocker: Mocker) = module {
+    single<IGrpcCalls> {
+        MockIGrpcCalls(mocker)
+    }
+    single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(), get()) }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())
     }
     single<SKLocalKeyValueSource> {
-        val hashMap = HashMap<String, Any>()
-        object : SKLocalKeyValueSource {
-            override fun clear() {
-                hashMap.clear()
-            }
-
-            override fun get(key: String): String? {
-                return hashMap[key] as String?
-            }
-
-            override fun save(key: String, value: Any) {
-                hashMap[key] = value
-            }
-
-        }
+        FakeKeyValueSource()
     }
     single<SKNetworkSourceChannel> {
-        SKNetworkSourceChannelImpl(
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
+        SKNetworkSourceChannelImpl(get(), get(), get(), get(), get())
     }
     single<SKNetworkSourceWorkspaces> {
         SKNetworkSourceWorkspacesImpl(get())
@@ -86,10 +78,7 @@ val fakeDataSourceModule = module {
         SKNetworkDataSourceReadChannelMembersImpl(get())
     }
     single<SKNetworkDataSourceMessages> {
-        SKNetworkDataSourceMessagesImpl(
-            get(),
-            get()
-        )
+        SKNetworkDataSourceMessagesImpl(get(), get())
     }
     single<SKNetworkDataSourceReadUsers> {
         SKNetworkDataSourceReadUsersImpl(get(), get())
@@ -134,9 +123,11 @@ val fakeDataSourceModule = module {
         SKLocalDataSourceMessagesImpl(
             get(),
             get(SlackMessageMessageQualifier),
-            get(),
-            get()
+            get(), get()
         )
+    }
+    single<IMessageDecrypter> {
+        IMessageDecrypterImpl(get(), get(), get())
     }
     single<SKLocalDataSourceChannelLastMessage> {
         SlackSKLocalDataSourceChannelLastMessage(
@@ -146,8 +137,7 @@ val fakeDataSourceModule = module {
             get(SlackChannelChannelQualifier),
             get(SlackChannelDMChannelQualifier),
             get(),
-            get(),
-            get()
+            get(), get()
         )
     }
 }

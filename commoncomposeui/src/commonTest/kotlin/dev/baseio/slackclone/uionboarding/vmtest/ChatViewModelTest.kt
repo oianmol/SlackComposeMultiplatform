@@ -3,6 +3,9 @@ package dev.baseio.slackclone.uionboarding.vmtest
 import app.cash.turbine.test
 import dev.baseio.slackclone.uichat.chatthread.ChatViewModel
 import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
+import dev.baseio.slackdata.protos.KMSKMessage
+import dev.baseio.slackdata.protos.KMSKMessages
+import dev.baseio.slackdata.protos.kmSKMessages
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
@@ -20,11 +23,13 @@ import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
 class ChatViewModelTest : SlackKoinUnitTest() {
+
     private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages by inject()
     private val useCaseChannelMembers: UseCaseGetChannelMembers by inject()
     private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages by inject()
     private val sendMessageDelegate: SendMessageDelegate by inject()
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
+
 
     @get:TestRule
     val instantTaskExecutorRule = AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
@@ -37,41 +42,19 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             useCaseFetchAndSaveMessages,
             useCaseChannelMembers,
             useCaseStreamLocalMessages,
-            sendMessageDelegate,koinApplication.koin.get()
+            sendMessageDelegate, koinApplication.koin.get()
         )
     }
 
     @Test
-    fun `when a message is sent it's found in the local database!`() {
+    fun `when a message is sent it's found in the local database! and then pagination loads the messages`() {
         runTest {
             authorizeUserFirst()
-
-            val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
-            val firstChannel = channels.first()
-            chatViewModel.requestFetch(firstChannel)
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
-
-            chatViewModel.sendMessageNow(message)
-
-            chatViewModel.chatMessagesFlow.test(15.seconds) {
-                awaitItem().apply {
-                    asserter.assertTrue("failed, found items!", this.isEmpty())
-                }
-                awaitItem().apply {
-                    asserter.assertTrue("failed, found no items!", this.isNotEmpty())
-                    asserter.assertTrue("failed, can't find $message ", this.find { it.decodedMessage == message } != null)
-                }
-            }
-
-        }
-    }
-
-    @Test
-    fun `when viewModel is initialized with a channel then pagination loads the messages`() {
-        runTest {
-            authorizeUserFirst()
-
+            mocker.everySuspending { iGrpcCalls().sendMessage(isAny(), isAny()) } returns channelPublicMessage(message)
+            mocker.everySuspending { iGrpcCalls().fetchChannelMembers(isAny(),isAny()) } returns testPublichannelMembers(testPublicChannels().channelsList.first())
+            mocker.everySuspending { iGrpcCalls().fetchMessages(isAny()) } returns testMessages(channelPublicMessage(message))
             // assert that sendMessageDelegate
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
             chatViewModel.requestFetch(channels.first())
@@ -82,14 +65,18 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             // assert pagination fetches new messages
             pagingState.test {
                 awaitItem().apply {
-                    asserter.assertTrue("was expecting empty state", this.isEmpty())
-                }
-                awaitItem().apply {
                     asserter.assertTrue("was expecting success state", this.isSuccess())
                 }
             }
         }
 
     }
+
+    private fun testMessages(channelPublicMessage: KMSKMessage): KMSKMessages {
+        return kmSKMessages {
+            this.messagesList.add(channelPublicMessage)
+        }
+    }
+
 
 }

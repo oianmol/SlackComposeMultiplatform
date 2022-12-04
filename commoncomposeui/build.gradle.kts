@@ -6,6 +6,7 @@ plugins {
     id(BuildPlugins.KOTLIN_PARCELABLE_PLUGIN)
     kotlin("native.cocoapods")
     id("com.rickclephas.kmp.nativecoroutines")
+    id("org.kodein.mock.mockmp") version "1.10.0"
     id(BuildPlugins.COMPOSE_ID) version Lib.AndroidX.COMPOSE_VERSION
     kotlin(BuildPlugins.SERIALIZATION) version Lib.Kotlin.KOTLIN_VERSION
 }
@@ -13,6 +14,9 @@ plugins {
 group = ProjectProperties.APPLICATION_ID
 version = "1.0"
 
+mockmp {
+    usesHelper = true
+}
 
 repositories {
     mavenCentral()
@@ -217,26 +221,3 @@ android {
 }
 
 tasks.replace("podGenIOS", PatchedPodGenTask::class)
-
-
-tasks.findByName("jvmTest")?.let {
-    it.doFirst {
-        SlackTestServer.start()
-    }
-
-    it.doLast {
-        SlackTestServer.stop()
-    }
-}
-
-tasks.named("iosSimulatorArm64Test", org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest::class).configure {
-    deviceId = "iPhone 14"
-
-    doFirst {
-        SlackTestServer.start()
-    }
-
-    doLast {
-        SlackTestServer.stop()
-    }
-}
