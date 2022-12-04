@@ -44,6 +44,9 @@ The android and jvm platform run's fine, make sure you match the ip address in G
 
 ![image](https://user-images.githubusercontent.com/4393101/201503478-78720caf-a91b-4fee-a3b2-61531fb73898.png)
 
+## Encryption Lib Specification
+
+![capillary](https://user-images.githubusercontent.com/4393101/205478018-4d9b1bbc-3263-4bd3-8349-2d149f83a72a.png)
 
 
 Video Demo for JVM Desktop and Android
