@@ -25,14 +25,24 @@ class NavigateChatThreadVMTest : SlackKoinUnitTest() {
     fun `when user searches a channel he gets the channel list with that criteria`() {
         runTest {
             authorizeUserFirst()
-            navigateChatThreadVM.search("new_channel")
-            navigateChatThreadVM.channelsStream.test(timeout = 5.seconds) {
+
+            val channelId = "1"
+            val name = "channel_public_$channelId"
+
+            mocker.everySuspending { iGrpcCalls().savePublicChannel(isAny(), isAny()) } returns testPublicChannel(
+                channelId,
+                "1"
+            )
+
+
+            navigateChatThreadVM.search(name)
+            navigateChatThreadVM.channelsStream.test {
                 awaitItem()
                 awaitItem().apply {
                     asserter.assertTrue({ "was expecting items!" }, this.isNotEmpty())
                     asserter.assertTrue(
                         { "was expecting new_channel!" },
-                        this.filter { it.channelName == "new_channel" }.size == 1
+                        this.filter { it.channelName == name }.size == 1
                     )
                 }
                 cancelAndIgnoreRemainingEvents()
