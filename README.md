@@ -27,13 +27,14 @@
 5. [This KMP project](https://github.com/oianmol/slackcomposemultiplatform)
 6. [Backend Server in gRPC Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
 7. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)
-8. [Capillary-kmp](https://github.com/oianmol/capillary-kmp)
-9. [Capillary-iOS-forNativeInterop](https://github.com/oianmol/slack_capillary_ios)
+8. [Slack encryption lib](https://github.com/oianmol/capillary-kmp)
+9. [Slack Encryption support for iOS](https://github.com/oianmol/slack_capillary_ios)
 
 ## Instructions to compile and get running
 
 1. Execute `git submodule update --init --recursive` and to update `git submodule update --recursive --remote` once the project is cloned to get all the dependent client projects.
-2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP/tree/fix/xcode_signing_issues) and install plugin and lib to mavenLocal()
+2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
+3. Clone [Capillary-kmp](https://github.com/oianmol/capillary-kmp) and install to mavenLocal()
 
 ## Improve build speed, execute them only when changes are made!
 
@@ -46,7 +47,8 @@ The android and jvm platform run's fine, make sure you match the ip address in G
 
 ## Architecture
 
-![image](https://user-images.githubusercontent.com/4393101/201503478-78720caf-a91b-4fee-a3b2-61531fb73898.png)
+![Slack Multiplatform (3)](https://user-images.githubusercontent.com/4393101/205478274-23b55650-5676-4530-bd12-cdbd96dd098d.png)
+
 
 Video Demo for JVM Desktop and Android
 
