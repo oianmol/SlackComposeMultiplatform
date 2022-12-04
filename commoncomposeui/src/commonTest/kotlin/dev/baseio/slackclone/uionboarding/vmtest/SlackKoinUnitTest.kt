@@ -101,7 +101,7 @@ abstract class SlackKoinUnitTest : KoinTest {
                 isAny(),
                 isAny()
             )
-        } returns testPublicChannels()
+        } returns testPublicChannels("1")
 
         useCaseCreateWorkspace.invoke(testUser().email,"12345","slack.com")
         getWorkspaces.invoke()
@@ -114,17 +114,23 @@ abstract class SlackKoinUnitTest : KoinTest {
         getUsers.invoke(selectedWorkspace.uuid)
     }
 
-    suspend fun testPublicChannels(): KMSKChannels {
+    suspend fun testPublicChannels(workId:String): KMSKChannels {
         return kmSKChannels {
-            this.channelsList.add(kmSKChannel {
-                this.uuid = "channel_public_1"
-                this.name = "channel_public_1"
-                this.workspaceId = "1"
-                this.publicKey =
-                    CapillaryInstances.getInstance("channel_public_1").publicKey().encoded.toKMSlackPublicKey()
-            })
+            this.channelsList.add(testPublicChannel("1",workId))
+            this.channelsList.add(testPublicChannel("2",workId))
         }
     }
+
+    suspend fun testPublicChannel(id:String,workId:String): KMSKChannel {
+        return kmSKChannel {
+            this.uuid = "channel_public_$id"
+            this.name = "channel_public_$id"
+            this.workspaceId = workId
+            this.publicKey =
+                CapillaryInstances.getInstance("channel_public_$id").publicKey().encoded.toKMSlackPublicKey()
+        }
+    }
+
 
     suspend fun testDMChannels(): KMSKDMChannels {
         return kmSKDMChannels {
@@ -151,11 +157,11 @@ abstract class SlackKoinUnitTest : KoinTest {
     }
 
     suspend fun channelPublicMessage(message: String) = kmSKMessage {
-        this.channelId = testPublicChannels().channelsList.first().uuid
+        this.channelId = testPublicChannels("1").channelsList.first().uuid
         this.uuid = "random${Clock.System.now().toEpochMilliseconds()}"
         this.sender = "1"
         this.workspaceId = testWorkspaces().workspacesList.first().uuid
-        this.text = testEncryptedMessageFrom(testPublicChannels().channelsList.first(),message)
+        this.text = testEncryptedMessageFrom(testPublicChannels("1").channelsList.first(),message)
     }
 
     suspend fun testPublichannelMembers(channel: KMSKChannel) = kmSKChannelMembers {

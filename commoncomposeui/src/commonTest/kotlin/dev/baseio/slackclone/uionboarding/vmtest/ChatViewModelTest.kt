@@ -53,7 +53,7 @@ class ChatViewModelTest : SlackKoinUnitTest() {
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
             mocker.everySuspending { iGrpcCalls().sendMessage(isAny(), isAny()) } returns channelPublicMessage(message)
-            mocker.everySuspending { iGrpcCalls().fetchChannelMembers(isAny(),isAny()) } returns testPublichannelMembers(testPublicChannels().channelsList.first())
+            mocker.everySuspending { iGrpcCalls().fetchChannelMembers(isAny(),isAny()) } returns testPublichannelMembers(testPublicChannels("1").channelsList.first())
             mocker.everySuspending { iGrpcCalls().fetchMessages(isAny()) } returns testMessages(channelPublicMessage(message))
             // assert that sendMessageDelegate
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()

@@ -23,7 +23,14 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
     fun `when create channel is called with new channel name createdChannel is not null and local database has it!`() {
         runTest {
             authorizeUserFirst()
-            val name = "new_channel${Clock.System.now().toEpochMilliseconds()}"
+            val channelId = "1"
+            val name = "channel_public_$channelId"
+
+            mocker.everySuspending { iGrpcCalls().savePublicChannel(isAny(), isAny()) } returns testPublicChannel(
+                channelId,
+                "1"
+            )
+
             with(createNewChannelVM.createChannelState) {
                 value = value.copy(
                     channel = value.channel.copy(
@@ -44,15 +51,14 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                     asserter.assertTrue({ "was expecting $wasNavigated" }, wasNavigated)
                 }
 
-                skLocalDataSourceReadChannels.fetchAllChannels(useCaseGetSelectedWorkspace.invoke()!!.uuid)
-                    .test(15.seconds) {
-                        awaitItem().apply {
-                            asserter.assertTrue(
-                                { "Was expecting the channel" },
-                                this.find { it.channelName == name } != null
-                            )
-                        }
+                skLocalDataSourceReadChannels.fetchAllChannels(useCaseGetSelectedWorkspace.invoke()!!.uuid).test {
+                    awaitItem().apply {
+                        asserter.assertTrue(
+                            { "Was expecting the channel" },
+                            this.find { it.channelName == name } != null
+                        )
                     }
+                }
             }
 
 
