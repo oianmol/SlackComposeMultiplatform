@@ -33,10 +33,14 @@
 ## Instructions to compile and get running
 
 1. Execute `git submodule update --init --recursive` and to update `git submodule update --recursive --remote` once the project is cloned to get all the dependent client projects.
-2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
-3. Clone [Capillary-kmp](https://github.com/oianmol/capillary-kmp) and install to mavenLocal()
+2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP/tree/fix/xcode_signing_issues) and install plugin and lib to mavenLocal()
 
-`./gradlew iosDeployIPhone13ProDebug`
+## Improve build speed, execute them only when changes are made!
+
+1. Install slack_domain_layer to maven local  `./gradlew :slack_domain_layer:publishToMavenLocal`
+2. Install slack_generate_protos to maven local  `./gradlew :slack_generate_protos:publishToMavenLocal`
+3. Install slack_data_layer to maven local  `./gradlew :slack_data_layer:publishToMavenLocal`
+4. Install encryptionlib to maven local `./gradlew :encryptionlib:publishToMavenLocal`
 
 The android and jvm platform run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
 

@@ -16,11 +16,7 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/commoncomposeui" />
             <option value="$PROJECT_DIR$/desktop" />
-            <option value="$PROJECT_DIR$/encryptionlib" />
-            <option value="$PROJECT_DIR$/slack_data_layer" />
-            <option value="$PROJECT_DIR$/slack_domain_layer" />
             <option value="$PROJECT_DIR$/slack_generate_protos" />
-            <option value="$PROJECT_DIR$/slack_multiplatform_grpc_server" />
             <option value="$PROJECT_DIR$/slack_protos" />
           </set>
         </option>

@@ -50,8 +50,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(Lib.Project.SLACK_DOMAIN_COMMON))
-                implementation(project(Lib.Project.SLACK_DATA_COMMON))
+                implementation((Lib.Project.SLACK_DOMAIN_COMMON))
+                implementation((Lib.Project.SLACK_DATA_COMMON))
                 implementation(Deps.Kotlinx.datetime)
                 implementation(Deps.SqlDelight.runtime)
                 implementation(Deps.Koin.core)

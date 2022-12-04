@@ -48,8 +48,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(Lib.Project.common))
-                api(project(Lib.Project.SLACK_DOMAIN_COMMON))
-                api(project(Lib.Project.SLACK_DATA_COMMON))
+                api((Lib.Project.SLACK_DOMAIN_COMMON))
+                api((Lib.Project.SLACK_DATA_COMMON))
                 implementation(Deps.Kotlinx.datetime)
                 implementation(Deps.SqlDelight.runtime)
                 implementation(Deps.Koin.core)

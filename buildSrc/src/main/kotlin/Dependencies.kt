@@ -73,9 +73,9 @@ object Deps {
 
 object Lib {
     object Project {
-        const val SLACK_DOMAIN_COMMON = ":slack_domain_layer"
-        const val SLACK_DATA_COMMON = ":slack_data_layer"
-        const val CAPILLARY_KMP = ":capillary_kmp"
+        const val SLACK_DOMAIN_COMMON = "dev.baseio.slackclone:slack_domain_layer:1.0"
+        const val SLACK_DATA_COMMON = "dev.baseio.slackclone:slack_data_layer:1.0"
+        const val CAPILLARY_KMP = "dev.baseio.slackcrypto:capillary-kmp:1.0"
         const val common = ":common"
         const val commonComposeUI = ":commoncomposeui"
     }

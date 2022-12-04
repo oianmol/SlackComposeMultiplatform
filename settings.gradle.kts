@@ -14,13 +14,12 @@ rootProject.name = "SlackJetpackCompose"
 
 include(":android")
 include(":desktop")
+
+//include(":slack_domain_layer")
+//include(":slack_data_layer")
+//include(":encryptionlib")
 include(":common")
 include(":commoncomposeui")
 
-include(":slack_multiplatform_grpc_server")
-
-include(":encryptionlib")
-include(":slack_data_layer")
-include(":slack_domain_layer")
 include(":slack_generate_protos")
 include(":slack_protos")
