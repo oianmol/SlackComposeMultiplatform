@@ -121,7 +121,7 @@ kotlin {
                 }
                 implementation("com.google.firebase:firebase-core:21.1.1")
                 implementation("com.google.firebase:firebase-messaging:23.1.0")
-                implementation("com.google.firebase:firebase-messaging-ktx:21.0.0")
+                implementation("com.google.firebase:firebase-messaging-ktx:23.1.0")
                 implementation(Deps.Koin.android)
                 implementation(Lib.Async.COROUTINES)
                 implementation(Deps.AndroidX.lifecycleViewModelKtx)
@@ -217,3 +217,26 @@ android {
 }
 
 tasks.replace("podGenIOS", PatchedPodGenTask::class)
+
+
+tasks.findByName("jvmTest")?.let {
+    it.doFirst {
+        SlackTestServer.start()
+    }
+
+    it.doLast {
+        SlackTestServer.stop()
+    }
+}
+
+tasks.named("iosSimulatorArm64Test", org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest::class).configure {
+    deviceId = "iPhone 14"
+
+    doFirst {
+        SlackTestServer.start()
+    }
+
+    doLast {
+        SlackTestServer.stop()
+    }
+}

@@ -12,6 +12,6 @@ val testDataModule = module {
     }
 
     single<IGrpcCalls> {
-        GrpcCalls( skKeyValueData = get())
+        GrpcCalls( skKeyValueData = get(), port = 8083)
     }
 }
