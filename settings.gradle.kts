@@ -20,6 +20,5 @@ include(":desktop")
 //include(":encryptionlib")
 include(":common")
 include(":commoncomposeui")
-
-include(":slack_generate_protos")
+//include(":slack_generate_protos")
 include(":slack_protos")
