@@ -12,6 +12,8 @@
       <module name="SlackJetpackCompose.protos.main" target="18" />
       <module name="SlackJetpackCompose.protos.test" target="18" />
       <module name="SlackJetpackCompose.slack-data-lib" target="17" />
+      <module name="SlackJetpackCompose.slack_multiplatform_grpc_server.main" target="18" />
+      <module name="SlackJetpackCompose.slack_multiplatform_grpc_server.test" target="18" />
     </bytecodeTargetLevel>
   </component>
 </project>
