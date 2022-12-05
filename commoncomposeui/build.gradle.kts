@@ -25,6 +25,8 @@ repositories {
 
 dependencies {
     commonMainApi(Lib.Multiplatform.mokoPaging)
+    commonMainApi(project(Lib.Project.SLACK_DOMAIN_COMMON))
+    commonMainApi(project(Lib.Project.SLACK_DATA_COMMON))
 }
 
 kotlin {
@@ -52,18 +54,13 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(Lib.Project.common))
-                api((Lib.Project.SLACK_DOMAIN_COMMON))
-                api((Lib.Project.SLACK_DATA_COMMON))
                 implementation(Deps.Kotlinx.datetime)
                 implementation(Deps.SqlDelight.runtime)
                 implementation(Deps.Koin.core)
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
-                implementation(Deps.Kotlinx.datetime)
-                implementation(Deps.SqlDelight.runtime)
                 implementation(Lib.Async.COROUTINES)
-                implementation(Deps.Koin.core)
                 implementation(kotlin("stdlib-common"))
                 implementation(Lib.Decompose.core)
                 implementation(Lib.Decompose.composejb)

@@ -16,7 +16,7 @@ import dev.baseio.slackclone.qrscanner.QRScannerUI
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
-internal fun SlackApp(
+fun SlackApp(
     modifier: Modifier = Modifier,
     rootComponent: () -> RootComponent
 ) {

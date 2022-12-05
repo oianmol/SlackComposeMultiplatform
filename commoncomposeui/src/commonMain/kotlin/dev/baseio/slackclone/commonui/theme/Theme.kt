@@ -56,7 +56,7 @@ private val DarkColorPalette = SlackCloneColorPalette(
 )
 
 @Composable
-internal fun SlackCloneTheme(
+fun SlackCloneTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

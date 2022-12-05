@@ -66,7 +66,7 @@ fun testDataSourcesModule(mocker: Mocker) = module {
         SKNetworkSourceChannelImpl(get(), get(), get(), get(), get())
     }
     single<SKNetworkSourceWorkspaces> {
-        SKNetworkSourceWorkspacesImpl(get())
+        SKNetworkSourceWorkspacesImpl(get(), get())
     }
     single<SKAuthNetworkDataSource> {
         SKAuthNetworkDataSourceImpl(get())
@@ -118,7 +118,12 @@ fun testDataSourcesModule(mocker: Mocker) = module {
             get(), get(), get()
         )
     }
-    single<SKLocalDataSourceUsers> { SKLocalDataSourceUsersImpl(get(), get(SlackUserRandomUserQualifier)) }
+    single<SKLocalDataSourceUsers> {
+        SKLocalDataSourceUsersImpl(
+            get(),
+            get(SlackUserRandomUserQualifier)
+        )
+    }
     single<SKLocalDataSourceMessages> {
         SKLocalDataSourceMessagesImpl(
             get(),

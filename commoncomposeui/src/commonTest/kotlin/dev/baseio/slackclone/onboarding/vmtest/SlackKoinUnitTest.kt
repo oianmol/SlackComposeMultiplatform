@@ -46,15 +46,16 @@ import kotlin.test.BeforeTest
 abstract class SlackKoinUnitTest : KoinTest {
     protected val mocker = Mocker()
     lateinit var koinApplication: KoinApplication
+
     protected lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
     protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
     protected val useCaseCreateWorkspace: UseCaseCreateWorkspace by inject()
     protected val useCaseCreateChannel: UseCaseCreateChannel by inject()
     protected val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch by inject()
     protected val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
-    protected val getWorkspaces: UseCaseFetchAndSaveWorkspaces by inject()
-    protected val getChannels: UseCaseFetchAndSaveChannels by inject()
-    val skLocalDataSourceChannels: SKLocalDataSourceReadChannels by inject()
+    private val getWorkspaces: UseCaseFetchAndSaveWorkspaces by inject()
+    private val getChannels: UseCaseFetchAndSaveChannels by inject()
+    private val skLocalDataSourceChannels: SKLocalDataSourceReadChannels by inject()
     protected val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers by inject()
     protected val getUsers: UseCaseFetchAndSaveUsers by inject()
 
@@ -64,7 +65,7 @@ abstract class SlackKoinUnitTest : KoinTest {
         platformMess()
     }
 
-    fun initKoinApp() {
+    private fun initKoinApp() {
         koinApplication = startKoin {
             modules(
                 module {

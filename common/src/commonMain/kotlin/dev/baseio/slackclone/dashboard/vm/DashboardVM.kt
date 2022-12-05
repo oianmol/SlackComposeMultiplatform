@@ -3,6 +3,7 @@ package dev.baseio.slackclone.dashboard.vm
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackclone.fcmToken
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.qualifier.named
 
 class DashboardVM(
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
@@ -36,7 +38,7 @@ class DashboardVM(
     private val skKeyValueData: SKLocalKeyValueSource,
     private val grpcCalls: IGrpcCalls,
     private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
-    ) :
+) :
     SlackViewModel(coroutineDispatcherProvider) {
     val selectedChatChannel = MutableStateFlow<DomainLayerChannels.SKChannel?>(null)
     var selectedWorkspace = MutableStateFlow<DomainLayerWorkspaces.SKWorkspace?>(null)
@@ -87,9 +89,11 @@ class DashboardVM(
 
     private fun observeForUserData(workspaceId: String) {
         observeNewMessagesJob =
-            useCaseObserveMessages.invoke(UseCaseWorkspaceChannelRequest(workspaceId = workspaceId)).launchIn(viewModelScope)
+            useCaseObserveMessages.invoke(UseCaseWorkspaceChannelRequest(workspaceId = workspaceId))
+                .launchIn(viewModelScope)
         useCaseObserveUsersJob = useCaseObserveUsers.invoke(workspaceId).launchIn(viewModelScope)
-        useCaseObserveChannelsJob = useCaseObserveChannels.invoke(workspaceId).launchIn(viewModelScope)
+        useCaseObserveChannelsJob =
+            useCaseObserveChannels.invoke(workspaceId).launchIn(viewModelScope)
     }
 
     private fun cancelJobIfWorkspaceChanged(workspaceId: String) {

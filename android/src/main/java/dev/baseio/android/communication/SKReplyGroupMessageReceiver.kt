@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.android.R
+import org.koin.core.qualifier.named
 
 class SKReplyGroupMessageReceiver : BroadcastReceiver() {
 
@@ -32,6 +33,8 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
     private fun channelId(intent: Intent) =
         intent.extras?.getString(MainActivity.EXTRA_CHANNEL_ID)!!
 
+    fun workspaceId(intent: Intent) = intent.extras?.getString(MainActivity.EXTRA_WORKSPACE_ID)!!
+
     private fun notificationId(intent: Intent) =
         intent.extras?.getInt(MainActivity.INTENT_KEY_NOT_ID)
 
@@ -41,7 +44,7 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
             if (results?.containsKey(NOTIFICATION_ACTION_KEY_REPLY) == true) {
                 val quickReplyResult = results.getCharSequence(NOTIFICATION_ACTION_KEY_REPLY)
                 if (!quickReplyResult.isNullOrEmpty()) {
-                    sendGroupChannelMessage(quickReplyResult, channelId(intent), notificationId(intent), context)
+                    sendGroupChannelMessage(quickReplyResult, channelId(intent),workspaceId(intent), notificationId(intent), context)
                 }
             }
         }
@@ -50,6 +53,7 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
     private fun sendGroupChannelMessage(
         quickReplyResult: CharSequence,
         channelId: String,
+        workspaceId:String,
         notificationId: Int?,
         context: Context
     ) {

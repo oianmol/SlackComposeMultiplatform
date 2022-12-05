@@ -109,6 +109,8 @@ internal fun DashboardUI(
                                 dashboardComponent.navigateOnboarding()
                             },{
                                 dashboardComponent.navigateQrScanner(it)
+                            },{
+                                dashboardComponent.navigateAddWorkspace()
                             }
                         )
                     },
@@ -151,6 +153,8 @@ internal fun DashboardUI(
                                 dashboardComponent.navigateOnboarding()
                             },{
                                 dashboardComponent.navigateQrScanner(it)
+                            },{
+                                dashboardComponent.navigateAddWorkspace()
                             }
                         )
                     },

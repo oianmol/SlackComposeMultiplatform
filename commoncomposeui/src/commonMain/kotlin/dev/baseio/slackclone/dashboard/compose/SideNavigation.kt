@@ -34,10 +34,14 @@ internal fun SideNavigation(
     sideNavComponent: SideNavComponent,
     onClose: () -> Unit,
     navigateOnboardingClearRoutes: () -> Unit,
-    navigateQrScanner: (QrScannerMode) -> Unit
+    navigateQrScanner: (QrScannerMode) -> Unit,
+    navigateAddWorkspace: () -> Unit
 ) {
     val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
-    SlackCloneSurface(color = LocalSlackCloneColor.current.uiBackground, modifier = modifier.fillMaxSize()) {
+    SlackCloneSurface(
+        color = LocalSlackCloneColor.current.uiBackground,
+        modifier = modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxHeight(),
@@ -65,13 +69,19 @@ internal fun SideNavigation(
                 navigateOnboardingClearRoutes()
             }, openQrScanner = {
                 navigateQrScanner(QrScannerMode.QR_DISPLAY)
+            }, addWorkspace = {
+                navigateAddWorkspace()
             })
         }
     }
 }
 
 @Composable
-internal fun SideNavFooter(logout: () -> Unit, openQrScanner: () -> Unit) {
+internal fun SideNavFooter(
+    logout: () -> Unit,
+    openQrScanner: () -> Unit,
+    addWorkspace: () -> Unit
+) {
     Column(modifier = Modifier) {
         Divider(color = LocalSlackCloneColor.current.lineColor)
         SlackListItem(
@@ -83,6 +93,9 @@ internal fun SideNavFooter(logout: () -> Unit, openQrScanner: () -> Unit) {
             onItemClick = {
                 openQrScanner()
             })
+        SlackListItem(icon = Icons.Filled.Add, title = "Add Workspace", onItemClick = {
+            addWorkspace()
+        })
         SlackListItem(icon = Icons.Filled.Settings, title = "Preferences")
         SlackListItem(icon = Icons.Filled.CheckCircle, title = "Help")
         SlackListItem(icon = Icons.Filled.ExitToApp, title = "Logout", onItemClick = {
@@ -163,7 +176,8 @@ internal fun OrganizationLogo(
     ) {
         SlackImageBox(
             modifierChild.align(Alignment.Center),
-            picUrl ?: "https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"
+            picUrl
+                ?: "https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"
         )
     }
 }

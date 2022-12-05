@@ -27,5 +27,4 @@ class AuthKoinComponents : KoinComponent {
     fun provideUseCaseFetchAndSaveWorkspaces(): UseCaseFetchAndSaveWorkspaces = get()
     fun provideUseCaseCreateChannel(): UseCaseCreateChannel = get()
     fun provideUseCaseFetchAllChannels(): UseCaseFetchAllChannels = get()
-    fun localUser(): DomainLayerUsers.SKUser = get<SKLocalKeyValueSource>().skUser()
 }

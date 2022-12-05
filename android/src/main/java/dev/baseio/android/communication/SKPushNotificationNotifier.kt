@@ -44,8 +44,12 @@ class SKPushNotificationNotifier(
         }
     }
 
-    suspend fun createReplyNotification(skMessage: DomainLayerMessages.SKMessage, channel: DomainLayerChannels.SKChannel) {
-        val channelMessagesMap = HashMap<DomainLayerChannels.SKChannel, ArrayList<DomainLayerMessages.SKMessage>>()
+    suspend fun createReplyNotification(
+        skMessage: DomainLayerMessages.SKMessage,
+        channel: DomainLayerChannels.SKChannel
+    ) {
+        val channelMessagesMap =
+            HashMap<DomainLayerChannels.SKChannel, ArrayList<DomainLayerMessages.SKMessage>>()
         addToChannelMessageMap(channel, skMessage, channelMessagesMap)
         processChannelMessageMapForGroupNotification(channelMessagesMap)
     }
@@ -114,7 +118,7 @@ class SKPushNotificationNotifier(
             .setSmallIcon(R.drawable.ic_baseline_notifications_24)
             // build summary info into InboxStyle template
             .setStyle(
-                inboxStyleFromMessages(messages,channel)
+                inboxStyleFromMessages(messages, channel)
             )
             // specify which group this notification belongs to
             .setGroup(channel.channelId)
@@ -178,7 +182,7 @@ class SKPushNotificationNotifier(
     // TODO - Try to find a way to have consistent ids instead of the current generator based ids
     private fun getChannelActivityIntent(skMessage: DomainLayerMessages.SKMessage): PendingIntent? {
         val resultIntent =
-            MainActivity.channelChatIntent(skMessage.channelId, context)
+            MainActivity.channelChatIntent(skMessage.channelId, skMessage.workspaceId, context)
         return PendingIntent.getActivity(
             context,
             skMessage.uuid.hashCode(),
@@ -215,7 +219,9 @@ class SKPushNotificationNotifier(
             .setLabel(replyLabel)
             .build()
         val replyAction: Action = Action.Builder(
-            android.R.drawable.sym_action_chat, context.getString(R.string.notif_reply), resultPendingIntent
+            android.R.drawable.sym_action_chat,
+            context.getString(R.string.notif_reply),
+            resultPendingIntent
         )
             .addRemoteInput(remoteInput)
             .setAllowGeneratedReplies(true)
@@ -246,7 +252,11 @@ class SKPushNotificationNotifier(
     ) {
         notificationManager.cancel(notificationId)
         notificationManager.cancel(channelNotificationId)
-        Toast.makeText(context, context.getString(R.string.notification_message_sent), Toast.LENGTH_LONG)
+        Toast.makeText(
+            context,
+            context.getString(R.string.notification_message_sent),
+            Toast.LENGTH_LONG
+        )
             .show()
     }
 

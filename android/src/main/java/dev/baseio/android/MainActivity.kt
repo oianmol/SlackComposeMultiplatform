@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     fun Intent.channelId() = this.extras?.getString(MainActivity.EXTRA_CHANNEL_ID)
 
+    fun Intent.workspaceId() = this.extras?.getString(MainActivity.EXTRA_WORKSPACE_ID)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val defaultComponentContext = DefaultComponentContext(
@@ -48,7 +50,11 @@ class MainActivity : AppCompatActivity() {
                 root
             }
             LaunchedEffect(intent?.channelId()) {
-                intent?.channelId()?.let { root.navigateChannel(it) }
+                with(intent) {
+                    channelId()?.let {
+                        root.navigateChannel(channelId()!!, workspaceId()!!)
+                    }
+                }
             }
             askForPostNotificationPermission()
         }
@@ -78,13 +84,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun channelChatIntent(channelId: String, context: Context): Intent {
+        fun channelChatIntent(channelId: String, workspaceId: String, context: Context): Intent {
             return Intent(context, MainActivity::class.java).apply {
                 putExtra(EXTRA_CHANNEL_ID, channelId)
+                putExtra(EXTRA_WORKSPACE_ID, workspaceId)
             }
         }
 
         const val EXTRA_CHANNEL_ID: String = "channel_id"
+        const val EXTRA_WORKSPACE_ID = "workspaceId"
         const val INTENT_KEY_NOT_ID: String = "notification_id"
     }
 }
