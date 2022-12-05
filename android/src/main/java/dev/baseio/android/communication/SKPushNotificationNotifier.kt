@@ -17,11 +17,11 @@ import androidx.core.app.NotificationCompat.InboxStyle
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import dev.baseio.android.MainActivity
-import dev.baseio.slackclone.koinApp
 import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import org.example.android.R
+import org.koin.java.KoinJavaComponent.getKoin
 import java.util.UUID
 
 const val NOTIFICATION_CHANNEL_ID_MESSAGES: String = "MessagesMagicMountain"
@@ -56,8 +56,9 @@ class SKPushNotificationNotifier(
             val messages = it.value
 
             val notifications = messages.map { skMessage ->
+                getKoin()
                 skMessage.decodedMessage =
-                    koinApp.koin.get<IMessageDecrypter>().decrypted(skMessage)?.decodedMessage ?: ""
+                    getKoin().get<IMessageDecrypter>().decrypted(skMessage)?.decodedMessage ?: ""
                 skMessage
             }.map { skMessage ->
                 notificationFromFCMDataModel(skMessage, channel)

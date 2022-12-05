@@ -23,15 +23,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.AT_THE_RATE
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.HASH_TAG
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.INVITE_TAG
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.URL_TAG
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.urlPattern
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.mentionTagPattern
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.hashTagPattern
-import dev.baseio.slackclone.uichat.chatthread.MentionsPatterns.inviteTagPattern
-import dev.baseio.slackclone.uichat.chatthread.SpanInfos
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.AT_THE_RATE
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.HASH_TAG
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.INVITE_TAG
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.URL_TAG
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.urlPattern
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.mentionTagPattern
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.hashTagPattern
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.inviteTagPattern
+import dev.baseio.slackclone.chatmessaging.chatthread.SpanInfos
 
 @Composable
 internal fun MentionsTextField(

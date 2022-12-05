@@ -1,8 +1,6 @@
 package dev.baseio.slackclone
 
-import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
-import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.dataSourceModule
 import dev.baseio.slackdata.injection.dispatcherModule
@@ -12,7 +10,9 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
-lateinit var koinApp: KoinApplication
+private lateinit var koinApp: KoinApplication
+
+fun getKoin() = koinApp.koin
 
 expect fun platformModule(): Module
 

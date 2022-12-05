@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import dev.baseio.android.MainActivity
-import dev.baseio.slackclone.koinApp
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
@@ -57,11 +57,11 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
             throwable.printStackTrace()
         }) {
             kotlin.runCatching {
-                        val user = koinApp.koin.get<SKLocalKeyValueSource>().skUser()
+                        val user = getKoin().get<SKLocalKeyValueSource>().skUser()
                         val channel =
-                            koinApp.koin.get<SKLocalDataSourceReadChannels>().getChannelByChannelId(channelId)
+                            getKoin().get<SKLocalDataSourceReadChannels>().getChannelByChannelId(channelId)
 
-                        koinApp.koin.get<UseCaseSendMessage>().invoke(
+                        getKoin().get<UseCaseSendMessage>().invoke(
                             DomainLayerMessages.SKMessage(
                                 uuid = System.currentTimeMillis().toString(),
                                 workspaceId = user.workspaceId,
@@ -75,7 +75,7 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
                             ), channel!!.publicKey
                         )
                         notificationId?.let { it1 ->
-                            koinApp.koin.get<NotificationManager>()
+                            getKoin().get<NotificationManager>()
                                 .notify(it1, NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_MESSAGES)
                                     .setContentText("You just replied back!")
                                     .setSmallIcon(R.drawable.ic_baseline_notifications_24)

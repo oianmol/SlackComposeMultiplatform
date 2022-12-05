@@ -6,13 +6,13 @@ import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelComponent
-import dev.baseio.slackclone.uichannels.createsearch.SearchChannelsComponent
-import dev.baseio.slackclone.uichat.newchat.NewChatThreadComponent
-import dev.baseio.slackclone.uidashboard.vm.DashboardComponent
-import dev.baseio.slackclone.uionboarding.GettingStartedComponent
-import dev.baseio.slackclone.uionboarding.vm.CreateWorkspaceComponent
-import dev.baseio.slackclone.uiqrscanner.QrScannerMode
+import dev.baseio.slackclone.channels.createsearch.CreateNewChannelComponent
+import dev.baseio.slackclone.channels.createsearch.SearchChannelsComponent
+import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadComponent
+import dev.baseio.slackclone.dashboard.vm.DashboardComponent
+import dev.baseio.slackclone.onboarding.GettingStartedComponent
+import dev.baseio.slackclone.onboarding.vm.CreateWorkspaceComponent
+import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
@@ -41,7 +41,7 @@ interface Root {
 
 class RootComponent(
   context: ComponentContext,
-  skKeyValueData: SKLocalKeyValueSource = koinApp.koin.get()
+  skKeyValueData: SKLocalKeyValueSource = getKoin().get()
 ) : Root, ComponentContext by context {
 
   private val navigation = StackNavigation<Config>()

@@ -18,7 +18,6 @@ import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.initKoin
-import dev.baseio.slackdata.SKKeyValueData
 import kotlinx.cinterop.useContents
 import platform.UIKit.UIWindow
 import platform.UIKit.UIViewController

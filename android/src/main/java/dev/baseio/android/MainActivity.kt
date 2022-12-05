@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     fun Intent.channelId() = this.extras?.getString(MainActivity.EXTRA_CHANNEL_ID)
 
-
-    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val defaultComponentContext = DefaultComponentContext(
@@ -46,13 +44,13 @@ class MainActivity : AppCompatActivity() {
             RootComponent(defaultComponentContext)
         }
         setContent {
-            askForPostNotificationPermission()
             MobileApp {
                 root
             }
             LaunchedEffect(intent?.channelId()) {
                 intent?.channelId()?.let { root.navigateChannel(it) }
             }
+            askForPostNotificationPermission()
         }
     }
 

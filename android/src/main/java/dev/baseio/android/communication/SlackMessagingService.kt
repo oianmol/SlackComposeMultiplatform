@@ -5,7 +5,7 @@ import android.util.Base64
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dev.baseio.slackclone.koinApp
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
@@ -42,12 +42,12 @@ class SlackMessagingService : FirebaseMessagingService() {
         Log.e("message", message.data.toString())
         val type = message.data["type"]
         if (type == "new_message") {
-            val user = koinApp.koin.get<SKLocalKeyValueSource>().skUser()
+            val user = getKoin().get<SKLocalKeyValueSource>().skUser()
             coroutineScope.launch(CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
             }) {
                 val channel =
-                    koinApp.koin.get<SKLocalDataSourceReadChannels>().getChannelById(
+                    getKoin().get<SKLocalDataSourceReadChannels>().getChannelById(
                         user.workspaceId,
                         message.data["channelId"]!!
                     )

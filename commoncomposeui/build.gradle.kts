@@ -87,7 +87,6 @@ kotlin {
                 implementation("junit:junit:4.13.2")
                 implementation(Deps.SqlDelight.jvmDriver)
                 implementation(Deps.SqlDelight.androidDriver)
-                implementation(TestLib.ROBO_ELECTRIC)
                 implementation(TestLib.ANDROID_JUNIT)
                 implementation(Lib.Async.COROUTINES_TEST)
                 implementation(Lib.Grpc.OKHTTP)
@@ -219,5 +218,3 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
-
-tasks.replace("podGenIOS", PatchedPodGenTask::class)

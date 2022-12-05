@@ -102,7 +102,7 @@ object Lib {
         private const val COMPOSE_CONSTRAINT_LAYOUT_VERSION = "1.0.0"
         private const val COMPOSE_NAVIGATION_VERSION = "2.5.0-alpha01"
         private const val COMPOSE_COIL_VERSION = "2.2.0"
-        private const val ACCOMPANIST_VERSION = "0.26.3-beta"
+        private const val ACCOMPANIST_VERSION = "0.28.0"
         private const val ACCOMPANIST_FLOW_LAYOUT_VERSION = "0.24.13-rc"
         private const val WINDOW_METRICES_VERSION = "1.0.0"
         private const val ACTIVITY_VERSION = "1.6.0"

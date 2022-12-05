@@ -1,10 +1,10 @@
 package dev.baseio.slackclone.commonui.material
 
 import androidx.compose.ui.text.input.TextFieldValue
-import dev.baseio.slackclone.uichat.chatthread.TextRange
+import dev.baseio.slackclone.chatmessaging.chatthread.TextRange
 import androidx.compose.ui.text.TextRange as AndroidTextRange
 
-fun dev.baseio.slackclone.uichat.chatthread.TextFieldValue.toTextFieldValue(): TextFieldValue {
+fun dev.baseio.slackclone.chatmessaging.chatthread.TextFieldValue.toTextFieldValue(): TextFieldValue {
     return TextFieldValue(
         this.text,
         this.selection.toCommonTextSelection(),

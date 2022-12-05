@@ -1,2 +1,0 @@
-package dev.baseio.slackdata
-

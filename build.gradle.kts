@@ -19,9 +19,9 @@ buildscript {
 group = "dev.baseio.slackclone"
 version = "1.0"
 
-/*subprojects {
+subprojects {
      apply(plugin = BuildPlugins.KTLINT)
-}*/
+}
 
 apply(from = teamPropsFile("git-hooks.gradle.kts"))
 

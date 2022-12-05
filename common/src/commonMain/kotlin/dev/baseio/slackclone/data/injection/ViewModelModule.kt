@@ -1,11 +1,11 @@
 package dev.baseio.slackclone.data.injection
 
-import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegate
-import dev.baseio.slackclone.uichat.chatthread.SendMessageDelegateImpl
-import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegate
-import dev.baseio.slackclone.uidashboard.vm.UserProfileDelegateImpl
-import dev.baseio.slackclone.uionboarding.QrCodeDelegate
-import dev.baseio.slackclone.uionboarding.QrCodeDelegateImpl
+import dev.baseio.slackclone.chatmessaging.chatthread.SendMessageDelegate
+import dev.baseio.slackclone.chatmessaging.chatthread.SendMessageDelegateImpl
+import dev.baseio.slackclone.dashboard.vm.UserProfileDelegate
+import dev.baseio.slackclone.dashboard.vm.UserProfileDelegateImpl
+import dev.baseio.slackclone.onboarding.QrCodeDelegate
+import dev.baseio.slackclone.onboarding.QrCodeDelegateImpl
 import org.koin.dsl.module
 
 val viewModelDelegateModule = module {

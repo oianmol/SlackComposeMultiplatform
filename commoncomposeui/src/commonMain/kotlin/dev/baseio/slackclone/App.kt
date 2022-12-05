@@ -6,17 +6,17 @@ import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
-import dev.baseio.slackclone.uichannels.createsearch.CreateNewChannelUI
-import dev.baseio.slackclone.uichannels.createsearch.SearchCreateChannelUI
-import dev.baseio.slackclone.uichat.newchat.NewChatThreadScreen
-import dev.baseio.slackclone.uidashboard.compose.DashboardUI
-import dev.baseio.slackclone.uionboarding.compose.CreateWorkspaceScreen
-import dev.baseio.slackclone.uionboarding.compose.GettingStartedUI
-import dev.baseio.slackclone.uiqrscanner.QRScannerUI
+import dev.baseio.slackclone.channels.createsearch.CreateNewChannelUI
+import dev.baseio.slackclone.channels.createsearch.SearchCreateChannelUI
+import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadScreen
+import dev.baseio.slackclone.dashboard.compose.DashboardUI
+import dev.baseio.slackclone.onboarding.compose.CreateWorkspaceScreen
+import dev.baseio.slackclone.onboarding.compose.GettingStartedUI
+import dev.baseio.slackclone.qrscanner.QRScannerUI
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
- fun SlackApp(
+internal fun SlackApp(
     modifier: Modifier = Modifier,
     rootComponent: () -> RootComponent
 ) {
@@ -41,10 +41,12 @@ import dev.baseio.slackclone.uiqrscanner.QRScannerUI
                 SearchCreateChannelUI(child.component)
             }
             is Root.Child.QrScanner -> {
-                QRScannerUI(mode = child.mode, qrCodeDelegate = koinApp.koin.get()) {
+                QRScannerUI(mode = child.mode, qrCodeDelegate = getKoin().get()) {
                     rootComponent().navigationPop()
                 }
             }
         }
     }
 }
+
+
