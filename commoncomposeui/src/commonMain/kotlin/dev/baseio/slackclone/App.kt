@@ -10,9 +10,9 @@ import dev.baseio.slackclone.channels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.channels.createsearch.SearchCreateChannelUI
 import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadScreen
 import dev.baseio.slackclone.dashboard.compose.DashboardUI
-import dev.baseio.slackclone.onboarding.compose.CreateWorkspaceScreen
 import dev.baseio.slackclone.onboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.onboarding.compose.GettingStartedUI
+import dev.baseio.slackclone.onboarding.compose.ProcessEmailWorkspaceSendEmailUI
 import dev.baseio.slackclone.onboarding.compose.WorkspaceInputUI
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 
@@ -24,9 +24,10 @@ fun SlackApp(
 ) {
     Children(modifier = modifier, stack = rootComponent().childStack, animation = stackAnimation(fade())) {
         when (val child = it.instance) {
-            is Root.Child.AuthorizeSendEmail->{
+            is Root.Child.AuthorizeSendEmail -> {
                 ProcessEmailWorkspaceSendEmailUI(child.component)
             }
+
             is Root.Child.GettingStarted -> {
                 GettingStartedUI(child.component)
             }

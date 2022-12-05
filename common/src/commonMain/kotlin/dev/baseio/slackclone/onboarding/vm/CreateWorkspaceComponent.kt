@@ -12,7 +12,7 @@ class CreateWorkspaceComponent(
     val navigateBack:()->Unit
 ) : ComponentContext by componentContext {
 
-    val authCreateWorkspaceVM =
+    val viewModel =
         instanceKeeper.getOrCreate {
             AuthCreateWorkspaceVM(
                 getKoin().get(),

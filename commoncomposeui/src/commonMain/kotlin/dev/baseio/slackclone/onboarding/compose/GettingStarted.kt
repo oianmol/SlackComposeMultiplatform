@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -53,7 +54,6 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.commonui.theme.SlackGreen
 import dev.baseio.slackclone.commonui.theme.SlackLogoYellow
 import dev.baseio.slackclone.getKoin
 import dev.baseio.slackclone.platformType
@@ -90,7 +90,11 @@ internal fun GettingStartedUI(
           .padding(12.dp)
       ) {
         if (showSlackAnim.showSlackAnim) {
-          SlackAnimation(gettingStartedVM)
+          val shouldStartLogoAnimation by gettingStartedVM.viewModel.componentState.subscribeAsState()
+          LaunchedEffect(Unit) {
+            gettingStartedVM.viewModel.animate()
+          }
+          SlackAnimation(shouldStartLogoAnimation.isStartAnimation)
         } else {
           AnimatedVisibility(visible = true) {
             when (size) {

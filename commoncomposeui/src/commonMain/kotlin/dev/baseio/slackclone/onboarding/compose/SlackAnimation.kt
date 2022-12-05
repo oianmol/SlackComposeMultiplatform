@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,9 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.onboarding.GettingStartedComponent
 import dev.baseio.slackclone.onboarding.SlackAnim
 import dev.baseio.slackclone.onboarding.SlackAnim.ANIM_DURATION
 
@@ -42,34 +39,29 @@ val loaderGreen = Color(91, 178, 128)
 val slackWhite = Color(255, 255, 255)
 
 @Composable
-internal fun SlackAnimation(gettingStartedVM: GettingStartedComponent) {
+internal fun SlackAnimation(isStartAnimation: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val shouldStartLogoAnimation by gettingStartedVM.viewModel.componentState.subscribeAsState()
-
-        LaunchedEffect(Unit) {
-            gettingStartedVM.viewModel.animate()
-        }
 
         val animatedRotateLogo by animateFloatAsState(
-            targetValue = if (shouldStartLogoAnimation.isStartAnimation) 0f else 360f,
+            targetValue = if (isStartAnimation) 0f else 360f,
             tween(durationMillis = SlackAnim.ANIM_DURATION)
         )
 
         val animatedMoveLogo by animateDpAsState(
-            targetValue = if (shouldStartLogoAnimation.isStartAnimation) (-120).dp else 0.dp,
+            targetValue = if (isStartAnimation) (-120).dp else 0.dp,
             tween(SlackAnim.ANIM_DURATION)
         )
 
-        SKTextLoader(Modifier.align(Alignment.Center), shouldStartLogoAnimation.isStartAnimation)
+        SKTextLoader(Modifier.align(Alignment.Center), isStartAnimation)
 
         SKFourColorLoader(
             Modifier.align(Alignment.Center),
             animatedRotateLogo,
             animatedMoveLogo,
-            shouldStartLogoAnimation.isStartAnimation
+            isStartAnimation
         )
     }
 }
