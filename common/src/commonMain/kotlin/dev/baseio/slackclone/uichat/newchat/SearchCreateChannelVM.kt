@@ -1,10 +1,8 @@
 package dev.baseio.slackclone.uichat.newchat
 
-import dev.baseio.security.CapillaryInstances
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseCreateChannel
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
@@ -21,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
-class NavigateChatThreadVM(
+class SearchCreateChannelVM(
     private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
     private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
