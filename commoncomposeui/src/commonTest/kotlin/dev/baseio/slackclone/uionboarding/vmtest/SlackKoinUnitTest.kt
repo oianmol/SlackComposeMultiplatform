@@ -13,6 +13,7 @@ import dev.baseio.slackdata.datasources.remote.channels.toKMSlackPublicKey
 import dev.baseio.slackdata.injection.*
 import dev.baseio.slackdata.localdata.testDbConnection
 import dev.baseio.slackdata.protos.*
+import dev.baseio.slackdata.provideKeystoreIfRequired
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
@@ -243,6 +244,7 @@ abstract class SlackKoinUnitTest : KoinTest {
         when (platformType()) {
             ANDROID -> {
                 Dispatchers.setMain(coroutineDispatcherProvider.main)
+                provideKeystoreIfRequired()
             }
 
             Platform.IOS -> {

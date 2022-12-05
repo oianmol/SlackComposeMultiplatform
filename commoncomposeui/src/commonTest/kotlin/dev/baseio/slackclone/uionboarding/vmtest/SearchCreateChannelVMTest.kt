@@ -9,7 +9,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.asserter
 
-class SearchChatThreadVMTest : SlackKoinUnitTest() {
+class SearchCreateChannelVMTest : SlackKoinUnitTest() {
     var navigated = false
 
     private val searchCreateChannelVM: SearchCreateChannelVM by lazy {
