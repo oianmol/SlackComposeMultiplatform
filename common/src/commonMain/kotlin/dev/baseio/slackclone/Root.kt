@@ -15,12 +15,10 @@ import dev.baseio.slackclone.onboarding.vm.CreateWorkspaceComponent
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
-import org.koin.core.qualifier.named
 
 interface Root {
     val childStack: Value<ChildStack<*, Child>>
 
-    fun navigateCreateWorkspace(isLogin: Boolean)
     fun navigateDashboard()
 
     fun navigateQRScanner(mode: QrScannerMode)
@@ -34,12 +32,14 @@ interface Root {
         data class SearchCreateChannel(val component: SearchChannelsComponent) : Child()
         data class CreateNewChannel(val component: CreateNewChannelComponent) : Child()
         data class NewChatThread(val component: NewChatThreadComponent) : Child()
-        data class CreateWorkspace(val component: CreateWorkspaceComponent) : Child()
         data class DashboardScreen(val component: DashboardComponent) : Child()
+        data class AuthorizeSendEmail(val component: CreateWorkspaceComponent) : Child()
         data class QrScanner(val mode: QrScannerMode) : Child()
         object EmailMagicLink : Child()
-        object SignInManually : Child()
+        data class SignInManually(val emailAddress: String) : Child()
     }
+
+    fun navigateEmailMagicLink()
 }
 
 class RootComponent(
@@ -72,14 +72,14 @@ class RootComponent(
         navigation.push(Config.DashboardScreen(channelId, workspaceId))
     }
 
-    override fun navigateCreateWorkspace(isLogin: Boolean) {
-        navigation.push(Config.CreateWorkspace(isLogin))
-    }
-
     override fun navigateDashboard() {
         navigation.navigate {
             listOf(Config.DashboardScreen())
         }
+    }
+
+    override fun navigateEmailMagicLink() {
+        navigation.push(Config.EmailMagicLink)
     }
 
     override fun navigateQRScanner(mode: QrScannerMode) {
@@ -92,27 +92,29 @@ class RootComponent(
 
     private fun createChild(config: Config, componentContext: ComponentContext): Root.Child =
         when (config) {
-            is Config.GettingStarted -> Root.Child.GettingStarted(
-                GettingStartedComponent(
-                    componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()),
-                    { isLogin ->
-                        navigateCreateWorkspace(isLogin)
-                    },
-                    {
-                        navigationPop()
-                    }) {
-                    navigateDashboard()
-                }
-            )
-
-            is Config.CreateWorkspace -> Root.Child.CreateWorkspace(
+            is Config.AuthorizeSendEmail -> Root.Child.AuthorizeSendEmail(
                 CreateWorkspaceComponent(
                     componentContext = componentContext.childContext(CreateWorkspaceComponent::class.qualifiedName.toString()),
-                    login = config.isLogin, {
+                    email = config.emailAddress,
+                    workspace = config.workspace, {
                         navigateDashboard()
                     }, {
                         navigationPop()
-                    })
+                    }
+                )
+            )
+
+            is Config.GettingStarted -> Root.Child.GettingStarted(
+                GettingStartedComponent(
+                    componentContext = componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()),
+                    navigateBack = {
+                        navigationPop()
+                    },
+                    navigateDashboard = {
+                        navigateDashboard()
+                    }) {
+                    navigateEmailMagicLink()
+                }
             )
 
             is Config.DashboardScreen -> Root.Child.DashboardScreen(
@@ -197,12 +199,8 @@ class RootComponent(
             )
 
             is Config.QrScanner -> Root.Child.QrScanner(mode = config.mode)
-            Config.EmailMagicLink -> {
-                Root.Child.EmailMagicLink
-            }
-            Config.SignInManually -> {
-                Root.Child.SignInManually
-            }
+            Config.EmailMagicLink -> Root.Child.EmailMagicLink
+            is Config.SignInManually -> Root.Child.SignInManually(config.workspace)
         }
 
 
@@ -219,13 +217,13 @@ class RootComponent(
             Config()
 
         @Parcelize
-        data class CreateWorkspace(var isLogin: Boolean) : Config()
-
-        @Parcelize
         object EmailMagicLink : Config()
 
         @Parcelize
-        object SignInManually : Config()
+        data class SignInManually(val workspace: String) : Config()
+
+        @Parcelize
+        data class AuthorizeSendEmail(val emailAddress: String, val workspace: String) : Config()
 
         @Parcelize
         object SearchCreateChannelUI : Config()

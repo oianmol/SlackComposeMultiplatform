@@ -5,10 +5,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
-import dev.baseio.android.MainActivity
+import dev.baseio.android.SlackAndroidActivity
 import dev.baseio.slackclone.getKoin
 import dev.baseio.slackdata.datasources.local.channels.skUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
@@ -19,7 +18,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.android.R
-import org.koin.core.qualifier.named
 
 class SKReplyGroupMessageReceiver : BroadcastReceiver() {
 
@@ -31,12 +29,12 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
     }
 
     private fun channelId(intent: Intent) =
-        intent.extras?.getString(MainActivity.EXTRA_CHANNEL_ID)!!
+        intent.extras?.getString(SlackAndroidActivity.EXTRA_CHANNEL_ID)!!
 
-    fun workspaceId(intent: Intent) = intent.extras?.getString(MainActivity.EXTRA_WORKSPACE_ID)!!
+    fun workspaceId(intent: Intent) = intent.extras?.getString(SlackAndroidActivity.EXTRA_WORKSPACE_ID)!!
 
     private fun notificationId(intent: Intent) =
-        intent.extras?.getInt(MainActivity.INTENT_KEY_NOT_ID)
+        intent.extras?.getInt(SlackAndroidActivity.INTENT_KEY_NOT_ID)
 
     private fun processMessageFromNotificationIntent(intent: Intent?, context: Context) {
         intent?.let {

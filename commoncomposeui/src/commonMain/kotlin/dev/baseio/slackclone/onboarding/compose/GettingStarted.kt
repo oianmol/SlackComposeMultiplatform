@@ -16,6 +16,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,12 +30,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -281,7 +277,7 @@ internal fun GetStartedButton(
       Spacer(Modifier.padding(8.dp))
 
       TeamNewToSlack(Modifier.padding(8.dp)) {
-        gettingStartedComponent.onCreateWorkspaceRequested(false)
+        gettingStartedComponent.emailMagicLink()
       }
     }
   }
@@ -289,14 +285,15 @@ internal fun GetStartedButton(
 
 @Composable
 internal fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
-  Button(
+  OutlinedButton(
     onClick = {
       onClick()
     },
     Modifier
       .fillMaxWidth()
       .height(40.dp),
-    colors = ButtonDefaults.buttonColors(backgroundColor = SlackGreen)
+    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+    border = BorderStroke(2.dp, Color.White)
   ) {
     Text(
       text = if (!scanMode) "Scan QR" else "Close Scanner",
@@ -312,7 +309,7 @@ internal fun LoginButton(
 ) {
   Button(
     onClick = {
-      gettingStartedVM.onCreateWorkspaceRequested(true)
+      gettingStartedVM.emailMagicLink()
     },
     Modifier
       .fillMaxWidth()
@@ -320,7 +317,7 @@ internal fun LoginButton(
     colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
   ) {
     Text(
-      text = "Sign In to Slack",
+      text = "Email me a magic link.",
       style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
     )
   }

@@ -6,7 +6,8 @@ import dev.baseio.slackclone.getKoin
 
 class CreateWorkspaceComponent(
     componentContext: ComponentContext,
-    private val login: Boolean,
+    private val email: String,
+    val workspace:String,
     val navigateDashboard: () -> Unit,
     val navigateBack:()->Unit
 ) : ComponentContext by componentContext {
@@ -19,8 +20,4 @@ class CreateWorkspaceComponent(
                 useCaseCreateWorkspace = getKoin().get(), useCaseSaveFCMToken = getKoin().get(),
             )
         }
-
-    fun isLogin(): Boolean {
-        return login
-    }
 }

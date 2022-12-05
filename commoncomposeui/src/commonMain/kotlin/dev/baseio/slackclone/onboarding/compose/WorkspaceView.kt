@@ -15,7 +15,7 @@ import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-fun WorkspaceInputView(modifier: Modifier) {
+fun WorkspaceInputView(modifier: Modifier, workspaceUrl: String, onUpdate: (String) -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -35,34 +35,18 @@ fun WorkspaceInputView(modifier: Modifier) {
             horizontalArrangement = Arrangement.Start
         ) {
             TextHttps()
-            WorkspaceTF()
+            WorkspaceTF(workspaceUrl,onUpdate)
             TextSlackCom()
         }
     }
 }
 
-@Composable
-private fun TextSlackCom() {
-    Text(
-        ".slack.com",
-        style = textStyleField().copy(
-            color = LocalSlackCloneColor.current.textPrimary.copy(
-                alpha = 0.4f
-            )
-        ),
-        overflow = TextOverflow.Clip,
-        maxLines = 1
-    )
-}
-
 
 @Composable
-internal fun WorkspaceTF() {
-    var workspace by remember { mutableStateOf("") }
-
+internal fun WorkspaceTF( workspaceUrl: String, onUpdate: (String) -> Unit) {
     BasicTextField(
-        value = workspace,
-        onValueChange = { newEmail -> workspace = newEmail },
+        value = workspaceUrl,
+        onValueChange = { newEmail -> onUpdate(newEmail)},
         textStyle = textStyleField(),
         singleLine = true,
         modifier = Modifier
@@ -72,7 +56,7 @@ internal fun WorkspaceTF() {
         cursorBrush = SolidColor(LocalSlackCloneColor.current.textPrimary),
         decorationBox = { inputTf ->
             Box {
-                if (workspace.isEmpty()) {
+                if (workspaceUrl.isEmpty()) {
                     Text(
                         text = "your-workspace",
                         style = textStyleField(),
@@ -86,10 +70,3 @@ internal fun WorkspaceTF() {
         }
     )
 }
-
-@Composable
-private fun textStyleField() = SlackCloneTypography.h6.copy(
-    color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.7f),
-    fontWeight = FontWeight.Normal,
-    textAlign = TextAlign.Start
-)

@@ -43,37 +43,6 @@ internal fun TextSlackCom() {
 }
 
 @Composable
-internal fun WorkspaceTF(workspace: String, onUpdate: (String) -> Unit) {
-    BasicTextField(
-        value = workspace,
-        onValueChange = { newEmail ->
-            onUpdate(newEmail)
-        },
-        textStyle = textStyleField(),
-        singleLine = true,
-        modifier = Modifier
-            .width(IntrinsicSize.Min)
-            .padding(top = 12.dp, bottom = 12.dp),
-        maxLines = 1,
-        cursorBrush = SolidColor(LocalSlackCloneColor.current.textPrimary),
-        decorationBox = { inputTf ->
-            Box {
-                if (workspace.isEmpty()) {
-                    Text(
-                        text = "your-workspace",
-                        style = textStyleField(),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.width(IntrinsicSize.Max)
-                    )
-                } else {
-                    inputTf()
-                }
-            }
-        }
-    )
-}
-
-@Composable
 internal fun textStyleField() = SlackCloneTypography.subtitle1.copy(
     color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.7f),
     fontWeight = FontWeight.Normal,

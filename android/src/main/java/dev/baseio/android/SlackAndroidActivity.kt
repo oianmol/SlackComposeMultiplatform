@@ -27,11 +27,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.example.android.R
 
-class MainActivity : AppCompatActivity() {
+class SlackAndroidActivity : AppCompatActivity() {
 
-    fun Intent.channelId() = this.extras?.getString(MainActivity.EXTRA_CHANNEL_ID)
+    fun Intent.channelId() = this.extras?.getString(SlackAndroidActivity.EXTRA_CHANNEL_ID)
 
-    fun Intent.workspaceId() = this.extras?.getString(MainActivity.EXTRA_WORKSPACE_ID)
+    fun Intent.workspaceId() = this.extras?.getString(SlackAndroidActivity.EXTRA_WORKSPACE_ID)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         fun channelChatIntent(channelId: String, workspaceId: String, context: Context): Intent {
-            return Intent(context, MainActivity::class.java).apply {
+            return Intent(context, SlackAndroidActivity::class.java).apply {
                 putExtra(EXTRA_CHANNEL_ID, channelId)
                 putExtra(EXTRA_WORKSPACE_ID, workspaceId)
             }

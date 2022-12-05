@@ -25,7 +25,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun EmailAddressInputView(modifier: Modifier = Modifier) {
+fun EmailAddressInputView(modifier: Modifier = Modifier, email: String, onUpdate: (String) -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -44,7 +44,9 @@ fun EmailAddressInputView(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            EmailTF()
+            EmailTF(email) { newEmail ->
+                onUpdate(newEmail)
+            }
         }
     }
 
@@ -52,18 +54,21 @@ fun EmailAddressInputView(modifier: Modifier = Modifier) {
 
 @ExperimentalComposeUiApi
 @Composable
-private fun EmailTF() {
-    var email by remember { mutableStateOf("") }
+private fun EmailTF(email: String, onUpdate: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
         value = email,
         onValueChange = { newEmail ->
-            email = newEmail
+            onUpdate(newEmail)
         },
         textStyle = emailTFStyle(),
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Email, contentDescription = null, tint = LocalSlackCloneColor.current.textPrimary)
+            Icon(
+                imageVector = Icons.Default.Email,
+                contentDescription = null,
+                tint = LocalSlackCloneColor.current.textPrimary
+            )
         },
         placeholder = {
             Text(

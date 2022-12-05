@@ -12,9 +12,9 @@ import kotlin.coroutines.CoroutineContext
 
 class GettingStartedComponent(
   componentContext: ComponentContext,
-  val onCreateWorkspaceRequested: (Boolean) -> Unit,
   val navigateBack: () -> Unit,
   private val navigateDashboard: () -> Unit,
+  val emailMagicLink: () -> Unit
 ) : ComponentContext by componentContext {
 
   val viewModel =
