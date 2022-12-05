@@ -37,6 +37,8 @@ interface Root {
         data class CreateWorkspace(val component: CreateWorkspaceComponent) : Child()
         data class DashboardScreen(val component: DashboardComponent) : Child()
         data class QrScanner(val mode: QrScannerMode) : Child()
+        object EmailMagicLink : Child()
+        object SignInManually : Child()
     }
 }
 
@@ -106,10 +108,11 @@ class RootComponent(
             is Config.CreateWorkspace -> Root.Child.CreateWorkspace(
                 CreateWorkspaceComponent(
                     componentContext = componentContext.childContext(CreateWorkspaceComponent::class.qualifiedName.toString()),
-                    login = config.isLogin
-                ) {
-                    navigateDashboard()
-                }
+                    login = config.isLogin, {
+                        navigateDashboard()
+                    }, {
+                        navigationPop()
+                    })
             )
 
             is Config.DashboardScreen -> Root.Child.DashboardScreen(
@@ -194,6 +197,12 @@ class RootComponent(
             )
 
             is Config.QrScanner -> Root.Child.QrScanner(mode = config.mode)
+            Config.EmailMagicLink -> {
+                Root.Child.EmailMagicLink
+            }
+            Config.SignInManually -> {
+                Root.Child.SignInManually
+            }
         }
 
 
@@ -211,6 +220,12 @@ class RootComponent(
 
         @Parcelize
         data class CreateWorkspace(var isLogin: Boolean) : Config()
+
+        @Parcelize
+        object EmailMagicLink : Config()
+
+        @Parcelize
+        object SignInManually : Config()
 
         @Parcelize
         object SearchCreateChannelUI : Config()

@@ -215,3 +215,5 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+
+tasks.replace("podGenIOS", PatchedPodGenTask::class)

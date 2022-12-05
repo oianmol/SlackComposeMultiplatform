@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.LocalWindow
+import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.dashboard.compose.WindowSize
 import dev.baseio.slackclone.dashboard.compose.getWindowSizeClass
@@ -40,6 +42,19 @@ internal fun CreateWorkspaceScreen(
         scaffoldState = scaffoldState,
         snackbarHost = {
             scaffoldState.snackbarHostState
+        }, topBar = {
+            SlackSurfaceAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton({
+                        component.navigateBack()
+                    }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                },
+                backgroundColor = SlackCloneColor,
+                actions = {}
+            )
         }
     ) { innerPadding ->
         SlackCloneSurface(
@@ -50,7 +65,10 @@ internal fun CreateWorkspaceScreen(
             when (size) {
                 WindowSize.Phones -> CreateWorkspacePhoneLayout(component)
                 else -> {
-                    CreateWorkspaceLargeScreenLayout(component, contentPadding = Modifier.padding(12.dp))
+                    CreateWorkspaceLargeScreenLayout(
+                        component,
+                        contentPadding = Modifier.padding(12.dp)
+                    )
                 }
             }
         }
@@ -126,7 +144,11 @@ internal fun WorkspaceCreateForm(createWorkspaceComponent: CreateWorkspaceCompon
 
 @Composable
 internal fun ErrorText(modifier: Modifier, error: Throwable?) {
-    Text(error?.stackTraceToString()?:"", style = SlackCloneTypography.subtitle1.copy(color = Color.White), modifier = modifier)
+    Text(
+        error?.stackTraceToString() ?: "",
+        style = SlackCloneTypography.subtitle1.copy(color = Color.White),
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -136,7 +158,11 @@ internal fun WorkspaceView(modifier: Modifier, name: String, viewModel: CreateWo
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Icon(Icons.Default.Build, contentDescription = null, modifier = Modifier.padding(horizontal = 12.dp))
+        Icon(
+            Icons.Default.Build,
+            contentDescription = null,
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
         TextHttps()
         WorkspaceTF(name) { nameNew ->
             viewModel.authCreateWorkspaceVM.state.apply {
@@ -160,13 +186,19 @@ internal fun CreateWorkspaceButton(text: String, onClick: () -> Unit) {
     ) {
         Text(
             text = text,
-            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+            style = SlackCloneTypography.subtitle1.copy(
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         )
     }
 }
 
 @Composable
-internal fun CreateWorkspaceLargeScreenLayout(viewModel: CreateWorkspaceComponent, contentPadding: Modifier) {
+internal fun CreateWorkspaceLargeScreenLayout(
+    viewModel: CreateWorkspaceComponent,
+    contentPadding: Modifier
+) {
     Row(
         Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,

@@ -7,7 +7,8 @@ import dev.baseio.slackclone.getKoin
 class CreateWorkspaceComponent(
     componentContext: ComponentContext,
     private val login: Boolean,
-    val navigateDashboard: () -> Unit
+    val navigateDashboard: () -> Unit,
+    val navigateBack:()->Unit
 ) : ComponentContext by componentContext {
 
     val authCreateWorkspaceVM =

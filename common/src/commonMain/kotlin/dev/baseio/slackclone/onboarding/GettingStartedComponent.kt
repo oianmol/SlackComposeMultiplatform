@@ -20,12 +20,12 @@ class GettingStartedComponent(
   val viewModel =
     instanceKeeper.getOrCreate {
       GettingStartedVM(
-        getKoin().get(),
+        coroutineDispatcherProvider = getKoin().get(),
         navigateDashboard = navigateDashboard,
         navigateBackNow = {
           navigateBack.invoke()
         },
-        getKoin().get(),
+        qrCodeDelegate = getKoin().get(),
       )
     }
 
