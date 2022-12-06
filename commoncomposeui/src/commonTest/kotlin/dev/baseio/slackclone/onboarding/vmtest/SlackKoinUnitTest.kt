@@ -23,7 +23,7 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseCreateWorkspace
+import dev.baseio.slackdomain.usecases.workspaces.UseCaseAuthWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,7 @@ abstract class SlackKoinUnitTest : KoinTest {
 
     protected lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
     protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
-    protected val useCaseCreateWorkspace: UseCaseCreateWorkspace by inject()
+    protected val useCaseAuthWorkspace: UseCaseAuthWorkspace by inject()
     protected val useCaseCreateChannel: UseCaseCreateChannel by inject()
     protected val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch by inject()
     protected val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
@@ -86,7 +86,7 @@ abstract class SlackKoinUnitTest : KoinTest {
     suspend fun authorizeUserFirst() {
         mocker.every { iGrpcCalls().skKeyValueData } returns koinApplication.koin.get()
         mocker.everySuspending { iGrpcCalls().currentLoggedInUser(isAny()) } returns testUser()
-        mocker.everySuspending { iGrpcCalls().saveWorkspace(isAny(), isAny()) } returns kmskAuthResult()
+        mocker.everySuspending { iGrpcCalls().sendMagicLink(isAny(), isAny()) } returns kmskAuthResult()
         mocker.everySuspending { iGrpcCalls().getWorkspaces(isAny()) } returns testWorkspaces()
         mocker.everySuspending {
             iGrpcCalls().getAllDMChannels(
@@ -105,7 +105,7 @@ abstract class SlackKoinUnitTest : KoinTest {
             )
         } returns testPublicChannels("1")
 
-        useCaseCreateWorkspace.invoke(testUser().email,"12345","slack.com")
+        useCaseAuthWorkspace.invoke(testUser().email,"12345","slack.com")
         getWorkspaces.invoke()
         selectedWorkspace = useCaseGetSelectedWorkspace.invoke()!!
         getChannels.invoke(selectedWorkspace.uuid, 0, 20)

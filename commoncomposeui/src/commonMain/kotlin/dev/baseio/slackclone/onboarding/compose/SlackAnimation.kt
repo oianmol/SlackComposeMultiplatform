@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.onboarding.SlackAnim
 import dev.baseio.slackclone.onboarding.SlackAnim.ANIM_DURATION
 
 val loaderYellow = Color(226, 179, 75)
@@ -39,30 +38,33 @@ val loaderGreen = Color(91, 178, 128)
 val slackWhite = Color(255, 255, 255)
 
 @Composable
-internal fun SlackAnimation(isStartAnimation: Boolean) {
+internal fun SlackAnimation(isAnimationStarting: Boolean,message:String, error: Throwable? = null) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
 
         val animatedRotateLogo by animateFloatAsState(
-            targetValue = if (isStartAnimation) 0f else 360f,
-            tween(durationMillis = SlackAnim.ANIM_DURATION)
+            targetValue = if (isAnimationStarting) 0f else 360f,
+            tween(durationMillis = ANIM_DURATION)
         )
 
         val animatedMoveLogo by animateDpAsState(
-            targetValue = if (isStartAnimation) (-120).dp else 0.dp,
-            tween(SlackAnim.ANIM_DURATION)
+            targetValue = if (isAnimationStarting) (-120).dp else 0.dp,
+            tween(ANIM_DURATION)
         )
 
-        SKTextLoader(Modifier.align(Alignment.Center), isStartAnimation)
+        SKTextLoader(Modifier.align(Alignment.Center), isAnimationStarting, error,message)
+        error?.let {
 
-        SKFourColorLoader(
-            Modifier.align(Alignment.Center),
-            animatedRotateLogo,
-            animatedMoveLogo,
-            isStartAnimation
-        )
+        } ?: kotlin.run {
+            SKFourColorLoader(
+                Modifier.align(Alignment.Center),
+                animatedRotateLogo,
+                animatedMoveLogo,
+                isAnimationStarting
+            )
+        }
     }
 }
 
@@ -97,7 +99,7 @@ internal fun CircularRectBlock(block: SlackAnimSpec.CircularRectBlockData, isMov
 
     val animatedWidth by animateDpAsState(
         targetValue = if (isMoveLeft) block.rectBlockWidth else block.rectBlockHeight,
-        tween(durationMillis = SlackAnim.ANIM_DURATION.times(2))
+        tween(durationMillis = ANIM_DURATION.times(2))
     )
 
     Droplet(block, dropScale)
@@ -141,16 +143,26 @@ internal fun Droplet(block: SlackAnimSpec.CircularRectBlockData, dropSize: Float
 }
 
 @Composable
-internal fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
+internal fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean, error: Throwable? = null, message: String) {
     Box(
         modifier = modifier.offset(x = 40.dp)
     ) {
-        Row {
-            AnimatedLetter("s", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.6).toInt())
-            AnimatedLetter("l", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.3).toInt())
-            AnimatedLetter("a", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.2).toInt())
-            AnimatedLetter("c", isStartAnimation, delay = SlackAnim.ANIM_DURATION.times(0.1).toInt())
-            AnimatedLetter("k", isStartAnimation, delay = 0)
+        error?.let {
+            Text(
+                text = "Failed to send you the email 🤷🏻‍♂ \n${it.message}️",
+                fontWeight = FontWeight.Light,
+                style = SlackCloneTypography.subtitle2.copy(
+                    color = slackWhite,
+                    letterSpacing = 4.sp
+                ),
+                modifier = Modifier
+            )
+        } ?: kotlin.run {
+            Row {
+                message.forEach {
+                    AnimatedLetter("$it", isStartAnimation, delay = ANIM_DURATION.times(message.length/100))
+                }
+            }
         }
     }
 }
@@ -159,7 +171,7 @@ internal fun SKTextLoader(modifier: Modifier, isStartAnimation: Boolean) {
 internal fun AnimatedLetter(letter: String, isVisible: Boolean, delay: Int) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
-        tween(durationMillis = SlackAnim.ANIM_DURATION.div(2), delayMillis = delay)
+        tween(durationMillis = ANIM_DURATION.div(2), delayMillis = delay)
     )
     Text(
         text = letter,

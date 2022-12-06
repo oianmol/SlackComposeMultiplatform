@@ -28,7 +28,7 @@ class GettingStartedVM(
   var componentState = MutableValue(
     GettingStartedComponent.GettingStartedState(
       introTextExpanded = false,
-      isStartAnimation = false,
+      isAnimationStarting = false,
       showSlackAnim = true,
     )
   )
@@ -47,11 +47,11 @@ class GettingStartedVM(
   fun animate() {
     viewModelScope.launch {
       componentState.reduce {
-        it.copy(isStartAnimation = true)
+        it.copy(isAnimationStarting = true)
       }
       delay(SlackAnim.ANIM_DURATION.toLong().plus(700))
       componentState.reduce {
-        it.copy(isStartAnimation = false)
+        it.copy(isAnimationStarting = false)
       }
       delay(SlackAnim.ANIM_DURATION.toLong().plus(800))
       endAnimation()

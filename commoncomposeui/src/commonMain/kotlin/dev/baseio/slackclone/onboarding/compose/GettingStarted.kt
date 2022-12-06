@@ -70,7 +70,7 @@ internal fun GettingStartedUI(
   viewModel: GettingStartedVM = gettingStartedVM.viewModel
 ) {
   val scaffoldState = rememberScaffoldState()
-  val showSlackAnim by viewModel.componentState.subscribeAsState()
+  val uiState by viewModel.componentState.subscribeAsState()
   val size = getWindowSizeClass(LocalWindow.current)
   PlatformSideEffects.GettingStartedScreen()
 
@@ -89,19 +89,17 @@ internal fun GettingStartedUI(
         modifier = Modifier
           .padding(12.dp)
       ) {
-        if (showSlackAnim.showSlackAnim) {
+        if (uiState.showSlackAnim) {
           val shouldStartLogoAnimation by gettingStartedVM.viewModel.componentState.subscribeAsState()
           LaunchedEffect(Unit) {
             gettingStartedVM.viewModel.animate()
           }
-          SlackAnimation(shouldStartLogoAnimation.isStartAnimation)
+          SlackAnimation(shouldStartLogoAnimation.isAnimationStarting,"slack")
         } else {
-          AnimatedVisibility(visible = true) {
-            when (size) {
-              WindowSize.Phones -> PhoneLayout(gettingStartedVM)
-              else -> {
-                LargeScreenLayout(gettingStartedVM)
-              }
+          when (size) {
+            WindowSize.Phones -> PhoneLayout(gettingStartedVM)
+            else -> {
+              LargeScreenLayout(gettingStartedVM)
             }
           }
         }

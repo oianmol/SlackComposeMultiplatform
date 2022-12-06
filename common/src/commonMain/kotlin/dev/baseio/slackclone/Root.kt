@@ -11,7 +11,7 @@ import dev.baseio.slackclone.channels.createsearch.SearchChannelsComponent
 import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.dashboard.vm.DashboardComponent
 import dev.baseio.slackclone.onboarding.GettingStartedComponent
-import dev.baseio.slackclone.onboarding.vm.CreateWorkspaceComponent
+import dev.baseio.slackclone.onboarding.vm.EmailMagicLinkComponent
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
@@ -33,7 +33,7 @@ interface Root {
         data class CreateNewChannel(val component: CreateNewChannelComponent) : Child()
         data class NewChatThread(val component: NewChatThreadComponent) : Child()
         data class DashboardScreen(val component: DashboardComponent) : Child()
-        data class AuthorizeSendEmail(val component: CreateWorkspaceComponent) : Child()
+        data class AuthorizeSendEmail(val component: EmailMagicLinkComponent) : Child()
         data class QrScanner(val mode: QrScannerMode) : Child()
         object EmailMagicLink : Child()
         data class SignInManually(val emailAddress: String) : Child()
@@ -93,8 +93,8 @@ class RootComponent(
     private fun createChild(config: Config, componentContext: ComponentContext): Root.Child =
         when (config) {
             is Config.AuthorizeSendEmail -> Root.Child.AuthorizeSendEmail(
-                CreateWorkspaceComponent(
-                    componentContext = componentContext.childContext(CreateWorkspaceComponent::class.qualifiedName.toString()),
+                EmailMagicLinkComponent(
+                    componentContext = componentContext.childContext(EmailMagicLinkComponent::class.qualifiedName.toString()),
                     email = config.emailAddress,
                     workspace = config.workspace, {
                         navigateDashboard()

@@ -31,7 +31,7 @@ class GettingStartedComponent(
 
   data class GettingStartedState(
     val introTextExpanded: Boolean,
-    val isStartAnimation: Boolean,
+    val isAnimationStarting: Boolean,
     val showSlackAnim: Boolean
   )
 }
