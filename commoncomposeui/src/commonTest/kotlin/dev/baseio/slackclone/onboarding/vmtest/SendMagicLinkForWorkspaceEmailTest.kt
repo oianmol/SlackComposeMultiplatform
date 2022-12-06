@@ -13,9 +13,11 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
 
     private val viewModel by lazy {
         SendMagicLinkForWorkspaceEmail(
-            coroutineDispatcherProvider,
-            useCaseAuthWorkspace,
-            useCaseSaveFCMToken = koinApplication.koin.get()
+            coroutineDispatcherProvider = coroutineDispatcherProvider,
+            useCaseAuthWorkspace = useCaseAuthWorkspace,
+            useCaseSaveFCMToken = koinApplication.koin.get(),
+            "email@email.com",
+            "slack",
         ) {}
     }
 
@@ -27,9 +29,6 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
             mocker.everySuspending { koinApplication.koin.get<IGrpcCalls>().sendMagicLink(isAny(), isAny()) } returns kmskAuthResult()
             mocker.everySuspending { koinApplication.koin.get<IGrpcCalls>().currentLoggedInUser(isAny()) } returns testUser()
 
-            viewModel.state.apply {
-                this.value = this.value.copy(email = "test@email.com", password = "password", "email")
-            }
             viewModel.sendMagicLink()
             viewModel.state.test(timeout = 5.seconds) {
                 awaitItem().apply {
@@ -46,9 +45,6 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
     @Test
     fun `viewModel state fails with validation exception`() {
         runTest {
-            viewModel.state.apply {
-                this.value = this.value.copy(email = "", password = "", "email")
-            }
             viewModel.sendMagicLink()
             viewModel.state.test(timeout = 5.seconds) {
                 awaitItem().apply {
