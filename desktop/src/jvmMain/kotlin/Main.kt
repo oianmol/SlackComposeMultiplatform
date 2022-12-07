@@ -1,31 +1,18 @@
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.Notification
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberNotification
-import androidx.compose.ui.window.rememberTrayState
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import dev.baseio.slackclone.SlackApp
-import dev.baseio.slackclone.LocalWindow
-import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.WindowInfo
+import com.github.sarxos.winreg.HKey
+import com.github.sarxos.winreg.WindowsRegistry
+import dev.baseio.slackclone.*
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.initKoin
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.awt.Desktop
-import kotlin.io.path.toPath
 
 @ExperimentalComposeUiApi
 fun main() {
@@ -62,6 +49,21 @@ fun main() {
 
 private fun handleDeepLink(rootComponent: RootComponent) {
     try {
+        val osName = System.getProperty("os.name")
+        if (osName.equals("windows", ignoreCase = true)) {
+            val reg: WindowsRegistry = WindowsRegistry.getInstance()
+            val appExecutablePath = System.getProperty("java.home")
+
+            val protocolRegKey = "Software\\Classes\\slackclone"
+            val protocolCmdRegKey = "shell\\open\\command"
+
+            reg.createKey(HKey.HKCU, protocolRegKey)
+            reg.createKey(HKey.HKCU, protocolCmdRegKey)
+
+            reg.writeStringValue(HKey.HKCU,protocolRegKey,"URL Protocol","")
+            reg.writeStringValue(HKey.HKCU,protocolCmdRegKey,"","$appExecutablePath %1")
+
+        }
         Desktop.getDesktop().setOpenURIHandler { event ->
             val queryMap = UriUtil.parseQueryMap(event.uri)
             queryMap["channelId"]?.let { channelId ->

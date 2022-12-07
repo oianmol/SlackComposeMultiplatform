@@ -26,6 +26,7 @@ kotlin {
                 implementation(project(Lib.Project.commonComposeUI))
                 implementation(project(Lib.Project.common))
                 implementation(compose.desktop.currentOs)
+                implementation("com.github.sarxos:windows-registry-util:0.3")
                 api(Lib.Decompose.core)
                 api(Lib.Decompose.coreJvm)
                 api(project(Lib.Project.SLACK_DATA_COMMON))
