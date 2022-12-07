@@ -1,7 +1,7 @@
 package dev.baseio.slackclone.koincomponents.auth
 
 import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
-import dev.baseio.slackdomain.usecases.auth.UseCaseCurrentUser
+import dev.baseio.slackdomain.usecases.auth.UseCaseFetchAndSaveCurrentUser
 import dev.baseio.slackdomain.usecases.channels.*
 import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
@@ -13,7 +13,7 @@ import org.koin.core.component.get
 
 class AuthKoinComponents : KoinComponent {
     fun provideUseCaseCreateWorkspace(): UseCaseAuthWorkspace = get()
-    fun provideUseCaseCurrentUser(): UseCaseCurrentUser = get()
+    fun provideUseCaseCurrentUser(): UseCaseFetchAndSaveCurrentUser = get()
     fun providerUseCaseGetSelectedWorkspace(): UseCaseGetSelectedWorkspace = get()
     fun providerUseCaseFetchChannelsWithLastMessage(): UseCaseFetchChannelsWithLastMessage = get()
     fun providerUseCaseFetchAndSaveChannels(): UseCaseFetchAndSaveChannels = get()

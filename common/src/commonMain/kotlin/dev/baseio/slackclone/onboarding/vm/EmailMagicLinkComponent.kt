@@ -18,7 +18,6 @@ class EmailMagicLinkComponent(
                 coroutineDispatcherProvider = getKoin().get(),
                 useCaseAuthWorkspace = getKoin().get(),
                 useCaseSaveFCMToken = getKoin().get(),
-                navigateDashboard = navigateDashboard,
                 email = email,
                 workspace = workspace
             )

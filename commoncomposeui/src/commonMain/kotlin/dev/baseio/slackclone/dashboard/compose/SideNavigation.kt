@@ -37,7 +37,7 @@ internal fun SideNavigation(
     navigateQrScanner: (QrScannerMode) -> Unit,
     navigateAddWorkspace: () -> Unit
 ) {
-    val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
+    val workspaces by sideNavComponent.viewModel.flow().collectAsState(emptyList())
     SlackCloneSurface(
         color = LocalSlackCloneColor.current.uiBackground,
         modifier = modifier.fillMaxSize()
@@ -58,7 +58,7 @@ internal fun SideNavigation(
                             onClose()
                         }
                     ) {
-                        Workspace(workspace = skWorkspace, index == 0)
+                        Workspace(workspace = skWorkspace, sideNavComponent.viewModel.isSelectedWorkspace(skWorkspace))
                         Spacer(modifier = Modifier.padding(8.dp))
                     }
                 }

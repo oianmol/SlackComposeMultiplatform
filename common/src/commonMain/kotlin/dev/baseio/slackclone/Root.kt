@@ -10,6 +10,7 @@ import dev.baseio.slackclone.channels.createsearch.CreateNewChannelComponent
 import dev.baseio.slackclone.channels.createsearch.SearchChannelsComponent
 import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadComponent
 import dev.baseio.slackclone.dashboard.vm.DashboardComponent
+import dev.baseio.slackclone.onboarding.AuthorizeTokenComponent
 import dev.baseio.slackclone.onboarding.GettingStartedComponent
 import dev.baseio.slackclone.onboarding.vm.EmailMagicLinkComponent
 import dev.baseio.slackclone.qrscanner.QrScannerMode
@@ -29,6 +30,7 @@ interface Root {
 
     sealed class Child {
         data class GettingStarted(val component: GettingStartedComponent) : Child()
+        data class AuthorizeWithToken(val component: AuthorizeTokenComponent) : Child()
         data class SearchCreateChannel(val component: SearchChannelsComponent) : Child()
         data class CreateNewChannel(val component: CreateNewChannelComponent) : Child()
         data class NewChatThread(val component: NewChatThreadComponent) : Child()
@@ -40,6 +42,7 @@ interface Root {
     }
 
     fun navigateEmailMagicLink()
+    fun navigateAuthorizeWithToken(token: String)
 }
 
 class RootComponent(
@@ -72,6 +75,10 @@ class RootComponent(
         navigation.push(Config.DashboardScreen(channelId, workspaceId))
     }
 
+    override fun navigateAuthorizeWithToken(token: String) {
+        navigation.push(Config.AuthorizeWithToken(token))
+    }
+
     override fun navigateDashboard() {
         navigation.navigate {
             listOf(Config.DashboardScreen())
@@ -92,27 +99,28 @@ class RootComponent(
 
     private fun createChild(config: Config, componentContext: ComponentContext): Root.Child =
         when (config) {
+            is Config.AuthorizeWithToken -> Root.Child.AuthorizeWithToken(
+                AuthorizeTokenComponent(
+                    componentContext = componentContext.childContext(AuthorizeTokenComponent::class.qualifiedName.toString()),
+                    token = config.token, navigateBack = ::navigationPop, navigateDashboard = ::navigateDashboard
+                )
+            )
+
             is Config.AuthorizeSendEmail -> Root.Child.AuthorizeSendEmail(
                 EmailMagicLinkComponent(
                     componentContext = componentContext.childContext(EmailMagicLinkComponent::class.qualifiedName.toString()),
                     email = config.emailAddress,
-                    workspace = config.workspace, {
-                        navigateDashboard()
-                    }, {
-                        navigationPop()
-                    }
+                    workspace = config.workspace, ::navigateDashboard, ::navigationPop
                 )
             )
 
             is Config.GettingStarted -> Root.Child.GettingStarted(
                 GettingStartedComponent(
                     componentContext = componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()),
-                    navigateBack = {
-                        navigationPop()
-                    },
-                    navigateDashboard = {
-                        navigateDashboard()
-                    }) {
+                    firstRun = config.firstLaunch,
+                    navigateBack = ::navigationPop,
+                    navigateDashboard = ::navigateDashboard
+                ) {
                     navigateEmailMagicLink()
                 }
             )
@@ -224,6 +232,9 @@ class RootComponent(
 
         @Parcelize
         data class AuthorizeSendEmail(val emailAddress: String, val workspace: String) : Config()
+
+        @Parcelize
+        data class AuthorizeWithToken(val token: String) : Config()
 
         @Parcelize
         object SearchCreateChannelUI : Config()

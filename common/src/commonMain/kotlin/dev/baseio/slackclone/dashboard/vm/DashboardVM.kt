@@ -3,8 +3,7 @@ package dev.baseio.slackclone.dashboard.vm
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackclone.fcmToken
-import dev.baseio.slackclone.getKoin
-import dev.baseio.slackdata.datasources.local.channels.skUser
+import dev.baseio.slackdata.datasources.local.channels.loggedInUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
@@ -16,7 +15,6 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndUpdateChangeInMessages
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndUpdateChangeInUsers
-import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +22,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.koin.core.qualifier.named
 
 class DashboardVM(
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    useCaseFetchAndSaveWorkspaces: UseCaseFetchAndSaveWorkspaces,
     private val useCaseObserveMessages: UseCaseFetchAndUpdateChangeInMessages,
     private val useCaseObserveUsers: UseCaseFetchAndUpdateChangeInUsers,
     private val useCaseObserveChannels: UseCaseFetchAndUpdateChangeInChannels,
@@ -63,14 +59,13 @@ class DashboardVM(
                     useCaseFetchChannels.invoke(workspaceId, 0, 20)
                     useCaseFetchAndSaveUsers(workspaceId)
                 }
-                grpcCalls.listenToChangeInChannelMembers(workspaceId, skKeyValueData.skUser().uuid).map {
+                grpcCalls.listenToChangeInChannelMembers(workspaceId, skKeyValueData.loggedInUser(workspaceId).uuid).map {
                     useCaseFetchChannels.invoke(workspaceId, 0, 20)
                 }.launchIn(viewModelScope)
             }
         }.launchIn(viewModelScope)
 
         viewModelScope.launch {
-            useCaseFetchAndSaveWorkspaces.invoke()
             useCaseSaveFCMToken.invoke(fcmToken())
         }
         useCaseGetSelectedWorkspace.invokeFlow().onEach {

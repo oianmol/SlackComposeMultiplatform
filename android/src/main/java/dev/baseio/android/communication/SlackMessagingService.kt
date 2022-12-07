@@ -1,13 +1,9 @@
 package dev.baseio.android.communication
 
 import android.app.NotificationManager
-import android.util.Base64
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dev.baseio.slackclone.getKoin
-import dev.baseio.slackdata.datasources.local.channels.skUser
-import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
@@ -42,13 +38,12 @@ class SlackMessagingService : FirebaseMessagingService() {
         Log.e("message", message.data.toString())
         val type = message.data["type"]
         if (type == "new_message") {
-            val user = getKoin().get<SKLocalKeyValueSource>().skUser()
             coroutineScope.launch(CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
             }) {
                 val channel =
                     getKoin().get<SKLocalDataSourceReadChannels>().getChannelById(
-                        user.workspaceId,
+                        message.data["workspaceId"]!!,
                         message.data["channelId"]!!
                     )
                 skPushNotificationNotifier.createReplyNotification(

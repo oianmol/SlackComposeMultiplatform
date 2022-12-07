@@ -136,8 +136,8 @@ kotlin {
             dependencies {
                 implementation(Lib.Async.COROUTINES)
                 implementation(Deps.Kotlinx.JVM.coroutinesSwing)
-                implementation("io.ktor:ktor-client-java:2.1.0")
-                implementation(Lib.Multiplatform.kamelImage)
+                api("io.ktor:ktor-client-java:2.1.0")
+                api(Lib.Multiplatform.kamelImage)
                 api(compose.preview)
                 implementation(Deps.Koin.core_jvm)
                 implementation(Lib.Decompose.composejb)

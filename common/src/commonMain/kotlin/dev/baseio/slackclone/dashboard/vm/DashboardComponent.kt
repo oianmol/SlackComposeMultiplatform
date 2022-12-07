@@ -75,7 +75,6 @@ class DashboardComponent(
             getKoin().get(),
             getKoin().get(),
             getKoin().get(),
-            getKoin().get(),
             getKoin().get()
         )
     }

@@ -1,7 +1,7 @@
 package dev.baseio.slackclone.dashboard.vm
 
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
-import dev.baseio.slackdomain.usecases.auth.UseCaseCurrentUser
+import dev.baseio.slackdomain.usecases.auth.UseCaseFetchAndSaveCurrentUser
 import dev.baseio.slackdomain.usecases.auth.UseCaseLogout
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMCode
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMStatusException
@@ -17,7 +17,7 @@ interface UserProfileDelegate {
 }
 
 class UserProfileDelegateImpl(
-    private val useCaseCurrentUser: UseCaseCurrentUser,
+    private val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser,
     private val useCaseClearAuth: UseCaseLogout
 ) : UserProfileDelegate {
 
@@ -38,7 +38,7 @@ class UserProfileDelegateImpl(
                 }
             }
         ) {
-            val result = useCaseCurrentUser()
+            val result = useCaseFetchAndSaveCurrentUser()
             currentLoggedInUser.value = result.getOrThrow()
         }
     }

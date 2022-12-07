@@ -12,10 +12,9 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     factory { UseCaseSaveFCMToken(get(), get()) }
-    factory { UseCaseQRAuthUser(get(), get(), get()) }
+    factory { UseCaseQRAuthUser(get(), get()) }
     factory { UseCaseGetChannelMembers(get(), get(), get()) }
-    factory { FindWorkspacesUseCase(get()) }
-    factory { UseCaseFetchAndSaveWorkspaces(get(), get()) }
+    factory { UseCaseFetchAndSaveWorkspaces(get(), get(), get(), get()) }
     factory { UseCaseFetchAndSaveChannelMembers(get(), get()) }
     factory { UseCaseGetWorkspaces(get()) }
     factory { UseCaseSetLastSelectedWorkspace(get()) }
@@ -31,15 +30,13 @@ val useCaseModule = module {
     factory { UseCaseStreamLocalMessages(get()) }
     factory { UseCaseFetchAllChannels(get()) }
     factory { UseCaseCreateChannel(get(), get(), get()) }
-    factory { UseCaseGetChannel(get()) }
     factory { UseCaseFetchChannelCount(get()) }
     factory { UseCaseInviteUserToChannel(get()) }
     factory { UseCaseSearchChannel(get()) }
     factory { UseCaseFetchLocalUsers(get()) }
-    factory { UseCaseFindChannelById(get(), get(), get()) }
     factory { UseCaseFetchAndSaveUsers(get(), get()) }
     factory { UseCaseLogout(get(), get()) }
     factory { UseCaseFetchChannelsWithSearch(get(), get(), get(), get()) }
-    factory { UseCaseCurrentUser(get()) }
+    factory { UseCaseFetchAndSaveCurrentUser(get(), get()) }
     factory { UseCaseAuthWorkspace(get()) }
 }

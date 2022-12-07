@@ -10,6 +10,13 @@ class SideNavComponent(
 ) : ComponentContext by componentContext {
 
     val viewModel = instanceKeeper.getOrCreate {
-        SideNavVM(getKoin().get(), getKoin().get(), getKoin().get(), getKoin().get(), navigateOnboardingRoot)
+        SideNavVM(
+            getKoin().get(),
+            getKoin().get(),
+            getKoin().get(),
+            getKoin().get(),
+            getKoin().get(),
+            navigateOnboardingRoot
+        )
     }
 }

@@ -13,10 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.onboarding.vm.EmailMagicLinkComponent
+import dev.baseio.slackclone.onboarding.AuthorizeTokenComponent
 
 @Composable
-internal fun ProcessEmailWorkspaceSendEmailUI(component: EmailMagicLinkComponent) {
+internal fun ProcessTokenFromDeepLink(component: AuthorizeTokenComponent){
     val uiState by component.viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
         component.viewModel.showLoading()
@@ -30,7 +30,7 @@ internal fun ProcessEmailWorkspaceSendEmailUI(component: EmailMagicLinkComponent
 
             uiState.error != null -> {
                 Text(
-                    text = "Failed to send you the email 🤷🏻‍♂ \n${uiState.error?.message}️",
+                    text = "Failed to verify the token! \n${uiState.error?.message}️",
                     fontWeight = FontWeight.Light,
                     style = SlackCloneTypography.subtitle2.copy(
                         color = slackWhite,
@@ -42,7 +42,7 @@ internal fun ProcessEmailWorkspaceSendEmailUI(component: EmailMagicLinkComponent
 
             else -> {
                 Text(
-                    text = "We have sent you the 📧!,Please check your mailbox before the link expires!️",
+                    text = "Awesome! you are logged in!",
                     fontWeight = FontWeight.Bold,
                     style = SlackCloneTypography.subtitle2.copy(
                         color = slackWhite,
@@ -54,5 +54,4 @@ internal fun ProcessEmailWorkspaceSendEmailUI(component: EmailMagicLinkComponent
             }
         }
     }
-
 }

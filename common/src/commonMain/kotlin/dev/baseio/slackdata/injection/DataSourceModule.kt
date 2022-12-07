@@ -54,7 +54,7 @@ val dataSourceModule = module {
     single<IGrpcCalls> {
         GrpcCalls(skKeyValueData = get(), address = "192.168.1.7")
     }
-    single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(),get()) }
+    single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(), get()) }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())
     }
@@ -93,7 +93,7 @@ val dataSourceModule = module {
         SKLocalDataSourceWriteWorkspacesImpl(get(), get())
     }
     single<SKLocalDataSourceReadWorkspaces> {
-        SKLocalDataSourceReadWorkspacesImpl(get(), get(SlackWorkspaceMapperQualifier), get())
+        SKLocalDataSourceReadWorkspacesImpl(get(), get(), get(SlackWorkspaceMapperQualifier), get())
     }
     single<SKNetworkDataSourceWriteChannels> {
         SKNetworkDataSourceWriteChannelsImpl(get(), get())
@@ -120,7 +120,8 @@ val dataSourceModule = module {
     single<SKLocalDataSourceUsers> {
         SKLocalDataSourceUsersImpl(
             get(),
-            get(SlackUserRandomUserQualifier)
+            get(),
+            get(SlackUserRandomUserQualifier),
         )
     }
     single<SKLocalDataSourceMessages> {

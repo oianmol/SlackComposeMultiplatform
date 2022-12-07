@@ -18,7 +18,7 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
             useCaseSaveFCMToken = koinApplication.koin.get(),
             "email@email.com",
             "slack",
-        ) {}
+        )
     }
 
     @Test
@@ -26,7 +26,7 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
         runTest {
             mocker.every { koinApplication.koin.get<IGrpcCalls>().skKeyValueData } returns koinApplication.koin.get()
             mocker.everySuspending { koinApplication.koin.get<IGrpcCalls>().saveFcmToken(isAny(), isAny()) } returns kmEmpty { }
-            mocker.everySuspending { koinApplication.koin.get<IGrpcCalls>().sendMagicLink(isAny(), isAny()) } returns kmskAuthResult()
+            mocker.everySuspending { koinApplication.koin.get<IGrpcCalls>().sendMagicLink(isAny(), isAny()) } returns kmEmpty {  }
             mocker.everySuspending { koinApplication.koin.get<IGrpcCalls>().currentLoggedInUser(isAny()) } returns testUser()
 
             viewModel.sendMagicLink()

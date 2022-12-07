@@ -16,8 +16,7 @@ class SendMagicLinkForWorkspaceEmail(
     private val useCaseAuthWorkspace: UseCaseAuthWorkspace,
     private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
     private val email: String,
-    private val workspace: String,
-    val navigateDashboard: () -> Unit
+    private val workspace: String
 ) : SlackViewModel(coroutineDispatcherProvider) {
     val state = MutableStateFlow(AuthCreateWorkspaceVMState())
 
@@ -55,7 +54,6 @@ class SendMagicLinkForWorkspaceEmail(
             )
             useCaseSaveFCMToken.invoke(fcmToken())
             state.value = state.value.copy(loading = false)
-            navigateDashboard()
         }
     }
 }

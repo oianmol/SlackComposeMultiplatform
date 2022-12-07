@@ -12,6 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 class GettingStartedComponent(
   componentContext: ComponentContext,
+  val firstRun:Boolean,
   val navigateBack: () -> Unit,
   private val navigateDashboard: () -> Unit,
   val emailMagicLink: () -> Unit

@@ -94,7 +94,7 @@ internal fun GettingStartedUI(
           LaunchedEffect(Unit) {
             gettingStartedVM.viewModel.animate()
           }
-          SlackAnimation(shouldStartLogoAnimation.isAnimationStarting,"slack")
+          SlackAnimation(shouldStartLogoAnimation.isAnimationStarting)
         } else {
           when (size) {
             WindowSize.Phones -> PhoneLayout(gettingStartedVM)

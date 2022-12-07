@@ -46,7 +46,7 @@ internal fun SlackSideBarLayoutDesktop(
     userProfile: () -> Unit,
     dashboardComponent: DashboardComponent
 ) {
-    val workspaces by sideNavComponent.viewModel.workspacesFlow.value.collectAsState(emptyList())
+    val workspaces by sideNavComponent.viewModel.flow().collectAsState(emptyList())
     val user by sideNavComponent.viewModel.currentLoggedInUser.collectAsState()
     val state by dashboardComponent.desktopStack.subscribeAsState()
 

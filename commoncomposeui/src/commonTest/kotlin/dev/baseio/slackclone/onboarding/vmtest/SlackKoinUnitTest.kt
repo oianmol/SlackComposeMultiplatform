@@ -9,6 +9,7 @@ import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.Platform.ANDROID
 import dev.baseio.slackclone.platformType
+import dev.baseio.slackdata.common.kmEmpty
 import dev.baseio.slackdata.datasources.remote.channels.toKMSlackPublicKey
 import dev.baseio.slackdata.injection.*
 import dev.baseio.slackdata.localdata.testDbConnection
@@ -86,7 +87,7 @@ abstract class SlackKoinUnitTest : KoinTest {
     suspend fun authorizeUserFirst() {
         mocker.every { iGrpcCalls().skKeyValueData } returns koinApplication.koin.get()
         mocker.everySuspending { iGrpcCalls().currentLoggedInUser(isAny()) } returns testUser()
-        mocker.everySuspending { iGrpcCalls().sendMagicLink(isAny(), isAny()) } returns kmskAuthResult()
+        mocker.everySuspending { iGrpcCalls().sendMagicLink(isAny(), isAny()) } returns kmEmpty {  }
         mocker.everySuspending { iGrpcCalls().getWorkspaces(isAny()) } returns testWorkspaces()
         mocker.everySuspending {
             iGrpcCalls().getAllDMChannels(
@@ -105,8 +106,8 @@ abstract class SlackKoinUnitTest : KoinTest {
             )
         } returns testPublicChannels("1")
 
-        useCaseAuthWorkspace.invoke(testUser().email,"12345","slack.com")
-        getWorkspaces.invoke()
+        useCaseAuthWorkspace.invoke(testUser().email,"slack.com")
+        getWorkspaces.invoke("some token")
         selectedWorkspace = useCaseGetSelectedWorkspace.invoke()!!
         getChannels.invoke(selectedWorkspace.uuid, 0, 20)
         val channels = skLocalDataSourceChannels.fetchAllChannels(selectedWorkspace.uuid).first()

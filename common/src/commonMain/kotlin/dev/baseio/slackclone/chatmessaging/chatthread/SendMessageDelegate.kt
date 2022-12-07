@@ -1,6 +1,6 @@
 package dev.baseio.slackclone.chatmessaging.chatthread
 
-import dev.baseio.slackdata.datasources.local.channels.skUser
+import dev.baseio.slackdata.datasources.local.channels.loggedInUser
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
@@ -73,7 +73,7 @@ class SendMessageDelegateImpl(
                     decodedMessage = message,
                     messageFirst = "",
                     messageSecond = "",
-                    sender = skKeyValueData.skUser().uuid,
+                    sender = skKeyValueData.loggedInUser(channel.workspaceId).uuid,
                     createdDate = Clock.System.now().toEpochMilliseconds(),
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),
                     isDeleted = false,
