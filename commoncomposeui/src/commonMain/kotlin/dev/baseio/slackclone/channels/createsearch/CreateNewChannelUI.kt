@@ -41,7 +41,7 @@ internal fun CreateNewChannelUI(
     createNewChannelComponent: CreateNewChannelComponent
 ) {
     val scaffoldState = rememberScaffoldState()
-    Box {
+
         Scaffold(
             backgroundColor = LocalSlackCloneColor.current.uiBackground,
             contentColor = LocalSlackCloneColor.current.textSecondary,
@@ -56,7 +56,7 @@ internal fun CreateNewChannelUI(
         ) { innerPadding ->
             NewChannelContent(innerPadding, createNewChannelComponent)
         }
-    }
+
 }
 
 @Composable

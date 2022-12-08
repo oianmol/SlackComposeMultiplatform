@@ -56,6 +56,15 @@ class SlackAndroidActivity : AppCompatActivity() {
                     }
                 }
             }
+            LaunchedEffect(intent?.action) {
+                intent?.action?.let {
+                    if (it == Intent.ACTION_VIEW) {
+                        intent.data?.getQueryParameter("token")?.takeIf { token -> token.isNotEmpty() }?.let {
+                            root.navigateAuthorizeWithToken(it)
+                        }
+                    }
+                }
+            }
             askForPostNotificationPermission()
         }
     }

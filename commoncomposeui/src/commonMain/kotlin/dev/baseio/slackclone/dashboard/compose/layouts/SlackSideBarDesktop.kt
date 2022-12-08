@@ -16,10 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,6 +41,8 @@ internal fun SlackSideBarLayoutDesktop(
     mentionsScreen: () -> Unit,
     searchScreen: () -> Unit,
     userProfile: () -> Unit,
+    qrCode: () -> Unit,
+    addWorkspace:()->Unit,
     dashboardComponent: DashboardComponent
 ) {
     val workspaces by sideNavComponent.viewModel.flow().collectAsState(emptyList())
@@ -83,6 +82,20 @@ internal fun SlackSideBarLayoutDesktop(
                     icon = Icons.Default.AccountCircle,
                     isSelected = state.active.configuration == DashboardComponent.Config.Profile
                 ) // You
+                SelectedSideBarIcon(
+                    modifier = Modifier.padding(vertical = 8.dp).clickable {
+                        qrCode()
+                    },
+                    icon = Icons.Default.Build,
+                    isSelected = false
+                ) // QRCode
+                SelectedSideBarIcon(
+                    modifier = Modifier.padding(vertical = 8.dp).clickable {
+                        addWorkspace()
+                    },
+                    icon = Icons.Default.AddCircle,
+                    isSelected = false
+                ) //
                 Spacer(Modifier.height(4.dp))
             }
             SlackOnlineBox(

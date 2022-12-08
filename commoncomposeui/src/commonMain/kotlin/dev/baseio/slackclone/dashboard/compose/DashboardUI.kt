@@ -46,6 +46,7 @@ import dev.baseio.slackclone.dashboard.vm.Dashboard
 import dev.baseio.slackclone.dashboard.vm.DashboardComponent
 import dev.baseio.slackclone.dashboard.vm.DashboardVM
 import dev.baseio.slackclone.onboarding.compose.PlatformSideEffects
+import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import mainDispatcher
 
@@ -107,9 +108,9 @@ internal fun DashboardUI(
                             },
                             {
                                 dashboardComponent.navigateOnboarding()
-                            },{
+                            }, {
                                 dashboardComponent.navigateQrScanner(it)
-                            },{
+                            }, {
                                 dashboardComponent.navigateAddWorkspace()
                             }
                         )
@@ -151,9 +152,9 @@ internal fun DashboardUI(
                             },
                             {
                                 dashboardComponent.navigateOnboarding()
-                            },{
+                            }, {
                                 dashboardComponent.navigateQrScanner(it)
-                            },{
+                            }, {
                                 dashboardComponent.navigateAddWorkspace()
                             }
                         )
@@ -210,6 +211,10 @@ internal fun DashboardUI(
                     }, userProfile = {
                         clearChat()
                         dashboardComponent.navigate(DashboardComponent.Config.Profile)
+                    }, qrCode = {
+                        dashboardComponent.navigateQrScanner(QrScannerMode.QR_DISPLAY)
+                    }, addWorkspace = {
+                        dashboardComponent.navigateAddWorkspace()
                     }, dashboardComponent)
                 }, workSpaceAndChannels = { modifier ->
                     SlackWorkspaceLayoutDesktop(

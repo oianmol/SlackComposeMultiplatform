@@ -138,7 +138,7 @@ class RootComponent(
                     navigateRoot = {
                         navigation.push(it)
                     }, navigateAddWorkspace = {
-                        navigation.push(Config.GettingStarted(firstLaunch = false))
+                        navigation.push(Config.EmailMagicLink)
                     }
                 ).also { dashboardComponent ->
                     config.channelId?.let { channelId ->
