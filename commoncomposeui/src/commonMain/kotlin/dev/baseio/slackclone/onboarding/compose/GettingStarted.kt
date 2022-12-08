@@ -60,7 +60,7 @@ import dev.baseio.slackclone.platformType
 import dev.baseio.slackclone.dashboard.compose.WindowSize
 import dev.baseio.slackclone.dashboard.compose.getWindowSizeClass
 import dev.baseio.slackclone.onboarding.GettingStartedComponent
-import dev.baseio.slackclone.onboarding.GettingStartedVM
+import dev.baseio.slackclone.onboarding.vm.GettingStartedVM
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 

@@ -25,7 +25,7 @@ import dev.baseio.slackclone.onboarding.AuthorizeTokenComponent
 internal fun ProcessTokenFromDeepLink(component: AuthorizeTokenComponent) {
     val uiState by component.viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
-        component.viewModel.showLoading()
+        component.viewModel.showLoading(component.viewModel.vmScope())
     }
 
     Scaffold(backgroundColor = LocalSlackCloneColor.current.uiBackground, topBar = {

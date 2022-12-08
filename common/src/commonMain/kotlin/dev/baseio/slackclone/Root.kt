@@ -57,7 +57,7 @@ class RootComponent(
         initialConfiguration = skKeyValueData.get(AUTH_TOKEN)?.let {
             Config.DashboardScreen()
         } ?: run {
-            Config.GettingStarted(firstLaunch = true)
+            Config.GettingStarted
         },
         handleBackButton = true, // Pop the back stack on back button press
         childFactory = ::createChild
@@ -117,7 +117,6 @@ class RootComponent(
             is Config.GettingStarted -> Root.Child.GettingStarted(
                 GettingStartedComponent(
                     componentContext = componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()),
-                    firstRun = config.firstLaunch,
                     navigateBack = ::navigationPop,
                     navigateDashboard = ::navigateDashboard
                 ) {
@@ -130,7 +129,7 @@ class RootComponent(
                     componentContext = componentContext.childContext(DashboardComponent::class.qualifiedName.toString()),
                     navigateOnboarding = {
                         navigation.navigate {
-                            listOf(Config.GettingStarted(firstLaunch = true))
+                            listOf(Config.GettingStarted)
                         }
                     }, navigateQrScanner = {
                         navigation.push(Config.QrScanner(it))
@@ -218,7 +217,7 @@ class RootComponent(
         data class QrScanner(val mode: QrScannerMode) : Config()
 
         @Parcelize
-        data class GettingStarted(val firstLaunch: Boolean = true) : Config()
+        object GettingStarted : Config()
 
         @Parcelize
         data class DashboardScreen(val channelId: String? = null, val workspaceId: String? = null) :

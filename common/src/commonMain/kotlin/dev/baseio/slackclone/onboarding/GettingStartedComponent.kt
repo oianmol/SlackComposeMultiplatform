@@ -6,13 +6,13 @@ import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.LifecycleOwner
 import com.arkivanov.essenty.lifecycle.doOnDestroy
 import dev.baseio.slackclone.getKoin
+import dev.baseio.slackclone.onboarding.vm.GettingStartedVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
 class GettingStartedComponent(
   componentContext: ComponentContext,
-  val firstRun:Boolean,
   val navigateBack: () -> Unit,
   private val navigateDashboard: () -> Unit,
   val emailMagicLink: () -> Unit

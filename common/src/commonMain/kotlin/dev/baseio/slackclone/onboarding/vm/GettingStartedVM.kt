@@ -3,6 +3,8 @@ package dev.baseio.slackclone.onboarding.vm
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.reduce
 import dev.baseio.slackclone.SlackViewModel
+import dev.baseio.slackclone.onboarding.GettingStartedComponent
+import dev.baseio.slackclone.onboarding.QrCodeDelegate
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

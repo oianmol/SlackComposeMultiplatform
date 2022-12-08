@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.onboarding.SlackAnim
-import dev.baseio.slackclone.onboarding.SlackAnim.ANIM_DURATION
+import dev.baseio.slackclone.onboarding.vm.SlackAnim
+import dev.baseio.slackclone.onboarding.vm.SlackAnim.ANIM_DURATION
 
 val loaderYellow = Color(226, 179, 75)
 val loaderPinkish = Color(206, 54, 92)
