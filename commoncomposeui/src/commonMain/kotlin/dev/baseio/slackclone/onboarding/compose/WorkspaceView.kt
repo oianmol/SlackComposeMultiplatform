@@ -15,7 +15,7 @@ import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-fun WorkspaceInputView(modifier: Modifier, workspaceUrl: String, onUpdate: (String) -> Unit) {
+internal fun WorkspaceInputView(modifier: Modifier, workspaceUrl: String, onUpdate: (String) -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()

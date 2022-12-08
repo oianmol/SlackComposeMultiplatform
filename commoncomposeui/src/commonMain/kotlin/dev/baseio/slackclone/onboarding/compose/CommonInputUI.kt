@@ -17,7 +17,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 
 @Composable
-fun CommonInputUI(
+internal fun CommonInputUI(
     navigateBack:()->Unit,
     navigateNext: () -> Unit,
     subtitleText: String,
@@ -75,7 +75,7 @@ fun CommonInputUI(
 }
 
 @Composable
-fun NextButton(modifier: Modifier = Modifier, navigateNext: () -> Unit) {
+internal fun NextButton(modifier: Modifier = Modifier, navigateNext: () -> Unit) {
     Button(
         onClick = {
             navigateNext()
@@ -96,7 +96,7 @@ fun NextButton(modifier: Modifier = Modifier, navigateNext: () -> Unit) {
 }
 
 @Composable
-private fun SubTitle(modifier: Modifier = Modifier, subtitleText: String) {
+internal fun SubTitle(modifier: Modifier = Modifier, subtitleText: String) {
     Text(
         subtitleText,
         modifier = modifier

@@ -51,7 +51,7 @@ internal fun SideNavigation(
                 item {
                     WorkspacesBar()
                 }
-                itemsIndexed(workspaces) { index, skWorkspace ->
+                itemsIndexed(workspaces) { _, skWorkspace ->
                     Column(
                         Modifier.clickable {
                             sideNavComponent.viewModel.select(skWorkspace)

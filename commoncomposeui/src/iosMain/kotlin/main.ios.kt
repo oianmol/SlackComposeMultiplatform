@@ -23,6 +23,11 @@ import platform.UIKit.UIWindow
 import platform.UIKit.UIViewController
 
 val lifecycle = LifecycleRegistry()
+val rootComponent by lazy {
+    RootComponent(
+        context = DefaultComponentContext(lifecycle = lifecycle),
+    )
+}
 
 fun MainViewController(window:UIWindow): UIViewController =
     Application("SlackComposeiOS") {
@@ -42,9 +47,7 @@ fun MainViewController(window:UIWindow): UIViewController =
                 Column {
                     Box(Modifier.height(48.dp).background(LocalSlackCloneColor.current.appBarColor))
                     SlackApp {
-                        RootComponent(
-                            context = DefaultComponentContext(lifecycle = lifecycle),
-                        )
+                        rootComponent
                     }
                 }
             }

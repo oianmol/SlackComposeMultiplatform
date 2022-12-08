@@ -5,7 +5,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import dev.baseio.slackdata.isEmailValid
 
 @Composable
-fun EmailAddressInputUI(
+internal fun EmailAddressInputUI(
     navigateBack: () -> Unit,
     navigateNext: (String) -> Unit,
 ) {
@@ -32,7 +32,7 @@ fun EmailAddressInputUI(
 }
 
 @Composable
-fun WorkspaceInputUI(
+internal fun WorkspaceInputUI(
     navigateBack: () -> Unit,
     navigateNext: (String) -> Unit,
 ) {

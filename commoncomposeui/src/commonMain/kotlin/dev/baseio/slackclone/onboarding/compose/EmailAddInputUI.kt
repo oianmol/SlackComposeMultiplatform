@@ -25,7 +25,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun EmailAddressInputView(modifier: Modifier = Modifier, email: String, onUpdate: (String) -> Unit) {
+internal fun EmailAddressInputView(modifier: Modifier = Modifier, email: String, onUpdate: (String) -> Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +54,7 @@ fun EmailAddressInputView(modifier: Modifier = Modifier, email: String, onUpdate
 
 @ExperimentalComposeUiApi
 @Composable
-private fun EmailTF(email: String, onUpdate: (String) -> Unit) {
+internal fun EmailTF(email: String, onUpdate: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
@@ -90,7 +90,7 @@ private fun EmailTF(email: String, onUpdate: (String) -> Unit) {
 }
 
 @Composable
-private fun emailTFColors() = TextFieldDefaults.textFieldColors(
+internal fun emailTFColors() = TextFieldDefaults.textFieldColors(
     backgroundColor = Color.Transparent,
     cursorColor = LocalSlackCloneColor.current.textPrimary,
     unfocusedIndicatorColor = Color.Transparent,
@@ -98,7 +98,7 @@ private fun emailTFColors() = TextFieldDefaults.textFieldColors(
 )
 
 @Composable
-private fun emailTFStyle() = SlackCloneTypography.h6.copy(
+internal fun emailTFStyle() = SlackCloneTypography.h6.copy(
     color = LocalSlackCloneColor.current.textPrimary,
     fontWeight = FontWeight.Normal,
     textAlign = TextAlign.Start
