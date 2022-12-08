@@ -110,7 +110,7 @@ class RootComponent(
                 EmailMagicLinkComponent(
                     componentContext = componentContext.childContext(EmailMagicLinkComponent::class.qualifiedName.toString()),
                     email = config.emailAddress,
-                    workspace = config.workspace, ::navigateDashboard, ::navigationPop
+                    workspace = config.workspace, ::navigationPop
                 )
             )
 

@@ -3,6 +3,8 @@ package dev.baseio.slackclone.onboarding
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import dev.baseio.slackclone.getKoin
+import dev.baseio.slackclone.onboarding.vm.AuthorizeTokenVM
+import dev.baseio.slackclone.onboarding.vm.SlackAnimationDelegateImpl
 
 class AuthorizeTokenComponent(
     componentContext: ComponentContext,
@@ -19,7 +21,8 @@ class AuthorizeTokenComponent(
                 useCaseFetchAndSaveUserWorkspace = getKoin().get(),
                 token = token,
                 navigateBackNow = navigateBack,
-                navigateDashboard = navigateDashboard
+                navigateDashboard = navigateDashboard,
+                slackAnimationDelegate = SlackAnimationDelegateImpl()
             )
         }
 }

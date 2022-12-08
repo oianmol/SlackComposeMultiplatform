@@ -2,7 +2,6 @@ package dev.baseio.slackclone.onboarding.vm
 
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackclone.fcmToken
-import dev.baseio.slackclone.onboarding.SlackAnim
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.usecases.auth.UseCaseSaveFCMToken
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseAuthWorkspace
@@ -13,31 +12,15 @@ import kotlinx.coroutines.launch
 
 class SendMagicLinkForWorkspaceEmail(
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    private val slackAnimationDelegate: SlackAnimationDelegate,
     private val useCaseAuthWorkspace: UseCaseAuthWorkspace,
     private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
     private val email: String,
     private val workspace: String
-) : SlackViewModel(coroutineDispatcherProvider) {
-    val state = MutableStateFlow(AuthCreateWorkspaceVMState())
+) : SlackViewModel(coroutineDispatcherProvider), SlackAnimationDelegate by slackAnimationDelegate {
 
     init {
         sendMagicLink()
-    }
-
-    private suspend fun endLoading() {
-        state.value = state.value.copy(isAnimationStarting = false)
-        delay(250)
-        showLoading()
-    }
-
-    fun showLoading() {
-        viewModelScope.launch {
-            state.value = state.value.copy(isAnimationStarting = true)
-            delay(SlackAnim.ANIM_DURATION.toLong().plus(700))
-            state.value = state.value.copy(isAnimationStarting = false)
-            delay(SlackAnim.ANIM_DURATION.toLong().plus(800))
-            endLoading()
-        }
     }
 
     fun sendMagicLink() {

@@ -1,4 +1,4 @@
-package dev.baseio.slackclone.onboarding
+package dev.baseio.slackclone.onboarding.vm
 
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.reduce

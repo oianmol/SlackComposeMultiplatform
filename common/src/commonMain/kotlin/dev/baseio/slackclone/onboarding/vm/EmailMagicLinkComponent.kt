@@ -8,7 +8,6 @@ class EmailMagicLinkComponent(
     componentContext: ComponentContext,
     private val email: String,
     val workspace: String,
-    private val navigateDashboard: () -> Unit,
     val navigateBack: () -> Unit
 ) : ComponentContext by componentContext {
 
@@ -19,7 +18,8 @@ class EmailMagicLinkComponent(
                 useCaseAuthWorkspace = getKoin().get(),
                 useCaseSaveFCMToken = getKoin().get(),
                 email = email,
-                workspace = workspace
+                workspace = workspace,
+                slackAnimationDelegate = SlackAnimationDelegateImpl()
             )
         }
 }
