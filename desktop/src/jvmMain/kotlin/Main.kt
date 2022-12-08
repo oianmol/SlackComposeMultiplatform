@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.awt.Desktop
+import kotlin.jvm.optionals.getOrNull
 
 @ExperimentalComposeUiApi
 fun main() {
@@ -52,8 +53,7 @@ private fun handleDeepLink(rootComponent: RootComponent) {
         val osName = System.getProperty("os.name")
         if (osName.equals("windows", ignoreCase = true)) {
             val reg: WindowsRegistry = WindowsRegistry.getInstance()
-            val appExecutablePath = System.getProperty("java.home")
-
+            val appExecutablePath = ProcessHandle.current().info().command().get()
             val protocolRegKey = "Software\\Classes\\slackclone"
             val protocolCmdRegKey = "shell\\open\\command"
 
