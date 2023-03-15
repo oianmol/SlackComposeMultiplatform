@@ -1,0 +1,14 @@
+on:
+  release:
+    types: [created]
+
+env:
+  ORG_GRADLE_PROJECT_githubUsername: ${{ secrets.actor }}
+  ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.token }}
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code but nothing else yet!
+        uses: actions/checkout@v2

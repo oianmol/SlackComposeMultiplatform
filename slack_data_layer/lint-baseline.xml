@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.2.2" type="baseline" client="gradle" dependencies="false" name="AGP (7.2.2)" variant="all" version="7.2.2">
+
+    <issue
+        id="LintError"
+        message="Unexpected failure during lint analysis of dev.baseio.slackdata.SKKeyValueData.kt (this is a bug in lint or one of the libraries it depends on)&#xA;&#xA;Message: () -> kotlin.String&#xA;Stack: `IllegalStateException:KtLightClassForFacadeImpl$Companion.createForFacadeNoCache(KtLightClassForFacadeImpl.kt:272)←FacadeCache$FacadeCacheData$cache$1.createValue(FacadeCache.kt:30)←FacadeCache$FacadeCacheData$cache$1.createValue(FacadeCache.kt:28)←SLRUCache.get(SLRUCache.java:47)←FacadeCache.get(FacadeCache.kt:47)←KtLightClassForFacadeImpl$Companion.createForFacade(KtLightClassForFacadeImpl.kt:282)←CliKotlinAsJavaSupport.getFacadeClassesInPackage(CliKotlinAsJavaSupport.kt:40)←LightClassUtilsKt.findFacadeClass(lightClassUtils.kt:58)`&#xA;&#xA;You can run with --stacktrace or set environment variable `LINT_PRINT_STACKTRACE=true` to dump a full stacktrace to stdout.">
+        <location
+            file="src/androidMain/kotlin/dev.baseio.slackdata.SKKeyValueData.kt"/>
+    </issue>
+
+    <issue
+        id="LintError"
+        message="Unexpected failure during lint analysis of ViewModel.kt (this is a bug in lint or one of the libraries it depends on)&#xA;&#xA;Message: () -> kotlin.String&#xA;Stack: `IllegalStateException:KtLightClassForFacadeImpl$Companion.createForFacadeNoCache(KtLightClassForFacadeImpl.kt:272)←FacadeCache$FacadeCacheData$cache$1.createValue(FacadeCache.kt:30)←FacadeCache$FacadeCacheData$cache$1.createValue(FacadeCache.kt:28)←SLRUCache.get(SLRUCache.java:47)←FacadeCache.get(FacadeCache.kt:47)←KtLightClassForFacadeImpl$Companion.createForFacade(KtLightClassForFacadeImpl.kt:282)←CliKotlinAsJavaSupport.getFacadeClassesInPackage(CliKotlinAsJavaSupport.kt:40)←LightClassUtilsKt.findFacadeClass(lightClassUtils.kt:58)`&#xA;&#xA;You can run with --stacktrace or set environment variable `LINT_PRINT_STACKTRACE=true` to dump a full stacktrace to stdout.">
+        <location
+            file="src/androidMain/kotlin/dev/ViewModel.kt"/>
+    </issue>
+
+    <issue
+        id="LintError"
+        message="Unexpected failure during lint analysis of mainDispatcher.kt (this is a bug in lint or one of the libraries it depends on)&#xA;&#xA;Message: () -> kotlin.String&#xA;Stack: `IllegalStateException:KtLightClassForFacadeImpl$Companion.createForFacadeNoCache(KtLightClassForFacadeImpl.kt:272)←FacadeCache$FacadeCacheData$cache$1.createValue(FacadeCache.kt:30)←FacadeCache$FacadeCacheData$cache$1.createValue(FacadeCache.kt:28)←SLRUCache.get(SLRUCache.java:47)←FacadeCache.get(FacadeCache.kt:47)←KtLightClassForFacadeImpl$Companion.createForFacade(KtLightClassForFacadeImpl.kt:282)←CliKotlinAsJavaSupport.getFacadeClassesInPackage(CliKotlinAsJavaSupport.kt:40)←LightClassUtilsKt.findFacadeClass(lightClassUtils.kt:58)`&#xA;&#xA;You can run with --stacktrace or set environment variable `LINT_PRINT_STACKTRACE=true` to dump a full stacktrace to stdout.">
+        <location
+            file="src/androidMain/kotlin/dev/mainDispatcher.kt"/>
+    </issue>
+
+    <issue
+        id="JcenterRepositoryObsolete"
+        message="JCenter Maven repository is no longer receiving updates: newer library versions may be available elsewhere"
+        errorLine1="        jcenter()"
+        errorLine2="        ~~~~~~~~~">
+        <location
+            file="settings.gradle.kts"
+            line="4"
+            column="9"/>
+    </issue>
+
+</issues>

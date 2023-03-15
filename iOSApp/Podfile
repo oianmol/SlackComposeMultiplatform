@@ -1,0 +1,18 @@
+target 'iosApp' do
+  use_frameworks!
+  platform :ios, '14.1'
+  pod 'common', :path => '../common'
+  pod 'Protobuf'
+  pod 'gRPC-ProtoRPC'
+  pod 'capillaryslack', :git => 'https://github.com/oianmol/slack_capillary_ios.git'
+  pod 'KMPNativeCoroutinesAsync', '0.13.1'
+  pod 'KMPNativeCoroutinesCombine', '0.13.1'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+    end
+  end
+end

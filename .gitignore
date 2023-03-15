@@ -1,0 +1,25 @@
+prebuilds/fullsdk-linux
+prebuilds/fullsdk-darwin
+out
+*.iml
+.gradle
+*.db
+local.properties
+/local.properties
+.idea
+.idea/
+.DS_Store
+build/
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+# Ignoring the persistant lockfile until kotlin.js vulnerabilities are fixed
+# yarn.lock # but absent yarn.lock leads to inconsistent builds on CI, so let's keep it
+/common/src/androidMain/res/raw/sender_verification_key.dat
+/common/src/androidMain/res/raw/tls.crt
+/common/src/jvmMain/resources/sender_verification_key.dat
+/capillary_kmp/build/
+/common/src/commonTest/resources/sender_verification_key.dat
+/capillaryios/Podfile.lock
+/commoncomposeui/rsa_ecdsa_*
