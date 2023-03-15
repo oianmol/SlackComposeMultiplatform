@@ -30,6 +30,7 @@ allprojects {
     repositories {
         google()
         mavenLocal()
+        gradlePluginPortal()
         mavenCentral()
     }
 }
