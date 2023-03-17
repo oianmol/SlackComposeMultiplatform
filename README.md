@@ -20,21 +20,13 @@
 
 ### Dependent Projects
 
-1. [SlackProtos](https://github.com/oianmol/slack_multiplatform_protos)
-2. [SlackGenerateProtos](https://github.com/oianmol/slack_multiplatform_generate_protos)
-3. [Slack Domain Layer](https://github.com/oianmol/slack_multiplatform_domain.git)
-4. [Slack Data Layer](https://github.com/oianmol/slack_multiplatform_client_data_lib)
-5. [This KMP project](https://github.com/oianmol/slackcomposemultiplatform)
-6. [Backend Server in gRPC Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
-7. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)
-8. [Slack encryption lib](https://github.com/oianmol/capillary-kmp)
-9. [Slack Encryption support for iOS](https://github.com/oianmol/slack_capillary_ios)
+1. [This KMP project](https://github.com/oianmol/slackcomposemultiplatform)
+2. [Backend Server in gRPC Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
+3. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)
 
-## Instructions to compile and get running
+## Prerequisities
 
-1. Execute `git submodule update --init --recursive` and to update `git submodule update --recursive --remote` once the project is cloned to get all the dependent client projects.
-2. Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
-3. Clone [Capillary-kmp](https://github.com/oianmol/capillary-kmp) and install to mavenLocal()
+Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
 
 The android, compose iOS and jvm platform run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
 
