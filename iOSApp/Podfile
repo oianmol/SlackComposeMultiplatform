@@ -4,7 +4,7 @@ target 'iosApp' do
   pod 'common', :path => '../common'
   pod 'Protobuf'
   pod 'gRPC-ProtoRPC'
-  pod 'capillaryslack', :git => 'https://github.com/oianmol/slack_capillary_ios.git'
+  pod 'capillaryslack', :path => '../slack_capillary_ios'
   pod 'KMPNativeCoroutinesAsync', '0.13.1'
   pod 'KMPNativeCoroutinesCombine', '0.13.1'
 end
