@@ -29,8 +29,9 @@ fun teamPropsFile(propsFile: String): File {
 allprojects {
     repositories {
         google()
-        mavenLocal()
         gradlePluginPortal()
+        mavenLocal()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
     }
 }

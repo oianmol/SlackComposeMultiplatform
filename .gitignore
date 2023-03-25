@@ -23,3 +23,4 @@ local.properties
 /common/src/commonTest/resources/sender_verification_key.dat
 /capillaryios/Podfile.lock
 /commoncomposeui/rsa_ecdsa_*
+/setuplocal.sh

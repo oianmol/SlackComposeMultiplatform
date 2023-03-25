@@ -18,17 +18,13 @@
 | 🤿 Testing with Turbine                                 | [Turbine](https://github.com/cashapp/turbine)                                                 |
 
 
-### Dependent Projects
-
-1. [This KMP project](https://github.com/oianmol/slackcomposemultiplatform)
-2. [Backend Server in gRPC Kotlin](https://github.com/oianmol/slack_multiplatform_grpc_server)
-3. [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP)
-
 ## Prerequisities
 
-Clone [gRPC-KMP Library](https://github.com/oianmol/gRPC-KMP) and install plugin and lib to mavenLocal()
+1. Fetch [grpc-KMP](https://github.com/oianmol/gRPC-KMP) submodule and install :plugin and :grpc-multiplatform-lib to mavenLocal()
+2. Setup env variables for the grpc-server with firebase creds and email info using setup.sh in the root of this project 
+3. Run the server 
 
-The android, compose iOS and jvm platform run's fine, make sure you match the ip address in GrpcCalls class of your system once you run the slackserver module locally!
+The project supports android, compose iOS and jvm platform, make sure you match the ip:addr in the class GrpcCalls() once you run the slackserver locally!
 
 ## Architecture
 
