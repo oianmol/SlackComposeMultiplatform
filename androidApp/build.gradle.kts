@@ -1,8 +1,8 @@
 plugins {
-    kotlin(BuildPlugins.MULTIPLATFORM)
-    id(BuildPlugins.ANDROID_APPLICATION_PLUGIN)
-    id(BuildPlugins.COMPOSE_ID)
-    id("com.google.gms.google-services")
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.googleservices)
 }
 
 repositories {
@@ -16,39 +16,39 @@ kotlin {
         val androidMain by getting {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             dependencies {
-                api(Lib.Decompose.core)
-                implementation(project(Lib.Project.commonComposeUI))
-                implementation(project(Lib.Project.common))
-                implementation(Lib.AndroidX.ACTIVITY_COMPOSE)
-                implementation(Lib.AndroidX.SPLASH_SCREEN)
-                implementation(Lib.Grpc.OKHTTP)
-                api(project(Lib.Project.SLACK_DATA_COMMON))
-                api(project(Lib.Project.SLACK_DOMAIN_COMMON))
-                implementation(Deps.Koin.core)
-                implementation(Deps.Koin.android)
+                api(libs.decompose.core)
+                implementation(project(":commoncomposeui"))
+                implementation(project(":common"))
+                implementation(libs.activity.compose)
+                implementation(libs.splash.screen)
+                implementation(libs.grpc.okhttp)
+                api(project(":slack_data_layer"))
+                api(project(":slack_domain_layer"))
+                implementation(libs.koin.core)
+                implementation(libs.koin.android)
 
 
                 // Firebase
-                implementation(Lib.Firebase.CLOUD_MESSAGING)
+                implementation(libs.firebaseMessaging)
 
                 // Accompanist Permissions
-                implementation(Lib.AndroidX.ACCOMPANIST_PERMISSION)
+                implementation(libs.accompanist.permission)
             }
         }
 
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         val androidUnitTest by getting {
             dependencies {
-                implementation(Deps.Koin.test)
+                implementation(libs.koin.test)
                 implementation(compose.uiTestJUnit4)
 
                 implementation(
-                    Lib.AndroidX.COMPOSE_JUNIT
+                    libs.compose.junit
                 )
                 implementation(
-                    Lib.AndroidX.COMPOSE_TEST_MANIFEST
+                    libs.compose.test.manifest
                 )
-                implementation(TestLib.JUNIT)
+                implementation(libs.junit)
             }
         }
     }
@@ -56,7 +56,7 @@ kotlin {
 
 
 android {
-    compileSdk = ProjectProperties.COMPILE_SDK
+    compileSdk = 32
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")
     }
@@ -64,8 +64,8 @@ android {
         versionCode = 1
         versionName = "1.0"
         applicationId = "dev.baseio.slackclone"
-        minSdk = ProjectProperties.MIN_SDK
-        targetSdk = ProjectProperties.TARGET_SDK
+        minSdk = 24
+        targetSdk = 32
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     testOptions {

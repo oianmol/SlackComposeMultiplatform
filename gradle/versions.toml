@@ -3,7 +3,7 @@
 #kotlin
 kotlin = "1.8.10"
 mockkmp = "1.12.0"
-
+gms= "4.3.14"
 google_protobuf = "0.8.19"
 timortel_grpc = "0.3.2"
 agp = "7.4.1"
@@ -163,5 +163,6 @@ navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navi
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 kotlin-native-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "google_protobuf" }
-timortel-grpc = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref ="timortel_grpc" }
+timortel-grpc = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "timortel_grpc" }
 mockkmp = { id = "org.kodein.mock.mockmp", version.ref = "mockkmp" }
+googleservices = { id = "com.google.gms.google-services", version.ref = "gms" }

@@ -14,6 +14,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import java.io.File
+import java.io.FileInputStream
 import java.security.Security
 
 object SlackServer {
@@ -78,7 +80,7 @@ private fun initKoin() {
 
 fun initializeFCM() {
   val options = FirebaseOptions.builder()
-    .setCredentials(GoogleCredentials.getApplicationDefault())
+    .setCredentials(GoogleCredentials.fromStream(FileInputStream(File(System.getenv("GOOGLE_APPLICATION_CREDENTIALS")))))
     .build()
 
   FirebaseApp.initializeApp(options)

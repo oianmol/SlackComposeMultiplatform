@@ -22,7 +22,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "SlackJetpackCompose"
 
-include(":android")
+include(":androidApp")
 include(":desktop")
 include(":slack_domain_layer")
 include(":slack_data_layer")
