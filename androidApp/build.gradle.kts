@@ -29,7 +29,7 @@ kotlin {
 
 
                 // Firebase
-                implementation(libs.firebaseMessaging)
+                implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
 
                 // Accompanist Permissions
                 implementation(libs.accompanist.permission)
@@ -56,7 +56,7 @@ kotlin {
 
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")
     }
@@ -65,7 +65,7 @@ android {
         versionName = "1.0"
         applicationId = "dev.baseio.slackclone"
         minSdk = 24
-        targetSdk = 32
+        targetSdk = 33
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     testOptions {
