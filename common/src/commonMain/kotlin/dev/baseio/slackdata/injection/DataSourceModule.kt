@@ -52,7 +52,7 @@ import org.koin.dsl.module
 
 val dataSourceModule = module {
     single<IGrpcCalls> {
-        GrpcCalls(skKeyValueData = get(), address = "192.168.178.25")
+        GrpcCalls(skKeyValueData = get())
     }
     single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(), get()) }
     single<SKLocalDatabaseSource> {

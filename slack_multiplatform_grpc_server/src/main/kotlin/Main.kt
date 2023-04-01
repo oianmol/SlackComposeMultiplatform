@@ -80,7 +80,7 @@ private fun initKoin() {
 
 fun initializeFCM() {
     val options = FirebaseOptions.builder()
-        .setCredentials(GoogleCredentials.fromStream(FileInputStream(File(System.getenv("GOOGLE_APPLICATION_CREDENTIALS")))))
+        .setCredentials(GoogleCredentials.getApplicationDefault())
         .build()
 
     FirebaseApp.initializeApp(options)

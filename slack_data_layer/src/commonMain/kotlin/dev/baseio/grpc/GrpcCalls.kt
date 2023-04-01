@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GrpcCalls(
     private val address: String = "localhost",
-    private val port: Int = 8081,
+    private val port: Int = 8080,
     override val skKeyValueData: SKLocalKeyValueSource
 ) : IGrpcCalls {
     companion object {
