@@ -269,7 +269,7 @@ internal fun DashboardUI(
 
 enum class WindowSize { Phones, SmallTablets, BigTablets, DesktopOne, DesktopTwo }
 
-fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
+internal fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
     windowDpSize.width < 0.dp ->
         throw IllegalArgumentException("Dp value cannot be negative")
 

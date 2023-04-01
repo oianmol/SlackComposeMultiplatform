@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
+import androidx.compose.ui.window.ComposeUIViewController
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.slackclone.SlackApp
@@ -19,6 +20,7 @@ import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.initKoin
 import kotlinx.cinterop.useContents
+import platform.UIKit.UIApplication
 import platform.UIKit.UIWindow
 import platform.UIKit.UIViewController
 
@@ -29,9 +31,11 @@ val rootComponent by lazy {
     )
 }
 
-fun MainViewController(window: UIWindow): UIViewController =
-    Application("SlackComposeiOS") {
+fun MainViewController(): UIViewController =
+    ComposeUIViewController {
         initKoin()
+
+        val window = UIApplication.sharedApplication.windows.first() as UIWindow
 
         val rememberedComposeWindow by remember(window) {
             val windowInfo = window.frame.useContents {
@@ -44,11 +48,8 @@ fun MainViewController(window: UIWindow): UIViewController =
             LocalWindow provides rememberedComposeWindow
         ) {
             SlackCloneTheme(isDarkTheme = true) {
-                Column {
-                    Box(Modifier.height(48.dp).background(LocalSlackCloneColor.current.appBarColor))
-                    SlackApp {
-                        rootComponent
-                    }
+                SlackApp {
+                    rootComponent
                 }
             }
         }

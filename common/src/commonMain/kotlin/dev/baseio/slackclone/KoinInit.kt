@@ -17,6 +17,9 @@ fun getKoin() = koinApp.koin
 expect fun platformModule(): Module
 
 fun initKoin(): KoinApplication {
+    if (::koinApp.isInitialized) {
+        return koinApp
+    }
     return startKoin {
         modules(
             platformModule(),
