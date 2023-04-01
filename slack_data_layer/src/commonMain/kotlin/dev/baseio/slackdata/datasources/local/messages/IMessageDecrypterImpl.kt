@@ -21,13 +21,18 @@ class IMessageDecrypterImpl(
             message.channelId,
             skKeyValueData.loggedInUser(message.workspaceId).uuid
         )?.channelEncryptedPrivateKey?.let { safeChannelEncryptedPrivateKey ->
-            capillary.decrypt(
-                EncryptedData(
-                    safeChannelEncryptedPrivateKey.first,
-                    safeChannelEncryptedPrivateKey.second
-                ),
-                capillary.privateKey()
-            )
+            kotlin.runCatching {
+                capillary.decrypt(
+                    EncryptedData(
+                        safeChannelEncryptedPrivateKey.first,
+                        safeChannelEncryptedPrivateKey.second
+                    ),
+                    capillary.privateKey()
+                )
+            }.recoverCatching {
+                println(it)
+                return@recoverCatching null
+            }.getOrNull()
         }?.let { bytes ->
             finalMessageAfterDecryption(
                 message,
