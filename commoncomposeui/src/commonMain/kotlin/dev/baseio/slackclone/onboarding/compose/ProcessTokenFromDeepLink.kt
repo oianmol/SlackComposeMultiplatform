@@ -28,20 +28,25 @@ internal fun ProcessTokenFromDeepLink(component: AuthorizeTokenComponent) {
         component.viewModel.showLoading()
     }
 
-    Scaffold(backgroundColor = LocalSlackCloneColor.current.uiBackground, topBar = {
-        SlackSurfaceAppBar(
-            title = {},
-            navigationIcon = {
-                IconButton({
-                    component.navigateBack()
-                }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
-                }
-            },
-            backgroundColor = LocalSlackCloneColor.current.uiBackground,
-            actions = {}
-        )
-    }) { paddingValues ->
+    Scaffold(
+        backgroundColor = LocalSlackCloneColor.current.uiBackground,
+        topBar = {
+            SlackSurfaceAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton({
+                        component.navigateBack()
+                    }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                },
+                backgroundColor = LocalSlackCloneColor.current.uiBackground,
+                actions = {}
+            )
+        },
+        contentColor = LocalSlackCloneColor.current.textSecondary,
+        modifier = Modifier.fillMaxSize(),
+    ) { paddingValues ->
         Box(Modifier.fillMaxSize().padding(paddingValues)) {
             when {
                 uiState.loading -> {

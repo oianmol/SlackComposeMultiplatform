@@ -17,7 +17,6 @@ import dev.baseio.slackclone.onboarding.compose.ProcessTokenFromDeepLink
 import dev.baseio.slackclone.onboarding.compose.WorkspaceInputUI
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 
-@OptIn(ExperimentalDecomposeApi::class)
 @Composable
 fun SlackApp(
     modifier: Modifier = Modifier,
@@ -31,7 +30,6 @@ fun SlackApp(
             is Root.Child.AuthorizeSendEmail -> {
                 ProcessEmailWorkspaceSendEmailUI(child.component)
             }
-
             is Root.Child.GettingStarted -> {
                 GettingStartedUI(child.component)
             }
