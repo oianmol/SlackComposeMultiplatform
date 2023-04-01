@@ -27,7 +27,7 @@ import javax.security.auth.Destroyable
 object CryptoChaCha20 {
     private const val ENCRYPT_ALGO = "ChaCha20-Poly1305/None/NoPadding"
     private const val KEY_LEN = 256
-    private const val NONCE_LEN = 12 //bytes
+    private const val NONCE_LEN = 12 // bytes
     private val NONCE_MIN_VAL = BigInteger("100000000000000000000000", 16)
     private val NONCE_MAX_VAL = BigInteger("ffffffffffffffffffffffff", 16)
     private var nonceCounter = NONCE_MIN_VAL
@@ -129,6 +129,6 @@ object CryptoChaCha20 {
     }
 
     fun secretFrom(symmetricKeyBytes: ByteArray?): SecretKeySpec {
-        return SecretKeySpec(symmetricKeyBytes,"ChaCha20")
+        return SecretKeySpec(symmetricKeyBytes, "ChaCha20")
     }
 }

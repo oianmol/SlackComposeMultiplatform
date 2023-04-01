@@ -21,13 +21,13 @@ import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.Keyboard
+import dev.baseio.slackclone.chatmessaging.chatthread.*
 import dev.baseio.slackclone.commonui.material.toCommonTextRange
 import dev.baseio.slackclone.commonui.material.toTextFieldValue
 import dev.baseio.slackclone.commonui.reusable.MentionsTextField
 import dev.baseio.slackclone.commonui.reusable.range
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.chatmessaging.chatthread.*
 import dev.baseio.slackclone.keyboardAsState
 import mainDispatcher
 
@@ -61,8 +61,8 @@ internal fun ChatMessageBox(
         )
         AnimatedVisibility(
             keyboard is Keyboard.Opened ||
-                    keyboard is Keyboard.HardwareKeyboard ||
-                    focusState?.hasFocus == true
+                keyboard is Keyboard.HardwareKeyboard ||
+                focusState?.hasFocus == true
         ) {
             ChatOptions(
                 viewModel,
@@ -179,7 +179,7 @@ internal fun MessageTFRow(
 @OptIn(ExperimentalComposeUiApi::class)
 private fun eventIsEnter(event: KeyEvent) =
     !event.isShiftPressed && event.type == KeyEventType.KeyUp &&
-            event.key == Key.Enter
+        event.key == Key.Enter
 
 @Composable
 internal fun CollapseExpandButton(viewModel: ChatViewModel) {

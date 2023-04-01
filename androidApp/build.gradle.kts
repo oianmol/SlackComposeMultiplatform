@@ -27,7 +27,6 @@ kotlin {
                 implementation(libs.koin.core)
                 implementation(libs.koin.android)
 
-
                 // Firebase
                 implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
 
@@ -53,7 +52,6 @@ kotlin {
         }
     }
 }
-
 
 android {
     compileSdk = 33

@@ -68,7 +68,6 @@ internal fun SlackListItem(
     }
 }
 
-
 @Composable
 internal fun SubTitleText(title: String, textColor: Color) {
     Text(

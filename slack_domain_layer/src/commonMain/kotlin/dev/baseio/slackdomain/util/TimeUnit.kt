@@ -1,7 +1,5 @@
 package dev.baseio.slackdomain.util
 
-import kotlin.time.Duration
-
 expect enum class TimeUnit {
     DAYS,
     HOURS,
@@ -10,4 +8,4 @@ expect enum class TimeUnit {
     SECONDS
 }
 
-expect fun TimeUnit.toMillis(duration: Long):Long
+expect fun TimeUnit.toMillis(duration: Long): Long

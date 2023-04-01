@@ -17,6 +17,15 @@ version = "1.0"
 
 subprojects {
     apply(plugin = rootProject.libs.plugins.ktlint.get().pluginId)
+
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        disabledRules.set(setOf("no-wildcard-imports"))
+        filter {
+            exclude { entry ->
+                entry.file.toString().contains("generated")
+            }
+        }
+    }
 }
 
 apply(from = teamPropsFile("git-hooks.gradle.kts"))

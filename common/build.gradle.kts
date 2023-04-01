@@ -10,7 +10,6 @@ plugins {
 group = "dev.baseio.slackclone.common"
 version = "1.0"
 
-
 repositories {
     mavenCentral()
 }
@@ -20,8 +19,6 @@ dependencies {
     commonMainApi(project(":slack_domain_layer"))
     commonMainApi(project(":slack_data_layer"))
 }
-
-
 
 kotlin {
     android()
@@ -48,7 +45,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-
 
                 implementation(libs.datetime)
                 implementation(libs.sqldelight.runtime)
@@ -176,4 +172,3 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
-

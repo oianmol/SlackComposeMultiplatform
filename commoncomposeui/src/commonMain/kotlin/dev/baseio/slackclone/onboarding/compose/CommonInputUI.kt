@@ -18,7 +18,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 
 @Composable
 internal fun CommonInputUI(
-    navigateBack:()->Unit,
+    navigateBack: () -> Unit,
     navigateNext: () -> Unit,
     subtitleText: String,
     TopView: @Composable (modifier: Modifier) -> Unit,
@@ -34,19 +34,19 @@ internal fun CommonInputUI(
             snackbarHost = {
                 scaffoldState.snackbarHostState
             }, topBar = {
-                SlackSurfaceAppBar(
-                    title = {},
-                    navigationIcon = {
-                        IconButton({
-                           navigateBack()
-                        }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = null)
-                        }
-                    },
-                    backgroundColor = LocalSlackCloneColor.current.uiBackground,
-                    actions = {}
-                )
-            }
+            SlackSurfaceAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton({
+                        navigateBack()
+                    }) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                },
+                backgroundColor = LocalSlackCloneColor.current.uiBackground,
+                actions = {}
+            )
+        }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 SlackCloneSurface(
@@ -57,7 +57,8 @@ internal fun CommonInputUI(
                         modifier = Modifier
                             .padding(12.dp)
                             .fillMaxHeight()
-                            .fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.SpaceAround
                     ) {
                         // Create references for the composables to constrain
                         Spacer(Modifier)
@@ -69,7 +70,6 @@ internal fun CommonInputUI(
                     }
                 }
             }
-
         }
     }
 }

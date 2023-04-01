@@ -20,7 +20,6 @@ fun main() {
         val windowState = rememberWindowState()
         val lifecycle = LifecycleRegistry()
 
-
         val rootComponent by lazy { RootComponent(DefaultComponentContext(lifecycle = lifecycle)) }
         initKoin()
 
@@ -60,9 +59,8 @@ private fun handleDeepLink(rootComponent: RootComponent) {
             reg.createKey(HKey.HKCU, protocolRegKey)
             reg.createKey(HKey.HKCU, protocolCmdRegKey)
 
-            reg.writeStringValue(HKey.HKCU,protocolRegKey,"URL Protocol","")
-            reg.writeStringValue(HKey.HKCU,protocolCmdRegKey,"","$appExecutablePath %1")
-
+            reg.writeStringValue(HKey.HKCU, protocolRegKey, "URL Protocol", "")
+            reg.writeStringValue(HKey.HKCU, protocolCmdRegKey, "", "$appExecutablePath %1")
         }
         Desktop.getDesktop().setOpenURIHandler { event ->
             val queryMap = UriUtil.parseQueryMap(event.uri)
@@ -98,5 +96,3 @@ fun DesktopApp(
         }
     }
 }
-
-

@@ -19,37 +19,39 @@ class SKNetworkDataSourceWriteChannelsImpl(
             kotlin.runCatching {
                 when (params) {
                     is DomainLayerChannels.SKChannel.SkDMChannel -> {
-                        grpcCalls.saveDMChannel(kmSKDMChannel {
-                            uuid = params.uuid
-                            workspaceId = params.workId
-                            createdDate = params.createdDate
-                            modifiedDate = params.modifiedDate
-                            this.senderId = params.senderId
-                            this.receiverId = params.receiverId
-                            this.isDeleted = params.deleted
-                            this.publicKey = CapillaryInstances.getInstance(params.uuid)
-                                .publicKey().encoded.toKMSlackPublicKey()
-                        }).mapToDomainSkChannel()
+                        grpcCalls.saveDMChannel(
+                            kmSKDMChannel {
+                                uuid = params.uuid
+                                workspaceId = params.workId
+                                createdDate = params.createdDate
+                                modifiedDate = params.modifiedDate
+                                this.senderId = params.senderId
+                                this.receiverId = params.receiverId
+                                this.isDeleted = params.deleted
+                                this.publicKey = CapillaryInstances.getInstance(params.uuid)
+                                    .publicKey().encoded.toKMSlackPublicKey()
+                            }
+                        ).mapToDomainSkChannel()
                     }
 
                     is DomainLayerChannels.SKChannel.SkGroupChannel -> {
-                        grpcCalls.savePublicChannel(kmSKChannel {
-                            uuid = params.uuid
-                            workspaceId = params.workId
-                            name = params.name
-                            createdDate = params.createdDate
-                            modifiedDate = params.modifiedDate
-                            avatarUrl = params.avatarUrl
-                            this.isDeleted = params.deleted
-                            this.publicKey = CapillaryInstances.getInstance(params.uuid)
-                                .publicKey().encoded.toKMSlackPublicKey()
-                        }).mapToDomainSkChannel()
+                        grpcCalls.savePublicChannel(
+                            kmSKChannel {
+                                uuid = params.uuid
+                                workspaceId = params.workId
+                                name = params.name
+                                createdDate = params.createdDate
+                                modifiedDate = params.modifiedDate
+                                avatarUrl = params.avatarUrl
+                                this.isDeleted = params.deleted
+                                this.publicKey = CapillaryInstances.getInstance(params.uuid)
+                                    .publicKey().encoded.toKMSlackPublicKey()
+                            }
+                        ).mapToDomainSkChannel()
                     }
                 }
             }
         }
-
-
     }
 }
 
@@ -59,21 +61,25 @@ fun DomainLayerUsers.SKSlackKey.toByteArray(): ByteArray {
 
 fun ByteArray.toKMSlackPublicKey(): KMSlackKey {
     return kmSlackKey {
-        this.keybytesList.addAll(this@toKMSlackPublicKey.map {
-            kmSKByteArrayElement {
-                byte = it.toInt()
+        this.keybytesList.addAll(
+            this@toKMSlackPublicKey.map {
+                kmSKByteArrayElement {
+                    byte = it.toInt()
+                }
             }
-        })
+        )
     }
 }
 
 fun ByteArray.toSKUserPublicKey(): DomainLayerUsers.SKSlackKey {
     return kmSlackKey {
-        this.keybytesList.addAll(this@toSKUserPublicKey.map {
-            kmSKByteArrayElement {
-                byte = it.toInt()
+        this.keybytesList.addAll(
+            this@toSKUserPublicKey.map {
+                kmSKByteArrayElement {
+                    byte = it.toInt()
+                }
             }
-        })
+        )
     }.toUserPublicKey()
 }
 
@@ -92,17 +98,21 @@ fun KMSKChannel.mapToDomainSkChannel(): DomainLayerChannels.SKChannel {
 }
 
 fun KMSlackKey.toUserPublicKey(): DomainLayerUsers.SKSlackKey {
-    return DomainLayerUsers.SKSlackKey(keyBytes = this.keybytesList.map { it.byte.toByte() }
-        .toByteArray())
+    return DomainLayerUsers.SKSlackKey(
+        keyBytes = this.keybytesList.map { it.byte.toByte() }
+            .toByteArray()
+    )
 }
 
 fun DomainLayerUsers.SKSlackKey.toSlackKey(): KMSlackKey {
     return kmSlackKey {
-        this.keybytesList.addAll(keyBytes.map {
-            kmSKByteArrayElement {
-                byte = it.toInt()
+        this.keybytesList.addAll(
+            keyBytes.map {
+                kmSKByteArrayElement {
+                    byte = it.toInt()
+                }
             }
-        })
+        )
     }
 }
 

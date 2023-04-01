@@ -29,7 +29,7 @@ val rootComponent by lazy {
     )
 }
 
-fun MainViewController(window:UIWindow): UIViewController =
+fun MainViewController(window: UIWindow): UIViewController =
     Application("SlackComposeiOS") {
         initKoin()
 

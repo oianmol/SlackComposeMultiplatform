@@ -7,19 +7,19 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class UseCaseFetchAndUpdateChangeInUsers(
-  private val skNetworkDataSourceMessages: SKNetworkDataSourceReadUsers,
-  private val skLocalDataSourceUsers: SKLocalDataSourceUsers
+    private val skNetworkDataSourceMessages: SKNetworkDataSourceReadUsers,
+    private val skLocalDataSourceUsers: SKLocalDataSourceUsers
 ) {
-  operator fun invoke(workspaceId: String): Flow<Unit> {
-    return skNetworkDataSourceMessages.listenToChangeInUsers(workspaceId)
-      .map { messageChangeSnapshot ->
-        messageChangeSnapshot.second?.let {
-          skLocalDataSourceUsers.saveUser(it)
-        }
-        Unit
-      }
-      .catch {
-        // TODO tell upstream of exceptions if any
-      }
-  }
+    operator fun invoke(workspaceId: String): Flow<Unit> {
+        return skNetworkDataSourceMessages.listenToChangeInUsers(workspaceId)
+            .map { messageChangeSnapshot ->
+                messageChangeSnapshot.second?.let {
+                    skLocalDataSourceUsers.saveUser(it)
+                }
+                Unit
+            }
+            .catch {
+                // TODO tell upstream of exceptions if any
+            }
+    }
 }

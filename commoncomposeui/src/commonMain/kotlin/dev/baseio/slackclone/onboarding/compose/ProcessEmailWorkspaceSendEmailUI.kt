@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.onboarding.vm.EmailMagicLinkComponent
 
@@ -74,7 +73,6 @@ internal fun ProcessEmailWorkspaceSendEmailUI(component: EmailMagicLinkComponent
                             modifier = Modifier
                         )
                     }
-
                 }
             }
         }

@@ -32,11 +32,13 @@ internal fun EmailAddressInputView(modifier: Modifier = Modifier, email: String,
             .wrapContentWidth()
     ) {
         Text(
-            text = "Email", style = SlackCloneTypography.caption.copy(
+            text = "Email",
+            style = SlackCloneTypography.caption.copy(
                 color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.7f),
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Start
-            ), modifier = Modifier.padding(bottom = 4.dp)
+            ),
+            modifier = Modifier.padding(bottom = 4.dp)
         )
         Row(
             modifier = modifier
@@ -49,7 +51,6 @@ internal fun EmailAddressInputView(modifier: Modifier = Modifier, email: String,
             }
         }
     }
-
 }
 
 @ExperimentalComposeUiApi

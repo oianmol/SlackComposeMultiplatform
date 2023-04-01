@@ -13,12 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenComponent
+import dev.baseio.slackclone.chatmessaging.chatthread.ChatViewModel
 import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedMonthDate
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenComponent
-import dev.baseio.slackclone.chatmessaging.chatthread.ChatViewModel
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 @Composable
@@ -42,7 +42,8 @@ internal fun ChatMessagesUI(
                     message,
                     alertLongClick,
                     members.firstOrNull { it.uuid == message.sender },
-                    onClickHash = {})
+                    onClickHash = {}
+                )
                 if (messageIndex + threshold >= messages.lastIndex) {
                     SideEffect {
                         viewModel.skMessagePagination.loadNextPage()
@@ -67,16 +68,19 @@ internal fun ChatMessagesUI(
 }
 
 private fun isLastMessage(
-    messageIndex: Int, messages: List<DomainLayerMessages.SKMessage>
+    messageIndex: Int,
+    messages: List<DomainLayerMessages.SKMessage>
 ) = messageIndex == messages.size.minus(1)
 
 @Composable
 internal fun ChatHeader(createdDate: Long) {
     Column(Modifier.padding(start = 8.dp, end = 8.dp)) {
         Text(
-            createdDate.calendar().formattedMonthDate(), style = SlackCloneTypography.subtitle2.copy(
+            createdDate.calendar().formattedMonthDate(),
+            style = SlackCloneTypography.subtitle2.copy(
                 fontWeight = FontWeight.Bold, color = LocalSlackCloneColor.current.textPrimary
-            ), modifier = Modifier.padding(4.dp)
+            ),
+            modifier = Modifier.padding(4.dp)
         )
         Divider(color = LocalSlackCloneColor.current.lineColor, thickness = 0.5.dp)
     }

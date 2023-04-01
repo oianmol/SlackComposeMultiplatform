@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.channels.directmessages.DMChannelsList
+import dev.baseio.slackclone.channels.directmessages.DirectMessagesComponent
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.channels.directmessages.DMChannelsList
-import dev.baseio.slackclone.channels.directmessages.DirectMessagesComponent
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
 @Composable

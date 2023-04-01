@@ -53,7 +53,7 @@ class WorkspaceDataSourceImpl(private val slackCloneDB: CoroutineDatabase) : Wor
         val collection = slackCloneDB.getCollection<SkMessage>()
         val pipeline: List<Bson> = listOf(
             match(
-                Document.parse("{'fullDocument.workspaceId': '${uuid}'}"),
+                Document.parse("{'fullDocument.workspaceId': '$uuid'}"),
                 Filters.`in`("operationType", OperationType.values().map { it.value }.toList())
             )
         )

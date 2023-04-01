@@ -1,6 +1,5 @@
 package dev.baseio.slackserver.services
 
-
 import dev.baseio.slackdata.common.Empty
 import dev.baseio.slackdata.common.sKByteArrayElement
 import dev.baseio.slackdata.protos.*
@@ -59,8 +58,6 @@ class UserService(coroutineContext: CoroutineContext = Dispatchers.IO, private v
             .saveUser(request.toDBUser())
             ?.toGrpc() ?: throw StatusException(Status.ABORTED)
     }
-
-
 }
 
 fun SkUser.toGrpc(): SKUser {
@@ -77,11 +74,13 @@ fun SkUser.toGrpc(): SKUser {
         .setLocation(this.location)
         .setPublicKey(
             SlackKey.newBuilder()
-                .addAllKeybytes(this.publicKey.keyBytes.map {
-                    sKByteArrayElement {
-                        this.byte = it.toInt()
+                .addAllKeybytes(
+                    this.publicKey.keyBytes.map {
+                        sKByteArrayElement {
+                            this.byte = it.toInt()
+                        }
                     }
-                })
+                )
                 .build()
         )
         .build()

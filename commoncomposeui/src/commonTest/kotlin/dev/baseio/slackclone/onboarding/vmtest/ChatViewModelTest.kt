@@ -29,10 +29,8 @@ class ChatViewModelTest : SlackKoinUnitTest() {
     private val sendMessageDelegate: SendMessageDelegate by inject()
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
 
-
     @get:TestRule
     val instantTaskExecutorRule = AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
-
 
     private val chatViewModel by lazy {
         ChatViewModel(
@@ -52,7 +50,7 @@ class ChatViewModelTest : SlackKoinUnitTest() {
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
             mocker.everySuspending { iGrpcCalls.sendMessage(isAny(), isAny()) } returns channelPublicMessage(message)
-            mocker.everySuspending { iGrpcCalls.fetchChannelMembers(isAny(),isAny()) } returns testPublichannelMembers(testPublicChannels("1").channelsList.first())
+            mocker.everySuspending { iGrpcCalls.fetchChannelMembers(isAny(), isAny()) } returns testPublichannelMembers(testPublicChannels("1").channelsList.first())
             mocker.everySuspending { iGrpcCalls.fetchMessages(isAny()) } returns testMessages(channelPublicMessage(message))
             // assert that sendMessageDelegate
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
@@ -68,7 +66,6 @@ class ChatViewModelTest : SlackKoinUnitTest() {
                 }
             }
         }
-
     }
 
     private fun testMessages(channelPublicMessage: KMSKMessage): KMSKMessages {
@@ -76,6 +73,4 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             this.messagesList.add(channelPublicMessage)
         }
     }
-
-
 }

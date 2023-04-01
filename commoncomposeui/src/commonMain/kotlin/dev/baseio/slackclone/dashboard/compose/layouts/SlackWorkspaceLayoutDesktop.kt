@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.channels.SlackChannelComponent
 import dev.baseio.slackclone.channels.views.SlackAllChannels
 import dev.baseio.slackclone.channels.views.SlackRecentChannels
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
+import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.dashboard.compose.FloatingDM
 import dev.baseio.slackclone.dashboard.compose.WorkspacesBar
 import dev.baseio.slackclone.dashboard.home.JumpToText

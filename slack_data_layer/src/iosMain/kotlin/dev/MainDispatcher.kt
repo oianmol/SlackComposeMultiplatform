@@ -9,9 +9,9 @@ actual val mainDispatcher: CoroutineDispatcher = NsQueueDispatcher(dispatch_get_
 actual val ioDispatcher: CoroutineDispatcher = mainDispatcher
 actual val defaultDispatcher: CoroutineDispatcher = mainDispatcher
 
-//NsQueueDispatcher(dispatch_get_main_queue())
+// NsQueueDispatcher(dispatch_get_main_queue())
 internal class NsQueueDispatcher(private val dispatchQueue: dispatch_queue_t) : CoroutineDispatcher() {
-  override fun dispatch(context: CoroutineContext, block: Runnable) {
-    dispatch_async(dispatchQueue) { block.run() }
-  }
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        dispatch_async(dispatchQueue) { block.run() }
+    }
 }

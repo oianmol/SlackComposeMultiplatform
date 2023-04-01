@@ -24,7 +24,6 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
         }
     }
 
-
     @Test
     fun `when user creates a channel then the app navigates to it`() {
         runTest {
@@ -49,7 +48,6 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
             }.distinctUntilChanged().test {
                 asserter.assertTrue("was expecting to be navigated", awaitItem())
             }
-
         }
     }
 
@@ -66,7 +64,6 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
                 "1"
             )
 
-
             searchCreateChannelVM.search(name)
             searchCreateChannelVM.channelsStream.test {
                 awaitItem()
@@ -76,7 +73,6 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
                         { "was expecting new_channel!" },
                         this.filter {
                             it.channelName == name
-
                         }.size == 1
                     )
                 }

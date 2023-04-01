@@ -31,13 +31,13 @@ import com.arkivanov.essenty.backhandler.BackCallback
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.WindowInfo
-import dev.baseio.slackclone.commonui.reusable.SlackDragComposableView
-import dev.baseio.slackclone.commonui.theme.SlackCloneColor
-import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenUI
+import dev.baseio.slackclone.commonui.reusable.SlackDragComposableView
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
+import dev.baseio.slackclone.commonui.theme.SlackCloneColor
+import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
+import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.dashboard.compose.layouts.SlackDesktopLayout
 import dev.baseio.slackclone.dashboard.compose.layouts.SlackSideBarLayoutDesktop
 import dev.baseio.slackclone.dashboard.compose.layouts.SlackWorkspaceLayoutDesktop
@@ -109,10 +109,10 @@ internal fun DashboardUI(
                             {
                                 dashboardComponent.navigateOnboarding()
                             }, {
-                                dashboardComponent.navigateQrScanner(it)
-                            }, {
-                                dashboardComponent.navigateAddWorkspace()
-                            }
+                            dashboardComponent.navigateQrScanner(it)
+                        }, {
+                            dashboardComponent.navigateAddWorkspace()
+                        }
                         )
                     },
                     rightViewComposable = { chatViewModifier ->
@@ -153,10 +153,10 @@ internal fun DashboardUI(
                             {
                                 dashboardComponent.navigateOnboarding()
                             }, {
-                                dashboardComponent.navigateQrScanner(it)
-                            }, {
-                                dashboardComponent.navigateAddWorkspace()
-                            }
+                            dashboardComponent.navigateQrScanner(it)
+                        }, {
+                            dashboardComponent.navigateAddWorkspace()
+                        }
                         )
                     },
                     rightViewComposable = { chatViewModifier ->

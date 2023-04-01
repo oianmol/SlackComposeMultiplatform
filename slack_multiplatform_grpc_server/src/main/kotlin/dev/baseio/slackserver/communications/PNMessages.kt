@@ -25,5 +25,4 @@ class PNMessages(
             }
         return tokens
     }
-
 }

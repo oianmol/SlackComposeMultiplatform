@@ -27,7 +27,8 @@ actual object CapillaryEncryption {
         // Retrieve symmetric key.
         val symmetricKeyBytes = rsaCipher.doFinal(encryptedData.first.frombase64())
         return CryptoChaCha20.decrypt(
-            encryptedData.second.frombase64()!!, CryptoChaCha20
+            encryptedData.second.frombase64()!!,
+            CryptoChaCha20
                 .secretFrom(symmetricKeyBytes)
         )
     }

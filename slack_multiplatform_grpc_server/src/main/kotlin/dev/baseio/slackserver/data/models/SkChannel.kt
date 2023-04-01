@@ -48,7 +48,6 @@ sealed class SkChannel(
     }
 }
 
-
 data class SkChannelMember(
     val workspaceId: String,
     val channelId: String,

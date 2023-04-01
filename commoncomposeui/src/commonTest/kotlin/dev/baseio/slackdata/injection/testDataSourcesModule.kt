@@ -3,15 +3,15 @@ package dev.baseio.slackdata.injection
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackdata.datasources.local.SKLocalDatabaseSourceImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceChannelMembersImpl
-import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceCreateChannelsImpl
+import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceReadChannelsImpl
 import dev.baseio.slackdata.datasources.local.channels.SlackSKLocalDataSourceChannelLastMessage
 import dev.baseio.slackdata.datasources.local.messages.IMessageDecrypterImpl
 import dev.baseio.slackdata.datasources.local.messages.SKLocalDataSourceMessagesImpl
 import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceCreateUsersImpl
 import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceUsersImpl
-import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceReadWorkspacesImpl
+import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
 import dev.baseio.slackdata.datasources.remote.auth.SKAuthNetworkDataSourceImpl
 import dev.baseio.slackdata.datasources.remote.auth.SKNetworkSaveFcmTokenImpl
 import dev.baseio.slackdata.datasources.remote.channels.SKNetworkDataSourceReadChannelMembersImpl
@@ -28,14 +28,14 @@ import dev.baseio.slackdomain.datasources.local.SKLocalDatabaseSource
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelLastMessage
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
-import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceCreateChannels
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
 import dev.baseio.slackdomain.datasources.local.messages.SKLocalDataSourceMessages
-import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceWriteUsers
 import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
-import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
+import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceWriteUsers
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceReadWorkspaces
+import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceWriteWorkspaces
 import dev.baseio.slackdomain.datasources.remote.auth.SKAuthNetworkDataSource
 import dev.baseio.slackdomain.datasources.remote.auth.SKNetworkSaveFcmToken
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannelMembers
@@ -49,7 +49,7 @@ import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkDataSourceW
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkSourceWorkspaces
 import org.koin.dsl.module
 
-fun testDataSourcesModule(iGrpcCalls: ()->IGrpcCalls) = module {
+fun testDataSourcesModule(iGrpcCalls: () -> IGrpcCalls) = module {
     single {
         iGrpcCalls.invoke()
     }
@@ -145,4 +145,3 @@ fun testDataSourcesModule(iGrpcCalls: ()->IGrpcCalls) = module {
         )
     }
 }
-

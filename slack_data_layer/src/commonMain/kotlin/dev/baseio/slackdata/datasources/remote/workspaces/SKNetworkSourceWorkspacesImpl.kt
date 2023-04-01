@@ -10,7 +10,6 @@ import dev.baseio.slackdata.protos.kmSKWorkspace
 import dev.baseio.slackdata.protos.kmSlackKey
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.remote.workspaces.SKNetworkSourceWorkspaces
-import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import kotlinx.coroutines.withContext
 
 class SKNetworkSourceWorkspacesImpl(
@@ -33,7 +32,6 @@ class SKNetworkSourceWorkspacesImpl(
                 )
             }
         }
-
     }
 }
 
@@ -47,11 +45,13 @@ private fun kmskCreateWorkspaceRequest(
         this.user = kmSKUser {
             this.email = email
             this.publicKey = kmSlackKey {
-                this.keybytesList.addAll(publicKey.map {
-                    kmSKByteArrayElement {
-                        this.byte = it.toInt()
+                this.keybytesList.addAll(
+                    publicKey.map {
+                        kmSKByteArrayElement {
+                            this.byte = it.toInt()
+                        }
                     }
-                })
+                )
             }
         }
     }

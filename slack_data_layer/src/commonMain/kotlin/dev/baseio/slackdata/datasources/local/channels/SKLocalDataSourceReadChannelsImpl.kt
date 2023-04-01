@@ -3,10 +3,10 @@ package dev.baseio.slackdata.datasources.local.channels
 import database.SkDMChannel
 import database.SkPublicChannel
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdata.local.asFlow
 import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.LOGGED_IN_USER
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
@@ -49,7 +49,6 @@ class SKLocalDataSourceReadChannelsImpl(
             slackChannelDao.slackDBQueries.selectAllPublicChannelsByName(workspaceId, params)
                 .asFlow()
                 .mapToList(coroutineMainDispatcherProvider.default)
-
         } ?: run {
             slackChannelDao.slackDBQueries.selectAllPublicChannels(workspaceId).asFlow()
                 .mapToList(coroutineMainDispatcherProvider.default)
@@ -108,7 +107,7 @@ class SKLocalDataSourceReadChannelsImpl(
                     }
             }.run {
                 if (this is DomainLayerChannels.SKChannel.SkDMChannel) {
-                    this.populateDMChannelWithOtherUser(skKeyValueData, skLocalDataSourceUsers,this.workspaceId)
+                    this.populateDMChannelWithOtherUser(skKeyValueData, skLocalDataSourceUsers, this.workspaceId)
                 }
                 this
             }
@@ -159,8 +158,6 @@ class SKLocalDataSourceReadChannelsImpl(
     override suspend fun getChannel(request: UseCaseWorkspaceChannelRequest): DomainLayerChannels.SKChannel? {
         return getChannelById(request.workspaceId, request.channelId!!)
     }
-
-
 }
 
 fun DomainLayerChannels.SKChannel.SkDMChannel.populateDMChannelWithOtherUser(

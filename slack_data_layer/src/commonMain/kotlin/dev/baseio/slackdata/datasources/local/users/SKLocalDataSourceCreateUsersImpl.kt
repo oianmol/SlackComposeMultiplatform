@@ -7,14 +7,14 @@ import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import kotlinx.coroutines.withContext
 
 class SKLocalDataSourceCreateUsersImpl(
-  private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-  private val skLocalDataSourceUsers: SKLocalDataSourceUsers
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    private val skLocalDataSourceUsers: SKLocalDataSourceUsers
 ) : SKLocalDataSourceWriteUsers {
-  override suspend fun saveUsers(users: List<DomainLayerUsers.SKUser>) {
-    withContext(coroutineDispatcherProvider.io) {
-      users.forEach {
-        skLocalDataSourceUsers.saveUser(it)
-      }
+    override suspend fun saveUsers(users: List<DomainLayerUsers.SKUser>) {
+        withContext(coroutineDispatcherProvider.io) {
+            users.forEach {
+                skLocalDataSourceUsers.saveUser(it)
+            }
+        }
     }
-  }
 }

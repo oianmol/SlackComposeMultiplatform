@@ -11,12 +11,10 @@ plugins {
     alias(libs.plugins.sqldelight.id)
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.timortel.grpc)
-
 }
 
 group = "dev.baseio.slackclone"
 version = "1.0"
-
 
 val ktor_version = "2.1.0"
 
@@ -72,9 +70,8 @@ kotlin {
             )
         }
         val sqlDriverNativeMain by creating {
-            dependsOn(commonMain)
             dependencies {
-                implementation("com.squareup.sqldelight:native-driver:1.5.3")
+                implementation(libs.sqldelight.nativedriver)
             }
         }
         val commonTest by getting {
@@ -83,6 +80,7 @@ kotlin {
             }
         }
         val androidMain by getting {
+            dependsOn(commonMain)
             kotlin.srcDirs(
                 projectDir.resolve("build/generated/source/kmp-grpc/jvmMain/kotlin").canonicalPath,
             )
@@ -113,6 +111,7 @@ kotlin {
         }
 
         val iosMain by creating {
+            dependsOn(commonMain)
             kotlin.srcDirs(
                 projectDir.resolve("build/generated/source/kmp-grpc/iosMain/kotlin").canonicalPath,
             )
@@ -126,13 +125,13 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
         }
 
-
         val androidUnitTest by getting {
             dependencies {
                 implementation("junit:junit:4.13.2")
             }
         }
         val jvmMain by getting {
+            dependsOn(commonMain)
             kotlin.srcDirs(
                 projectDir.resolve("build/generated/source/kmp-grpc/jvmMain/kotlin").canonicalPath,
             )
@@ -155,12 +154,10 @@ grpcKotlinMultiplatform {
     targetSourcesMap.put(
         OutputTarget.IOS,
         listOf(
-            kotlin.sourceSets.getByName("iosArm64Main"),
-            kotlin.sourceSets.getByName("iosSimulatorArm64Main"),
-            kotlin.sourceSets.getByName("iosX64Main")
+            kotlin.sourceSets.getByName("iosMain"),
         )
     )
-    //Specify the folders where your proto files are located, you can list multiple.
+    // Specify the folders where your proto files are located, you can list multiple.
     protoSourceFolders.set(listOf(projectDir.parentFile.resolve("slack_protos/src/main/proto")))
 }
 
@@ -184,7 +181,6 @@ sqldelight {
     }
 }
 
-
 android {
     compileSdk = 33
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -197,4 +193,3 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
-

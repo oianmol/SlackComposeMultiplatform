@@ -19,15 +19,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.channels.SlackChannelComponent
+import dev.baseio.slackclone.channels.views.SlackAllChannels
+import dev.baseio.slackclone.channels.views.SlackRecentChannels
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.channels.SlackChannelComponent
-import dev.baseio.slackclone.channels.views.SlackAllChannels
-import dev.baseio.slackclone.channels.views.SlackRecentChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
@@ -54,13 +54,13 @@ internal fun HomeScreenUI(
                 SlackRecentChannels({
                     onItemClick(it)
                 }, onClickAdd = {
-                        onCreateChannelRequest()
-                    }, recentChannelsComponent)
+                    onCreateChannelRequest()
+                }, recentChannelsComponent)
                 SlackAllChannels({
                     onItemClick(it)
                 }, onClickAdd = {
-                        onCreateChannelRequest()
-                    }, allChannelsComponent)
+                    onCreateChannelRequest()
+                }, allChannelsComponent)
             }
         }
     }

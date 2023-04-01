@@ -33,7 +33,7 @@ class UseCaseFetchChannelsWithSearch(
                     receiverId = skUser.uuid,
                     uuid = uuid,
                     deleted = false,
-                    channelPublicKey = dmChannel?.channelPublicKey?: DomainLayerUsers.SKSlackKey(ByteArray(0))
+                    channelPublicKey = dmChannel?.channelPublicKey ?: DomainLayerUsers.SKSlackKey(ByteArray(0))
                 ).apply {
                     channelName = skUser.name
                     pictureUrl = skUser.avatarUrl

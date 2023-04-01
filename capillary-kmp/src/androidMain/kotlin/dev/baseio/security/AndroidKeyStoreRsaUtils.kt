@@ -31,14 +31,11 @@ object AndroidKeyStoreRsaUtils {
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
             .setKeySize(2048)
 
-
         spec = specBuilder.build()
 
-
-        val keyPairGenerator = KeyPairGenerator.getInstance("RSA",KEYSTORE_ANDROID)
+        val keyPairGenerator = KeyPairGenerator.getInstance("RSA", KEYSTORE_ANDROID)
         keyPairGenerator.initialize(spec)
         keyPairGenerator.generateKeyPair()
-
     }
 
     fun getPublicKey(keyStore: KeyStore, keychainId: String): PublicKey {
@@ -61,9 +58,10 @@ object AndroidKeyStoreRsaUtils {
     }
 
     fun getPublicKeyFromBytes(publicKeyBytes: ByteArray): PublicKey {
-        return PublicKey(KeyFactory.getInstance("RSA").generatePublic(
-            X509EncodedKeySpec(publicKeyBytes)
-        ))
+        return PublicKey(
+            KeyFactory.getInstance("RSA").generatePublic(
+                X509EncodedKeySpec(publicKeyBytes)
+            )
+        )
     }
-
 }

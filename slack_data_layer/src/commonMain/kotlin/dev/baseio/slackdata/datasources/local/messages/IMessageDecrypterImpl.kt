@@ -1,12 +1,12 @@
 package dev.baseio.slackdata.datasources.local.messages
 
 import dev.baseio.security.*
-import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
-import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdata.datasources.local.channels.loggedInUser
 import dev.baseio.slackdomain.datasources.IDataDecryptor
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
+import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
+import dev.baseio.slackdomain.model.message.DomainLayerMessages
 
 class IMessageDecrypterImpl(
     private val skKeyValueData: SKLocalKeyValueSource,
@@ -25,7 +25,8 @@ class IMessageDecrypterImpl(
                 EncryptedData(
                     safeChannelEncryptedPrivateKey.first,
                     safeChannelEncryptedPrivateKey.second
-                ), capillary.privateKey()
+                ),
+                capillary.privateKey()
             )
         }?.let { bytes ->
             finalMessageAfterDecryption(
@@ -34,7 +35,6 @@ class IMessageDecrypterImpl(
             )
         }
     }
-
 
     private fun finalMessageAfterDecryption(
         skLastMessage: DomainLayerMessages.SKMessage,
@@ -48,7 +48,8 @@ class IMessageDecrypterImpl(
                         Pair(
                             messageFinal.messageFirst,
                             messageFinal.messageSecond
-                        ), privateKeyBytes = privateKeyBytes
+                        ),
+                        privateKeyBytes = privateKeyBytes
                     )
                         .decodeToString()
                 )
@@ -62,4 +63,3 @@ class IMessageDecrypterImpl(
         return messageFinal
     }
 }
-

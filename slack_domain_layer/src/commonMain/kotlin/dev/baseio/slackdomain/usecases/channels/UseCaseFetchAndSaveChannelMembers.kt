@@ -4,12 +4,12 @@ import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChanne
 import dev.baseio.slackdomain.datasources.remote.channels.SKNetworkDataSourceReadChannelMembers
 
 class UseCaseFetchAndSaveChannelMembers(
-  private val networkSource: SKNetworkDataSourceReadChannelMembers,
-  private val localSource: SKLocalDataSourceChannelMembers
+    private val networkSource: SKNetworkDataSourceReadChannelMembers,
+    private val localSource: SKLocalDataSourceChannelMembers
 ) {
-  suspend operator fun invoke(useCaseWorkspaceChannelRequest: UseCaseWorkspaceChannelRequest) {
-    networkSource.fetchChannelMembers(useCaseWorkspaceChannelRequest).mapCatching {
-      localSource.save(it)
+    suspend operator fun invoke(useCaseWorkspaceChannelRequest: UseCaseWorkspaceChannelRequest) {
+        networkSource.fetchChannelMembers(useCaseWorkspaceChannelRequest).mapCatching {
+            localSource.save(it)
+        }
     }
-  }
 }

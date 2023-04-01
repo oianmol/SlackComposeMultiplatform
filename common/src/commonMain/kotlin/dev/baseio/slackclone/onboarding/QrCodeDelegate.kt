@@ -17,96 +17,99 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 interface QrCodeDelegate {
-  var qrCode: MutableStateFlow<KMSKQrCodeResponse?>
-  var loadingQR: MutableStateFlow<Boolean>
-  var message: MutableStateFlow<String>
-  var navigateDashboardNow: () -> Unit
-  fun loadQrCode(viewModelScope: CoroutineScope)
-  suspend fun whenAuthorized(kmskQrCodeResponse: KMSKAuthResult)
-  var navigateBack: () -> Unit
-  var exception: MutableStateFlow<Throwable?>
-  fun authorize(code: String, viewModelScope: CoroutineScope)
-  fun toggleScanningMode()
+    var qrCode: MutableStateFlow<KMSKQrCodeResponse?>
+    var loadingQR: MutableStateFlow<Boolean>
+    var message: MutableStateFlow<String>
+    var navigateDashboardNow: () -> Unit
+    fun loadQrCode(viewModelScope: CoroutineScope)
+    suspend fun whenAuthorized(kmskQrCodeResponse: KMSKAuthResult)
+    var navigateBack: () -> Unit
+    var exception: MutableStateFlow<Throwable?>
+    fun authorize(code: String, viewModelScope: CoroutineScope)
+    fun toggleScanningMode()
 
-  var scanningMode: MutableStateFlow<Boolean>
+    var scanningMode: MutableStateFlow<Boolean>
 }
 
 class QrCodeDelegateImpl(private val qrCodeAuthUser: UseCaseQRAuthUser, private val iGrpcCalls: IGrpcCalls) :
-  QrCodeDelegate {
-  override var qrCode = MutableStateFlow<KMSKQrCodeResponse?>(null)
-  override var scanningMode = MutableStateFlow(false)
-  override var loadingQR = MutableStateFlow(false)
-  override var message = MutableStateFlow("")
-  override var exception = MutableStateFlow<Throwable?>(null)
-  override var navigateDashboardNow: () -> Unit = {}
-  override var navigateBack: () -> Unit = {}
+    QrCodeDelegate {
+    override var qrCode = MutableStateFlow<KMSKQrCodeResponse?>(null)
+    override var scanningMode = MutableStateFlow(false)
+    override var loadingQR = MutableStateFlow(false)
+    override var message = MutableStateFlow("")
+    override var exception = MutableStateFlow<Throwable?>(null)
+    override var navigateDashboardNow: () -> Unit = {}
+    override var navigateBack: () -> Unit = {}
 
-  private var authorizeJob: Job? = null
+    private var authorizeJob: Job? = null
 
-  override fun toggleScanningMode() {
-    scanningMode.value = !scanningMode.value
-  }
-
-
-  override fun authorize(code: String, viewModelScope: CoroutineScope) {
-    authorizeJob?.let {
-      return
+    override fun toggleScanningMode() {
+        scanningMode.value = !scanningMode.value
     }
-    authorizeJob = viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-      exception.value = throwable
-    }) {
-      val authResult = iGrpcCalls.authorizeQrCode(kmSKQRAuthVerify {
-        this.token = code
-      })
-      whenAuthorized(authResult)
+
+    override fun authorize(code: String, viewModelScope: CoroutineScope) {
+        authorizeJob?.let {
+            return
+        }
+        authorizeJob = viewModelScope.launch(
+            CoroutineExceptionHandler { _, throwable ->
+                exception.value = throwable
+            }
+        ) {
+            val authResult = iGrpcCalls.authorizeQrCode(
+                kmSKQRAuthVerify {
+                    this.token = code
+                }
+            )
+            whenAuthorized(authResult)
+        }
     }
-  }
 
-  override fun loadQrCode(viewModelScope: CoroutineScope) {
-    qrCode.value?.let {
-      clearQR()
-      return
+    override fun loadQrCode(viewModelScope: CoroutineScope) {
+        qrCode.value?.let {
+            clearQR()
+            return
+        }
+        loadingQR.value = true
+        message.value = "Preparing for Authentication"
+        listenQrCodeResponseInternal(viewModelScope)
     }
-    loadingQR.value = true
-    message.value = "Preparing for Authentication"
-    listenQrCodeResponseInternal(viewModelScope)
-  }
 
-  private fun listenQrCodeResponseInternal(viewModelScope: CoroutineScope) {
-    // TODO don't use grpccalls directly instead invoke a useCase
-    getKoin().get<IGrpcCalls>().getQrCodeResponse().onEach { kmskQrCodeResponse ->
-      if (kmskQrCodeResponse.hasAuthResult()) {
-        navigateBack()
-      } else {
-        whenQrCodeAvailable(kmskQrCodeResponse)
-      }
-    }.catch {
-      loadingQR.value = false
-      message.value = it.message.toString()
-    }.launchIn(viewModelScope)
-  }
+    private fun listenQrCodeResponseInternal(viewModelScope: CoroutineScope) {
+        // TODO don't use grpccalls directly instead invoke a useCase
+        getKoin().get<IGrpcCalls>().getQrCodeResponse().onEach { kmskQrCodeResponse ->
+            if (kmskQrCodeResponse.hasAuthResult()) {
+                navigateBack()
+            } else {
+                whenQrCodeAvailable(kmskQrCodeResponse)
+            }
+        }.catch {
+            loadingQR.value = false
+            message.value = it.message.toString()
+        }.launchIn(viewModelScope)
+    }
 
-  private fun whenQrCodeAvailable(kmskQrCodeResponse: KMSKQrCodeResponse) {
-    qrCode.value = kmskQrCodeResponse
-    loadingQR.value = false
-  }
+    private fun whenQrCodeAvailable(kmskQrCodeResponse: KMSKQrCodeResponse) {
+        qrCode.value = kmskQrCodeResponse
+        loadingQR.value = false
+    }
 
-  override suspend fun whenAuthorized(kmskQrCodeResponse: KMSKAuthResult) {
-    qrCodeAuthUser(
-      DomainLayerUsers.SKAuthResult(
-        kmskQrCodeResponse.token,
-        kmskQrCodeResponse.refreshToken,
-        status = DomainLayerUsers.SKStatus(
-          kmskQrCodeResponse.status.information,
-          kmskQrCodeResponse.status.statusCode
+    override suspend fun whenAuthorized(kmskQrCodeResponse: KMSKAuthResult) {
+        qrCodeAuthUser(
+            DomainLayerUsers.SKAuthResult(
+                kmskQrCodeResponse.token,
+                kmskQrCodeResponse.refreshToken,
+                status = DomainLayerUsers.SKStatus(
+                    kmskQrCodeResponse.status.information,
+                    kmskQrCodeResponse.status.statusCode
+                )
+            )
         )
-      )
-    )
-    navigateDashboardNow()
-  }
+        navigateDashboardNow()
+    }
 
-  private fun clearQR() {
-    qrCode.value = null
-    message.value = ""
-  }
+    private fun clearQR() {
+        qrCode.value = null
+        message.value = ""
+    }
 }

@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
+import dev.baseio.slackclone.chatmessaging.chatthread.composables.ChatScreenContent
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.reusable.SlackListItem
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
-import dev.baseio.slackclone.chatmessaging.chatthread.composables.ChatScreenContent
 import dev.baseio.slackclone.dashboard.compose.WindowSize
 import dev.baseio.slackclone.dashboard.compose.getWindowSizeClass
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
@@ -93,12 +93,12 @@ internal fun BoxScope.ChannelMembersDialog(viewModel: ChatViewModel) {
         ListItem(text = {
             Text("Channel Members")
         }, trailing = {
-                IconButton(onClick = {
-                    viewModel.showChannelDetailsRequested()
-                }) {
-                    Icon(Icons.Default.Close, contentDescription = null)
-                }
-            }, modifier = Modifier.background(LocalSlackCloneColor.current.appBarColor, shape = RoundedCornerShape(12.dp)))
+            IconButton(onClick = {
+                viewModel.showChannelDetailsRequested()
+            }) {
+                Icon(Icons.Default.Close, contentDescription = null)
+            }
+        }, modifier = Modifier.background(LocalSlackCloneColor.current.appBarColor, shape = RoundedCornerShape(12.dp)))
 
         LazyColumn(Modifier) {
             items(members) { skUser ->

@@ -22,81 +22,79 @@ import java.util.concurrent.Executors
 
 @Composable
 internal actual fun QrCodeScanner(modifier: Modifier, onQrCodeScanned: (String) -> Unit) {
-  val context = LocalContext.current
-  val lifecycleOwner = LocalLifecycleOwner.current
-  var preview by remember { mutableStateOf<Preview?>(null) }
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var preview by remember { mutableStateOf<Preview?>(null) }
 
-  var hasCamPermission by remember {
-    mutableStateOf(
-      ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.CAMERA
-      ) == PackageManager.PERMISSION_GRANTED
-    )
-  }
-  val launcher = rememberLauncherForActivityResult(
-    contract = ActivityResultContracts.RequestPermission(),
-    onResult = { granted ->
-      hasCamPermission = granted
+    var hasCamPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        )
     }
-  )
-  LaunchedEffect(key1 = true) {
-    launcher.launch(Manifest.permission.CAMERA)
-  }
-  if(hasCamPermission){
-    AndroidView(
-      factory = { AndroidViewContext ->
-        PreviewView(AndroidViewContext).apply {
-          this.scaleType = PreviewView.ScaleType.FILL_CENTER
-          layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-          )
-          implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            hasCamPermission = granted
         }
-      },
-      modifier = modifier,
-      update = { previewView ->
-        val cameraSelector: CameraSelector = CameraSelector.Builder()
-          .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-          .build()
-        val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
-        val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
-          ProcessCameraProvider.getInstance(context)
-
-        cameraProviderFuture.addListener({
-          preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(previewView.surfaceProvider)
-          }
-          val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-          val barcodeAnalyser = BarCodeAnalyser { barcodes ->
-            barcodes.forEach { barcode ->
-              barcode.rawValue?.let { barcodeValue ->
-                onQrCodeScanned(barcodeValue)
-              }
-            }
-          }
-          val imageAnalysis: ImageAnalysis = ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-            .also {
-              it.setAnalyzer(cameraExecutor, barcodeAnalyser)
-            }
-
-          try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
-              lifecycleOwner,
-              cameraSelector,
-              preview,
-              imageAnalysis
-            )
-          } catch (e: Exception) {
-          }
-        }, ContextCompat.getMainExecutor(context))
-      }
     )
-  }
+    LaunchedEffect(key1 = true) {
+        launcher.launch(Manifest.permission.CAMERA)
+    }
+    if (hasCamPermission) {
+        AndroidView(
+            factory = { AndroidViewContext ->
+                PreviewView(AndroidViewContext).apply {
+                    this.scaleType = PreviewView.ScaleType.FILL_CENTER
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+                    implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+                }
+            },
+            modifier = modifier,
+            update = { previewView ->
+                val cameraSelector: CameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build()
+                val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+                val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
+                    ProcessCameraProvider.getInstance(context)
 
+                cameraProviderFuture.addListener({
+                    preview = Preview.Builder().build().also {
+                        it.setSurfaceProvider(previewView.surfaceProvider)
+                    }
+                    val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+                    val barcodeAnalyser = BarCodeAnalyser { barcodes ->
+                        barcodes.forEach { barcode ->
+                            barcode.rawValue?.let { barcodeValue ->
+                                onQrCodeScanned(barcodeValue)
+                            }
+                        }
+                    }
+                    val imageAnalysis: ImageAnalysis = ImageAnalysis.Builder()
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build()
+                        .also {
+                            it.setAnalyzer(cameraExecutor, barcodeAnalyser)
+                        }
 
+                    try {
+                        cameraProvider.unbindAll()
+                        cameraProvider.bindToLifecycle(
+                            lifecycleOwner,
+                            cameraSelector,
+                            preview,
+                            imageAnalysis
+                        )
+                    } catch (e: Exception) {
+                    }
+                }, ContextCompat.getMainExecutor(context))
+            }
+        )
+    }
 }

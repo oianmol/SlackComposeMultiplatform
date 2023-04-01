@@ -1,8 +1,8 @@
 package dev.baseio.slackserver.data.impl
 
-import dev.baseio.slackserver.data.sources.AuthDataSource
 import dev.baseio.slackserver.data.models.SkAuthUser
 import dev.baseio.slackserver.data.models.SkUser
+import dev.baseio.slackserver.data.sources.AuthDataSource
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
@@ -25,7 +25,7 @@ class AuthDataSourceImpl(private val slackCloneDB: CoroutineDatabase) : AuthData
     }
 
     override suspend fun register(email: String, user: SkUser): SkUser? {
-        //save the user details
+        // save the user details
         if (email.trim().isEmpty()) {
             throw Exception("email cannot be empty!")
         }

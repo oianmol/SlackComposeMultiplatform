@@ -15,7 +15,7 @@ class UseCaseFetchAndSaveWorkspaces(
         kotlin.runCatching {
             skLocalKeyValueSource.save(AUTH_TOKEN, token)
             val kmSKWorkspaces = skNetworkDataSourceReadWorkspaces.getWorkspaces(token)
-            //TODO there will be always one workspace change list<Item> to Item in grpc call.
+            // TODO there will be always one workspace change list<Item> to Item in grpc call.
             val workspaces = kmSKWorkspaces.map { skWorkspace -> skWorkspace.copy(token = token) }
             skLocalDataSourceWriteWorkspaces.saveWorkspaces(workspaces)
             setLastSelectedWorkspace.invoke(workspaces.first())

@@ -1,2 +1,1 @@
-package dev.baseio.security 
-
+package dev.baseio.security

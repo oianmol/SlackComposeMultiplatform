@@ -45,14 +45,16 @@ object AuthTestFixtures {
 
     suspend fun testDMChannels(): KMSKDMChannels {
         return kmSKDMChannels {
-            this.channelsList.add(kmSKDMChannel {
-                this.uuid = "channel_dm_1"
-                this.workspaceId = "1"
-                this.senderId = "1"
-                this.receiverId = "2"
-                this.publicKey = CapillaryInstances.getInstance("channel_dm_1")
-                    .publicKey().encoded.toKMSlackPublicKey()
-            })
+            this.channelsList.add(
+                kmSKDMChannel {
+                    this.uuid = "channel_dm_1"
+                    this.workspaceId = "1"
+                    this.senderId = "1"
+                    this.receiverId = "2"
+                    this.publicKey = CapillaryInstances.getInstance("channel_dm_1")
+                        .publicKey().encoded.toKMSlackPublicKey()
+                }
+            )
         }
     }
 
@@ -82,32 +84,36 @@ object AuthTestFixtures {
     suspend fun testPublichannelMembers(channel: KMSKChannel) = kmSKChannelMembers {
         val channelPrivateKey = CapillaryInstances.getInstance(channel.uuid).privateKey()
         return kmSKChannelMembers {
-            this.membersList.add(kmSKChannelMember {
-                val userPublicKey = CapillaryInstances.getInstance("1").publicKey()
-                val encryptedPrivateKey =
-                    CapillaryEncryption.encrypt(channelPrivateKey.encoded, userPublicKey)
-                this.uuid = "somerandom${channel.uuid}1"
-                this.workspaceId = channel.workspaceId
-                this.channelId = channel.uuid
-                this.memberId = "1"
-                this.channelPrivateKey = kmSKEncryptedMessage {
-                    this.first = encryptedPrivateKey.first
-                    this.second = encryptedPrivateKey.second
+            this.membersList.add(
+                kmSKChannelMember {
+                    val userPublicKey = CapillaryInstances.getInstance("1").publicKey()
+                    val encryptedPrivateKey =
+                        CapillaryEncryption.encrypt(channelPrivateKey.encoded, userPublicKey)
+                    this.uuid = "somerandom${channel.uuid}1"
+                    this.workspaceId = channel.workspaceId
+                    this.channelId = channel.uuid
+                    this.memberId = "1"
+                    this.channelPrivateKey = kmSKEncryptedMessage {
+                        this.first = encryptedPrivateKey.first
+                        this.second = encryptedPrivateKey.second
+                    }
                 }
-            })
-            this.membersList.add(kmSKChannelMember {
-                val userPublicKey = CapillaryInstances.getInstance("2").publicKey()
-                val encryptedPrivateKey =
-                    CapillaryEncryption.encrypt(channelPrivateKey.encoded, userPublicKey)
-                this.uuid = "somerandom${channel.uuid}2"
-                this.workspaceId = channel.workspaceId
-                this.channelId = channel.uuid
-                this.memberId = "2"
-                this.channelPrivateKey = kmSKEncryptedMessage {
-                    this.first = encryptedPrivateKey.first
-                    this.second = encryptedPrivateKey.second
+            )
+            this.membersList.add(
+                kmSKChannelMember {
+                    val userPublicKey = CapillaryInstances.getInstance("2").publicKey()
+                    val encryptedPrivateKey =
+                        CapillaryEncryption.encrypt(channelPrivateKey.encoded, userPublicKey)
+                    this.uuid = "somerandom${channel.uuid}2"
+                    this.workspaceId = channel.workspaceId
+                    this.channelId = channel.uuid
+                    this.memberId = "2"
+                    this.channelPrivateKey = kmSKEncryptedMessage {
+                        this.first = encryptedPrivateKey.first
+                        this.second = encryptedPrivateKey.second
+                    }
                 }
-            })
+            )
         }
     }
 

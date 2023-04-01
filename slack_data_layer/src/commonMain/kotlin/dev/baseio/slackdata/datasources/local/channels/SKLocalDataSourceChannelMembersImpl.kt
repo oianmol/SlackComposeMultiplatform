@@ -2,7 +2,6 @@ package dev.baseio.slackdata.datasources.local.channels
 
 import database.SlackChannelMember
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdata.datasources.remote.channels.toDomainSKEncryptedMessage
 import dev.baseio.slackdata.local.asFlow
 import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.protos.KMSKEncryptedMessage
@@ -62,7 +61,6 @@ class SKLocalDataSourceChannelMembersImpl(
                 )
             }
         }
-
     }
 }
 
@@ -79,7 +77,9 @@ fun SlackChannelMember.toChannelMember(): DomainLayerChannels.SkChannelMember {
         this.workspaceId,
         this.channelId,
         this.memberId,
-        DomainLayerUsers.SKEncryptedMessage(this.channelPrivateKeyFirst,
-            this.channelPrivateKeySecond)
+        DomainLayerUsers.SKEncryptedMessage(
+            this.channelPrivateKeyFirst,
+            this.channelPrivateKeySecond
+        )
     )
 }

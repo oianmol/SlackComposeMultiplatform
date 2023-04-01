@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
@@ -22,11 +21,13 @@ internal fun WorkspaceInputView(modifier: Modifier, workspaceUrl: String, onUpda
             .wrapContentWidth()
     ) {
         Text(
-            text = "Workspace URL", style = SlackCloneTypography.caption.copy(
+            text = "Workspace URL",
+            style = SlackCloneTypography.caption.copy(
                 color = LocalSlackCloneColor.current.textPrimary.copy(alpha = 0.7f),
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Start
-            ), modifier = Modifier.padding(bottom = 4.dp)
+            ),
+            modifier = Modifier.padding(bottom = 4.dp)
         )
         Row(
             modifier = modifier
@@ -35,18 +36,17 @@ internal fun WorkspaceInputView(modifier: Modifier, workspaceUrl: String, onUpda
             horizontalArrangement = Arrangement.Start
         ) {
             TextHttps()
-            WorkspaceTF(workspaceUrl,onUpdate)
+            WorkspaceTF(workspaceUrl, onUpdate)
             TextSlackCom()
         }
     }
 }
 
-
 @Composable
-internal fun WorkspaceTF( workspaceUrl: String, onUpdate: (String) -> Unit) {
+internal fun WorkspaceTF(workspaceUrl: String, onUpdate: (String) -> Unit) {
     BasicTextField(
         value = workspaceUrl,
-        onValueChange = { newEmail -> onUpdate(newEmail)},
+        onValueChange = { newEmail -> onUpdate(newEmail) },
         textStyle = textStyleField(),
         singleLine = true,
         modifier = Modifier

@@ -1,12 +1,15 @@
 package dev.baseio.security
 
-import java.io.*
-import java.security.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.security.KeyFactory
+import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
-import java.security.spec.*
-import javax.crypto.spec.OAEPParameterSpec
-import javax.crypto.spec.PSource
+import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.RSAKeyGenParameterSpec
+import java.security.spec.X509EncodedKeySpec
 
 object JVMKeyStoreRsaUtils {
     private const val KEY_ALIAS_SUFFIX_PRIVATE = "_capillary_rsa_private"
@@ -42,7 +45,7 @@ object JVMKeyStoreRsaUtils {
     ) {
         val file = File(fileName)
         try {
-            file.createNewFile();
+            file.createNewFile()
             val fos = FileOutputStream(file)
             fos.write(bytes)
             fos.flush()
@@ -78,7 +81,6 @@ object JVMKeyStoreRsaUtils {
         } catch (e: java.lang.Exception) {
             throw e
         } finally {
-
         }
     }
 
@@ -91,13 +93,15 @@ object JVMKeyStoreRsaUtils {
         File(privateKeyFile(keychainId)).delete()
     }
 
-    private fun toKeyAlias(keychainId: String,key:String): String {
+    private fun toKeyAlias(keychainId: String, key: String): String {
         return keychainId + key
     }
 
     fun getPublicKeyFromBytes(publicKeyBytes: ByteArray): PublicKey {
-        return PublicKey(KeyFactory.getInstance("RSA").generatePublic(
-            X509EncodedKeySpec(publicKeyBytes)
-        ))
+        return PublicKey(
+            KeyFactory.getInstance("RSA").generatePublic(
+                X509EncodedKeySpec(publicKeyBytes)
+            )
+        )
     }
 }

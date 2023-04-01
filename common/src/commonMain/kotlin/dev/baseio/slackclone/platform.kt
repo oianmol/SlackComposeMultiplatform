@@ -1,8 +1,8 @@
 package dev.baseio.slackclone
 
 enum class Platform {
-  ANDROID,IOS,JVM
+    ANDROID, IOS, JVM
 }
 
-expect fun platformType() :Platform
-expect suspend fun fcmToken():String
+expect fun platformType(): Platform
+expect suspend fun fcmToken(): String

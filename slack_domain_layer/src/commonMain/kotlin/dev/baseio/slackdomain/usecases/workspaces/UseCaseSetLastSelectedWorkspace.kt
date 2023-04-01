@@ -4,8 +4,8 @@ import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceRead
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 
 class UseCaseSetLastSelectedWorkspace(private val skLocalDataSourceReadWorkspaces: SKLocalDataSourceReadWorkspaces) {
-    suspend operator fun invoke(skWorkspace: DomainLayerWorkspaces.SKWorkspace){
+    suspend operator fun invoke(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
         return skLocalDataSourceReadWorkspaces.setLastSelected(skWorkspace)
-        /// TODO
+        // / TODO
     }
 }

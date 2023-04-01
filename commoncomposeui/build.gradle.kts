@@ -129,16 +129,16 @@ kotlin {
                 api("com.google.protobuf:protobuf-java:3.21.9")
             }
         }
-        val iosX64Main by getting{
+        val iosX64Main by getting {
         }
-        val iosArm64Main by getting{
+        val iosArm64Main by getting {
         }
-        val iosSimulatorArm64Main by getting{
+        val iosSimulatorArm64Main by getting {
         }
 
         val iosMain by creating {
             dependsOn(commonMain)
-            dependencies{
+            dependencies {
                 implementation(libs.decompose.composejb)
             }
             iosX64Main.dependsOn(this)

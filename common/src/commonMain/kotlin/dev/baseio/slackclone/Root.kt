@@ -133,13 +133,13 @@ class RootComponent(
                             listOf(Config.GettingStarted(firstLaunch = true))
                         }
                     }, navigateQrScanner = {
-                        navigation.push(Config.QrScanner(it))
-                    },
+                    navigation.push(Config.QrScanner(it))
+                },
                     navigateRoot = {
                         navigation.push(it)
                     }, navigateAddWorkspace = {
-                        navigation.push(Config.EmailMagicLink)
-                    }
+                    navigation.push(Config.EmailMagicLink)
+                }
                 ).also { dashboardComponent ->
                     config.channelId?.let { channelId ->
                         dashboardComponent.navigateChannel(
@@ -210,7 +210,6 @@ class RootComponent(
             Config.EmailMagicLink -> Root.Child.EmailMagicLink
             is Config.SignInManually -> Root.Child.SignInManually(config.workspace)
         }
-
 
     sealed class Config : Parcelable {
 

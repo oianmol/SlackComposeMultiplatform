@@ -1,0 +1,2 @@
+[*.{kt,kts}]
+ktlint_no-wildcard-imports = disabled

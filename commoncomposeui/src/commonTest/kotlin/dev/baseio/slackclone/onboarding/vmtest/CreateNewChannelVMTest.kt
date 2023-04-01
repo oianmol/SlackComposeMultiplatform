@@ -51,7 +51,6 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
 
                 createNewChannelVM.createChannel()
 
-
                 test {
                     awaitItem().also {
                         asserter.assertTrue({ "was expecting true" }, it.loading)
@@ -72,7 +71,6 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                         }
                     }
             }
-
         }
     }
 
@@ -93,7 +91,6 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                 "1"
             )
 
-
             with(createNewChannelVM.createChannelState) {
                 value = value.copy(
                     channel = value.channel.copy(
@@ -109,8 +106,6 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                     asserter.assertTrue({ "was expecting true" }, wasNavigated)
                 }
             }
-
         }
     }
-
 }

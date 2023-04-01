@@ -8,8 +8,8 @@ import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdata.mapper.toSkUser
 import dev.baseio.slackdomain.LOGGED_IN_USER
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
-import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
+import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
@@ -84,6 +84,5 @@ class SKLocalDataSourceUsersImpl(
                 it.publicKey?.keyBytes ?: throw Exception("keyBytes cannot be null!"),
             )
         }
-
     }
 }

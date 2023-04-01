@@ -7,19 +7,19 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class UseCaseFetchAndUpdateChangeInChannels(
-  private val readChannelsSource: SKNetworkDataSourceReadChannels,
-  private val localSourceChannel: SKLocalDataSourceCreateChannels
+    private val readChannelsSource: SKNetworkDataSourceReadChannels,
+    private val localSourceChannel: SKLocalDataSourceCreateChannels
 ) {
-  operator fun invoke(workspaceId: String): Flow<Unit> {
-    return readChannelsSource.listenToChangeInChannels(workspaceId)
-      .map { messageChangeSnapshot ->
-        messageChangeSnapshot.second?.let {
-          localSourceChannel.saveChannel(it)
-        }
-        Unit
-      }
-      .catch {
-        // TODO tell upstream of exceptions if any
-      }
-  }
+    operator fun invoke(workspaceId: String): Flow<Unit> {
+        return readChannelsSource.listenToChangeInChannels(workspaceId)
+            .map { messageChangeSnapshot ->
+                messageChangeSnapshot.second?.let {
+                    localSourceChannel.saveChannel(it)
+                }
+                Unit
+            }
+            .catch {
+                // TODO tell upstream of exceptions if any
+            }
+    }
 }

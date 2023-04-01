@@ -23,7 +23,7 @@ class WorkspaceService(
 
     override suspend fun updateWorkspace(request: SKWorkspace): SKWorkspace {
         val authData = AUTH_CONTEXT_KEY.get()
-        //todo authorize this request!
+        // todo authorize this request!
         return workspaceDataSource.updateWorkspace(request.toDBWorkspace())?.toGRPC()
             ?: throw StatusException(Status.NOT_FOUND)
     }
@@ -62,21 +62,23 @@ class WorkspaceService(
     override suspend fun findWorkspacesForEmail(request: SKFindWorkspacesRequest): SKWorkspaces {
         val workspaces = workspaceDataSource.findWorkspacesForEmail(request.email)
         return SKWorkspaces.newBuilder()
-            .addAllWorkspaces(workspaces.map { workspace ->
-                sKWorkspace {
-                    uuid = workspace.uuid ?: ""
-                    modifiedTime = workspace.modifiedTime
-                    picUrl = workspace.picUrl ?: ""
-                    domain = workspace.domain ?: ""
-                    name = workspace.name ?: ""
+            .addAllWorkspaces(
+                workspaces.map { workspace ->
+                    sKWorkspace {
+                        uuid = workspace.uuid ?: ""
+                        modifiedTime = workspace.modifiedTime
+                        picUrl = workspace.picUrl ?: ""
+                        domain = workspace.domain ?: ""
+                        name = workspace.name ?: ""
+                    }
                 }
-            })
+            )
             .build()
     }
 
     override suspend fun letMeIn(request: SKCreateWorkspaceRequest): SKWorkspace {
         return workspaceDataSource.findWorkspaceForName(request.workspace.name)?.let {
-            //if workspace exists then authenticateUser!
+            // if workspace exists then authenticateUser!
             processRequestForEmail(request.user, workspaceId = it.uuid)
             it.toGRPC()
         } ?: run {

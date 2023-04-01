@@ -1,10 +1,7 @@
 package dev.baseio.slackdata.injection
 
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
-import dev.baseio.slackdata.RealCoroutineDispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import mainDispatcher
 import org.koin.dsl.module
 
 val testDispatcherModule = module {

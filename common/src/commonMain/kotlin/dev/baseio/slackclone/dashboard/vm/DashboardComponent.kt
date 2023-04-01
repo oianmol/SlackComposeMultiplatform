@@ -11,12 +11,12 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.getKoin
 import dev.baseio.slackclone.channels.SlackChannelComponent
 import dev.baseio.slackclone.channels.directmessages.DirectMessagesComponent
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.dashboard.home.HomeScreenComponent
 import dev.baseio.slackclone.dashboard.home.UserProfileComponent
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
@@ -42,9 +42,9 @@ interface Dashboard {
 class DashboardComponent(
     componentContext: ComponentContext,
     val navigateOnboarding: () -> Unit,
-    val navigateQrScanner:(QrScannerMode)->Unit,
+    val navigateQrScanner: (QrScannerMode) -> Unit,
     val navigateRoot: (RootComponent.Config) -> Unit,
-    val navigateAddWorkspace:()->Unit
+    val navigateAddWorkspace: () -> Unit
 ) : Dashboard, ComponentContext by componentContext {
 
     val sideNavComponent = SideNavComponent(childContext(SideNavComponent::class.qualifiedName.toString())) {

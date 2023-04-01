@@ -5,5 +5,4 @@ class SlackConstants {
         const val CIPHERTEXT_KEY: String = "CIPHERTEXT_KEY"
         const val KEY_ALGORITHM_KEY = "KEY_ALGORITHM_KEY"
     }
-
 }

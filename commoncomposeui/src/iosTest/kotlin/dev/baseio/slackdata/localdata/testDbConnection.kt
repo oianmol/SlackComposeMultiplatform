@@ -2,9 +2,9 @@ package dev.baseio.slackdata.localdata
 
 import co.touchlab.sqliter.DatabaseConfiguration
 import com.squareup.sqldelight.db.SqlDriver
-import dev.baseio.database.SlackDB
 import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 import com.squareup.sqldelight.drivers.native.wrapConnection
+import dev.baseio.database.SlackDB
 
 internal actual fun testDbConnection(): SqlDriver {
     val schema = SlackDB.Schema

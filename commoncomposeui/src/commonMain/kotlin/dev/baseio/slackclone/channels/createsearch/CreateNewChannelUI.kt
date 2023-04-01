@@ -42,21 +42,20 @@ internal fun CreateNewChannelUI(
 ) {
     val scaffoldState = rememberScaffoldState()
 
-        Scaffold(
-            backgroundColor = LocalSlackCloneColor.current.uiBackground,
-            contentColor = LocalSlackCloneColor.current.textSecondary,
-            modifier = Modifier,
-            scaffoldState = scaffoldState,
-            topBar = {
-                NewChannelAppBar(createNewChannelComponent)
-            },
-            snackbarHost = {
-                scaffoldState.snackbarHostState
-            }
-        ) { innerPadding ->
-            NewChannelContent(innerPadding, createNewChannelComponent)
+    Scaffold(
+        backgroundColor = LocalSlackCloneColor.current.uiBackground,
+        contentColor = LocalSlackCloneColor.current.textSecondary,
+        modifier = Modifier,
+        scaffoldState = scaffoldState,
+        topBar = {
+            NewChannelAppBar(createNewChannelComponent)
+        },
+        snackbarHost = {
+            scaffoldState.snackbarHostState
         }
-
+    ) { innerPadding ->
+        NewChannelContent(innerPadding, createNewChannelComponent)
+    }
 }
 
 @Composable
@@ -94,7 +93,7 @@ internal fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
         value = searchChannel.channel.name,
         onValueChange = { newValue ->
             val newId = newValue.replace(" ", "_")
-            with(createNewChannelComponent.viewModel.createChannelState){
+            with(createNewChannelComponent.viewModel.createChannelState) {
                 value = value.copy(channel = value.channel.copy(name = newId))
             }
         },

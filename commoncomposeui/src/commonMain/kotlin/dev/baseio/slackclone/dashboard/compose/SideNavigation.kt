@@ -92,7 +92,8 @@ internal fun SideNavFooter(
             horizontalArrangement = Arrangement.Start,
             onItemClick = {
                 openQrScanner()
-            })
+            }
+        )
         SlackListItem(icon = Icons.Filled.Add, title = "Add Workspace", onItemClick = {
             addWorkspace()
         })

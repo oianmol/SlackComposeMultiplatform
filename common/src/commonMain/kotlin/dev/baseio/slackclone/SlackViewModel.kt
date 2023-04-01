@@ -6,7 +6,6 @@ import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 
-
 abstract class SlackViewModel(coroutineDispatcherProvider: CoroutineDispatcherProvider) :
     InstanceKeeper.Instance {
     private val job = SupervisorJob()

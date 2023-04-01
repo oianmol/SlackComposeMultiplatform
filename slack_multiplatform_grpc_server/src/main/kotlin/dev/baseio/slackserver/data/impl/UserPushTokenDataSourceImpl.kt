@@ -16,7 +16,7 @@ class UserPushTokenDataSourceImpl(private val coroutineDatabase: CoroutineDataba
         val exists =
             coroutineDatabase.getCollection<SKUserPushToken>()
                 .find(SKUserPushToken::token eq toSkUserPushToken.token).toList().isNotEmpty()
-        if(!exists){
+        if (!exists) {
             coroutineDatabase.getCollection<SKUserPushToken>().insertOne(toSkUserPushToken)
         }
     }

@@ -2,8 +2,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 actual val mainDispatcher: CoroutineDispatcher
-  get() = Dispatchers.Main
+    get() = Dispatchers.Main
 actual val ioDispatcher: CoroutineDispatcher
-  get() = Dispatchers.IO
+    get() = Dispatchers.IO
 actual val defaultDispatcher: CoroutineDispatcher
-  get() = Dispatchers.Default
+    get() = Dispatchers.Default

@@ -77,8 +77,5 @@ internal fun ProcessTokenFromDeepLink(component: AuthorizeTokenComponent) {
                 }
             }
         }
-
     }
-
-
 }

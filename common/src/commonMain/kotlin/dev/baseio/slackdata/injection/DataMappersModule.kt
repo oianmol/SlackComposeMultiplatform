@@ -11,40 +11,39 @@ import org.koin.core.qualifier.QualifierValue
 import org.koin.dsl.module
 
 val dataMappersModule = module {
-  single<EntityMapper<DomainLayerWorkspaces.SKWorkspace, SlackWorkspaces>>(qualifier = SlackWorkspaceMapperQualifier) { SlackWorkspaceMapper() }
-  single<EntityMapper<DomainLayerUsers.SKUser, SlackUser>>(qualifier = SlackUserRandomUserQualifier) { SlackUserMapper() }
-  single<EntityMapper<DomainLayerChannels.SKChannel, SkPublicChannel>>(qualifier = SlackChannelChannelQualifier) { SlackPublicChannelMapper() }
-  single<EntityMapper<DomainLayerChannels.SKChannel, SkDMChannel>>(qualifier = SlackChannelDMChannelQualifier) { SlackDMChannelMapper() }
-  single<EntityMapper<DomainLayerMessages.SKMessage, SlackMessage>>(qualifier = SlackMessageMessageQualifier) { SlackMessageMapper() }
+    single<EntityMapper<DomainLayerWorkspaces.SKWorkspace, SlackWorkspaces>>(qualifier = SlackWorkspaceMapperQualifier) { SlackWorkspaceMapper() }
+    single<EntityMapper<DomainLayerUsers.SKUser, SlackUser>>(qualifier = SlackUserRandomUserQualifier) { SlackUserMapper() }
+    single<EntityMapper<DomainLayerChannels.SKChannel, SkPublicChannel>>(qualifier = SlackChannelChannelQualifier) { SlackPublicChannelMapper() }
+    single<EntityMapper<DomainLayerChannels.SKChannel, SkDMChannel>>(qualifier = SlackChannelDMChannelQualifier) { SlackDMChannelMapper() }
+    single<EntityMapper<DomainLayerMessages.SKMessage, SlackMessage>>(qualifier = SlackMessageMessageQualifier) { SlackMessageMapper() }
 }
 
 object SlackWorkspaceMapperQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "SlackWorkspaceMapperQualifier"
+    override val value: QualifierValue
+        get() = "SlackWorkspaceMapperQualifier"
 }
 
 object SlackMessageMessageQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "SlackMessageMessage"
-
+    override val value: QualifierValue
+        get() = "SlackMessageMessage"
 }
 
 object SlackUserChannelQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "SlackUserChannel"
+    override val value: QualifierValue
+        get() = "SlackUserChannel"
 }
 
 object SlackUserRandomUserQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "SlackUserRandomUser"
+    override val value: QualifierValue
+        get() = "SlackUserRandomUser"
 }
 
 object SlackChannelChannelQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "SlackChannelChannel"
+    override val value: QualifierValue
+        get() = "SlackChannelChannel"
 }
 
 object SlackChannelDMChannelQualifier : Qualifier {
-  override val value: QualifierValue
-    get() = "SlackChannelDMChannelQualifier"
+    override val value: QualifierValue
+        get() = "SlackChannelDMChannelQualifier"
 }

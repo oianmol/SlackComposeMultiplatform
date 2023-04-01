@@ -6,4 +6,3 @@ import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 
 @Composable
 internal expect fun QrCodeView(modifier: Modifier, response: KMSKQrCodeResponse)
-

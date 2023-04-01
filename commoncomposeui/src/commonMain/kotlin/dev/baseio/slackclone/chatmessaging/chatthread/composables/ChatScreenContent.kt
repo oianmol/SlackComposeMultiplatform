@@ -14,10 +14,10 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.chatmessaging.chatthread.BoxState
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatViewModel
+import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 
 @Composable
 internal fun ChatScreenContent(

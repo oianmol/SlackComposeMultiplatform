@@ -7,17 +7,17 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 
 class SKNetworkDataSourceReadChannelMembersImpl(private val grpcCalls: IGrpcCalls) :
-  SKNetworkDataSourceReadChannelMembers {
-  override suspend fun fetchChannelMembers(request: UseCaseWorkspaceChannelRequest): Result<List<DomainLayerChannels.SkChannelMember>> {
-    return kotlin.runCatching {
-      val channelMembers = grpcCalls.fetchChannelMembers(request)
-      channelMembers.membersList.map {
-        it.toDomain()
-      }
+    SKNetworkDataSourceReadChannelMembers {
+    override suspend fun fetchChannelMembers(request: UseCaseWorkspaceChannelRequest): Result<List<DomainLayerChannels.SkChannelMember>> {
+        return kotlin.runCatching {
+            val channelMembers = grpcCalls.fetchChannelMembers(request)
+            channelMembers.membersList.map {
+                it.toDomain()
+            }
+        }
     }
-  }
 }
 
 fun KMSKChannelMember.toDomain(): DomainLayerChannels.SkChannelMember {
-  return DomainLayerChannels.SkChannelMember(this.uuid, this.workspaceId, this.channelId, this.memberId,this.channelPrivateKey.toDomainSKEncryptedMessage())
+    return DomainLayerChannels.SkChannelMember(this.uuid, this.workspaceId, this.channelId, this.memberId, this.channelPrivateKey.toDomainSKEncryptedMessage())
 }

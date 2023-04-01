@@ -26,6 +26,4 @@ class PNChannel(
             }
         return tokens
     }
-
-
 }

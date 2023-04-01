@@ -12,7 +12,7 @@ import dev.baseio.slackdomain.util.toMillis
 
 class BarCodeAnalyser(
     private val onBarcodeDetected: (barcodes: List<Barcode>) -> Unit,
-): ImageAnalysis.Analyzer {
+) : ImageAnalysis.Analyzer {
     private var lastAnalyzedTimeStamp = 0L
 
     @SuppressLint("UnsafeOptInUsageError")
@@ -45,4 +45,3 @@ class BarCodeAnalyser(
         }
     }
 }
-

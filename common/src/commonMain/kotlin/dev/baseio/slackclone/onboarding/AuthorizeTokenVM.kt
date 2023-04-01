@@ -38,11 +38,13 @@ class AuthorizeTokenVM(
     }
 
     init {
-        viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
-            throwable.printStackTrace()
-            navigateBackNow()
-            state.value = state.value.copy(error = throwable)
-        }) {
+        viewModelScope.launch(
+            CoroutineExceptionHandler { coroutineContext, throwable ->
+                throwable.printStackTrace()
+                navigateBackNow()
+                state.value = state.value.copy(error = throwable)
+            }
+        ) {
             state.value = state.value.copy(loading = true)
             useCaseFetchAndSaveUserWorkspace.invoke(token)
             useCaseFetchAndSaveCurrentUser.invoke()

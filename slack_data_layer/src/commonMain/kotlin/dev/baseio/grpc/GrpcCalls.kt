@@ -8,8 +8,8 @@ import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMChannel
-import kotlinx.coroutines.flow.Flow
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMMetadata
+import kotlinx.coroutines.flow.Flow
 
 class GrpcCalls(
     private val address: String = "localhost",
@@ -75,15 +75,21 @@ class GrpcCalls(
     }
 
     override suspend fun findWorkspaceByName(name: String, token: String?): KMSKWorkspace {
-        return workspacesStub.findWorkspaceForName(kmSKFindWorkspacesRequest {
-            this.name = name
-        }, fetchToken(token))
+        return workspacesStub.findWorkspaceForName(
+            kmSKFindWorkspacesRequest {
+                this.name = name
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun findWorkspacesForEmail(email: String, token: String?): KMSKWorkspaces {
-        return workspacesStub.findWorkspacesForEmail(kmSKFindWorkspacesRequest {
-            this.email = email
-        }, fetchToken(token))
+        return workspacesStub.findWorkspacesForEmail(
+            kmSKFindWorkspacesRequest {
+                this.email = email
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun getWorkspaces(token: String?): KMSKWorkspaces {
@@ -103,13 +109,16 @@ class GrpcCalls(
         limit: Int,
         token: String?
     ): KMSKChannels {
-        return channelsStub.getAllChannels(kmSKChannelRequest {
-            workspaceId = workspaceIdentifier
-            this.paged = kmSKPagedRequest {
-                this.offset = offset
-                this.limit = limit
-            }
-        }, fetchToken(token))
+        return channelsStub.getAllChannels(
+            kmSKChannelRequest {
+                workspaceId = workspaceIdentifier
+                this.paged = kmSKPagedRequest {
+                    this.offset = offset
+                    this.limit = limit
+                }
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun getAllDMChannels(
@@ -118,13 +127,16 @@ class GrpcCalls(
         limit: Int,
         token: String?
     ): KMSKDMChannels {
-        return channelsStub.getAllDMChannels(kmSKChannelRequest {
-            workspaceId = workspaceIdentifier
-            this.paged = kmSKPagedRequest {
-                this.offset = offset
-                this.limit = limit
-            }
-        }, fetchToken(token))
+        return channelsStub.getAllDMChannels(
+            kmSKChannelRequest {
+                workspaceId = workspaceIdentifier
+                this.paged = kmSKPagedRequest {
+                    this.offset = offset
+                    this.limit = limit
+                }
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun savePublicChannel(kmChannel: KMSKChannel, token: String?): KMSKChannel {
@@ -139,46 +151,62 @@ class GrpcCalls(
         workspaceChannelRequest: UseCaseWorkspaceChannelRequest,
         token: String?
     ): Flow<KMSKMessageChangeSnapshot> {
-        return messagingStub.registerChangeInMessage(kmSKWorkspaceChannelRequest {
-            workspaceId = workspaceChannelRequest.workspaceId
-            channelId = workspaceChannelRequest.channelId
-        }, fetchToken(token))
+        return messagingStub.registerChangeInMessage(
+            kmSKWorkspaceChannelRequest {
+                workspaceId = workspaceChannelRequest.workspaceId
+                channelId = workspaceChannelRequest.channelId
+            },
+            fetchToken(token)
+        )
     }
 
     override fun listenToChangeInUsers(
         workspaceId: String,
         token: String?
     ): Flow<KMSKUserChangeSnapshot> {
-        return usersStub.registerChangeInUsers(kmSKWorkspaceChannelRequest {
-            this.workspaceId = workspaceId
-        }, fetchToken(token))
+        return usersStub.registerChangeInUsers(
+            kmSKWorkspaceChannelRequest {
+                this.workspaceId = workspaceId
+            },
+            fetchToken(token)
+        )
     }
 
     override fun listenToChangeInChannels(
         workspaceId: String,
         token: String?
     ): Flow<KMSKChannelChangeSnapshot> {
-        return channelsStub.registerChangeInChannels(kmSKChannelRequest {
-            this.workspaceId = workspaceId
-        }, fetchToken(token))
+        return channelsStub.registerChangeInChannels(
+            kmSKChannelRequest {
+                this.workspaceId = workspaceId
+            },
+            fetchToken(token)
+        )
     }
 
     override fun listenToChangeInDMChannels(
         workspaceId: String,
         token: String?
     ): Flow<KMSKDMChannelChangeSnapshot> {
-        return channelsStub.registerChangeInDMChannels(kmSKChannelRequest {
-            this.workspaceId = workspaceId
-        }, fetchToken(token))
+        return channelsStub.registerChangeInDMChannels(
+            kmSKChannelRequest {
+                this.workspaceId = workspaceId
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun fetchChannelMembers(
-        request: UseCaseWorkspaceChannelRequest, token: String?
+        request: UseCaseWorkspaceChannelRequest,
+        token: String?
     ): KMSKChannelMembers {
-        return channelsStub.channelMembers(kmSKWorkspaceChannelRequest {
-            this.workspaceId = request.workspaceId
-            this.channelId = request.channelId
-        }, fetchToken(token))
+        return channelsStub.channelMembers(
+            kmSKWorkspaceChannelRequest {
+                this.workspaceId = request.workspaceId
+                this.channelId = request.channelId
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun inviteUserToChannel(
@@ -187,14 +215,17 @@ class GrpcCalls(
         skSlackKey: DomainLayerUsers.SKEncryptedMessage,
         token: String?
     ): KMSKChannelMembers {
-        return channelsStub.inviteUserToChannel(kmSKInviteUserChannel {
-            this.channelId = channelId
-            this.userId = userId
-            this.channelPrivateKey = kmSKEncryptedMessage {
-                this.first = skSlackKey.first
-                this.second = skSlackKey.second
-            }
-        }, fetchToken(token))
+        return channelsStub.inviteUserToChannel(
+            kmSKInviteUserChannel {
+                this.channelId = channelId
+                this.userId = userId
+                this.channelPrivateKey = kmSKEncryptedMessage {
+                    this.first = skSlackKey.first
+                    this.second = skSlackKey.second
+                }
+            },
+            fetchToken(token)
+        )
     }
 
     override fun listenToChangeInChannelMembers(
@@ -202,36 +233,43 @@ class GrpcCalls(
         memberId: String,
         token: String?
     ): Flow<KMSKChannelMemberChangeSnapshot> {
-        return channelsStub.registerChangeInChannelMembers(kmSKChannelMember {
-            this.workspaceId = workspaceId
-            this.memberId = memberId
-        }, fetchToken(token))
+        return channelsStub.registerChangeInChannelMembers(
+            kmSKChannelMember {
+                this.workspaceId = workspaceId
+                this.memberId = memberId
+            },
+            fetchToken(token)
+        )
     }
 
     override fun listenToChangeInWorkspace(
         workspaceId: String,
         token: String?
     ): Flow<KMSKWorkspaceChangeSnapshot> {
-        return workspacesStub.registerChangeInWorkspace(kmSKWorkspace {
-            this.uuid = workspaceId
-        }, fetchToken(token))
+        return workspacesStub.registerChangeInWorkspace(
+            kmSKWorkspace {
+                this.uuid = workspaceId
+            },
+            fetchToken(token)
+        )
     }
 
     override suspend fun fetchMessages(request: UseCaseWorkspaceChannelRequest): KMSKMessages {
-        return messagingStub.getMessages(kmSKWorkspaceChannelRequest {
-            this.workspaceId = request.workspaceId
-            this.channelId = request.channelId
-            this.paged = kmSKPagedRequest {
-                this.limit = request.limit
-                this.offset = request.offset
+        return messagingStub.getMessages(
+            kmSKWorkspaceChannelRequest {
+                this.workspaceId = request.workspaceId
+                this.channelId = request.channelId
+                this.paged = kmSKPagedRequest {
+                    this.limit = request.limit
+                    this.offset = request.offset
+                }
             }
-        })
+        )
     }
 
     override suspend fun sendMessage(kmskMessage: KMSKMessage, token: String?): KMSKMessage {
         return messagingStub.saveMessage(kmskMessage, fetchToken(token))
     }
-
 
     private fun fetchToken(token: String?): KMMetadata {
         return KMMetadata().apply {
@@ -240,8 +278,6 @@ class GrpcCalls(
             }
         }
     }
-
-
 }
 
 interface IGrpcCalls {
@@ -354,4 +390,3 @@ interface IGrpcCalls {
         token: String? = skKeyValueData.get(AUTH_TOKEN)
     ): KMEmpty
 }
-

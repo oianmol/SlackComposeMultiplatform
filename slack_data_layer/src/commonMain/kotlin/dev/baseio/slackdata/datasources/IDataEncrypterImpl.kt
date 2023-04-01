@@ -1,10 +1,8 @@
 package dev.baseio.slackdata.datasources
 
 import dev.baseio.security.CapillaryEncryption
-import dev.baseio.slackdomain.datasources.IDataEncrypter
 import dev.baseio.security.toPublicKey
-import dev.baseio.slackdata.datasources.remote.channels.toDomainSKEncryptedMessage
-import dev.baseio.slackdata.toSKEncryptedMessage
+import dev.baseio.slackdomain.datasources.IDataEncrypter
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 class IDataEncrypterImpl : IDataEncrypter {

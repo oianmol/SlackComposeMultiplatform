@@ -21,17 +21,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.AT_THE_RATE
 import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.HASH_TAG
 import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.INVITE_TAG
 import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.URL_TAG
-import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.urlPattern
-import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.mentionTagPattern
 import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.hashTagPattern
 import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.inviteTagPattern
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.mentionTagPattern
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns.urlPattern
 import dev.baseio.slackclone.chatmessaging.chatthread.SpanInfos
+import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
+import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
 internal fun MentionsTextField(
@@ -165,7 +165,6 @@ fun extractSpans(
 }
 
 fun SpanInfos.range() = TextRange(start, end)
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

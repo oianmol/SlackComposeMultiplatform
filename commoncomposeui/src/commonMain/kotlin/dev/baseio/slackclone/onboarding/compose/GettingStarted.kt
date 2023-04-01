@@ -50,188 +50,188 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.Platform
-import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
+import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.commonui.theme.SlackLogoYellow
-import dev.baseio.slackclone.getKoin
-import dev.baseio.slackclone.platformType
 import dev.baseio.slackclone.dashboard.compose.WindowSize
 import dev.baseio.slackclone.dashboard.compose.getWindowSizeClass
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackclone.onboarding.GettingStartedComponent
 import dev.baseio.slackclone.onboarding.GettingStartedVM
+import dev.baseio.slackclone.platformType
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 
 @Composable
 internal fun GettingStartedUI(
-  gettingStartedVM: GettingStartedComponent,
-  viewModel: GettingStartedVM = gettingStartedVM.viewModel
+    gettingStartedVM: GettingStartedComponent,
+    viewModel: GettingStartedVM = gettingStartedVM.viewModel
 ) {
-  val scaffoldState = rememberScaffoldState()
-  val uiState by viewModel.componentState.subscribeAsState()
-  val size = getWindowSizeClass(LocalWindow.current)
-  PlatformSideEffects.GettingStartedScreen()
+    val scaffoldState = rememberScaffoldState()
+    val uiState by viewModel.componentState.subscribeAsState()
+    val size = getWindowSizeClass(LocalWindow.current)
+    PlatformSideEffects.GettingStartedScreen()
 
-  Scaffold(
-    backgroundColor = SlackCloneColor,
-    contentColor = LocalSlackCloneColor.current.textSecondary,
-    modifier = Modifier.fillMaxSize(),
-    scaffoldState = scaffoldState,
-    snackbarHost = {
-      scaffoldState.snackbarHostState
-    }
-  ) { innerPadding ->
-    Box(modifier = Modifier.padding(innerPadding)) {
-      SlackCloneSurface(
-        color = SlackCloneColor,
-        modifier = Modifier
-          .padding(12.dp)
-      ) {
-        if (uiState.showSlackAnim) {
-          val shouldStartLogoAnimation by gettingStartedVM.viewModel.componentState.subscribeAsState()
-          LaunchedEffect(Unit) {
-            gettingStartedVM.viewModel.animate()
-          }
-          SlackAnimation(shouldStartLogoAnimation.isAnimationStarting)
-        } else {
-          when (size) {
-            WindowSize.Phones -> PhoneLayout(gettingStartedVM)
-            else -> {
-              LargeScreenLayout(gettingStartedVM)
-            }
-          }
+    Scaffold(
+        backgroundColor = SlackCloneColor,
+        contentColor = LocalSlackCloneColor.current.textSecondary,
+        modifier = Modifier.fillMaxSize(),
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            scaffoldState.snackbarHostState
         }
-      }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            SlackCloneSurface(
+                color = SlackCloneColor,
+                modifier = Modifier
+                    .padding(12.dp)
+            ) {
+                if (uiState.showSlackAnim) {
+                    val shouldStartLogoAnimation by gettingStartedVM.viewModel.componentState.subscribeAsState()
+                    LaunchedEffect(Unit) {
+                        gettingStartedVM.viewModel.animate()
+                    }
+                    SlackAnimation(shouldStartLogoAnimation.isAnimationStarting)
+                } else {
+                    when (size) {
+                        WindowSize.Phones -> PhoneLayout(gettingStartedVM)
+                        else -> {
+                            LargeScreenLayout(gettingStartedVM)
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
 }
 
 @Composable
 internal fun LargeScreenLayout(
-  gettingStartedVM: GettingStartedComponent
+    gettingStartedVM: GettingStartedComponent
 
 ) {
-  val scanMode by gettingStartedVM.viewModel.scanningMode.collectAsState()
+    val scanMode by gettingStartedVM.viewModel.scanningMode.collectAsState()
 
-  val density = LocalDensity.current
+    val density = LocalDensity.current
 
-  Row(
-    Modifier.fillMaxSize(),
-    horizontalArrangement = Arrangement.Center,
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    Column(
-      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
-      verticalArrangement = Arrangement.SpaceAround,
-      horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-      Spacer(Modifier.padding(16.dp))
-      IntroText(modifier = Modifier.padding(top = 12.dp), gettingStartedVM, {
-        IntroEnterTransitionVertical(density)
-      }) {
-        IntroExitTransitionVertical()
-      }
-      Spacer(Modifier.padding(16.dp))
-      GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
-        GetStartedExitTransVertical()
-      })
-    }
-
-    Column(
-      Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      if (scanMode) {
-        QRScannerUI(mode = QrScannerMode.CAMERA, qrCodeDelegate = getKoin().get()) {
-          gettingStartedVM.navigateBack()
+        Column(
+            Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.padding(16.dp))
+            IntroText(modifier = Modifier.padding(top = 12.dp), gettingStartedVM, {
+                IntroEnterTransitionVertical(density)
+            }) {
+                IntroExitTransitionVertical()
+            }
+            Spacer(Modifier.padding(16.dp))
+            GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
+                GetStartedExitTransVertical()
+            })
         }
-      } else {
-        CenterImage(Modifier.padding(24.dp), gettingStartedVM)
-      }
+
+        Column(
+            Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (scanMode) {
+                QRScannerUI(mode = QrScannerMode.CAMERA, qrCodeDelegate = getKoin().get()) {
+                    gettingStartedVM.navigateBack()
+                }
+            } else {
+                CenterImage(Modifier.padding(24.dp), gettingStartedVM)
+            }
+        }
     }
-  }
 }
 
 @Composable
 internal fun PhoneLayout(
-  gettingStartedVM: GettingStartedComponent
+    gettingStartedVM: GettingStartedComponent
 ) {
-  val scanMode by gettingStartedVM.viewModel.scanningMode.collectAsState()
+    val scanMode by gettingStartedVM.viewModel.scanningMode.collectAsState()
 
-  val density = LocalDensity.current
-  Column(
-    verticalArrangement = Arrangement.SpaceAround,
-    horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = Modifier.fillMaxSize()
-  ) {
-    IntroText(modifier = Modifier.fillMaxWidth().padding(top = 12.dp), gettingStartedVM, {
-      IntroEnterTransitionHorizontal(density)
-    }) {
-      IntroExitTransitionHorizontal()
-    }
+    val density = LocalDensity.current
+    Column(
+        verticalArrangement = Arrangement.SpaceAround,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        IntroText(modifier = Modifier.fillMaxWidth().padding(top = 12.dp), gettingStartedVM, {
+            IntroEnterTransitionHorizontal(density)
+        }) {
+            IntroExitTransitionHorizontal()
+        }
 
-    if (scanMode) {
-      QRScannerUI(modifier = Modifier.weight(1f, fill = false), QrScannerMode.CAMERA, getKoin().get()) {
-        gettingStartedVM.navigateBack()
-      }
-    } else {
-      CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
+        if (scanMode) {
+            QRScannerUI(modifier = Modifier.weight(1f, fill = false), QrScannerMode.CAMERA, getKoin().get()) {
+                gettingStartedVM.navigateBack()
+            }
+        } else {
+            CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
+        }
+        Spacer(Modifier.padding(8.dp))
+        GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
+            GetStartedExitTransHorizontal()
+        })
     }
-    Spacer(Modifier.padding(8.dp))
-    GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
-      GetStartedExitTransHorizontal()
-    })
-  }
 }
 
 @Composable
 internal fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
-  ClickableText(
-    text = buildAnnotatedString {
-      withStyle(
-        style = SpanStyle(
-          color = Color.White
-        )
-      ) {
-        append("Is your team new to slack ?")
-      }
+    ClickableText(
+        text = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    color = Color.White
+                )
+            ) {
+                append("Is your team new to slack ?")
+            }
 
-      withStyle(
-        style = SpanStyle(
-          color = Color.White,
-          textDecoration = TextDecoration.Underline
-        )
-      ) {
-        append(" Create a workspace?")
-      }
-    },
-    modifier = modifier,
-    style = SlackCloneTypography.subtitle2,
-    onClick = {
-      onClick()
-    }
-  )
+            withStyle(
+                style = SpanStyle(
+                    color = Color.White,
+                    textDecoration = TextDecoration.Underline
+                )
+            ) {
+                append(" Create a workspace?")
+            }
+        },
+        modifier = modifier,
+        style = SlackCloneTypography.subtitle2,
+        onClick = {
+            onClick()
+        }
+    )
 }
 
 @Composable
 internal fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
-  val painter = PainterRes.gettingStarted()
-  val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
-  AnimatedVisibility(
-    visible = expanded.introTextExpanded,
-    enter = ImageEnterTransition(),
-    exit = ImageExitTrans()
-  ) {
-    Image(
-      modifier = modifier,
-      painter = painter,
-      contentDescription = null,
-      contentScale = ContentScale.Fit
-    )
-  }
+    val painter = PainterRes.gettingStarted()
+    val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
+    AnimatedVisibility(
+        visible = expanded.introTextExpanded,
+        enter = ImageEnterTransition(),
+        exit = ImageExitTrans()
+    ) {
+        Image(
+            modifier = modifier,
+            painter = painter,
+            contentDescription = null,
+            contentScale = ContentScale.Fit
+        )
+    }
 }
 
 @Composable
@@ -239,90 +239,89 @@ internal fun ImageExitTrans() = shrinkOut() + fadeOut()
 
 @Composable
 internal fun ImageEnterTransition() = expandIn(
-  expandFrom = Alignment.Center
+    expandFrom = Alignment.Center
 ) + fadeIn(
-  // Fade in with the initial alpha of 0.3f.
-  initialAlpha = 0.3f
+    // Fade in with the initial alpha of 0.3f.
+    initialAlpha = 0.3f
 )
 
 @Composable
 internal fun GetStartedButton(
-  gettingStartedComponent: GettingStartedComponent,
-  enterAnim: @Composable () -> EnterTransition,
-  exitAnim: @Composable () -> ExitTransition
+    gettingStartedComponent: GettingStartedComponent,
+    enterAnim: @Composable () -> EnterTransition,
+    exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedComponent.viewModel.componentState.subscribeAsState()
-  val loading by gettingStartedComponent.viewModel.loadingQR.collectAsState()
-  val scanningMode by gettingStartedComponent.viewModel.scanningMode.collectAsState()
+    val expanded by gettingStartedComponent.viewModel.componentState.subscribeAsState()
+    val loading by gettingStartedComponent.viewModel.loadingQR.collectAsState()
+    val scanningMode by gettingStartedComponent.viewModel.scanningMode.collectAsState()
 
-  AnimatedVisibility(
-    visible = expanded.introTextExpanded,
-    enter = enterAnim(),
-    exit = exitAnim()
-  ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-      if (platformType() != Platform.JVM) {
-        if (loading) CircularProgressIndicator(color = SlackLogoYellow) else QrCodeButton(scanningMode) {
-          when (platformType()) {
-            Platform.ANDROID, Platform.IOS -> {
-              gettingStartedComponent.viewModel.toggleScanningMode()
+    AnimatedVisibility(
+        visible = expanded.introTextExpanded,
+        enter = enterAnim(),
+        exit = exitAnim()
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            if (platformType() != Platform.JVM) {
+                if (loading) CircularProgressIndicator(color = SlackLogoYellow) else QrCodeButton(scanningMode) {
+                    when (platformType()) {
+                        Platform.ANDROID, Platform.IOS -> {
+                            gettingStartedComponent.viewModel.toggleScanningMode()
+                        }
+
+                        Platform.JVM -> TODO("This doesn't belong here!")
+                    }
+                }
             }
 
-            Platform.JVM -> TODO("This doesn't belong here!")
-          }
+            Spacer(Modifier.padding(8.dp))
+
+            LoginButton(gettingStartedComponent)
+            Spacer(Modifier.padding(8.dp))
+
+            TeamNewToSlack(Modifier.padding(8.dp)) {
+                gettingStartedComponent.emailMagicLink()
+            }
         }
-      }
-
-      Spacer(Modifier.padding(8.dp))
-
-      LoginButton(gettingStartedComponent)
-      Spacer(Modifier.padding(8.dp))
-
-      TeamNewToSlack(Modifier.padding(8.dp)) {
-        gettingStartedComponent.emailMagicLink()
-      }
     }
-  }
 }
 
 @Composable
 internal fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
-  OutlinedButton(
-    onClick = {
-      onClick()
-    },
-    Modifier
-      .fillMaxWidth()
-      .height(40.dp),
-    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-    border = BorderStroke(2.dp, Color.White)
-  ) {
-    Text(
-      text = if (!scanMode) "Scan QR" else "Close Scanner",
-      style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
-    )
-  }
+    OutlinedButton(
+        onClick = {
+            onClick()
+        },
+        Modifier
+            .fillMaxWidth()
+            .height(40.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        border = BorderStroke(2.dp, Color.White)
+    ) {
+        Text(
+            text = if (!scanMode) "Scan QR" else "Close Scanner",
+            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+        )
+    }
 }
-
 
 @Composable
 internal fun LoginButton(
-  gettingStartedVM: GettingStartedComponent
+    gettingStartedVM: GettingStartedComponent
 ) {
-  Button(
-    onClick = {
-      gettingStartedVM.emailMagicLink()
-    },
-    Modifier
-      .fillMaxWidth()
-      .height(40.dp),
-    colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
-  ) {
-    Text(
-      text = "Email me a magic link.",
-      style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
-    )
-  }
+    Button(
+        onClick = {
+            gettingStartedVM.emailMagicLink()
+        },
+        Modifier
+            .fillMaxWidth()
+            .height(40.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
+    ) {
+        Text(
+            text = "Email me a magic link.",
+            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+        )
+    }
 }
 
 @Composable
@@ -330,93 +329,93 @@ internal fun GetStartedExitTransHorizontal() = slideOutHorizontally() + shrinkHo
 
 @Composable
 internal fun GetStartedEnterTransitionHorizontal(density: Density) =
-  slideInHorizontally {
-    // Slide in from 40 dp from the bottom.
-    with(density) { +5680.dp.roundToPx() }
-  } + expandHorizontally(
-    // Expand from the top.
-    expandFrom = Alignment.Start
-  ) + fadeIn(
-    // Fade in with the initial alpha of 0.3f.
-    initialAlpha = 0.3f
-  )
+    slideInHorizontally {
+        // Slide in from 40 dp from the bottom.
+        with(density) { +5680.dp.roundToPx() }
+    } + expandHorizontally(
+        // Expand from the top.
+        expandFrom = Alignment.Start
+    ) + fadeIn(
+        // Fade in with the initial alpha of 0.3f.
+        initialAlpha = 0.3f
+    )
 
 @Composable
 internal fun GetStartedExitTransVertical() = slideOutVertically() + shrinkVertically() + fadeOut()
 
 @Composable
 internal fun GetStartedEnterTransitionVertical(density: Density) =
-  slideInVertically {
-    // Slide in from 40 dp from the bottom.
-    with(density) { +5680.dp.roundToPx() }
-  } + expandVertically(
-    // Expand from the top.
-    expandFrom = Alignment.Top
-  ) + fadeIn(
-    // Fade in with the initial alpha of 0.3f.
-    initialAlpha = 0.3f
-  )
+    slideInVertically {
+        // Slide in from 40 dp from the bottom.
+        with(density) { +5680.dp.roundToPx() }
+    } + expandVertically(
+        // Expand from the top.
+        expandFrom = Alignment.Top
+    ) + fadeIn(
+        // Fade in with the initial alpha of 0.3f.
+        initialAlpha = 0.3f
+    )
 
 @Composable
 internal fun IntroText(
-  modifier: Modifier = Modifier,
-  gettingStartedVM: GettingStartedComponent,
-  enterAnim: @Composable () -> EnterTransition,
-  exitAnim: @Composable () -> ExitTransition
+    modifier: Modifier = Modifier,
+    gettingStartedVM: GettingStartedComponent,
+    enterAnim: @Composable () -> EnterTransition,
+    exitAnim: @Composable () -> ExitTransition
 ) {
-  val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
+    val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
 
-  AnimatedVisibility(
-    visible = expanded.introTextExpanded,
-    enter = enterAnim(),
-    exit = exitAnim()
-  ) {
-    Column(modifier) {
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(
-          modifier = Modifier.size(128.dp),
-          painter = PainterRes.slackLogo(),
-          contentDescription = null
-        )
-        Text(
-          text = buildAnnotatedString {
-            withStyle(
-              style = SpanStyle(
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-              )
-            ) {
-              append("Slack")
+    AnimatedVisibility(
+        visible = expanded.introTextExpanded,
+        enter = enterAnim(),
+        exit = exitAnim()
+    ) {
+        Column(modifier) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    modifier = Modifier.size(128.dp),
+                    painter = PainterRes.slackLogo(),
+                    contentDescription = null
+                )
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        ) {
+                            append("Slack")
+                        }
+                    },
+                    modifier = Modifier.padding(4.dp),
+                    style = SlackCloneTypography.h4
+                )
             }
-          },
-          modifier = Modifier.padding(4.dp),
-          style = SlackCloneTypography.h4
-        )
-      }
 
-      Text(
-        text = buildAnnotatedString {
-          withStyle(
-            style = SpanStyle(
-              fontWeight = FontWeight.Bold,
-              color = Color.White
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    ) {
+                        append("Slack brings the team together")
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            SlackLogoYellow,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append(" wherever you are.")
+                    }
+                },
+                style = SlackCloneTypography.h4
             )
-          ) {
-            append("Slack brings the team together")
-          }
-          withStyle(
-            style = SpanStyle(
-              SlackLogoYellow,
-              fontWeight = FontWeight.Bold
-            )
-          ) {
-            append(" wherever you are.")
-          }
-        },
-        style = SlackCloneTypography.h4
-      )
+        }
     }
-  }
 }
 
 @Composable
@@ -424,14 +423,14 @@ internal fun IntroExitTransitionHorizontal() = slideOutHorizontally() + shrinkHo
 
 @Composable
 internal fun IntroEnterTransitionHorizontal(density: Density) = slideInHorizontally {
-  // Slide in from 12580 dp from the left.
-  with(density) { -12580.dp.roundToPx() }
+    // Slide in from 12580 dp from the left.
+    with(density) { -12580.dp.roundToPx() }
 } + expandHorizontally(
-  // Expand from the top.
-  expandFrom = Alignment.Start
+    // Expand from the top.
+    expandFrom = Alignment.Start
 ) + fadeIn(
-  // Fade in with the initial alpha of 0.3f.
-  initialAlpha = 0.3f
+    // Fade in with the initial alpha of 0.3f.
+    initialAlpha = 0.3f
 )
 
 @Composable
@@ -439,12 +438,12 @@ internal fun IntroExitTransitionVertical() = slideOutVertically() + shrinkVertic
 
 @Composable
 internal fun IntroEnterTransitionVertical(density: Density) = slideInVertically {
-  // Slide in from 12580 dp from the left.
-  with(density) { -12580.dp.roundToPx() }
+    // Slide in from 12580 dp from the left.
+    with(density) { -12580.dp.roundToPx() }
 } + expandVertically(
-  // Expand from the top.
-  expandFrom = Alignment.Top
+    // Expand from the top.
+    expandFrom = Alignment.Top
 ) + fadeIn(
-  // Fade in with the initial alpha of 0.3f.
-  initialAlpha = 0.3f
+    // Fade in with the initial alpha of 0.3f.
+    initialAlpha = 0.3f
 )

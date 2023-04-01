@@ -2,7 +2,6 @@ package dev.baseio.slackdomain.usecases.channels
 
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelLastMessage
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.usecases.BaseUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 

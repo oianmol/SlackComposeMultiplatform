@@ -27,7 +27,7 @@ class SlackChannelVM(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun loadRecentChannels(): Flow<List<DomainLayerChannels.SKChannel>> {
         return useCaseGetSelectedWorkspace.invokeFlow().flatMapLatest {
-                ucFetchRecentChannels(it!!.uuid)
-            }
+            ucFetchRecentChannels(it!!.uuid)
+        }
     }
 }

@@ -1,7 +1,7 @@
 [versions]
 
 #kotlin
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 mockkmp = "1.12.0"
 gms= "4.3.14"
 google_protobuf = "0.8.19"

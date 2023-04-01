@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SKLocalDataSourceUsers {
     fun getUsersByWorkspace(workspace: String): Flow<List<DomainLayerUsers.SKUser>>
-    fun getUsersByWorkspaceAndName(workspace: String,name:String): Flow<List<DomainLayerUsers.SKUser>>
+    fun getUsersByWorkspaceAndName(workspace: String, name: String): Flow<List<DomainLayerUsers.SKUser>>
     fun getUsers(workspace: String): List<DomainLayerUsers.SKUser>
     fun getUser(workspaceId: String, uuid: String): DomainLayerUsers.SKUser?
     fun saveUser(senderInfo: DomainLayerUsers.SKUser?)

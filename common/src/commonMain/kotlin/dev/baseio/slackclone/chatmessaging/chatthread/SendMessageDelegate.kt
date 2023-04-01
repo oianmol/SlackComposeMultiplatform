@@ -64,7 +64,6 @@ class SendMessageDelegateImpl(
                 }
             }
 
-
             useCaseSendMessage.invoke(
                 DomainLayerMessages.SKMessage(
                     uuid = Clock.System.now().toEpochMilliseconds().toString(),
@@ -78,7 +77,8 @@ class SendMessageDelegateImpl(
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),
                     isDeleted = false,
                     isSynced = false,
-                ), channel.publicKey
+                ),
+                channel.publicKey
             )
             this.message.value = TextFieldValue()
         }

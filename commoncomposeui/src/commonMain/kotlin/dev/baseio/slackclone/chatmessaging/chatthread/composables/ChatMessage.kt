@@ -11,13 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns
 import dev.baseio.slackclone.common.extensions.calendar
 import dev.baseio.slackclone.common.extensions.formattedTime
 import dev.baseio.slackclone.commonui.reusable.MentionsText
 import dev.baseio.slackclone.commonui.reusable.SlackImageBox
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
-import dev.baseio.slackclone.chatmessaging.chatthread.MentionsPatterns
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
@@ -35,7 +35,7 @@ internal fun ChatMessage(
             .combinedClickable(enabled = true, onLongClick = {
                 alertLongClick(message)
             }, onClick = {
-                }),
+            }),
         icon = {
             SlackImageBox(
                 Modifier.size(48.dp),

@@ -11,17 +11,23 @@ class FakeQrCodeGenerator : IQrCodeGenerator {
     override val inMemoryQrCodes: HashMap<String, Pair<Path, (SKAuthResult) -> Unit>> = hashMapOf()
 
     override fun process(data: String): Pair<SKQrCodeResponse, Path> {
-        return Pair(sKQrCodeResponse {
-            this.byteArray.addAll(mutableListOf<SKByteArrayElement>().apply {
-                add(sKByteArrayElement {
-                    this.byte = 1
-                })
-            })
-        }, Path("somepath"))
+        return Pair(
+            sKQrCodeResponse {
+                this.byteArray.addAll(
+                    mutableListOf<SKByteArrayElement>().apply {
+                        add(
+                            sKByteArrayElement {
+                                this.byte = 1
+                            }
+                        )
+                    }
+                )
+            },
+            Path("somepath")
+        )
     }
 
     override fun randomToken(): String {
         return token
     }
-
 }

@@ -18,7 +18,6 @@ abstract class PNSender<T : IDataMap> {
                     sendMessagesNow(pushTokens, request, it, notificationType)
                 }
             }
-
         }
     }
 
@@ -86,9 +85,11 @@ abstract class PNSender<T : IDataMap> {
         sender: SkUser,
         notificationType: NotificationType
     ) {
-        FirebaseMessaging.getInstance().sendAll(pushTokens.map { skUserPushToken ->
-            toFirebaseMessage(request, skUserPushToken.token, sender.name, notificationType)
-        })
+        FirebaseMessaging.getInstance().sendAll(
+            pushTokens.map { skUserPushToken ->
+                toFirebaseMessage(request, skUserPushToken.token, sender.name, notificationType)
+            }
+        )
     }
 
     abstract suspend fun getPushTokens(request: T): List<SKUserPushToken>

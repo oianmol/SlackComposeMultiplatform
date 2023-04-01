@@ -27,7 +27,6 @@ import kotlin.io.path.deleteIfExists
 import kotlin.io.path.fileSize
 import kotlin.io.path.inputStream
 
-
 class QrCodeService(
     coroutineContext: CoroutineContext = Dispatchers.IO,
     private val database: CoroutineDatabase,
@@ -40,11 +39,13 @@ class QrCodeService(
             val data = user.userId // bad impl, try something secure
             val result = qrCodeGenerator.process(data)
             send(result.first) // first send the QR code!
-            qrCodeGenerator.put(data,result) { // when authenticated send the auth result
+            qrCodeGenerator.put(data, result) { // when authenticated send the auth result
                 launch {
-                    send(sKQrCodeResponse {
-                        this.authResult = it
-                    })
+                    send(
+                        sKQrCodeResponse {
+                            this.authResult = it
+                        }
+                    )
                     close()
                 }
             }
@@ -53,7 +54,6 @@ class QrCodeService(
             }
         }
     }
-
 
     override suspend fun verifyQrCode(request: SKQRAuthVerify): SKAuthResult {
         qrCodeGenerator.find(request.token)?.let {
@@ -67,7 +67,7 @@ class QrCodeService(
     }
 }
 
-class QrCodeGenerator :IQrCodeGenerator {
+class QrCodeGenerator : IQrCodeGenerator {
     override val inMemoryQrCodes: HashMap<String, Pair<Path, (SKAuthResult) -> Unit>> = hashMapOf()
 
     override fun process(data: String): Pair<SKQrCodeResponse, Path> {
@@ -75,12 +75,15 @@ class QrCodeGenerator :IQrCodeGenerator {
             val ins = inputStream(java.nio.file.StandardOpenOption.READ)
             val bytes = ins.readAllBytes()
             val intBytes = bytes.map { it.toInt() }
-            return Pair(sKQrCodeResponse {
-                this.byteArray.addAll(intBytes.map { sKByteArrayElement { this.byte = it } })
-                this.totalSize = fileSize()
-            }.also {
-                ins.close()
-            }, this)
+            return Pair(
+                sKQrCodeResponse {
+                    this.byteArray.addAll(intBytes.map { sKByteArrayElement { this.byte = it } })
+                    this.totalSize = fileSize()
+                }.also {
+                    ins.close()
+                },
+                this
+            )
         }
     }
 

@@ -35,9 +35,9 @@ kotlin {
                 implementation(libs.koin.core.jvm)
             }
         }
-        val jvmTest by getting{
+        val jvmTest by getting {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            dependencies{
+            dependencies {
                 implementation(compose.uiTestJUnit4)
                 implementation(libs.koin.test)
             }
@@ -72,7 +72,7 @@ compose.desktop {
             vendor = "Anmol Verma"
 
             macOS {
-                packageName  = "Slack Clone"
+                packageName = "Slack Clone"
                 dockName = "Slack Clone"
                 bundleID = "dev.baseio.slackclone"
                 iconFile.set(project.file("icon.png"))

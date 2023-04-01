@@ -12,5 +12,3 @@ interface WorkspaceDataSource {
     suspend fun updateWorkspace(toDBWorkspace: SkWorkspace): SkWorkspace?
     fun registerForChanges(uuid: String?): Flow<Pair<SkWorkspace?, SkWorkspace?>>
 }
-
-

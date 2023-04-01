@@ -12,10 +12,12 @@ class SKNetworkSaveFcmTokenImpl(
 ) : SKNetworkSaveFcmToken {
     override suspend fun save(token: String) {
         skLocalKeyValueSource.get(LOGGED_IN_USER)?.let {
-            iGrpcCalls.saveFcmToken(kmSKPushToken {
-                this.token = token
-                this.platform = 0
-            })
+            iGrpcCalls.saveFcmToken(
+                kmSKPushToken {
+                    this.token = token
+                    this.platform = 0
+                }
+            )
         }
     }
 }

@@ -13,11 +13,11 @@ class NewChatThreadComponent(
 
     val viewModel = instanceKeeper.getOrCreate {
         SearchCreateChannelVM(
-          getKoin().get(),
-          getKoin().get(),
-          getKoin().get(),
-          getKoin().get(),
-          getKoin().get()
+            getKoin().get(),
+            getKoin().get(),
+            getKoin().get(),
+            getKoin().get(),
+            getKoin().get()
         ) {
             navigationPopWith(it)
         }

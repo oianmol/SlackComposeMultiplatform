@@ -4,8 +4,6 @@ import dev.baseio.slackdata.protos.SKAuthUser
 import dev.baseio.slackserver.communications.SlackEmailHelper
 import dev.baseio.slackserver.data.sources.AuthDataSource
 import dev.baseio.slackserver.data.sources.UsersDataSource
-import io.grpc.Status
-import io.grpc.StatusException
 
 interface AuthenticationDelegate {
     suspend fun processRequestForEmail(request: SKAuthUser, workspaceId: String)
@@ -32,5 +30,4 @@ class AuthenticationDelegateImpl(
             }
         }.exceptionOrNull()?.printStackTrace()
     }
-
 }

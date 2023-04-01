@@ -75,7 +75,6 @@ class DesktopAuthCreateWorkspaceUITest {
         Dispatchers.setMain(koinApplication.koin.get<CoroutineDispatcherProvider>().main)
     }
 
-
     @Test
     fun `create workspace fails when credentials are not entered`() {
         with(compose) {
@@ -100,7 +99,6 @@ class DesktopAuthCreateWorkspaceUITest {
             onNodeWithText("Let me in...").performClick()
             waitUntilExists(hasText("check the form", substring = true, ignoreCase = true))
         }
-
     }
 
     @After

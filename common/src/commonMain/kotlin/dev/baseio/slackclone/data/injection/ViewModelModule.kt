@@ -9,13 +9,13 @@ import dev.baseio.slackclone.onboarding.QrCodeDelegateImpl
 import org.koin.dsl.module
 
 val viewModelDelegateModule = module {
-  single<UserProfileDelegate> {
-    UserProfileDelegateImpl(getKoin().get(), getKoin().get())
-  }
-  single<SendMessageDelegate> {
-    SendMessageDelegateImpl(get(), get(), get())
-  }
-  single<QrCodeDelegate> {
-    QrCodeDelegateImpl(get(), get())
-  }
+    single<UserProfileDelegate> {
+        UserProfileDelegateImpl(getKoin().get(), getKoin().get())
+    }
+    single<SendMessageDelegate> {
+        SendMessageDelegateImpl(get(), get(), get())
+    }
+    single<QrCodeDelegate> {
+        QrCodeDelegateImpl(get(), get())
+    }
 }

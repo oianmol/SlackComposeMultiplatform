@@ -36,7 +36,7 @@ interface DomainLayerUsers {
     )
 
     @Serializable
-    data class SKEncryptedMessage(val first:String,val second:String)
+    data class SKEncryptedMessage(val first: String, val second: String)
 
     @Serializable
     data class SKSlackKey(

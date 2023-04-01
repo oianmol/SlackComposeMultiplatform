@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.8.0"
+    kotlin("jvm") version "1.8.10"
     application
 }
 
 group = "dev.baseio.slackserver"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 dependencies {
     implementation("javax.mail:mail:1.5.0-b01")
@@ -25,19 +25,18 @@ dependencies {
     implementation("com.google.zxing:core:3.5.0")
     implementation("com.google.zxing:javase:3.5.0")
 
-    //mongodb
+    // mongodb
     implementation("org.litote.kmongo:kmongo:4.7.2")
     implementation("org.litote.kmongo:kmongo-async:4.7.2")
     implementation("org.litote.kmongo:kmongo-coroutine:4.7.2")
 
-    //jwt
+    // jwt
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
 
-    //passwords
+    // passwords
     implementation("at.favre.lib:bcrypt:0.9.0")
-
 }
 
 tasks.test {

@@ -7,5 +7,5 @@ interface IDataEncrypter {
 }
 
 interface IDataDecryptor {
-    fun decrypt(byteArray: Pair<String,String>, privateKeyBytes: ByteArray): ByteArray
+    fun decrypt(byteArray: Pair<String, String>, privateKeyBytes: ByteArray): ByteArray
 }

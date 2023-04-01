@@ -7,10 +7,10 @@ import dev.baseio.slackdomain.datasources.IDataEncrypter
 import org.koin.dsl.module
 
 val encryptionModule = module {
-  factory<IDataEncrypter> {
-    IDataEncrypterImpl()
-  }
-  factory<IDataDecryptor> {
-    IDataDecryptorImpl()
-  }
+    factory<IDataEncrypter> {
+        IDataEncrypterImpl()
+    }
+    factory<IDataDecryptor> {
+        IDataDecryptorImpl()
+    }
 }

@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class SKNetworkDataSourceMessagesImpl(
-    private val grpcCalls: IGrpcCalls, private val iDataEncrypter: IDataEncrypter
+    private val grpcCalls: IGrpcCalls,
+    private val iDataEncrypter: IDataEncrypter
 ) : SKNetworkDataSourceMessages {
 
     override fun registerChangeInMessages(request: UseCaseWorkspaceChannelRequest): Flow<Pair<DomainLayerMessages.SKMessage?, DomainLayerMessages.SKMessage?>> {
@@ -38,36 +39,40 @@ class SKNetworkDataSourceMessagesImpl(
         params: DomainLayerMessages.SKMessage,
         publicKey: DomainLayerUsers.SKSlackKey
     ): DomainLayerMessages.SKMessage {
-        return grpcCalls.sendMessage(kmSKMessage {
-            uuid = params.uuid
-            workspaceId = params.workspaceId
-            isDeleted = params.isDeleted
-            channelId = params.channelId
-            text = kmSKEncryptedMessage {
-                this.first = params.messageFirst
-                this.second = params.messageSecond
+        return grpcCalls.sendMessage(
+            kmSKMessage {
+                uuid = params.uuid
+                workspaceId = params.workspaceId
+                isDeleted = params.isDeleted
+                channelId = params.channelId
+                text = kmSKEncryptedMessage {
+                    this.first = params.messageFirst
+                    this.second = params.messageSecond
+                }
+                sender = params.sender
+                createdDate = params.createdDate
+                modifiedDate = params.modifiedDate
             }
-            sender = params.sender
-            createdDate = params.createdDate
-            modifiedDate = params.modifiedDate
-        }).toDomainLayerMessage()
+        ).toDomainLayerMessage()
     }
 
     override suspend fun sendMessage(params: DomainLayerMessages.SKMessage, publicKey: DomainLayerUsers.SKSlackKey): DomainLayerMessages.SKMessage {
-        val encryptedMessage :DomainLayerUsers.SKEncryptedMessage = iDataEncrypter.encrypt(
+        val encryptedMessage: DomainLayerUsers.SKEncryptedMessage = iDataEncrypter.encrypt(
             params.decodedMessage.encodeToByteArray(),
             publicKey.keyBytes,
         )
-        return grpcCalls.sendMessage(kmSKMessage {
-            uuid = params.uuid
-            workspaceId = params.workspaceId
-            isDeleted = params.isDeleted
-            channelId = params.channelId
-            text = encryptedMessage.asKMSKEncryptedMessageRaw()
-            sender = params.sender
-            createdDate = params.createdDate
-            modifiedDate = params.modifiedDate
-        }).toDomainLayerMessage()
+        return grpcCalls.sendMessage(
+            kmSKMessage {
+                uuid = params.uuid
+                workspaceId = params.workspaceId
+                isDeleted = params.isDeleted
+                channelId = params.channelId
+                text = encryptedMessage.asKMSKEncryptedMessageRaw()
+                sender = params.sender
+                createdDate = params.createdDate
+                modifiedDate = params.modifiedDate
+            }
+        ).toDomainLayerMessage()
     }
 }
 

@@ -76,5 +76,3 @@ fun SlackApp(
         }
     }
 }
-
-

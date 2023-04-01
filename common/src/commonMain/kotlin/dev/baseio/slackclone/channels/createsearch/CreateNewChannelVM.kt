@@ -29,7 +29,8 @@ class CreateNewChannelVM(
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),
                     deleted = false,
                     channelPublicKey = DomainLayerUsers.SKSlackKey(emptyArray<Byte>().toByteArray())
-                ), false
+                ),
+                false
             )
         )
 

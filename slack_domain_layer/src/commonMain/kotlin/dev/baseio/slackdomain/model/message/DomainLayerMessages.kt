@@ -1,8 +1,6 @@
 package dev.baseio.slackdomain.model.message
 
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import dev.baseio.slackdomain.model.users.DomainLayerUsers
-
 
 interface DomainLayerMessages {
     data class SKMessage(
@@ -53,7 +51,6 @@ interface DomainLayerMessages {
             result = 31 * result + decodedMessage.hashCode()
             return result
         }
-
     }
 
     data class SKLastMessage(

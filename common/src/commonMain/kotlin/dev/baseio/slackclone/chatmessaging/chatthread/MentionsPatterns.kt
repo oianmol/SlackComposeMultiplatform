@@ -8,8 +8,8 @@ object MentionsPatterns {
     const val AT_THE_RATE = "AT_RATE"
     val urlPattern = Regex(
         "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" +
-                "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" +
-                "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" +
+            "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
         hashSetOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE)
     )
 

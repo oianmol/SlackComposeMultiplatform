@@ -22,7 +22,7 @@ import org.litote.kmongo.reactivestreams.KMongo
 val dataSourcesModule = module {
     single {
         val client = KMongo.createClient(connectionString = System.getenv("MONGODB_URL"))
-        client.getDatabase("slackDB").coroutine //normal java driver usage 
+        client.getDatabase("slackDB").coroutine // normal java driver usage
     }
     factory<WorkspaceDataSource> { WorkspaceDataSourceImpl(get()) }
     factory<UsersDataSource> { UsersDataSourceImpl(get()) }

@@ -3,10 +3,10 @@ package dev.baseio.slackdata.injection
 import dev.baseio.slackdomain.usecases.auth.*
 import dev.baseio.slackdomain.usecases.channels.*
 import dev.baseio.slackdomain.usecases.chat.*
-import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndUpdateChangeInUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
+import dev.baseio.slackdomain.usecases.users.UseCaseFetchLocalUsers
 import dev.baseio.slackdomain.usecases.workspaces.*
 import org.koin.dsl.module
 

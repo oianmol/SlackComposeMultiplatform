@@ -11,7 +11,7 @@ val testDispatcherModule = module {
 
 class TestCoroutineDispatcherProvider(
     override val default: CoroutineDispatcher = Dispatchers.Main,
-    override val io: CoroutineDispatcher =  Dispatchers.Main,
-    override val main: CoroutineDispatcher =  Dispatchers.Main,
-    override val unconfirmed: CoroutineDispatcher =  Dispatchers.Main,
+    override val io: CoroutineDispatcher = Dispatchers.Main,
+    override val main: CoroutineDispatcher = Dispatchers.Main,
+    override val unconfirmed: CoroutineDispatcher = Dispatchers.Main,
 ) : CoroutineDispatcherProvider

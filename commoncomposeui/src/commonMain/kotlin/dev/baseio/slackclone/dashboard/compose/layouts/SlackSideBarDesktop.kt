@@ -42,7 +42,7 @@ internal fun SlackSideBarLayoutDesktop(
     searchScreen: () -> Unit,
     userProfile: () -> Unit,
     qrCode: () -> Unit,
-    addWorkspace:()->Unit,
+    addWorkspace: () -> Unit,
     dashboardComponent: DashboardComponent
 ) {
     val workspaces by sideNavComponent.viewModel.flow().collectAsState(emptyList())

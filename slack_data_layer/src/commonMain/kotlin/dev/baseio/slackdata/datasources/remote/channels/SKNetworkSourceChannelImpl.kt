@@ -59,7 +59,8 @@ class SKNetworkSourceChannelImpl(
             EncryptedData(
                 channelEncryptedPrivateKeyForLoggedInUser.first,
                 channelEncryptedPrivateKeyForLoggedInUser.second
-            ), capillary.privateKey()
+            ),
+            capillary.privateKey()
         )
         val channelPrivateKeyEncryptedForInvitedUser = iDataEncrypter.encrypt(
             decryptedChannelPrivateKeyForLoggedInUser,
