@@ -65,7 +65,7 @@ kotlin {
                 implementation(libs.coroutines)
                 implementation(project(":slack_domain_layer"))
                 implementation(kotlin("stdlib-common"))
-                api("io.github.timortel:grpc-multiplatform-lib:0.2.2")
+                api("io.github.timortel:grpc-multiplatform-lib:0.3.1")
             }
             kotlin.srcDirs(
                 projectDir.resolve("build/generated/source/kmp-grpc/commonMain/kotlin").canonicalPath,
