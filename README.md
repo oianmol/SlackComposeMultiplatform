@@ -31,14 +31,9 @@ The project supports android, compose iOS and jvm platform, make sure you match 
 ![Slack Multiplatform (3)](https://user-images.githubusercontent.com/4393101/205478274-23b55650-5676-4530-bd12-cdbd96dd098d.png)
 
 
-Video Demo for JVM Desktop and Android
+Video Demo 
 
-https://user-images.githubusercontent.com/4393101/201595781-c8669824-d774-4c82-b1e2-4814913357a8.mp4
-
-
-Video Demo for Jetpack Compose for iOS
-
-https://user-images.githubusercontent.com/32521663/189109199-6743606c-0e28-4d10-b7ba-61ec3641ed55.mp4
+https://user-images.githubusercontent.com/4393101/229371347-1cebf7bf-384d-4ec0-bfcf-19b1e34e6290.mp4
 
 
 
