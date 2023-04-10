@@ -17,7 +17,7 @@ import dev.baseio.slackclone.onboarding.compose.WorkspaceInputUI
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 
 @Composable
-internal fun SlackApp(
+fun SlackApp(
     modifier: Modifier = Modifier,
     rootComponent: () -> RootComponent
 ) {

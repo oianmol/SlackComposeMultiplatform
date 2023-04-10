@@ -99,6 +99,7 @@ kotlin {
         val androidUnitTest by getting {
             dependencies {
                 implementation("junit:junit:4.13.2")
+                implementation(kotlin("test"))
             }
         }
         val iosX64Main by getting
@@ -118,9 +119,25 @@ android {
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = (24)
+        testInstrumentationRunner =  "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+}
+dependencies {
+    androidTestImplementation("junit:junit:4.12")
+    // Core library
+    androidTestImplementation("androidx.test:core:1.5.0")
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+
+    // Assertions
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.ext:truth:1.5.0")
+
 }

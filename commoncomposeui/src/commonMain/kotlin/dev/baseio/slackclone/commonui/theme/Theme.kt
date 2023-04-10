@@ -56,7 +56,7 @@ private val DarkColorPalette = SlackCloneColorPalette(
 )
 
 @Composable
-internal fun SlackCloneTheme(
+fun SlackCloneTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -171,7 +171,7 @@ class SlackCloneColorPalette(
 }
 
 @Composable
-internal fun ProvideSlackCloneColors(
+fun ProvideSlackCloneColors(
     colors: SlackCloneColorPalette,
     content: @Composable () -> Unit
 ) {
@@ -180,7 +180,7 @@ internal fun ProvideSlackCloneColors(
     CompositionLocalProvider(LocalSlackCloneColor provides colorPalette, content = content)
 }
 
-internal val LocalSlackCloneColor = compositionLocalOf<SlackCloneColorPalette> {
+val LocalSlackCloneColor = compositionLocalOf<SlackCloneColorPalette> {
     error("No SlackCloneColorPalette provided")
 }
 

@@ -25,21 +25,25 @@ import javax.security.auth.Destroyable
  *
  */
 object CryptoChaCha20 {
-    private const val ENCRYPT_ALGO = "ChaCha20-Poly1305/None/NoPadding"
     private const val KEY_LEN = 256
     private const val NONCE_LEN = 12 // bytes
     private val NONCE_MIN_VAL = BigInteger("100000000000000000000000", 16)
     private val NONCE_MAX_VAL = BigInteger("ffffffffffffffffffffffff", 16)
     private var nonceCounter = NONCE_MIN_VAL
+
+    private fun getCipher() = Cipher.getInstance("ChaCha20-Poly1305") // JVM 11+
+        ?: Cipher.getInstance("ChaCha20/Poly1305/NoPadding") // Android 28+
+        ?: error("Could not find ChachaPoly cipher. Are you running JVM 11+ or Android 28+?")
+
     @Throws(Exception::class)
     fun encrypt(input: ByteArray, key: SecretKeySpec): ByteArray {
         Objects.requireNonNull(input, "Input message cannot be null")
         Objects.requireNonNull(key, "key cannot be null")
         require(input.size != 0) { "Length of message cannot be 0" }
         require(key.encoded.size * 8 == KEY_LEN) { "Size of key must be 256 bits" }
-        val cipher = Cipher.getInstance(ENCRYPT_ALGO)
         val nonce = nonce
         val ivParameterSpec = IvParameterSpec(nonce)
+        val cipher = getCipher()
         cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec)
         val messageCipher = cipher.doFinal(input)
 
@@ -63,7 +67,7 @@ object CryptoChaCha20 {
         val messageCipher = ByteArray(input.size - NONCE_LEN)
         System.arraycopy(input, NONCE_LEN, messageCipher, 0, input.size - NONCE_LEN)
         val ivParameterSpec = IvParameterSpec(nonce)
-        val cipher = Cipher.getInstance(ENCRYPT_ALGO)
+        val cipher = getCipher()
         cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec)
         return cipher.doFinal(messageCipher)
     }
