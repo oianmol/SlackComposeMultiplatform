@@ -19,7 +19,7 @@ version = "1.0"
 val ktor_version = "2.1.0"
 
 object Jvm {
-    val target = JavaVersion.VERSION_1_8
+    val target = JavaVersion.VERSION_18
 }
 
 repositories {
@@ -189,7 +189,8 @@ android {
         targetSdk = (33)
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
+    namespace = "dev.baseio.slackdata"
 }

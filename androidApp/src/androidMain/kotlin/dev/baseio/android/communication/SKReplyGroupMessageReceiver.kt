@@ -33,7 +33,8 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
     private fun channelId(intent: Intent) =
         intent.extras?.getString(SlackAndroidActivity.EXTRA_CHANNEL_ID)!!
 
-    fun workspaceId(intent: Intent) = intent.extras?.getString(SlackAndroidActivity.EXTRA_WORKSPACE_ID)!!
+    fun workspaceId(intent: Intent) =
+        intent.extras?.getString(SlackAndroidActivity.EXTRA_WORKSPACE_ID)!!
 
     private fun notificationId(intent: Intent) =
         intent.extras?.getInt(SlackAndroidActivity.INTENT_KEY_NOT_ID)
@@ -63,16 +64,13 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
         notificationId: Int?,
         context: Context
     ) {
-        GlobalScope.launch(CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
-        }) {
+        GlobalScope.launch(CoroutineExceptionHandler { _, throwable -> throwable.printStackTrace() }) {
             val user = getKoin().get<SKLocalKeyValueSource>().loggedInUser(workspaceId)
             val channel =
                 getKoin().get<SKLocalDataSourceReadChannels>().getChannelByChannelId(channelId)
 
             sendMessage(workspaceId, channelId, quickReplyResult, user, channel)
             notifyMessageSent(notificationId, context)
-
         }
     }
 
@@ -84,7 +82,7 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
         channel: DomainLayerChannels.SKChannel?
     ) {
         getKoin().get<UseCaseSendMessage>().invoke(
-            DomainLayerMessages.SKMessage(
+            params = DomainLayerMessages.SKMessage(
                 uuid = System.currentTimeMillis().toString(),
                 workspaceId = workspaceId,
                 channelId = channelId,
@@ -94,22 +92,24 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
                 modifiedDate = System.currentTimeMillis(),
                 isDeleted = false,
                 isSynced = false
-            ), channel!!.publicKey
+            ),
+            publicKey = channel!!.publicKey
         )
     }
 
     private fun notifyMessageSent(notificationId: Int?, context: Context) {
         notificationId?.let { it1 ->
             getKoin().get<NotificationManager>()
-                .notify(
-                    it1, NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_MESSAGES)
-                        .setContentText("You just replied back!")
-                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                        .setContentTitle("Sent.")
-                        .setAutoCancel(true)
-                        .setContentText("Message Sent!")
-                        .build()
-                )
+                .notify(it1, notification(context))
         }
     }
+
+    private fun notification(context: Context) =
+        NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_MESSAGES)
+            .setContentText("You just replied back!")
+            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+            .setContentTitle("Sent.")
+            .setAutoCancel(true)
+            .setContentText("Message Sent!")
+            .build()
 }

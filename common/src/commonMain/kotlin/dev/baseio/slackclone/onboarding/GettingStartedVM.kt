@@ -1,7 +1,7 @@
 package dev.baseio.slackclone.onboarding
 
 import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.reduce
+import com.arkivanov.decompose.value.update
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import kotlinx.coroutines.delay
@@ -35,22 +35,22 @@ class GettingStartedVM(
         private set
 
     private suspend fun endAnimation() {
-        componentState.reduce {
+        componentState.update {
             it.copy(showSlackAnim = false)
         }
         delay(250)
-        componentState.reduce {
+        componentState.update {
             it.copy(introTextExpanded = true)
         }
     }
 
     fun animate() {
         viewModelScope.launch {
-            componentState.reduce {
+            componentState.update {
                 it.copy(isAnimationStarting = true)
             }
             delay(SlackAnim.ANIM_DURATION.toLong().plus(700))
-            componentState.reduce {
+            componentState.update {
                 it.copy(isAnimationStarting = false)
             }
             delay(SlackAnim.ANIM_DURATION.toLong().plus(800))

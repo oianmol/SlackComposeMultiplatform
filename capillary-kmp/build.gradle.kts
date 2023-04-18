@@ -122,9 +122,10 @@ android {
         testInstrumentationRunner =  "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
+    namespace = "org.example.library"
 }
 dependencies {
     androidTestImplementation("junit:junit:4.12")

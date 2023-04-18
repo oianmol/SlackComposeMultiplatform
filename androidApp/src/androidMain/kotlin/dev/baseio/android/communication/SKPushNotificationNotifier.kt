@@ -182,7 +182,11 @@ class SKPushNotificationNotifier(
     // TODO - Try to find a way to have consistent ids instead of the current generator based ids
     private fun getChannelActivityIntent(skMessage: DomainLayerMessages.SKMessage): PendingIntent? {
         val resultIntent =
-            SlackAndroidActivity.channelChatIntent(skMessage.channelId, skMessage.workspaceId, context)
+            SlackAndroidActivity.channelChatIntent(
+                skMessage.channelId,
+                skMessage.workspaceId,
+                context
+            )
         return PendingIntent.getActivity(
             context,
             skMessage.uuid.hashCode(),
@@ -256,10 +260,8 @@ class SKPushNotificationNotifier(
             context,
             context.getString(R.string.notification_message_sent),
             Toast.LENGTH_LONG
-        )
-            .show()
+        ).show()
     }
-
 
     fun clearAllNotifications() {
         notificationManager.cancelAll()

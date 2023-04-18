@@ -25,7 +25,6 @@ class SlackMessagingService : FirebaseMessagingService() {
         )
     }
 
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         coroutineScope.launch(context = CoroutineExceptionHandler { _, throwable ->

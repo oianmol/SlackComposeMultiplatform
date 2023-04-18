@@ -2,30 +2,12 @@ import com.google.protobuf.gradle.*
 
 plugins {
     kotlin("jvm")
-    `maven-publish`
     id("java")
-    id("com.google.protobuf") version "0.8.19"
+    id("com.google.protobuf") version "0.9.0"
 }
 
 group = "dev.baseio.slackdatalib"
 version = "1.0.0"
-
-val sourcesJar by tasks.registering(Jar::class) {
-    classifier = "sources"
-    from(sourceSets.main.get().allSource)
-}
-
-publishing {
-    repositories {
-        mavenLocal()
-    }
-    publications {
-        register("mavenJava", MavenPublication::class) {
-            from(components["java"])
-            artifact(sourcesJar.get())
-        }
-    }
-}
 
 object Versions {
     const val GRPC = "1.49.1"
@@ -82,6 +64,6 @@ protobuf {
     }
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_18
+    targetCompatibility = JavaVersion.VERSION_18
 }
