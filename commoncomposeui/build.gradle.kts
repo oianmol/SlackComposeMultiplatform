@@ -6,16 +6,11 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.rick.nativecoroutines)
-    alias(libs.plugins.mockkmp)
     alias(libs.plugins.compose)
 }
 
 group = "dev.baseio.slackclone.composeui"
 version = "1.0"
-
-mockmp {
-    usesHelper = true
-}
 
 kotlin {
     android()

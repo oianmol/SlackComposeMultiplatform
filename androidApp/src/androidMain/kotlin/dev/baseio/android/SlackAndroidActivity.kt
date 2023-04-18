@@ -9,22 +9,17 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.DefaultComponentContext
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.baseio.android.util.showToast
-import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.WindowInfo
+import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import dev.baseio.slackclone.rememberComposeWindow
 import org.example.android.R
 
 class SlackAndroidActivity : AppCompatActivity() {
@@ -49,23 +44,34 @@ class SlackAndroidActivity : AppCompatActivity() {
             MobileApp {
                 root
             }
-            LaunchedEffect(intent?.channelId()) {
-                with(intent) {
-                    channelId()?.let {
-                        root.navigateChannel(channelId()!!, workspaceId()!!)
-                    }
-                }
-            }
-            LaunchedEffect(intent?.action) {
-                intent?.action?.let {
-                    if (it == Intent.ACTION_VIEW) {
-                        intent.data?.getQueryParameter("token")?.takeIf { token -> token.isNotEmpty() }?.let {
+            ChannelNavigator(root)
+            AuthNavigator(root)
+            askForPostNotificationPermission()
+        }
+    }
+
+    @Composable
+    private fun AuthNavigator(root: RootComponent) {
+        LaunchedEffect(intent?.action) {
+            intent?.action?.let {
+                if (it == Intent.ACTION_VIEW) {
+                    intent.data?.getQueryParameter("token")?.takeIf { token -> token.isNotEmpty() }
+                        ?.let {
                             root.navigateAuthorizeWithToken(it)
                         }
-                    }
                 }
             }
-            askForPostNotificationPermission()
+        }
+    }
+
+    @Composable
+    private fun ChannelNavigator(root: RootComponent) {
+        LaunchedEffect(intent?.channelId()) {
+            with(intent) {
+                channelId()?.let {
+                    root.navigateChannel(channelId()!!, workspaceId()!!)
+                }
+            }
         }
     }
 
@@ -108,17 +114,7 @@ class SlackAndroidActivity : AppCompatActivity() {
 
 @Composable
 internal fun MobileApp(root: () -> RootComponent) {
-    val config = LocalConfiguration.current
-
-    var rememberedComposeWindow by remember {
-        mutableStateOf(WindowInfo(config.screenWidthDp.dp, config.screenHeightDp.dp))
-    }
-
-    LaunchedEffect(config) {
-        snapshotFlow { config }.distinctUntilChanged().onEach {
-            rememberedComposeWindow = WindowInfo(it.screenWidthDp.dp, it.screenHeightDp.dp)
-        }.launchIn(this)
-    }
+    val rememberedComposeWindow by rememberComposeWindow()
 
     CompositionLocalProvider(
         LocalWindow provides rememberedComposeWindow

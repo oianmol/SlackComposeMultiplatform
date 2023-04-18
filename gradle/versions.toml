@@ -1,8 +1,8 @@
 [versions]
 
 #kotlin
-kotlin = "1.8.10"
-mockkmp = "1.12.0"
+kotlin = "1.8.20"
+mockkmp = "1.13.0"
 gms= "4.3.14"
 google_protobuf = "0.9.0"
 timortel_grpc = "0.3.1"

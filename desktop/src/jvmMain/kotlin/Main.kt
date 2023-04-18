@@ -26,19 +26,7 @@ fun main() {
         handleDeepLink(rootComponent)
 
         Window(onCloseRequest = ::exitApplication, state = windowState) {
-            var rememberedComposeWindow by remember(this.window) {
-                mutableStateOf(WindowInfo(windowState.size.width, windowState.size.height))
-            }
-
-            LaunchedEffect(windowState) {
-                snapshotFlow { windowState.size }
-                    .distinctUntilChanged()
-                    .onEach {
-                        rememberedComposeWindow = WindowInfo(it.width, it.height)
-                    }
-                    .launchIn(this)
-            }
-
+            val rememberedComposeWindow by rememberComposeWindow()
             DesktopApp(rememberedComposeWindow) {
                 rootComponent
             }
