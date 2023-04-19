@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.compose)
 }
 
 val copyJsResources = tasks.create("copyJsResourcesWorkaround", Copy::class.java) {
@@ -47,6 +47,9 @@ kotlin {
         val jsWasmMain by creating {
             dependencies {
                 implementation(project(":commoncomposeui"))
+                api(project(":common"))
+                api(project(":slack_data_layer"))
+                api(project(":slack_domain_layer"))
                 implementation(compose.runtime)
                 implementation(compose.ui)
                 implementation(compose.foundation)
