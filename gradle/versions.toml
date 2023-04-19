@@ -25,11 +25,10 @@ viewmodel_ktx = "2.6.1"
 okhttp_version = "4.7.2"
 profile_installer = "1.3.0"
 androidx_security = "1.1.0-alpha05"
-mokopaging = "0.7.2"
 kamelImage = "0.4.0"
 okhttp_grpc = "1.50.0"
 netty_shaded = "1.50.2"
-ktor_version = "2.1.0"
+ktor_version = "2.2.1"
 timber_version = "5.0.1"
 appcompat = "1.6.1"
 ktx_core_version = "1.10.0"
@@ -39,7 +38,7 @@ common = ":common"
 commoncomposeui = ":commoncomposeui"
 decompose_version = "2.0.0-alpha-02"
 decompose_composejb = "2.0.0-compose-experimental-alpha-02"
-compose_version = "1.4.0"
+compose_version = "1.4.0-dev-wasm05"
 compose_activity_version = "1.7.0"
 compose_constraint_layout_version = "1.0.1"
 compose_navigation_version = "2.6.0-alpha09"
@@ -98,7 +97,6 @@ accompanist_flow_layouts = { module = "com.google.accompanist:accompanist-flowla
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "compose_coil_version" }
 compose_livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "compose_version" }
 compose_navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose_navigation_version" }
-material_design = { module = "androidx.compose.material:material", version.ref = "compose_version" }
 accompanist_insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist_version" }
 accompanist_insets_ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist_version" }
 accompanist_coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanist_coil" }
@@ -133,7 +131,6 @@ grpc_netty = { module = "io.grpc:grpc-netty-shaded", version.ref = "netty_shaded
 grpc_okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "okhttp_grpc" }
 sqldelight_native = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelight" }
 kamelimage = { module = "com.alialbaali.kamel:kamel-image", version.ref = "kamelImage" }
-mokopaging = { module = "dev.icerock.moko:paging", version.ref = "mokopaging" }
 firebaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robo_electric_version" }
 mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp_version" }

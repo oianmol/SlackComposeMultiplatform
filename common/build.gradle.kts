@@ -15,7 +15,6 @@ repositories {
 }
 
 dependencies {
-    commonMainApi(libs.mokopaging)
     commonMainApi(project(":slack_domain_layer"))
     commonMainApi(project(":slack_data_layer"))
 }
@@ -38,6 +37,15 @@ kotlin {
         }
     }
 
+    js(IR) {
+        browser()
+    }
+
+    @Suppress("OPT_IN_USAGE")
+    wasm {
+        browser()
+    }
+
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -53,6 +61,15 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation(libs.decompose.core)
             }
+        }
+        val jsWasmMain by creating {
+            dependsOn(commonMain)
+        }
+        val jsMain by getting {
+            dependsOn(jsWasmMain)
+        }
+        val wasmMain by getting {
+            dependsOn(jsWasmMain)
         }
         val androidMain by getting {
             dependencies {

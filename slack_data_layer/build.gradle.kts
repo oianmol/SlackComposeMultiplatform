@@ -38,6 +38,16 @@ kotlin {
         publishLibraryVariants("release")
     }
 
+
+    js(IR) {
+        browser()
+    }
+
+    @Suppress("OPT_IN_USAGE")
+    wasm {
+        browser()
+    }
+
     cocoapods {
         summary = "Slack Data Library"
         homepage = "https://github.com/oianmol"
@@ -69,6 +79,21 @@ kotlin {
                 projectDir.resolve("build/generated/source/kmp-grpc/commonMain/kotlin").canonicalPath,
             )
         }
+
+        val jsWasmMain by creating {
+            dependsOn(commonMain)
+        }
+        val jsMain by getting {
+            dependsOn(jsWasmMain)
+            dependencies {
+                implementation("io.ktor:ktor-client-core:2.2.1")
+            }
+        }
+
+        val wasmMain by getting {
+            dependsOn(jsWasmMain)
+        }
+
         val sqlDriverNativeMain by creating {
             dependencies {
                 implementation(libs.sqldelight.nativedriver)
@@ -156,6 +181,10 @@ grpcKotlinMultiplatform {
         listOf(
             kotlin.sourceSets.getByName("iosMain"),
         )
+    )
+    targetSourcesMap.put(
+        OutputTarget.JS,
+        listOf(kotlin.sourceSets.getByName("jsMain"))
     )
     // Specify the folders where your proto files are located, you can list multiple.
     protoSourceFolders.set(listOf(projectDir.parentFile.resolve("slack_protos/src/main/proto")))

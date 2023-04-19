@@ -24,6 +24,15 @@ kotlin {
         }
     }
 
+    js(IR) {
+        browser()
+    }
+
+    wasm {
+        browser()
+    }
+
+
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -36,6 +45,16 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
                 implementation(kotlin("stdlib-common"))
             }
+        }
+
+        val jsWasmMain by creating {
+            dependsOn(commonMain)
+        }
+        val jsMain by getting {
+            dependsOn(jsWasmMain)
+        }
+        val wasmMain by getting {
+            dependsOn(jsWasmMain)
         }
 
         val iosX64Main by getting

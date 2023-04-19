@@ -12,8 +12,8 @@ import dev.baseio.slackdomain.usecases.channels.UseCaseGetChannelMembers
 import dev.baseio.slackdomain.usecases.channels.UseCaseWorkspaceChannelRequest
 import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndSaveMessages
 import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
-import dev.icerock.moko.paging.LambdaPagedListDataSource
-import dev.icerock.moko.paging.Pagination
+import dev.icerock.moko.pagingmp.LambdaPagedListDataSource
+import dev.icerock.moko.pagingmp.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

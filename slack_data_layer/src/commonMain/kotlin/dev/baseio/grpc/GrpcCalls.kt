@@ -20,34 +20,34 @@ class GrpcCalls(
         const val AUTHENTICATION_TOKEN_KEY = "Authorization"
     }
 
-    val grpcChannel by lazy {
+    private val grpcChannel by lazy {
         KMChannel.Builder
             .forAddress(address, port)
             .usePlaintext()
             .build()
     }
 
-    val workspacesStub by lazy {
+    private val workspacesStub by lazy {
         KMWorkspaceServiceStub(grpcChannel)
     }
 
-    val channelsStub by lazy {
+    private val channelsStub by lazy {
         KMChannelsServiceStub(grpcChannel)
     }
 
-    val authStub by lazy {
+    private val authStub by lazy {
         KMAuthServiceStub(grpcChannel)
     }
 
-    val usersStub by lazy {
+    private val usersStub by lazy {
         KMUsersServiceStub(grpcChannel)
     }
 
-    val qrCodeStub by lazy {
+    private val qrCodeStub by lazy {
         KMQrCodeServiceStub(grpcChannel)
     }
 
-    val messagingStub by lazy {
+    private val messagingStub by lazy {
         KMMessagesServiceStub(grpcChannel)
     }
 

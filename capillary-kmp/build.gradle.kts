@@ -28,6 +28,16 @@ kotlin {
         publishLibraryVariants("release")
     }
 
+    js(IR) {
+        browser()
+    }
+
+    @Suppress("OPT_IN_USAGE")
+    wasm {
+        browser()
+    }
+
+
     cocoapods {
         summary = "Capillary encryption Library"
         homepage = "https://github.com/oianmol"
@@ -81,6 +91,16 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
             }
+        }
+
+        val jsWasmMain by creating {
+            dependsOn(commonMain)
+        }
+        val jsMain by getting {
+            dependsOn(jsWasmMain)
+        }
+        val wasmMain by getting {
+            dependsOn(jsWasmMain)
         }
 
         val jvmMain by getting {

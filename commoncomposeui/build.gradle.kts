@@ -1,3 +1,6 @@
+@file:Suppress( "OPT_IN_USAGE")
+
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
@@ -23,6 +26,14 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    js(IR) {
+        browser()
+    }
+
+    wasm {
+        browser()
+    }
+
     cocoapods {
         summary = "Slack commoncomposeui library"
         homepage = "https://github.com/oianmol"
@@ -36,7 +47,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.mokopaging)
                 api(project(":slack_domain_layer"))
                 api(project(":slack_data_layer"))
                 implementation(project(":common"))
@@ -51,6 +61,19 @@ kotlin {
                 implementation(libs.decompose.core)
                 implementation(libs.decompose.composejb)
             }
+        }
+        val jsWasmMain by creating {
+            dependsOn(commonMain)
+        }
+        val jsMain by getting {
+            dependsOn(jsWasmMain)
+            dependencies {
+                implementation("io.ktor:ktor-client-core:2.2.1")
+            }
+        }
+
+        val wasmMain by getting {
+            dependsOn(jsWasmMain)
         }
         val commonTest by getting {
             dependencies {
@@ -87,18 +110,18 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 // CameraX
-                api("androidx.camera:camera-camera2:1.3.0-alpha04")
-                api("androidx.camera:camera-lifecycle:1.3.0-alpha04")
-                api("androidx.camera:camera-view:1.3.0-alpha04")
-                api("androidx.camera:camera-video:1.3.0-alpha04")
-                api("androidx.camera:camera-extensions:1.3.0-alpha04")
+                api("androidx.camera:camera-camera2:1.3.0-alpha05")
+                api("androidx.camera:camera-lifecycle:1.3.0-alpha05")
+                api("androidx.camera:camera-view:1.3.0-alpha05")
+                api("androidx.camera:camera-video:1.3.0-alpha05")
+                api("androidx.camera:camera-extensions:1.3.0-alpha05")
                 implementation("com.google.guava:guava:29.0-android")
                 // Zxing
                 api("com.google.zxing:core:3.5.0")
 
-                implementation("com.google.mlkit:barcode-scanning:17.0.3")
+                implementation("com.google.mlkit:barcode-scanning:17.1.0")
                 api(libs.activity.compose)
-                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
+                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
                 implementation("com.google.firebase:firebase-core:21.1.1")
                 implementation("com.google.firebase:firebase-messaging:23.1.2")
                 implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
@@ -180,3 +203,6 @@ android {
     }
     namespace = "dev.baseio.composeui"
 }
+
+// Use a proper version of webpack, TODO remove after updating to Kotlin 1.9.
+rootProject.the<NodeJsRootExtension>().versions.webpack.version = "5.76.2"

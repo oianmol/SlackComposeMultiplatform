@@ -34,13 +34,3 @@ fun teamPropsFile(propsFile: String): File {
     val teamPropsDir = file("team-props")
     return File(teamPropsDir, propsFile)
 }
-
-allprojects {
-    repositories {
-        google()
-        gradlePluginPortal()
-        mavenLocal()
-        mavenCentral()
-        maven { setUrl("https://jitpack.io") }
-    }
-}
