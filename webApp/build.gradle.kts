@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
-    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.web)
 }
 
 val copyJsResources = tasks.create("copyJsResourcesWorkaround", Copy::class.java) {
@@ -54,6 +54,7 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.foundation)
                 implementation(compose.material)
+                api(libs.decompose.core)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
             }

@@ -3,7 +3,7 @@
 #kotlin
 kotlin = "1.8.20"
 mockkmp = "1.13.0"
-gms= "4.3.14"
+gms = "4.3.14"
 google_protobuf = "0.9.0"
 timortel_grpc = "0.3.1"
 agp = "7.4.2"
@@ -38,7 +38,8 @@ common = ":common"
 commoncomposeui = ":commoncomposeui"
 decompose_version = "2.0.0-alpha-02"
 decompose_composejb = "2.0.0-compose-experimental-alpha-02"
-compose_version = "1.4.0-dev-wasm05"
+compose_version = "1.4.0"
+compose_web_version = "1.4.0-dev-wasm05"
 compose_activity_version = "1.7.0"
 compose_constraint_layout_version = "1.0.1"
 compose_navigation_version = "2.6.0-alpha09"
@@ -81,6 +82,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 lifecycleviewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "viewmodel_ktx" }
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose_version" }
 decompose-core-jvm = { module = "com.arkivanov.decompose:decompose-jvm", version.ref = "decompose_version" }
+decompose-js = { module = "com.arkivanov.decompose:decompose-js", version.ref = "decompose_composejb" }
 decompose-composejb = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose_composejb" }
 kt_std = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 ktx_core = { module = "androidx.core:core-ktx", version.ref = "ktx_core_version" }
@@ -143,6 +145,7 @@ libmockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose_version" }
+compose_web = { id = "org.jetbrains.compose", version.ref = "compose_web_version" }
 android_application = { id = "com.android.application", version.ref = "agp" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android_library = { id = "com.android.library", version.ref = "agp" }

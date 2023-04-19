@@ -10,7 +10,7 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIWindow
 
 @Composable
-internal actual fun rememberComposeWindow(): State<WindowInfo> {
+actual fun rememberComposeWindow(): State<WindowInfo> {
     val window = UIApplication.sharedApplication.windows.first() as UIWindow
 
     val rememberedComposeWindow = remember(window) {

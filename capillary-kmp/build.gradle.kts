@@ -148,7 +148,7 @@ android {
     namespace = "org.example.library"
 }
 dependencies {
-    androidTestImplementation("junit:junit:4.12")
+    androidTestImplementation("junit:junit:4.13.2")
     // Core library
     androidTestImplementation("androidx.test:core:1.5.0")
 

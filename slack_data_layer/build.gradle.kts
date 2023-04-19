@@ -1,7 +1,6 @@
 import io.github.timortel.kotlin_multiplatform_grpc_plugin.GrpcMultiplatformExtension.OutputTarget
 
 plugins {
-    id("maven-publish")
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.android.library)
@@ -66,7 +65,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                implementation("com.squareup.sqldelight:runtime:1.5.3")
+                implementation("com.squareup.sqldelight:runtime:1.5.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
                 implementation(libs.datetime)
                 implementation(libs.sqldelight.runtime)
