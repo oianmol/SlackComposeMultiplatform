@@ -50,7 +50,7 @@ accompanist_flow_layout_version = "0.24.13-rc"
 window_metrices_version = "1.0.0"
 activity_version = "1.7.0"
 accompanist_adaptive_version = "0.26.4-beta"
-coroutines_version = "1.6.4"
+coroutines_version = "1.6.4-wasm0"
 roomversion = "2.5.1"
 gson_version = "2.9.1"
 sqldelight = "1.5.5"
@@ -66,7 +66,12 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 google_services = { module = "com.google.gms:google-services", version.ref = "google_services_version" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxdatetime" }
 
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines_version" }
+coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines_version" }
+
+coroutines_android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_version" }
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines_version" }
+
 coroutinesx64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64", version.ref = "coroutines_version" }
 coroutinesarm64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64", version.ref = "coroutines_version" }
 coroutinesiossimulatorarm64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iossimulatorarm64", version.ref = "coroutines_version" }
@@ -115,10 +120,6 @@ roomruntime = { module = "androidx.room:room-runtime", version.ref = "roomversio
 roomcompiler = { module = "androidx.room:room-compiler", version.ref = "roomversion" }
 roomktx = { module = "androidx.room:room-ktx", version.ref = "roomversion" }
 roompaging = { module = "androidx.room:room-paging", version.ref = "roomversion" }
-
-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines_version" }
-coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines_version" }
-coroutines_android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_version" }
 
 ktor_core = { module = "io.ktor:ktor-client-core", version.ref = "ktor_version" }
 ktor_cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor_version" }

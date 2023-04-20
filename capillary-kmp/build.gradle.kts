@@ -17,9 +17,6 @@ repositories {
 
 kotlin {
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-        }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
@@ -83,7 +80,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation(libs.coroutines)
                 implementation("com.squareup.okio:okio:3.2.0")
             }
         }
@@ -141,10 +138,6 @@ android {
         minSdk = (24)
         testInstrumentationRunner =  "androidx.test.runner.AndroidJUnitRunner"
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
     namespace = "org.example.library"
 }
 dependencies {
@@ -155,7 +148,7 @@ dependencies {
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    androidTestImplementation(libs.coroutines.test)
 
     // Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

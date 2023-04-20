@@ -28,7 +28,7 @@ dependencies {
     api("io.grpc:grpc-protobuf:${Versions.GRPC}")
     api("io.grpc:grpc-stub:${Versions.GRPC}")
     api("io.grpc:grpc-kotlin-stub:${Versions.GRPC_KOTLIN}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    api(libs.coroutines)
 }
 
 protobuf {
