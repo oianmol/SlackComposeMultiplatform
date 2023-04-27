@@ -6,7 +6,7 @@ import dev.baseio.slackserver.data.sources.AuthDataSource
 import dev.baseio.slackserver.data.sources.UsersDataSource
 
 interface AuthenticationDelegate {
-    suspend fun processRequestForEmail(request: SKAuthUser, workspaceId: String)
+    suspend fun authenticateUserForWorkspaceId(request: SKAuthUser, workspaceId: String)
 }
 
 class AuthenticationDelegateImpl(
@@ -14,19 +14,30 @@ class AuthenticationDelegateImpl(
     private val usersDataSource: UsersDataSource
 ) : AuthenticationDelegate {
 
-    override suspend fun processRequestForEmail(request: SKAuthUser, workspaceId: String) {
+    override suspend fun authenticateUserForWorkspaceId(request: SKAuthUser, workspaceId: String) {
         kotlin.runCatching {
-            val existingUser = usersDataSource.getUserWithEmailId(emailId = request.email, workspaceId = workspaceId)
+            val existingUser = usersDataSource.getUserWithEmailId(
+                emailId = request.email,
+                workspaceId = workspaceId
+            )
             existingUser?.let {
                 val authResult = skAuthResult(it)
-                SlackEmailHelper.sendEmail(request.email, "slackclone://open/?token=${authResult.token}&workspaceId=$workspaceId")
+                SlackEmailHelper.sendEmail(
+                    request.email,
+                    "slackclone://open/?token=${authResult.token}&workspaceId=$workspaceId"
+                )
             } ?: run {
                 val generatedUser = authDataSource.register(
-                    request.email,
-                    request.user.toDBUser().copy(workspaceId = workspaceId, email = request.email)
+                    request.user.toDBUser().copy(
+                        workspaceId = workspaceId,
+                        email = request.email
+                    )
                 )
                 val authResult = skAuthResult(generatedUser)
-                SlackEmailHelper.sendEmail(request.email, "slackclone://open/?token=${authResult.token}&workspaceId=$workspaceId")
+                SlackEmailHelper.sendEmail(
+                    request.email,
+                    "slackclone://open/?token=${authResult.token}&workspaceId=$workspaceId"
+                )
             }
         }.exceptionOrNull()?.printStackTrace()
     }

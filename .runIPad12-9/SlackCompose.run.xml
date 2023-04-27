@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SlackCompose" type="KmmRunConfiguration" factoryName="iOS Application" CONFIG_VERSION="1" EXEC_TARGET_ID="CB5C3005-5824-4445-9FAE-4C47F97C41D4" XCODE_PROJECT="$PROJECT_DIR$/composeiOSApp/SlackCompose.xcworkspace" XCODE_CONFIGURATION="Debug" XCODE_SCHEME="SlackCompose">
+    <method v="2">
+      <option name="com.jetbrains.kmm.ios.BuildIOSAppTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
