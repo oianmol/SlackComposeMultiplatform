@@ -15,7 +15,6 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation(libs.kamelimage)
                 implementation(libs.ktor.jvm)
                 implementation(libs.ktor.core)
                 implementation(libs.ktor.cio)
@@ -23,7 +22,7 @@ kotlin {
                 implementation(project(":commoncomposeui"))
                 api(project(":common"))
                 implementation(compose.desktop.currentOs)
-                implementation("com.github.sarxos:windows-registry-util:0.3")
+                implementation(libs.windows.registry.util)
                 api(libs.decompose.core)
                 api(libs.decompose.core.jvm)
                 api(project(":slack_data_layer"))

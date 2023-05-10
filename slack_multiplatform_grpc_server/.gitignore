@@ -133,3 +133,4 @@ hs_err_pid*
 /src/main/resources/tls/tls.key
 /src/main/resources/tls/tls.crt
 /adminsdk.json
+/rsa_ecdsa_jvm0b8851ce-ce80-464a-8480-fd822776c1141682595230033_capillary_rsa_private

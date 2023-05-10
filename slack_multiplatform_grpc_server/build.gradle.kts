@@ -16,10 +16,11 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk16:1.46")
     implementation("com.google.firebase:firebase-admin:9.1.1")
     implementation(project(":capillary-kmp"))
+    implementation("org.thymeleaf:thymeleaf:3.1.1.RELEASE")
 
     implementation(project(":slack_generate_protos"))
 
-    implementation("io.insert-koin:koin-core:3.2.2")
+    implementation("io.insert-koin:koin-core:3.4.0")
 
     implementation("io.grpc:grpc-netty-shaded:1.50.2")
     implementation("com.google.zxing:core:3.5.0")
