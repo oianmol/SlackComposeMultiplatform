@@ -11,7 +11,7 @@ import kotlinx.datetime.Clock
 
 interface SendMessageDelegate {
     var channel: DomainLayerChannels.SKChannel
-    var message: MutableStateFlow<TextFieldValue>
+    var chatMessage: MutableStateFlow<TextFieldValue>
     var spanInfoList: MutableStateFlow<List<SpanInfos>>
     var deleteMessageRequest: MutableStateFlow<DomainLayerMessages.SKMessage?>
 
@@ -27,7 +27,7 @@ class SendMessageDelegateImpl(
     private val useCaseSendMessage: UseCaseSendMessage
 
 ) : SendMessageDelegate {
-    override var message: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
+    override var chatMessage: MutableStateFlow<TextFieldValue> = MutableStateFlow(TextFieldValue())
     override var spanInfoList: MutableStateFlow<List<SpanInfos>> = MutableStateFlow(emptyList())
     override var deleteMessageRequest = MutableStateFlow<DomainLayerMessages.SKMessage?>(null)
     override lateinit var channel: DomainLayerChannels.SKChannel
@@ -50,12 +50,12 @@ class SendMessageDelegateImpl(
                         val result = useCaseInviteUserToChannel.inviteUserToChannelFromOtherDeviceOrUser(channel, user)
                         when {
                             result.isSuccess -> {
-                                this.message.value =
+                                this.chatMessage.value =
                                     TextFieldValue("We just invited $user to ${channel.channelName!!}!")
                             }
 
                             else -> {
-                                this.message.value =
+                                this.chatMessage.value =
                                     TextFieldValue("Failed to add $user to ${channel.channelName!!} ${result.exceptionOrNull()?.message}!")
                             }
                         }
@@ -80,7 +80,7 @@ class SendMessageDelegateImpl(
                 ),
                 channel.publicKey
             )
-            this.message.value = TextFieldValue()
+            this.chatMessage.value = TextFieldValue()
         }
     }
 

@@ -14,7 +14,7 @@ actual object CapillaryEncryption {
         val secretKey = CryptoChaCha20.createSymmetricKey()
         val payloadCiphertext = CryptoChaCha20.encrypt(plaintext, secretKey)
         val symmetricKeyCiphertext = cipher.doFinal(secretKey.encoded)
-        CryptoChaCha20.clearSecret(secretKey)
+        //CryptoChaCha20.clearSecret(secretKey)
         return Pair(symmetricKeyCiphertext.base64(), payloadCiphertext.base64())
     }
 

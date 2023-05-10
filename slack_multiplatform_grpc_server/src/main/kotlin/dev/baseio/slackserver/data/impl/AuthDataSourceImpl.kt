@@ -1,6 +1,5 @@
 package dev.baseio.slackserver.data.impl
 
-import dev.baseio.slackserver.data.models.SkAuthUser
 import dev.baseio.slackserver.data.models.SkUser
 import dev.baseio.slackserver.data.sources.AuthDataSource
 import kotlinx.coroutines.reactive.awaitFirstOrNull
@@ -10,23 +9,9 @@ import org.litote.kmongo.reactivestreams.findOne
 import java.util.*
 
 class AuthDataSourceImpl(private val slackCloneDB: CoroutineDatabase) : AuthDataSource {
-    override suspend fun findUser(email: String, workspaceId: String): SkUser? {
-        val user = slackCloneDB.getCollection<SkUser>().collection
-            .findOne(
-                SkUser::email eq email,
-                SkUser::workspaceId eq workspaceId
-            )
-        user.awaitFirstOrNull()?.let { user ->
-            slackCloneDB.getCollection<SkAuthUser>().collection
-                .findOne(SkAuthUser::userId eq user.uuid)
-                .awaitFirstOrNull()
-        }
-        return null
-    }
-
-    override suspend fun register(email: String, user: SkUser): SkUser? {
+    override suspend fun register(user: SkUser): SkUser? {
         // save the user details
-        if (email.trim().isEmpty()) {
+        if (user.email.trim().isEmpty()) {
             throw Exception("email cannot be empty!")
         }
         if (user.uuid.trim().isEmpty()) {
@@ -36,10 +21,6 @@ class AuthDataSourceImpl(private val slackCloneDB: CoroutineDatabase) : AuthData
             user
         ).awaitFirstOrNull()
         // save the auth
-
-        slackCloneDB.getCollection<SkAuthUser>().collection.insertOne(
-            SkAuthUser(UUID.randomUUID().toString(), user.uuid)
-        ).awaitFirstOrNull()
 
         return slackCloneDB.getCollection<SkUser>().collection.findOne(SkUser::uuid eq user.uuid).awaitFirstOrNull()
     }

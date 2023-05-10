@@ -61,8 +61,8 @@ internal fun ChatMessageBox(
         )
         AnimatedVisibility(
             keyboard is Keyboard.Opened ||
-                keyboard is Keyboard.HardwareKeyboard ||
-                focusState?.hasFocus == true
+                    keyboard is Keyboard.HardwareKeyboard ||
+                    focusState?.hasFocus == true
         ) {
             ChatOptions(
                 viewModel,
@@ -74,7 +74,7 @@ internal fun ChatMessageBox(
 
 @Composable
 internal fun ChatOptions(viewModel: ChatViewModel, modifier: Modifier = Modifier) {
-    val search by viewModel.message.collectAsState(mainDispatcher)
+    val chatMessage by viewModel.chatMessage.collectAsState(mainDispatcher)
 
     Row(
         modifier
@@ -102,7 +102,7 @@ internal fun ChatOptions(viewModel: ChatViewModel, modifier: Modifier = Modifier
             }
         }
         Box(Modifier.padding(end = 8.dp)) {
-            SendMessageButton(viewModel = viewModel, search = search.text)
+            SendMessageButton(viewModel = viewModel, message = chatMessage.text)
         }
     }
 }
@@ -116,7 +116,8 @@ internal fun MessageTFRow(
     modifier: Modifier
 ) {
 
-    val mentionText by viewModel.message.collectAsState(mainDispatcher)
+    val mentionText by viewModel.chatMessage.collectAsState(mainDispatcher)
+    val channel by viewModel.channelFlow.subscribeAsState()
 
     var currentlyEditing by remember {
         mutableStateOf<SpanInfos?>(null)
@@ -140,12 +141,13 @@ internal fun MessageTFRow(
                     }
                 },
                 onValueChange = {
-                    viewModel.message.value =
+                    viewModel.messageUpdate(
                         TextFieldValue(
-                            it.text,
-                            it.selection.toCommonTextRange(),
-                            it.composition?.toCommonTextRange()
+                            text = it.text,
+                            selection = it.selection.toCommonTextRange(),
+                            composition = it.composition?.toCommonTextRange()
                         )
+                    )
                 },
                 maxLines = 4,
                 cursorBrush = SolidColor(LocalSlackCloneColor.current.textPrimary),
@@ -153,7 +155,14 @@ internal fun MessageTFRow(
                     color = LocalSlackCloneColor.current.textPrimary
                 ),
                 decorationBox = { innerTextField ->
-                    ChatTFPlusPlaceHolder(mentionText.text, Modifier, innerTextField, viewModel)
+                    // TODO test this again because it crashes with
+                    //  java.lang.IllegalStateException: LayoutCoordinate operations are only valid when isAttached is true
+                    /*ChatTFPlusPlaceHolder(
+                        isEmpty = mentionText.text.isEmpty(),
+                        innerTextField = innerTextField,
+                        channelName = channel.channelName ?: "NA"
+                    )*/
+                    Box(Modifier.padding(16.dp)) { innerTextField() }
                 },
                 modifier = Modifier.weight(1f).onKeyEvent { event: KeyEvent ->
                     when {
@@ -179,7 +188,7 @@ internal fun MessageTFRow(
 @OptIn(ExperimentalComposeUiApi::class)
 private fun eventIsEnter(event: KeyEvent) =
     !event.isShiftPressed && event.type == KeyEventType.KeyUp &&
-        event.key == Key.Enter
+            event.key == Key.Enter
 
 @Composable
 internal fun CollapseExpandButton(viewModel: ChatViewModel) {
@@ -202,44 +211,40 @@ internal fun CollapseExpandButton(viewModel: ChatViewModel) {
 @Composable
 internal fun SendMessageButton(
     viewModel: ChatViewModel,
-    search: String,
+    message: String,
     modifier: Modifier = Modifier
 ) {
     IconButton(
         onClick = {
-            viewModel.sendMessageNow(search)
+            viewModel.sendMessageNow(message)
         },
-        enabled = search.isNotEmpty(),
+        enabled = message.isNotEmpty(),
         modifier = modifier
     ) {
         Icon(
             Icons.Default.Send,
             contentDescription = null,
-            tint = if (search.isEmpty()) LocalSlackCloneColor.current.sendButtonDisabled else LocalSlackCloneColor.current.sendButtonEnabled
+            tint = if (message.isEmpty()) LocalSlackCloneColor.current.sendButtonDisabled else LocalSlackCloneColor.current.sendButtonEnabled
         )
     }
 }
 
 @Composable
 internal fun ChatTFPlusPlaceHolder(
-    search: String,
-    modifier: Modifier = Modifier,
+    isEmpty: Boolean,
     innerTextField: @Composable () -> Unit,
-    viewModel: ChatViewModel
+    channelName: String
 ) {
-    val channel by viewModel.channelFlow.subscribeAsState()
-    Row(
-        modifier
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        Modifier
+            .padding(16.dp)
     ) {
-        if (search.isEmpty()) {
+        if (isEmpty) {
             Text(
-                text = "Message ${channel.channelName}",
+                text = "Message ${channelName}",
                 style = SlackCloneTypography.subtitle1.copy(
                     color = LocalSlackCloneColor.current.textSecondary
                 ),
-                modifier = Modifier.weight(1f)
             )
         } else {
             innerTextField()

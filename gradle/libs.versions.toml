@@ -1,35 +1,51 @@
 [versions]
 
 #kotlin
+barcodeScanning = "17.1.0"
+cameraExtensions = "1.3.0-alpha06"
+cameraVideo = "1.3.0-alpha06"
+cameraView = "1.3.0-alpha06"
+cameraLifecycle = "1.3.0-alpha06"
+cameraCamera2 = "1.3.0-alpha06"
+core = "3.5.0"
+firebaseMessagingKtx = "23.1.2"
+firebaseMessaging = "23.1.2"
+firebaseCore = "21.1.1"
+guava = "29.0-android"
+kamelImageVersion = "0.5-darwinandjs4"
 kotlin = "1.8.20"
+ktorClientJava = "2.3.0"
+lifecycleRuntimeKtx = "2.6.1"
 mockkmp = "1.13.0"
 gms= "4.3.14"
 google_protobuf = "0.9.0"
+protobufJava = "3.21.9"
+testCore = "0.6.1"
 timortel_grpc = "0.3.1"
 agp = "7.4.2"
 kt_lint = "11.0.0"
 safe_args = "2.3.5"
 google_services_version = "4.3.15"
-koin = "3.2.2"
+koin = "3.4.0"
 android_junit_version = "1.1.5"
-firebase = "31.5.0"
+firebase = "32.0.0"
 robo_electric_version = "4.3"
 arch_core_version = "2.2.0"
 core_test_version = "1.5.0"
 junit_version = "4.13.2"
 nav_version = "2.3.5"
-splashscreen = "1.0.0"
+splashscreen = "1.0.1"
 retrofit_version = "2.9.0"
 accompanist_coil = "0.14.0"
+turbine = "0.12.1"
 viewmodel_ktx = "2.6.1"
 okhttp_version = "4.7.2"
-profile_installer = "1.3.0"
-androidx_security = "1.1.0-alpha05"
+profile_installer = "1.3.1"
+androidx_security = "1.1.0-alpha06"
 mokopaging = "0.7.2"
-kamelImage = "0.4.0"
 okhttp_grpc = "1.50.0"
 netty_shaded = "1.50.2"
-ktor_version = "2.1.0"
+ktor_version = "2.3.0"
 timber_version = "5.0.1"
 appcompat = "1.6.1"
 ktx_core_version = "1.10.0"
@@ -40,15 +56,15 @@ commoncomposeui = ":commoncomposeui"
 decompose_version = "2.0.0-alpha-02"
 decompose_composejb = "2.0.0-compose-experimental-alpha-02"
 compose_version = "1.4.0"
-compose_activity_version = "1.7.0"
+compose_activity_version = "1.7.1"
 compose_constraint_layout_version = "1.0.1"
-compose_navigation_version = "2.6.0-alpha09"
+compose_navigation_version = "2.6.0-beta01"
 navigation = "2.5.3"
-compose_coil_version = "2.2.0"
+compose_coil_version = "2.3.0"
 accompanist_version = "0.28.0"
 accompanist_flow_layout_version = "0.24.13-rc"
 window_metrices_version = "1.0.0"
-activity_version = "1.7.0"
+activity_version = "1.7.1"
 accompanist_adaptive_version = "0.26.4-beta"
 coroutines_version = "1.6.4"
 roomversion = "2.5.1"
@@ -56,9 +72,25 @@ gson_version = "2.9.1"
 sqldelight = "1.5.5"
 ricklephas_nativecoroutines = "0.13.3"
 kotlinxdatetime = "0.4.0"
+windowsRegistryUtil = "0.3"
 
 [libraries]
 android_application = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraExtensions" }
+androidx-camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraVideo" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobufJava" }
+windows-registry-util = { module = "com.github.sarxos:windows-registry-util", version.ref = "windowsRegistryUtil" }
+zxing-core = { module = "com.google.zxing:core", version.ref = "core" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+kamel-image = { module = "io.github.luca992.com.alialbaali.kamel:kamel-image", version.ref = "kamelImageVersion" }
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "kt_lint" }
 sqldelight = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 kmp_native_coroutines = { module = "com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin", version.ref = "ricklephas_nativecoroutines" }
@@ -128,11 +160,11 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit_gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit_version" }
 logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp_version" }
 google_gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
+test-core = { module = "dev.icerock.moko:test-core", version.ref = "testCore" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber_version" }
 grpc_netty = { module = "io.grpc:grpc-netty-shaded", version.ref = "netty_shaded" }
 grpc_okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "okhttp_grpc" }
 sqldelight_native = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelight" }
-kamelimage = { module = "com.alialbaali.kamel:kamel-image", version.ref = "kamelImage" }
 mokopaging = { module = "dev.icerock.moko:paging", version.ref = "mokopaging" }
 firebaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robo_electric_version" }
@@ -143,6 +175,7 @@ androidxrunner = { module = "androidx.test:runner", version.ref = "androidx_runn
 androidx-junit-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "android_junit_version" }
 archcore = { module = "androidx.arch.core:core-testing", version.ref = "arch_core_version" }
 libmockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose_version" }

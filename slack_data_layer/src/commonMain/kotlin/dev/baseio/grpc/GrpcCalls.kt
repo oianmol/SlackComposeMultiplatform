@@ -35,8 +35,8 @@ class GrpcCalls(
         KMChannelsServiceStub(grpcChannel)
     }
 
-    val authStub by lazy {
-        KMAuthServiceStub(grpcChannel)
+    val pushServiceStub by lazy {
+        KMSecurePushServiceStub(grpcChannel)
     }
 
     val usersStub by lazy {
@@ -56,7 +56,7 @@ class GrpcCalls(
     }
 
     override suspend fun saveFcmToken(fcmToken: KMSKPushToken, token: String?): KMEmpty {
-        return authStub.savePushToken(fcmToken, fetchToken(token))
+        return pushServiceStub.savePushToken(fcmToken, fetchToken(token))
     }
 
     override fun getQrCodeResponse(token: String?): Flow<KMSKQrCodeResponse> {

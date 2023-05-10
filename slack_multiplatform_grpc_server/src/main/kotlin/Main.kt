@@ -33,12 +33,16 @@ object SlackServer {
         return ServerBuilder.forPort(8080)
             // .useTransportSecurity(tlsCertFile, tlsPrivateKeyFile) // TODO enable this once the kmp library supports this.
             .addService(
-                AuthService(
+                SecurePushService(
                     pushTokenDataSource = getKoin().get(),
-                    authenticationDelegate = getKoin().get()
                 )
             )
-            .addService(QrCodeService(database = getKoin().get(), qrCodeGenerator = getKoin().get()))
+            .addService(
+                QrCodeService(
+                    database = getKoin().get(),
+                    qrCodeGenerator = getKoin().get()
+                )
+            )
             .addService(
                 WorkspaceService(
                     workspaceDataSource = getKoin().get(),

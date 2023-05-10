@@ -83,9 +83,10 @@ class ChatViewModel(
 
     private fun UseCaseWorkspaceChannelRequest.messageChangeListener() {
         viewModelScope.launch(parentJob!! + exceptions) {
-            useCaseStreamLocalMessages.invoke(this@messageChangeListener).collectLatest { skMessageList ->
-                chatMessagesFlow.value = skMessageList
-            }
+            useCaseStreamLocalMessages.invoke(this@messageChangeListener)
+                .collectLatest { skMessageList ->
+                    chatMessagesFlow.value = skMessageList
+                }
         }
     }
 
@@ -159,6 +160,14 @@ class ChatViewModel(
                 function(channel)
             }
         }
+    }
+
+    fun messageUpdate(textFieldValue: TextFieldValue) {
+        chatMessage.value = TextFieldValue(
+            text = textFieldValue.text,
+            selection = textFieldValue.selection,
+            composition = textFieldValue.composition
+        )
     }
 }
 
