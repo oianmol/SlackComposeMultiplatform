@@ -25,7 +25,11 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun EmailAddressInputView(modifier: Modifier = Modifier, email: String, onUpdate: (String) -> Unit) {
+internal fun EmailAddressInputView(
+    modifier: Modifier = Modifier,
+    email: String,
+    onUpdate: (String) -> Unit
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -83,7 +87,9 @@ internal fun EmailTF(email: String, onUpdate: (String) -> Unit) {
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Done,
         ),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        }),
         colors = emailTFColors(),
         singleLine = true,
         maxLines = 1

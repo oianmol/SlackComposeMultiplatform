@@ -21,14 +21,20 @@ fun SlackApp(
     modifier: Modifier = Modifier,
     rootComponent: () -> RootComponent
 ) {
-    Children(modifier = modifier, stack = rootComponent().childStack, animation = stackAnimation(fade())) {
+    Children(
+        modifier = modifier,
+        stack = rootComponent().childStack,
+        animation = stackAnimation(fade())
+    ) {
         when (val child = it.instance) {
             is Root.Child.AuthorizeWithToken -> {
                 ProcessTokenFromDeepLink(child.component)
             }
+
             is Root.Child.AuthorizeSendEmail -> {
                 ProcessEmailWorkspaceSendEmailUI(child.component)
             }
+
             is Root.Child.GettingStarted -> {
                 GettingStartedUI(child.component)
             }
@@ -67,7 +73,12 @@ fun SlackApp(
                 WorkspaceInputUI(navigateBack = {
                     rootComponent().navigationPop()
                 }, navigateNext = { workspace ->
-                    rootComponent().navigatePush(RootComponent.Config.AuthorizeSendEmail(child.emailAddress, workspace))
+                    rootComponent().navigatePush(
+                        RootComponent.Config.AuthorizeSendEmail(
+                            child.emailAddress,
+                            workspace
+                        )
+                    )
                 })
             }
         }

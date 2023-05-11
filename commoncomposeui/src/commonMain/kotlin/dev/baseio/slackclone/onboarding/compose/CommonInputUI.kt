@@ -1,12 +1,16 @@
 package dev.baseio.slackclone.onboarding.compose
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -15,9 +19,12 @@ import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.notchPadding
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CommonInputUI(
+    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateNext: () -> Unit,
     subtitleText: String,
@@ -25,11 +32,12 @@ internal fun CommonInputUI(
 ) {
     val scaffoldState = rememberScaffoldState()
     PlatformSideEffects.SkipTypingScreen()
+    val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
     SlackCloneTheme {
         Scaffold(
             backgroundColor = LocalSlackCloneColor.current.uiBackground,
             contentColor = LocalSlackCloneColor.current.textSecondary,
-            modifier = Modifier,
+            modifier = modifier,
             scaffoldState = scaffoldState,
             snackbarHost = {
                 scaffoldState.snackbarHostState
@@ -55,6 +63,11 @@ internal fun CommonInputUI(
                 ) {
                     Column(
                         modifier = Modifier
+                            .pointerInput(Unit) {
+                                detectTapGestures {
+                                    localSoftwareKeyboardController?.hide()
+                                }
+                            }
                             .padding(12.dp)
                             .fillMaxHeight()
                             .fillMaxWidth(),
