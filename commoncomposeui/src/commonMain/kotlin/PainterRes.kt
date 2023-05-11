@@ -3,12 +3,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import org.jetbrains.compose.resources.*
 
 object PainterRes {
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
     internal fun gettingStarted(): Painter {
-        return painterResource("images/gettingstarted.png")
+        return painterResource("gettingstarted.png")
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     internal fun slackLogo(): Painter {
-        return painterResource("images/ic_launcher_foreground.png")
+        return painterResource("ic_launcher_foreground.png")
     }
 }
