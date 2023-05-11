@@ -2,6 +2,7 @@ package dev.baseio.slackdata.injection
 
 import dev.baseio.grpc.GrpcCalls
 import dev.baseio.grpc.IGrpcCalls
+import dev.baseio.slackclone.BuildKonfig
 import dev.baseio.slackdata.datasources.local.SKLocalDatabaseSourceImpl
 import dev.baseio.slackdata.datasources.local.SKLocalKeyValueSourceImpl
 import dev.baseio.slackdata.datasources.local.channels.SKLocalDataSourceChannelMembersImpl
@@ -52,7 +53,7 @@ import org.koin.dsl.module
 
 val dataSourceModule = module {
     single<IGrpcCalls> {
-        GrpcCalls(skKeyValueData = get())
+        GrpcCalls(skKeyValueData = get(),address = BuildKonfig.ipAddr)
     }
     single<SKNetworkSaveFcmToken> { SKNetworkSaveFcmTokenImpl(get(), get()) }
     single<SKLocalDatabaseSource> {

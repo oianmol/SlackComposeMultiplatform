@@ -1,3 +1,6 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import java.net.InetAddress
+
 plugins {
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -5,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.rick.nativecoroutines)
+    alias(libs.plugins.buildkonfig)
 }
 
 group = "dev.baseio.slackclone.common"
@@ -12,6 +16,14 @@ version = "1.0"
 
 repositories {
     mavenCentral()
+}
+
+buildkonfig {
+    packageName = "dev.baseio.slackclone"
+
+    defaultConfigs {
+        buildConfigField(STRING, "ipAddr", InetAddress.getLocalHost().hostAddress)
+    }
 }
 
 dependencies {
