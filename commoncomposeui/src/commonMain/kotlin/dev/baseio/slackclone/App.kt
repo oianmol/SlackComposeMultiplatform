@@ -22,7 +22,7 @@ fun SlackApp(
     rootComponent: () -> RootComponent
 ) {
     Children(
-        modifier = modifier,
+        modifier = modifier.notchPadding(),
         stack = rootComponent().childStack,
         animation = stackAnimation(fade())
     ) {

@@ -19,7 +19,6 @@ import dev.baseio.slackclone.commonui.theme.*
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.notchPadding
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,7 +42,10 @@ internal fun CommonInputUI(
                 scaffoldState.snackbarHostState
             }, topBar = {
             SlackSurfaceAppBar(
-                title = {},
+                title = {
+
+                },
+                elevation = 0.dp,
                 navigationIcon = {
                     IconButton({
                         navigateBack()
@@ -52,35 +54,31 @@ internal fun CommonInputUI(
                     }
                 },
                 backgroundColor = LocalSlackCloneColor.current.uiBackground,
+                contentColor = LocalSlackCloneColor.current.textSecondary,
                 actions = {}
             )
         }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                SlackCloneSurface(
-                    color = LocalSlackCloneColor.current.uiBackground,
+                Column(
                     modifier = Modifier
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    localSoftwareKeyboardController?.hide()
-                                }
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                localSoftwareKeyboardController?.hide()
                             }
-                            .padding(12.dp)
-                            .fillMaxHeight()
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.SpaceAround
-                    ) {
-                        // Create references for the composables to constrain
-                        Spacer(Modifier)
-                        Column {
-                            TopView(Modifier)
-                            SubTitle(modifier = Modifier, subtitleText)
                         }
-                        NextButton(modifier = Modifier, navigateNext)
+                        .padding(12.dp)
+                        .fillMaxHeight()
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    // Create references for the composables to constrain
+                    Spacer(Modifier)
+                    Column {
+                        TopView(Modifier)
+                        SubTitle(modifier = Modifier, subtitleText)
                     }
+                    NextButton(modifier = Modifier, navigateNext)
                 }
             }
         }
