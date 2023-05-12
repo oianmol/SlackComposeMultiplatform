@@ -2,7 +2,6 @@ package dev.baseio.slackclone.onboarding.vmtest
 
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.grpc.MockIGrpcCalls
 import dev.baseio.security.CapillaryEncryption
 import dev.baseio.security.CapillaryInstances
 import dev.baseio.security.toPublicKey
@@ -54,22 +53,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kotlinx.datetime.Clock
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesMocks
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import tech.antibytes.kmock.MockCommon
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-@UsesMocks(IGrpcCalls::class)
+@MockCommon(IGrpcCalls::class)
 abstract class SlackKoinUnitTest : KoinTest {
 
-    protected val mocker = Mocker()
-    var iGrpcCalls: IGrpcCalls = MockIGrpcCalls(mocker)
+    var iGrpcCalls: IGrpcCallsMock = kmock()
 
     val koinApplication: KoinApplication = startKoin {
         modules(

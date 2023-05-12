@@ -1,3 +1,4 @@
+import tech.antibytes.gradle.kmock.KMockExtension
 
 plugins {
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
@@ -7,10 +8,15 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.rick.nativecoroutines)
     alias(libs.plugins.compose)
+    alias(libs.plugins.kmock)
 }
 
 group = "dev.baseio.slackclone.composeui"
 version = "1.0"
+
+kmock {
+    rootPackage = "dev.baseio.slackclone"
+}
 
 kotlin {
     android()
@@ -69,6 +75,7 @@ kotlin {
                 implementation(libs.coroutines.test)
                 implementation(libs.turbine)
                 implementation(libs.test.core)
+                implementation(libs.kmock.gradle)
             }
         }
 

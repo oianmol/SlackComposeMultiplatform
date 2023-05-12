@@ -14,10 +14,10 @@ firebaseMessaging = "23.1.2"
 firebaseCore = "21.1.1"
 guava = "29.0-android"
 kamelImageVersion = "0.5-darwinandjs4"
+kmockGradle = "0.3.0-rc08"
 kotlin = "1.8.20"
 ktorClientJava = "2.3.0"
 lifecycleRuntimeKtx = "2.6.1"
-mockkmp = "1.13.0"
 gms = "4.3.14"
 google_protobuf = "0.9.0"
 protobufJava = "3.21.9"
@@ -88,6 +88,7 @@ androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtim
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
 barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+kmock-gradle = { module = "tech.antibytes.kmock:kmock", version.ref = "kmockGradle" }
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobufJava" }
 windows-registry-util = { module = "com.github.sarxos:windows-registry-util", version.ref = "windowsRegistryUtil" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "core" }
@@ -189,6 +190,7 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 rick-nativecoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "ricklephas_nativecoroutines" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfigGradlePlugin" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kmock = { id = "tech.antibytes.kmock.kmock-gradle", version.ref = "kmockGradle" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 sqldelight_id = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -198,5 +200,4 @@ navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", versi
 kotlin-native-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "google_protobuf" }
 timortel-grpc = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "timortel_grpc" }
-mockkmp = { id = "org.kodein.mock.mockmp", version.ref = "mockkmp" }
 googleservices = { id = "com.google.gms.google-services", version.ref = "gms" }

@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.navigation.safeargs.kotlin) apply false
+    alias(libs.plugins.kmock) apply false
 }
 
 group = "dev.baseio.slackclone"
