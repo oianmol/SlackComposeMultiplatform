@@ -37,14 +37,14 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
                 .suspendFunction(iGrpcCalls::savePublicChannel)
                 .whenInvokedWith(any(), any())
                 .thenReturn(
-                    testPublicChannel(
+                    AuthTestFixtures.testPublicChannel(
                         channelId,
                         "1"
                     )
                 )
 
             searchCreateChannelVM.createChannel(
-                testPublicChannel(
+                AuthTestFixtures.testPublicChannel(
                     channelId,
                     "1"
                 ).mapToDomainSkChannel()
@@ -70,7 +70,7 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
                 .suspendFunction(iGrpcCalls::savePublicChannel)
                 .whenInvokedWith(any(), any())
                 .thenReturn(
-                    testPublicChannel(
+                    AuthTestFixtures.testPublicChannel(
                         channelId,
                         "1"
                     )

@@ -55,17 +55,17 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             given(iGrpcCalls)
                 .suspendFunction(iGrpcCalls::sendMessage)
                 .whenInvokedWith(any(), any(),)
-                .thenReturn( channelPublicMessage(message))
+                .thenReturn( AuthTestFixtures.channelPublicMessage(message))
 
             given(iGrpcCalls)
                 .suspendFunction(iGrpcCalls::fetchChannelMembers)
                 .whenInvokedWith(any(), any(),)
-                .thenReturn(testPublichannelMembers(testPublicChannels("1").channelsList.first()))
+                .thenReturn(AuthTestFixtures.testPublichannelMembers(AuthTestFixtures.testPublicChannels("1").channelsList.first()))
 
             given(iGrpcCalls)
                 .suspendFunction(iGrpcCalls::fetchMessages)
                 .whenInvokedWith(any())
-                .thenReturn(testMessages(channelPublicMessage(message)))
+                .thenReturn(testMessages(AuthTestFixtures.channelPublicMessage(message)))
 
             // assert that sendMessageDelegate
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()

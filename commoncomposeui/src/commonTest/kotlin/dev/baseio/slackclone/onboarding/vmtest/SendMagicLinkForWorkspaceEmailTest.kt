@@ -54,7 +54,7 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
                 .suspendFunction(iGrpcCalls::currentLoggedInUser)
                 .whenInvokedWith(any())
                 .thenReturn(
-                    testUser()
+                    AuthTestFixtures.testUser()
                 )
 
             viewModel.sendMagicLink()

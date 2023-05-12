@@ -1,11 +1,13 @@
 package dev.baseio.slackclone.onboarding.vmtest
 
+import androidx.compose.runtime.snapshotFlow
 import app.cash.turbine.test
 import dev.baseio.slackclone.channels.createsearch.CreateNewChannelVM
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels.SKChannel
 import io.mockative.any
 import io.mockative.given
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.test.runTest
 import org.koin.test.inject
 import kotlin.test.Test
@@ -38,7 +40,7 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                 .suspendFunction(iGrpcCalls::savePublicChannel)
                 .whenInvokedWith(any(), any())
                 .thenReturn(
-                    testPublicChannel(
+                    AuthTestFixtures.testPublicChannel(
                         channelId,
                         "1"
                     )
@@ -88,7 +90,7 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                 .suspendFunction(iGrpcCalls::savePublicChannel)
                 .whenInvokedWith(any())
                 .thenReturn(
-                    testPublicChannel(
+                    AuthTestFixtures.testPublicChannel(
                         channelId,
                         "1"
                     )
@@ -106,6 +108,12 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                 asserter.assertTrue({ "was expecting true" }, awaitItem().loading)
                 asserter.assertTrue({ "was expecting true" }, awaitItem().loading)
                 asserter.assertTrue({ "was expecting true" }, awaitItem().loading.not())
+            }
+
+            snapshotFlow {
+                wasNavigated
+            }.distinctUntilChanged().test {
+                asserter.assertTrue("was expecting to be navigated", awaitItem())
             }
         }
     }
