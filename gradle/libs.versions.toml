@@ -19,6 +19,7 @@ ktorClientJava = "2.3.0"
 lifecycleRuntimeKtx = "2.6.1"
 mockkmp = "1.13.0"
 gms = "4.3.14"
+ksp = "1.8.20-1.0.11"
 google_protobuf = "0.9.0"
 protobufJava = "3.21.9"
 testCore = "0.6.1"
@@ -200,3 +201,4 @@ google-protobuf = { id = "com.google.protobuf", version.ref = "google_protobuf" 
 timortel-grpc = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "timortel_grpc" }
 mockkmp = { id = "org.kodein.mock.mockmp", version.ref = "mockkmp" }
 googleservices = { id = "com.google.gms.google-services", version.ref = "gms" }
+kotlin-symbol-processing = {id = "com.google.devtools.ksp",version.ref="ksp"}

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.rick.nativecoroutines)
     alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin.symbol.processing)
 }
 
 group = "dev.baseio.slackclone.composeui"
@@ -69,6 +70,7 @@ kotlin {
                 implementation(libs.coroutines.test)
                 implementation(libs.turbine)
                 implementation(libs.test.core)
+                implementation("io.mockative:mockative:1.4.1")
             }
         }
 
@@ -165,6 +167,14 @@ kotlin {
             freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
         }
     }
+}
+
+dependencies {
+    configurations
+        .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
+        .forEach {
+            add(it.name, "io.mockative:mockative-processor:1.4.1")
+        }
 }
 
 android {

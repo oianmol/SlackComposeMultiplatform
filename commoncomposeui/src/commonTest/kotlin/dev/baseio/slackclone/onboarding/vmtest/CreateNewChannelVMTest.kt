@@ -4,6 +4,8 @@ import app.cash.turbine.test
 import dev.baseio.slackclone.channels.createsearch.CreateNewChannelVM
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels.SKChannel
+import io.mockative.any
+import io.mockative.given
 import kotlinx.coroutines.test.runTest
 import org.koin.test.inject
 import kotlin.test.Test
@@ -32,15 +34,16 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
             val channelId = "1"
             val name = "channel_public_$channelId"
 
-            mocker.everySuspending {
-                iGrpcCalls.savePublicChannel(
-                    isAny(),
-                    isAny()
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::savePublicChannel)
+                .whenInvokedWith(any(), any())
+                .thenReturn(
+                    testPublicChannel(
+                        channelId,
+                        "1"
+                    )
                 )
-            } returns testPublicChannel(
-                channelId,
-                "1"
-            )
+
 
             with(createNewChannelVM.createChannelState) {
                 value = value.copy(
@@ -81,30 +84,28 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
 
             val channelId = "1"
 
-            mocker.everySuspending {
-                iGrpcCalls.savePublicChannel(
-                    isAny(),
-                    isAny()
-                )
-            } returns testPublicChannel(
-                channelId,
-                "1"
-            )
-
-            with(createNewChannelVM.createChannelState) {
-                value = value.copy(
-                    channel = value.channel.copy(
-                        name = "new_channel"
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::savePublicChannel)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    testPublicChannel(
+                        channelId,
+                        "1"
                     )
                 )
 
+            createNewChannelVM.createChannelState.value =
+                createNewChannelVM.createChannelState.value.copy(
+                    channel = createNewChannelVM.createChannelState.value.channel.copy(
+                        name = "new_channel"
+                    )
+                )
+            createNewChannelVM.createChannelState.test {
                 createNewChannelVM.createChannel()
-
-                createNewChannelVM.createChannelState.test {
-                    awaitItem()
-                    awaitItem()
-                    asserter.assertTrue({ "was expecting true" }, wasNavigated)
-                }
+                asserter.assertTrue({ "was expecting true" }, !awaitItem().loading)
+                asserter.assertTrue({ "was expecting true" }, awaitItem().loading)
+                asserter.assertTrue({ "was expecting true" }, awaitItem().loading)
+                asserter.assertTrue({ "was expecting true" }, awaitItem().loading.not())
             }
         }
     }

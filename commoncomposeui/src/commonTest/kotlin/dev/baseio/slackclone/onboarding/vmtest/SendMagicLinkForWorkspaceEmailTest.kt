@@ -5,6 +5,8 @@ import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.onboarding.vm.SendMagicLinkForWorkspaceEmail
 import dev.baseio.slackdata.common.kmEmpty
 import dev.baseio.slackdata.protos.kmSKWorkspace
+import io.mockative.any
+import io.mockative.given
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.asserter
@@ -25,18 +27,35 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
     fun `viewModel informs the component to navigate after successful authentication`() {
         viewModel = getViewModel("sdf@sdffd.com")
         runTest {
-            mocker.every { koinApplication.koin.get<IGrpcCalls>().skKeyValueData } returns koinApplication.koin.get()
-            mocker.everySuspending {
-                koinApplication.koin.get<IGrpcCalls>().saveFcmToken(isAny(), isAny())
-            } returns kmEmpty { }
-            mocker.everySuspending {
-                koinApplication.koin.get<IGrpcCalls>().sendMagicLink(
-                    isAny(), isAny()
+
+            given(iGrpcCalls)
+                .invocation {
+                    koinApplication.koin.get<IGrpcCalls>().skKeyValueData
+                }
+                .thenReturn(
+                    koinApplication.koin.get()
                 )
-            } returns kmSKWorkspace { }
-            mocker.everySuspending {
-                koinApplication.koin.get<IGrpcCalls>().currentLoggedInUser(isAny())
-            } returns testUser()
+
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::saveFcmToken)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    kmEmpty { }
+                )
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::sendMagicLink)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    kmSKWorkspace { }
+                )
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::currentLoggedInUser)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    testUser()
+                )
 
             viewModel.sendMagicLink()
             viewModel.state.test(timeout = 5.seconds) {

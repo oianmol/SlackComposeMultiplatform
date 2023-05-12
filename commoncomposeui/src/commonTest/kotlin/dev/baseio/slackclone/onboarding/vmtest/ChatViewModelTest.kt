@@ -13,6 +13,8 @@ import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
 import dev.icerock.moko.mvvm.livedata.asFlow
 import dev.icerock.moko.test.AndroidArchitectureInstantTaskExecutorRule
 import dev.icerock.moko.test.TestRule
+import io.mockative.any
+import io.mockative.given
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -49,9 +51,22 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             authorizeUserFirst()
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
-            mocker.everySuspending { iGrpcCalls.sendMessage(isAny(), isAny()) } returns channelPublicMessage(message)
-            mocker.everySuspending { iGrpcCalls.fetchChannelMembers(isAny(), isAny()) } returns testPublichannelMembers(testPublicChannels("1").channelsList.first())
-            mocker.everySuspending { iGrpcCalls.fetchMessages(isAny()) } returns testMessages(channelPublicMessage(message))
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::sendMessage)
+                .whenInvokedWith(any(), any(),)
+                .thenReturn( channelPublicMessage(message))
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::fetchChannelMembers)
+                .whenInvokedWith(any(), any(),)
+                .thenReturn(testPublichannelMembers(testPublicChannels("1").channelsList.first()))
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::fetchMessages)
+                .whenInvokedWith(any())
+                .thenReturn(testMessages(channelPublicMessage(message)))
+
             // assert that sendMessageDelegate
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
             chatViewModel.requestFetch(channels.first())

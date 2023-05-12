@@ -2,7 +2,6 @@ package dev.baseio.slackclone.onboarding.vmtest
 
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.grpc.MockIGrpcCalls
 import dev.baseio.security.CapillaryEncryption
 import dev.baseio.security.CapillaryInstances
 import dev.baseio.security.toPublicKey
@@ -19,6 +18,7 @@ import dev.baseio.slackdata.injection.useCaseModule
 import dev.baseio.slackdata.localdata.testDbConnection
 import dev.baseio.slackdata.protos.KMSKChannel
 import dev.baseio.slackdata.protos.KMSKChannels
+import dev.baseio.slackdata.protos.KMSKCreateWorkspaceRequest
 import dev.baseio.slackdata.protos.KMSKDMChannels
 import dev.baseio.slackdata.protos.KMSKEncryptedMessage
 import dev.baseio.slackdata.protos.KMSKWorkspaces
@@ -49,13 +49,16 @@ import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseAuthWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
+import io.mockative.classOf
+import io.mockative.Mock
+import io.mockative.any
+import io.mockative.given
+import io.mockative.mock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kotlinx.datetime.Clock
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesMocks
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -65,11 +68,10 @@ import org.koin.test.inject
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-@UsesMocks(IGrpcCalls::class)
 abstract class SlackKoinUnitTest : KoinTest {
 
-    protected val mocker = Mocker()
-    var iGrpcCalls: IGrpcCalls = MockIGrpcCalls(mocker)
+    @Mock
+    var iGrpcCalls: IGrpcCalls = mock(classOf())
 
     val koinApplication: KoinApplication = startKoin {
         modules(
@@ -109,32 +111,43 @@ abstract class SlackKoinUnitTest : KoinTest {
     private fun iGrpcCalls() = koinApplication.koin.get<IGrpcCalls>()
 
     suspend fun authorizeUserFirst() {
-        mocker.every { iGrpcCalls().skKeyValueData } returns koinApplication.koin.get()
-        mocker.everySuspending { iGrpcCalls().currentLoggedInUser(isAny()) } returns testUser()
-        mocker.everySuspending {
-            iGrpcCalls().sendMagicLink(
-                isAny(),
-                isAny()
-            )
-        } returns testWorkspace()
+        given(iGrpcCalls()).invocation {
+            skKeyValueData
+        }.thenReturn(koinApplication.koin.get())
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::currentLoggedInUser)
+            .whenInvokedWith(any())
+            .thenReturn(testUser())
 
-        mocker.everySuspending { iGrpcCalls().getWorkspaces(isAny()) } returns testWorkspaces()
-        mocker.everySuspending {
-            iGrpcCalls().getAllDMChannels(
-                isAny(),
-                isAny(),
-                isAny(),
-                isAny()
-            )
-        } returns testDMChannels()
-        mocker.everySuspending {
-            iGrpcCalls().getPublicChannels(
-                isAny(),
-                isAny(),
-                isAny(),
-                isAny()
-            )
-        } returns testPublicChannels("1")
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::currentLoggedInUser)
+            .whenInvokedWith()
+            .thenReturn(testUser())
+
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::sendMagicLink)
+            .whenInvokedWith(any(), any())
+            .thenReturn(testWorkspace())
+
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::sendMagicLink)
+            .whenInvokedWith(any())
+            .thenReturn(testWorkspace())
+
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::getWorkspaces)
+            .whenInvokedWith(any())
+            .thenReturn(testWorkspaces())
+
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::getAllDMChannels)
+            .whenInvokedWith(any())
+            .thenReturn(testDMChannels())
+
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::getPublicChannels)
+            .whenInvokedWith(any(), any(), any(), any())
+            .thenReturn(testPublicChannels("1"))
 
         useCaseAuthWorkspace.invoke(testUser().email, "slack.com")
         useCaseFetchAndSaveCurrentUser.invoke()

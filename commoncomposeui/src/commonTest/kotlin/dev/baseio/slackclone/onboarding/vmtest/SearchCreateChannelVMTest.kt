@@ -4,6 +4,8 @@ import androidx.compose.runtime.snapshotFlow
 import app.cash.turbine.test
 import dev.baseio.slackclone.chatmessaging.newchat.SearchCreateChannelVM
 import dev.baseio.slackdata.datasources.remote.channels.mapToDomainSkChannel
+import io.mockative.any
+import io.mockative.given
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -31,10 +33,15 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
 
             val channelId = "1"
 
-            mocker.everySuspending { iGrpcCalls.savePublicChannel(isAny(), isAny()) } returns testPublicChannel(
-                channelId,
-                "1"
-            )
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::savePublicChannel)
+                .whenInvokedWith(any(), any())
+                .thenReturn(
+                    testPublicChannel(
+                        channelId,
+                        "1"
+                    )
+                )
 
             searchCreateChannelVM.createChannel(
                 testPublicChannel(
@@ -59,10 +66,15 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
             val channelId = "1"
             val name = "channel_public_$channelId"
 
-            mocker.everySuspending { iGrpcCalls.savePublicChannel(isAny(), isAny()) } returns testPublicChannel(
-                channelId,
-                "1"
-            )
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::savePublicChannel)
+                .whenInvokedWith(any(), any())
+                .thenReturn(
+                    testPublicChannel(
+                        channelId,
+                        "1"
+                    )
+                )
 
             searchCreateChannelVM.search(name)
             searchCreateChannelVM.channelsStream.test {
