@@ -1,4 +1,6 @@
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -7,11 +9,13 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.github.sarxos.winreg.HKey
 import com.github.sarxos.winreg.WindowsRegistry
-import dev.baseio.slackclone.*
+import dev.baseio.slackclone.LocalWindow
+import dev.baseio.slackclone.RootComponent
+import dev.baseio.slackclone.SlackApp
+import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import dev.baseio.slackclone.initKoin
+import dev.baseio.slackclone.rememberComposeWindow
 import java.awt.Desktop
 
 @ExperimentalComposeUiApi

@@ -142,14 +142,17 @@ private fun RealDeviceCamera(
                         didOutputMetadataObjects: List<*>,
                         fromConnection: AVCaptureConnection
                     ) {
-                        didOutputMetadataObjects.firstOrNull()?.let { metadataObject ->
-                            val readableObject =
-                                metadataObject as? AVMetadataMachineReadableCodeObject
-                            val code = readableObject?.stringValue ?: ""
-                            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                            onQrCodeScanned(code)
-                            captureSession.stopRunning()
-                        }
+                        didOutputMetadataObjects.mapNotNull { it as? AVMetadataMachineReadableCodeObject }
+                            .firstOrNull { readableObject ->
+                                readableObject.stringValue != null
+                            }?.let { metadataObject ->
+                                val readableObject =
+                                    metadataObject as? AVMetadataMachineReadableCodeObject
+                                val code = readableObject?.stringValue ?: ""
+                                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                                onQrCodeScanned(code)
+                                captureSession.stopRunning()
+                            }
                     }
                 }, queue = dispatch_get_main_queue())
 
