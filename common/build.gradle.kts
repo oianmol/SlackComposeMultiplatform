@@ -34,6 +34,8 @@ dependencies {
     commonMainApi(project(":slack_data_layer"))
 }
 
+tasks.getByName("build").dependsOn("generateBuildKonfig")
+
 kotlin {
     android()
     jvm {

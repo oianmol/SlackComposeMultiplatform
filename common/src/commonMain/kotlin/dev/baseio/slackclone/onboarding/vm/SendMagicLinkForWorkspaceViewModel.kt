@@ -11,30 +11,30 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class SendMagicLinkForWorkspaceEmail(
+class SendMagicLinkForWorkspaceViewModel(
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseAuthWorkspace: UseCaseAuthWorkspace,
     private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
     private val email: String,
     private val workspace: String
 ) : SlackViewModel(coroutineDispatcherProvider) {
-    val state = MutableStateFlow(AuthCreateWorkspaceVMState())
+    val uiState = MutableStateFlow(AuthCreateWorkspaceVMState())
 
     init {
         sendMagicLink()
     }
 
     private suspend fun endLoading() {
-        state.value = state.value.copy(isAnimationStarting = false)
+        uiState.value = uiState.value.copy(loaderState = false)
         delay(250)
-        showLoading()
+        showSlackProgressAnimation()
     }
 
-    fun showLoading() {
+    fun showSlackProgressAnimation() {
         viewModelScope.launch {
-            state.value = state.value.copy(isAnimationStarting = true)
+            uiState.value = uiState.value.copy(loaderState = true)
             delay(SlackAnim.ANIM_DURATION.toLong().plus(700))
-            state.value = state.value.copy(isAnimationStarting = false)
+            uiState.value = uiState.value.copy(loaderState = false)
             delay(SlackAnim.ANIM_DURATION.toLong().plus(800))
             endLoading()
         }
@@ -44,16 +44,16 @@ class SendMagicLinkForWorkspaceEmail(
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
-                state.value = state.value.copy(error = throwable, loading = false)
+                uiState.value = uiState.value.copy(error = throwable, loading = false)
             }
         ) {
-            state.value = state.value.copy(error = null, loading = true)
+            uiState.value = uiState.value.copy(error = null, loading = true)
             useCaseAuthWorkspace(
                 email,
                 workspace,
             )
             useCaseSaveFCMToken.invoke(fcmToken())
-            state.value = state.value.copy(loading = false)
+            uiState.value = uiState.value.copy(loading = false)
         }
     }
 }
@@ -61,5 +61,5 @@ class SendMagicLinkForWorkspaceEmail(
 data class AuthCreateWorkspaceVMState(
     var error: Throwable? = null,
     var loading: Boolean = false,
-    var isAnimationStarting: Boolean = false
+    var loaderState: Boolean = false
 )

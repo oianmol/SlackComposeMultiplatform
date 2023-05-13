@@ -2,7 +2,7 @@ package dev.baseio.slackclone.onboarding.vmtest
 
 import app.cash.turbine.test
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.slackclone.onboarding.vm.SendMagicLinkForWorkspaceEmail
+import dev.baseio.slackclone.onboarding.vm.SendMagicLinkForWorkspaceViewModel
 import dev.baseio.slackdata.common.kmEmpty
 import dev.baseio.slackdata.protos.kmSKWorkspace
 import io.mockative.any
@@ -14,8 +14,8 @@ import kotlin.time.Duration.Companion.seconds
 
 class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
 
-    private lateinit var viewModel: SendMagicLinkForWorkspaceEmail
-    private fun getViewModel(email: String) = SendMagicLinkForWorkspaceEmail(
+    private lateinit var viewModel: SendMagicLinkForWorkspaceViewModel
+    private fun getViewModel(email: String) = SendMagicLinkForWorkspaceViewModel(
         coroutineDispatcherProvider = coroutineDispatcherProvider,
         useCaseAuthWorkspace = useCaseAuthWorkspace,
         useCaseSaveFCMToken = koinApplication.koin.get(),
@@ -58,7 +58,7 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
                 )
 
             viewModel.sendMagicLink()
-            viewModel.state.test(timeout = 5.seconds) {
+            viewModel.uiState.test(timeout = 5.seconds) {
                 awaitItem().apply {
                     asserter.assertTrue(actual = loading, message = "Loading was not true!")
                 }
@@ -80,7 +80,7 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
 
         runTest {
             viewModel.sendMagicLink()
-            viewModel.state.test(timeout = 5.seconds) {
+            viewModel.uiState.test(timeout = 5.seconds) {
                 awaitItem().apply {
                     asserter.assertTrue(actual = this.error != null, message = "error was null!")
                 }

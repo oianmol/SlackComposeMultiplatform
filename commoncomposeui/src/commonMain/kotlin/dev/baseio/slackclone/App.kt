@@ -12,7 +12,7 @@ import dev.baseio.slackclone.dashboard.compose.DashboardUI
 import dev.baseio.slackclone.onboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.onboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.onboarding.compose.ProcessEmailWorkspaceSendEmailUI
-import dev.baseio.slackclone.onboarding.compose.ProcessTokenFromDeepLink
+import dev.baseio.slackclone.onboarding.compose.ProcessAuthTokenScreen
 import dev.baseio.slackclone.onboarding.compose.WorkspaceInputUI
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 
@@ -28,7 +28,8 @@ fun SlackApp(
     ) {
         when (val child = it.instance) {
             is Root.Child.AuthorizeWithToken -> {
-                ProcessTokenFromDeepLink(child.component)
+                // once we receive the deeplink with token, then we open this composable
+                ProcessAuthTokenScreen(child.component)
             }
 
             is Root.Child.AuthorizeSendEmail -> {

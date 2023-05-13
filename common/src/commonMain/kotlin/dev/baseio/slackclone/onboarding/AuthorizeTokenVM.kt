@@ -14,41 +14,54 @@ class AuthorizeTokenVM(
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser,
     private val useCaseFetchAndSaveUserWorkspace: UseCaseFetchAndSaveWorkspaces,
-    token: String,
-    navigateBackNow: () -> Unit,
-    navigateDashboard: () -> Unit
+    private val authToken: String,
+    private val navigateBackNow: () -> Unit,
+    private val navigateDashboard: () -> Unit
 ) :
     SlackViewModel(coroutineDispatcherProvider) {
-    val state = MutableStateFlow(AuthCreateWorkspaceVMState())
 
-    private suspend fun endLoading() {
-        state.value = state.value.copy(isAnimationStarting = false)
-        delay(250)
-        showLoading()
+    val uiState = MutableStateFlow(AuthCreateWorkspaceVMState())
+
+    init {
+        initiateWithToken(navigateBackNow, authToken, navigateDashboard)
     }
 
-    fun showLoading() {
+    /**
+     * recursive loading of the slack animation
+     */
+    fun showSlackProgressAnimation() {
         viewModelScope.launch {
-            state.value = state.value.copy(isAnimationStarting = true)
+            uiState.value = uiState.value.copy(loaderState = true)
             delay(SlackAnim.ANIM_DURATION.toLong().plus(700))
-            state.value = state.value.copy(isAnimationStarting = false)
+            uiState.value = uiState.value.copy(loaderState = false)
             delay(SlackAnim.ANIM_DURATION.toLong().plus(800))
-            endLoading()
+            uiState.value = uiState.value.copy(loaderState = false)
+            delay(250)
+            showSlackProgressAnimation()
         }
     }
 
-    init {
+
+    private fun initiateWithToken(
+        navigateBackNow: () -> Unit,
+        authToken: String,
+        navigateDashboard: () -> Unit
+    ) {
         viewModelScope.launch(
-            CoroutineExceptionHandler { coroutineContext, throwable ->
+            CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
                 navigateBackNow()
-                state.value = state.value.copy(error = throwable)
+                uiState.value = uiState.value.copy(error = throwable)
             }
         ) {
-            state.value = state.value.copy(loading = true)
-            useCaseFetchAndSaveUserWorkspace.invoke(token)
+            uiState.value = uiState.value.copy(loading = true)
+            useCaseFetchAndSaveUserWorkspace.invoke(authToken)
             useCaseFetchAndSaveCurrentUser.invoke()
             navigateDashboard()
         }
+    }
+
+    fun retry() {
+        initiateWithToken(navigateBackNow, authToken, navigateDashboard)
     }
 }

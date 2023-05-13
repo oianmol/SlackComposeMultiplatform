@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,12 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.onboarding.QrCodeDelegate
 
 @Composable
-internal fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrCodeDelegate: QrCodeDelegate, navigateBack: () -> Unit) {
+internal fun QRScannerUI(
+    modifier: Modifier = Modifier,
+    mode: QrScannerMode,
+    qrCodeDelegate: QrCodeDelegate,
+    navigateBack: () -> Unit
+) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(modifier) {
         when (mode) {
@@ -63,8 +69,14 @@ internal fun QRScannerUI(modifier: Modifier = Modifier, mode: QrScannerMode, qrC
                             },
                             backgroundColor = LocalSlackCloneColor.current.appBarColor
                         )
-                        Column(Modifier.fillMaxSize()) {
-                            qrResponse?.let { it1 -> QrCodeView(Modifier.size(300.dp), it1) }
+                        Box(Modifier.fillMaxSize()) {
+                            qrResponse?.let { it1 ->
+                                QrCodeView(
+                                    Modifier.size(300.dp).align(
+                                        Alignment.Center
+                                    ), it1
+                                )
+                            }
                                 ?: CircularProgressIndicator(color = Color.White)
                         }
                     }
