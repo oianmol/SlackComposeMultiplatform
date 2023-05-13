@@ -27,7 +27,7 @@ internal fun CommonInputUI(
     TopView: @Composable (modifier: Modifier) -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
-    PlatformSideEffects.SkipTypingScreen()
+    PlatformSideEffects.SlackCloneColorOnPlatformUI()
     val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
     SlackCloneTheme {
         Scaffold(

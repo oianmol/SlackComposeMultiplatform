@@ -19,7 +19,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +29,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,7 +72,7 @@ internal fun GettingStartedUI(
 ) {
     val scaffoldState = rememberScaffoldState()
     val uiState by viewModel.componentState.subscribeAsState()
-    PlatformSideEffects.GettingStartedScreen()
+    PlatformSideEffects.SlackCloneColorOnPlatformUI()
 
     Scaffold(
         backgroundColor = SlackCloneColor,
@@ -122,7 +123,7 @@ internal fun LargeScreenLayout(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
+            Modifier.weight(1f).padding(24.dp).fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -133,18 +134,23 @@ internal fun LargeScreenLayout(
                 IntroExitTransitionVertical()
             }
             Spacer(Modifier.padding(16.dp))
-            GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionVertical(density) }, {
-                GetStartedExitTransVertical()
-            })
+            FooterView(
+                gettingStartedComponent = gettingStartedVM,
+                enterAnim = { GetStartedEnterTransitionVertical(density) },
+                exitAnim = { GetStartedExitTransVertical() })
         }
 
         Column(
-            Modifier.weight(1f, fill = true).padding(24.dp).fillMaxHeight(),
+            Modifier.weight(1f).padding(24.dp).fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (scanMode) {
-                QRScannerUI(mode = QrScannerMode.CAMERA, qrCodeDelegate = getKoin().get()) {
+                QRScannerUI(
+                    modifier = Modifier.size(300.dp),
+                    mode = QrScannerMode.SHOW_QR_SCANNER_CAMERA,
+                    qrCodeDelegate = getKoin().get()
+                ) {
                     gettingStartedVM.navigateBack()
                 }
             } else {
@@ -164,29 +170,44 @@ internal fun PhoneLayout(
     Column(
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
     ) {
-        IntroText(modifier = Modifier.fillMaxWidth().padding(top = 12.dp), gettingStartedVM, {
-            IntroEnterTransitionHorizontal(density)
-        }) {
+        IntroText(
+            modifier = Modifier.fillMaxWidth().weight(1f).padding(vertical = 8.dp),
+            gettingStartedVM,
+            {
+                IntroEnterTransitionHorizontal(density)
+            }) {
             IntroExitTransitionHorizontal()
         }
-
-        if (scanMode) {
-            QRScannerUI(
-                modifier = Modifier.weight(1f, fill = false),
-                QrScannerMode.CAMERA,
-                getKoin().get()
-            ) {
-                gettingStartedVM.navigateBack()
-            }
-        } else {
-            CenterImage(Modifier.weight(1f, fill = false), gettingStartedVM)
-        }
+        CenterView(Modifier.weight(1f), scanMode, gettingStartedVM)
         Spacer(Modifier.padding(8.dp))
-        GetStartedButton(gettingStartedVM, { GetStartedEnterTransitionHorizontal(density) }, {
-            GetStartedExitTransHorizontal()
-        })
+        FooterView(
+            Modifier.weight(1f),
+            gettingStartedVM,
+            { GetStartedEnterTransitionHorizontal(density) },
+            {
+                GetStartedExitTransHorizontal()
+            })
+    }
+}
+
+@Composable
+private fun CenterView(
+    modifier: Modifier,
+    scanMode: Boolean,
+    gettingStartedVM: GettingStartedComponent,
+) {
+    if (scanMode) {
+        QRScannerUI(
+            modifier = modifier.size(300.dp),
+            QrScannerMode.SHOW_QR_SCANNER_CAMERA,
+            getKoin().get()
+        ) {
+            gettingStartedVM.navigateBack()
+        }
+    } else {
+        CenterImage(modifier, gettingStartedVM)
     }
 }
 
@@ -248,7 +269,8 @@ internal fun ImageEnterTransition() = expandIn(
 )
 
 @Composable
-internal fun GetStartedButton(
+internal fun FooterView(
+    modifier: Modifier = Modifier,
     gettingStartedComponent: GettingStartedComponent,
     enterAnim: @Composable () -> EnterTransition,
     exitAnim: @Composable () -> ExitTransition
@@ -262,7 +284,10 @@ internal fun GetStartedButton(
         enter = enterAnim(),
         exit = exitAnim()
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+        ) {
             if (platformType() != Platform.JVM) {
                 if (loading) CircularProgressIndicator(color = SlackLogoYellow) else QrCodeButton(
                     scanningMode
@@ -423,7 +448,7 @@ internal fun IntroText(
                         append(" wherever you are.")
                     }
                 },
-                style = SlackCloneTypography.h4
+                style = SlackCloneTypography.h5
             )
         }
     }

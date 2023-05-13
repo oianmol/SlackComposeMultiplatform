@@ -33,6 +33,10 @@ internal fun ProcessAuthTokenScreen(component: AuthorizeTokenComponent) {
     LaunchedEffect(Unit) {
         component.viewModel.showSlackProgressAnimation()
     }
+    PlatformSideEffects.PlatformColors(
+        LocalSlackCloneColor.current.uiBackground,
+        LocalSlackCloneColor.current.uiBackground
+    )
     Scaffold(
         backgroundColor = LocalSlackCloneColor.current.uiBackground,
         contentColor = LocalSlackCloneColor.current.textSecondary,

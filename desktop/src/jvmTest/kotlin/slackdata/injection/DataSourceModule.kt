@@ -47,7 +47,7 @@ import org.koin.dsl.module
 
 val fakeDataSourceModule = module {
     single<IGrpcCalls> {
-        GrpcCalls(skKeyValueData = get())
+        GrpcCalls(skKeyValueData = get(), coroutineDispatcherProvider = get())
     }
     single<SKLocalDatabaseSource> {
         SKLocalDatabaseSourceImpl(get())
@@ -100,7 +100,12 @@ val fakeDataSourceModule = module {
         SKLocalDataSourceWriteWorkspacesImpl(get(), get())
     }
     single<SKLocalDataSourceReadWorkspaces> {
-        SKLocalDataSourceReadWorkspacesImpl(get(), get(SlackWorkspaceMapperQualifier), get())
+        SKLocalDataSourceReadWorkspacesImpl(
+            slackDB = get(),
+            skLocalKeyValueSource = get(SlackWorkspaceMapperQualifier),
+            entityMapper = get(),
+            coroutineDispatcherProvider = get()
+        )
     }
     single<SKNetworkDataSourceWriteChannels> {
         SKNetworkDataSourceWriteChannelsImpl(get(), get())
@@ -124,7 +129,13 @@ val fakeDataSourceModule = module {
             get(), get(), get()
         )
     }
-    single<SKLocalDataSourceUsers> { SKLocalDataSourceUsersImpl(get(), get(), get(SlackUserRandomUserQualifier)) }
+    single<SKLocalDataSourceUsers> {
+        SKLocalDataSourceUsersImpl(
+            get(),
+            get(),
+            get(SlackUserRandomUserQualifier)
+        )
+    }
     single<SKLocalDataSourceMessages> {
         SKLocalDataSourceMessagesImpl(
             get(),

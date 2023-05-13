@@ -17,6 +17,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackclone.onboarding.QrCodeDelegate
+import dev.baseio.slackclone.onboarding.compose.PlatformSideEffects
 
 @Composable
 internal fun QRScannerUI(
@@ -26,60 +27,69 @@ internal fun QRScannerUI(
     navigateBack: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    Scaffold(modifier) {
-        when (mode) {
-            QrScannerMode.CAMERA -> {
-                QrCodeScanner(Modifier.fillMaxSize().padding(it)) { code ->
-                    qrCodeDelegate.authorize(code, coroutineScope)
+
+    when (mode) {
+        QrScannerMode.SHOW_QR_SCANNER_CAMERA -> {
+            var qrCodeReceived by remember { mutableStateOf(false) }
+
+            val func: (String) -> Unit = { qrCode ->
+                if (qrCodeReceived.not()) {
+                    qrCodeDelegate.authorize(qrCode, coroutineScope)
                 }
+                qrCodeReceived = true
+            }
+            QrCodeScanner(modifier, func)
+        }
+
+        QrScannerMode.SHOW_QR_CODE_VIEW -> {
+            PlatformSideEffects.SlackCloneColorOnPlatformUI()
+
+            LaunchedEffect(Unit) {
+                qrCodeDelegate.loadQrCode(coroutineScope)
             }
 
-            QrScannerMode.QR_DISPLAY -> {
-                val qrResponse by qrCodeDelegate.qrCode.collectAsState()
-
-                LaunchedEffect(Unit) {
-                    qrCodeDelegate.loadQrCode(this)
-                }
-
-                SlackCloneSurface(
-                    color = SlackCloneColor,
-                    modifier = Modifier
-                ) {
-                    Column(
-                        Modifier.fillMaxSize(),
-                    ) {
-                        SlackSurfaceAppBar(
-                            title = {
-                                Text(
-                                    text = "QR Scanner",
-                                    style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.appBarTextTitleColor)
-                                )
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = {
-                                    navigateBack()
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Clear,
-                                        contentDescription = "Clear",
-                                        modifier = Modifier.padding(start = 8.dp),
-                                        tint = LocalSlackCloneColor.current.appBarIconColor
-                                    )
-                                }
-                            },
-                            backgroundColor = LocalSlackCloneColor.current.appBarColor
-                        )
-                        Box(Modifier.fillMaxSize()) {
-                            qrResponse?.let { it1 ->
-                                QrCodeView(
-                                    Modifier.size(300.dp).align(
-                                        Alignment.Center
-                                    ), it1
+            Scaffold(
+                modifier = modifier,
+                backgroundColor = SlackCloneColor,
+                contentColor = LocalSlackCloneColor.current.textSecondary,
+                topBar = {
+                    SlackSurfaceAppBar(
+                        title = {
+                            Text(
+                                text = "QR Scanner",
+                                style = SlackCloneTypography.subtitle1.copy(color = LocalSlackCloneColor.current.appBarTextTitleColor)
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                navigateBack()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = "Clear",
+                                    modifier = Modifier.padding(start = 8.dp),
+                                    tint = LocalSlackCloneColor.current.appBarIconColor
                                 )
                             }
-                                ?: CircularProgressIndicator(color = Color.White)
-                        }
+                        },
+                        backgroundColor = LocalSlackCloneColor.current.appBarColor
+                    )
+                }
+            ) {
+                val qrResponse by qrCodeDelegate.qrCode.collectAsState()
+                Box(Modifier.padding(it).fillMaxSize()) {
+                    qrResponse?.let { it1 ->
+                        QrCodeView(
+                            Modifier.size(300.dp).align(
+                                Alignment.Center
+                            ), it1
+                        )
                     }
+                        ?: CircularProgressIndicator(
+                            color = Color.White, modifier = Modifier.align(
+                                Alignment.Center
+                            )
+                        )
                 }
             }
         }

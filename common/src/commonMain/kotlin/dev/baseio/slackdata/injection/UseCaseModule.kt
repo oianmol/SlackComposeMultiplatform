@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     factory { UseCaseSaveFCMToken(get(), get()) }
-    factory { UseCaseQRAuthUser(get(), get()) }
+    factory { UseCaseAuthWithQrCode(get(), get()) }
     factory { UseCaseGetChannelMembers(get(), get(), get()) }
     factory { UseCaseFetchAndSaveWorkspaces(get(), get(), get(), get()) }
     factory { UseCaseFetchAndSaveChannelMembers(get(), get()) }

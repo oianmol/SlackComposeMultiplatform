@@ -68,7 +68,7 @@ internal fun SideNavigation(
                 sideNavComponent.viewModel.logout()
                 navigateOnboardingClearRoutes()
             }, openQrScanner = {
-                navigateQrScanner(QrScannerMode.QR_DISPLAY)
+                navigateQrScanner(QrScannerMode.SHOW_QR_CODE_VIEW)
             }, addWorkspace = {
                 navigateAddWorkspace()
             })

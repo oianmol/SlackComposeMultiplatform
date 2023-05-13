@@ -12,7 +12,6 @@ import kotlin.coroutines.CoroutineContext
 
 class GettingStartedComponent(
     componentContext: ComponentContext,
-    val firstRun: Boolean,
     val navigateBack: () -> Unit,
     private val navigateDashboard: () -> Unit,
     val emailMagicLink: () -> Unit
@@ -42,5 +41,3 @@ fun CoroutineScope(context: CoroutineContext, lifecycle: Lifecycle): CoroutineSc
     lifecycle.doOnDestroy(scope::cancel)
     return scope
 }
-
-fun LifecycleOwner.coroutineScope(context: CoroutineContext): CoroutineScope = CoroutineScope(context, lifecycle)

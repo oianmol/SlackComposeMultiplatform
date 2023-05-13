@@ -5,10 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 expect object PlatformSideEffects {
     @Composable
-    internal fun GettingStartedScreen()
-
-    @Composable
-    internal fun SkipTypingScreen()
+    internal fun SlackCloneColorOnPlatformUI()
 
     @Composable
     internal fun PlatformColors(topColor: Color, bottomColor: Color)

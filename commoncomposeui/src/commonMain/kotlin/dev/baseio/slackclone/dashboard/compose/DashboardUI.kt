@@ -219,7 +219,7 @@ internal fun DashboardUI(
                             dashboardComponent.navigate(DashboardComponent.Config.Profile)
                         },
                         qrCode = {
-                            dashboardComponent.navigateQrScanner(QrScannerMode.QR_DISPLAY)
+                            dashboardComponent.navigateQrScanner(QrScannerMode.SHOW_QR_CODE_VIEW)
                         },
                         addWorkspace = {
                             dashboardComponent.navigateAddWorkspace()

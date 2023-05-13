@@ -16,18 +16,7 @@ import platform.UIKit.statusBarManager
 
 actual object PlatformSideEffects {
     @Composable
-    internal actual fun GettingStartedScreen() {
-        val statusBar = uiView()
-        SideEffect {
-            with(SlackCloneColor.toUIColor()) {
-                statusBar?.backgroundColor = this
-                UINavigationBar.appearance().backgroundColor = this
-            }
-        }
-    }
-
-    @Composable
-    internal actual fun SkipTypingScreen() {
+    internal actual fun SlackCloneColorOnPlatformUI() {
         val statusBar = uiView()
         SideEffect {
             with(SlackCloneColor.toUIColor()) {

@@ -2,11 +2,10 @@ package dev.baseio.slackclone.onboarding
 
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.getKoin
-import dev.baseio.slackdata.protos.KMSKAuthResult
 import dev.baseio.slackdata.protos.KMSKQrCodeResponse
 import dev.baseio.slackdata.protos.kmSKQRAuthVerify
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
-import dev.baseio.slackdomain.usecases.auth.UseCaseQRAuthUser
+import dev.baseio.slackdomain.usecases.auth.UseCaseAuthWithQrCode
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -21,17 +20,16 @@ interface QrCodeDelegate {
     var loadingQR: MutableStateFlow<Boolean>
     var message: MutableStateFlow<String>
     var navigateDashboardNow: () -> Unit
-    fun loadQrCode(viewModelScope: CoroutineScope)
-    suspend fun whenAuthorized(kmskQrCodeResponse: KMSKAuthResult)
     var navigateBack: () -> Unit
     var exception: MutableStateFlow<Throwable?>
+    var scanningMode: MutableStateFlow<Boolean>
+
+    fun loadQrCode(viewModelScope: CoroutineScope)
     fun authorize(code: String, viewModelScope: CoroutineScope)
     fun toggleScanningMode()
-
-    var scanningMode: MutableStateFlow<Boolean>
 }
 
-class QrCodeDelegateImpl(private val qrCodeAuthUser: UseCaseQRAuthUser, private val iGrpcCalls: IGrpcCalls) :
+class QrCodeDelegateImpl(private val useCaseAuthWithQrCode: UseCaseAuthWithQrCode, private val iGrpcCalls: IGrpcCalls) :
     QrCodeDelegate {
     override var qrCode = MutableStateFlow<KMSKQrCodeResponse?>(null)
     override var scanningMode = MutableStateFlow(false)
@@ -48,7 +46,7 @@ class QrCodeDelegateImpl(private val qrCodeAuthUser: UseCaseQRAuthUser, private 
     }
 
     override fun authorize(code: String, viewModelScope: CoroutineScope) {
-        authorizeJob?.let {
+        authorizeJob?.takeIf { it.isActive }?.let {
             return
         }
         authorizeJob = viewModelScope.launch(
@@ -56,12 +54,22 @@ class QrCodeDelegateImpl(private val qrCodeAuthUser: UseCaseQRAuthUser, private 
                 exception.value = throwable
             }
         ) {
-            val authResult = iGrpcCalls.authorizeQrCode(
+            val kmskQrCodeResponse = iGrpcCalls.authorizeQrCode(
                 kmSKQRAuthVerify {
                     this.token = code
                 }
             )
-            whenAuthorized(authResult)
+            useCaseAuthWithQrCode(
+                result = DomainLayerUsers.SKAuthResult(
+                    kmskQrCodeResponse.token,
+                    kmskQrCodeResponse.refreshToken,
+                    status = DomainLayerUsers.SKStatus(
+                        kmskQrCodeResponse.status.information,
+                        kmskQrCodeResponse.status.statusCode
+                    )
+                )
+            )
+            navigateDashboardNow()
         }
     }
 
@@ -92,20 +100,6 @@ class QrCodeDelegateImpl(private val qrCodeAuthUser: UseCaseQRAuthUser, private 
     private fun whenQrCodeAvailable(kmskQrCodeResponse: KMSKQrCodeResponse) {
         qrCode.value = kmskQrCodeResponse
         loadingQR.value = false
-    }
-
-    override suspend fun whenAuthorized(kmskQrCodeResponse: KMSKAuthResult) {
-        qrCodeAuthUser(
-            DomainLayerUsers.SKAuthResult(
-                kmskQrCodeResponse.token,
-                kmskQrCodeResponse.refreshToken,
-                status = DomainLayerUsers.SKStatus(
-                    kmskQrCodeResponse.status.information,
-                    kmskQrCodeResponse.status.statusCode
-                )
-            )
-        )
-        navigateDashboardNow()
     }
 
     private fun clearQR() {

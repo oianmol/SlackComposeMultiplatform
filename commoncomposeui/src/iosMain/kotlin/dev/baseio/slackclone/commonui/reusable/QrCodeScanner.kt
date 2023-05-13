@@ -1,14 +1,15 @@
 package dev.baseio.slackclone.commonui.reusable
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.interop.UIKitView
+import androidx.compose.ui.unit.dp
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ObjCAction
 import platform.AVFoundation.*
@@ -41,7 +42,6 @@ private val deviceTypes = listOf(
     AVCaptureDeviceTypeBuiltInUltraWideCamera,
     AVCaptureDeviceTypeBuiltInDuoCamera
 )
-
 
 @Composable
 actual fun QrCodeScanner(
@@ -100,6 +100,9 @@ private fun BoxScope.AuthorizedCamera(onQrCodeScanned: (String) -> Unit) {
     if (camera != null) {
         RealDeviceCamera(camera, onQrCodeScanned)
     } else {
+        LaunchedEffect(Unit) {
+            onQrCodeScanned("11")
+        }
         Text(
             """
             Camera is not available on simulator.
@@ -128,12 +131,8 @@ private fun RealDeviceCamera(
                 deviceInputWithDevice(device = camera, error = null)!!
             captureSession.addInput(captureDeviceInput)
             captureSession.addOutput(capturePhotoOutput)
-
-            //Initialize an AVCaptureMetadataOutput object and set it as the output device to the capture session.
             val metadataOutput = AVCaptureMetadataOutput()
             if (captureSession.canAddOutput(metadataOutput)) {
-                //Set delegate and use default dispatch queue to execute the call back
-                // fixed with https://youtrack.jetbrains.com/issue/KT-45755/iOS-delegate-protocol-is-empty
                 captureSession.addOutput(metadataOutput)
                 metadataOutput.setMetadataObjectsDelegate(objectsDelegate = object : NSObject(),
                     AVCaptureMetadataOutputObjectsDelegateProtocol {
@@ -144,7 +143,7 @@ private fun RealDeviceCamera(
                     ) {
                         didOutputMetadataObjects.mapNotNull { it as? AVMetadataMachineReadableCodeObject }
                             .firstOrNull { readableObject ->
-                                readableObject.stringValue != null
+                                readableObject.stringValue().isNullOrEmpty().not()
                             }?.let { metadataObject ->
                                 val readableObject =
                                     metadataObject as? AVMetadataMachineReadableCodeObject
@@ -158,7 +157,6 @@ private fun RealDeviceCamera(
 
                 metadataOutput.metadataObjectTypes = metadataOutput.availableMetadataObjectTypes()
             }
-
         }
     }
     val cameraPreviewLayer = remember {
