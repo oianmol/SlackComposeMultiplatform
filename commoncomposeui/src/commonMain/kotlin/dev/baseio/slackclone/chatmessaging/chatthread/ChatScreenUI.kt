@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
 import dev.baseio.slackclone.chatmessaging.chatthread.composables.ChatScreenContent
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
@@ -64,45 +63,47 @@ internal fun ChatScreenUI(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun BoxScope.ChannelMembersDialog(viewModel: ChatViewModel) {
+internal fun ChannelMembersDialog(viewModel: ChatViewModel) {
     val members by viewModel.channelMembers.collectAsState()
-    val size = getWindowSizeClass(LocalWindow.current)
-    val screenWidth = LocalWindow.current.width
-    val width = screenWidth * when (size) {
-        WindowSize.Phones -> 1.0f
-        WindowSize.SmallTablets -> 0.8f
-        WindowSize.BigTablets -> 0.6f
-        WindowSize.DesktopOne -> 0.5f
-        WindowSize.DesktopTwo -> 0.4f
-    }
-    val height = LocalWindow.current.height * when (size) {
-        WindowSize.Phones -> 1.0f
-        WindowSize.SmallTablets -> 0.8f
-        WindowSize.BigTablets -> 0.6f
-        WindowSize.DesktopOne -> 0.5f
-        WindowSize.DesktopTwo -> 0.4f
-    }
+
     Box(
         Modifier.background(color = LocalSlackCloneColor.current.onUiBackground)
             .fillMaxSize()
     )
-    Column(
-        modifier = Modifier.align(Alignment.Center).width(width).height(height)
-            .background(LocalSlackCloneColor.current.uiBackground, shape = RoundedCornerShape(12.dp))
-    ) {
-        ListItem(text = {
-            Text("Channel Members")
-        }, trailing = {
-            IconButton(onClick = {
-                viewModel.showChannelDetailsRequested()
-            }) {
-                Icon(Icons.Default.Close, contentDescription = null)
-            }
-        }, modifier = Modifier.background(LocalSlackCloneColor.current.appBarColor, shape = RoundedCornerShape(12.dp)))
+    BoxWithConstraints {
+        val width = maxWidth * when (getWindowSizeClass()) {
+            WindowSize.Phones -> 1.0f
+            WindowSize.SmallTablets -> 0.8f
+            WindowSize.BigTablets -> 0.6f
+            WindowSize.DesktopOne -> 0.5f
+            WindowSize.DesktopTwo -> 0.4f
+        }
+        val height = maxHeight * when (getWindowSizeClass()) {
+            WindowSize.Phones -> 1.0f
+            WindowSize.SmallTablets -> 0.8f
+            WindowSize.BigTablets -> 0.6f
+            WindowSize.DesktopOne -> 0.5f
+            WindowSize.DesktopTwo -> 0.4f
+        }
 
-        LazyColumn(Modifier) {
-            items(members) { skUser ->
-                SlackListItem(icon = Icons.Default.Person, title = skUser.name ?: "--")
+        Column(
+            modifier = Modifier.align(Alignment.Center).width(width).height(height)
+                .background(LocalSlackCloneColor.current.uiBackground, shape = RoundedCornerShape(12.dp))
+        ) {
+            ListItem(text = {
+                Text("Channel Members")
+            }, trailing = {
+                IconButton(onClick = {
+                    viewModel.showChannelDetailsRequested()
+                }) {
+                    Icon(Icons.Default.Close, contentDescription = null)
+                }
+            }, modifier = Modifier.background(LocalSlackCloneColor.current.appBarColor, shape = RoundedCornerShape(12.dp)))
+
+            LazyColumn(Modifier) {
+                items(members) { skUser ->
+                    SlackListItem(icon = Icons.Default.Person, title = skUser.name ?: "--")
+                }
             }
         }
     }

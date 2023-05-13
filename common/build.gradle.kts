@@ -1,5 +1,7 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import java.net.InetAddress
+import java.util.Enumeration
+import java.net.NetworkInterface
 
 plugins {
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
@@ -22,7 +24,7 @@ buildkonfig {
     packageName = "dev.baseio.slackclone"
 
     defaultConfigs {
-        buildConfigField(STRING, "ipAddr", InetAddress.getLocalHost().hostAddress)
+        buildConfigField(STRING, "ipAddr", ipv4())
     }
 }
 
@@ -184,4 +186,23 @@ android {
         targetCompatibility = JavaVersion.VERSION_18
     }
     namespace = "dev.baseio.slackcommon"
+}
+
+fun ipv4(): String? {
+    var result: InetAddress? = null
+    val interfaces: Enumeration<java.net.NetworkInterface> = (NetworkInterface.getNetworkInterfaces())
+    while (interfaces.hasMoreElements()) {
+        val addresses: Enumeration<InetAddress> = interfaces.nextElement().getInetAddresses()
+        while (addresses.hasMoreElements()) {
+            val address = addresses.nextElement()
+            if (!address.isLoopbackAddress) {
+                if (address.isSiteLocalAddress) {
+                    return address.hostAddress
+                } else if (result == null) {
+                    result = address
+                }
+            }
+        }
+    }
+    return (result ?: InetAddress.getLocalHost()).hostAddress
 }

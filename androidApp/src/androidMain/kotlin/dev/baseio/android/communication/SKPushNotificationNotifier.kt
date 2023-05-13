@@ -20,7 +20,7 @@ import dev.baseio.android.SlackAndroidActivity
 import dev.baseio.slackdomain.datasources.local.messages.IMessageDecrypter
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
-import org.example.android.R
+import dev.baseio.slackclone.R
 import org.koin.java.KoinJavaComponent.getKoin
 import java.util.UUID
 

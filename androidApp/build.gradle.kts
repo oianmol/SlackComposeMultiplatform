@@ -26,10 +26,8 @@ kotlin {
                 api(project(":slack_domain_layer"))
                 implementation(libs.koin.core)
                 implementation(libs.koin.android)
-
                 // Firebase
-                implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
-
+                implementation(libs.firebase.messaging.ktx)
                 // Accompanist Permissions
                 implementation(libs.accompanist.permission)
             }
@@ -40,7 +38,6 @@ kotlin {
             dependencies {
                 implementation(libs.koin.test)
                 implementation(compose.uiTestJUnit4)
-
                 implementation(
                     libs.compose.junit
                 )
@@ -87,5 +84,5 @@ android {
             isMinifyEnabled = false
         }
     }
-    namespace = "org.example.android"
+    namespace = "dev.baseio.slackclone"
 }

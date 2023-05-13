@@ -1,6 +1,4 @@
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -9,13 +7,10 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.github.sarxos.winreg.HKey
 import com.github.sarxos.winreg.WindowsRegistry
-import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
-import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.initKoin
-import dev.baseio.slackclone.rememberComposeWindow
 import java.awt.Desktop
 
 @ExperimentalComposeUiApi
@@ -30,8 +25,7 @@ fun main() {
         handleDeepLink(rootComponent)
 
         Window(onCloseRequest = ::exitApplication, state = windowState) {
-            val rememberedComposeWindow by rememberComposeWindow()
-            DesktopApp(rememberedComposeWindow) {
+            DesktopApp() {
                 rootComponent
             }
         }
@@ -75,16 +69,11 @@ private fun handleDeepLink(rootComponent: RootComponent) {
 
 @Composable
 fun DesktopApp(
-    rememberedComposeWindow: WindowInfo,
     rootComponent: () -> RootComponent
 ) {
     SlackCloneTheme {
-        CompositionLocalProvider(
-            LocalWindow provides rememberedComposeWindow
-        ) {
-            SlackApp(
-                rootComponent = rootComponent
-            )
-        }
+        SlackApp(
+            rootComponent = rootComponent
+        )
     }
 }

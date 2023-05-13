@@ -20,6 +20,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,7 +49,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
@@ -71,7 +71,6 @@ internal fun GettingStartedUI(
 ) {
     val scaffoldState = rememberScaffoldState()
     val uiState by viewModel.componentState.subscribeAsState()
-    val size = getWindowSizeClass(LocalWindow.current)
     PlatformSideEffects.GettingStartedScreen()
 
     Scaffold(
@@ -83,7 +82,7 @@ internal fun GettingStartedUI(
             scaffoldState.snackbarHostState
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
+        BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             SlackCloneSurface(
                 color = SlackCloneColor,
                 modifier = Modifier
@@ -96,7 +95,7 @@ internal fun GettingStartedUI(
                     }
                     SlackAnimation(shouldStartLogoAnimation.isAnimationStarting)
                 } else {
-                    when (size) {
+                    when (getWindowSizeClass()) {
                         WindowSize.Phones -> PhoneLayout(gettingStartedVM)
                         else -> {
                             LargeScreenLayout(gettingStartedVM)
@@ -174,7 +173,11 @@ internal fun PhoneLayout(
         }
 
         if (scanMode) {
-            QRScannerUI(modifier = Modifier.weight(1f, fill = false), QrScannerMode.CAMERA, getKoin().get()) {
+            QRScannerUI(
+                modifier = Modifier.weight(1f, fill = false),
+                QrScannerMode.CAMERA,
+                getKoin().get()
+            ) {
                 gettingStartedVM.navigateBack()
             }
         } else {
@@ -218,7 +221,6 @@ internal fun TeamNewToSlack(modifier: Modifier, onClick: () -> Unit) {
 
 @Composable
 internal fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: GettingStartedComponent) {
-    val painter = PainterRes.gettingStarted()
     val expanded by gettingStartedVM.viewModel.componentState.subscribeAsState()
     AnimatedVisibility(
         visible = expanded.introTextExpanded,
@@ -227,7 +229,7 @@ internal fun CenterImage(modifier: Modifier = Modifier, gettingStartedVM: Gettin
     ) {
         Image(
             modifier = modifier,
-            painter = painter,
+            painter = PainterRes.gettingStarted(),
             contentDescription = null,
             contentScale = ContentScale.Fit
         )
@@ -262,7 +264,9 @@ internal fun GetStartedButton(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (platformType() != Platform.JVM) {
-                if (loading) CircularProgressIndicator(color = SlackLogoYellow) else QrCodeButton(scanningMode) {
+                if (loading) CircularProgressIndicator(color = SlackLogoYellow) else QrCodeButton(
+                    scanningMode
+                ) {
                     when (platformType()) {
                         Platform.ANDROID, Platform.IOS -> {
                             gettingStartedComponent.viewModel.toggleScanningMode()
@@ -299,7 +303,10 @@ internal fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
     ) {
         Text(
             text = if (!scanMode) "Scan QR" else "Close Scanner",
-            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+            style = SlackCloneTypography.subtitle1.copy(
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         )
     }
 }
@@ -319,13 +326,17 @@ internal fun LoginButton(
     ) {
         Text(
             text = "Email me a magic link.",
-            style = SlackCloneTypography.subtitle1.copy(color = Color.White, fontWeight = FontWeight.Bold)
+            style = SlackCloneTypography.subtitle1.copy(
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         )
     }
 }
 
 @Composable
-internal fun GetStartedExitTransHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
+internal fun GetStartedExitTransHorizontal() =
+    slideOutHorizontally() + shrinkHorizontally() + fadeOut()
 
 @Composable
 internal fun GetStartedEnterTransitionHorizontal(density: Density) =
@@ -419,7 +430,8 @@ internal fun IntroText(
 }
 
 @Composable
-internal fun IntroExitTransitionHorizontal() = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
+internal fun IntroExitTransitionHorizontal() =
+    slideOutHorizontally() + shrinkHorizontally() + fadeOut()
 
 @Composable
 internal fun IntroEnterTransitionHorizontal(density: Density) = slideInHorizontally {

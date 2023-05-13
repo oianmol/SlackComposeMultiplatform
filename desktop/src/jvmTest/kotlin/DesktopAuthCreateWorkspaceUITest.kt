@@ -15,7 +15,6 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.database.SlackDB
 import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.SKKeyValueData
@@ -80,19 +79,7 @@ class DesktopAuthCreateWorkspaceUITest {
         with(compose) {
             mainClock.autoAdvance = false
             setContent {
-                val window = rememberWindowState()
-                var rememberedComposeWindow by remember(window) {
-                    mutableStateOf(WindowInfo(window.size.width, window.size.height))
-                }
-                LaunchedEffect(window) {
-                    snapshotFlow { window.size }
-                        .distinctUntilChanged()
-                        .onEach {
-                            rememberedComposeWindow = WindowInfo(it.width, it.height)
-                        }
-                        .launchIn(this)
-                }
-                DesktopApp(rememberedComposeWindow) {
+                DesktopApp() {
                     rootComponent
                 }
             }
