@@ -20,7 +20,8 @@ import dev.baseio.slackclone.getKoin
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
-class SearchMessagesComponent(componentContext: ComponentContext) : ComponentContext by componentContext
+class SearchMessagesComponent(componentContext: ComponentContext) :
+    ComponentContext by componentContext
 
 interface Dashboard {
     fun navigate(child: DashboardComponent.Config)
@@ -47,35 +48,37 @@ class DashboardComponent(
     val navigateAddWorkspace: () -> Unit
 ) : Dashboard, ComponentContext by componentContext {
 
-    val sideNavComponent = SideNavComponent(childContext(SideNavComponent::class.qualifiedName.toString())) {
-        navigateOnboarding()
-    }
+    val sideNavComponent =
+        SideNavComponent(childContext(SideNavComponent::class.qualifiedName.toString())) {
+            navigateOnboarding()
+        }
     val chatScreenComponent = ChatScreenComponent(
-        childContext(ChatScreenComponent::class.qualifiedName.toString())
+        componentContext = childContext(ChatScreenComponent::class.qualifiedName.toString()),
+        navigateToRequestKeys = {
+
+        }
     )
-    val recentChannelsComponent =
-        SlackChannelComponent(
-            childContext(SlackChannelComponent::class.qualifiedName.toString().plus("recent")),
-            "recent"
-        )
-    val allChannelsComponent =
-        SlackChannelComponent(
-            childContext(SlackChannelComponent::class.qualifiedName.toString().plus("allChannels")),
-            "allChannels"
-        )
+    val recentChannelsComponent = SlackChannelComponent(
+        childContext(SlackChannelComponent::class.qualifiedName.toString().plus("recent")),
+        "recent"
+    )
+    val allChannelsComponent = SlackChannelComponent(
+        childContext(SlackChannelComponent::class.qualifiedName.toString().plus("allChannels")),
+        "allChannels"
+    )
 
     val dashboardVM = instanceKeeper.getOrCreate {
         DashboardVM(
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get()
+            coroutineDispatcherProvider = getKoin().get(),
+            useCaseObserveMessages = getKoin().get(),
+            useCaseObserveUsers = getKoin().get(),
+            useCaseObserveChannels = getKoin().get(),
+            useCaseGetSelectedWorkspace = getKoin().get(),
+            useCaseFetchChannels = getKoin().get(),
+            useCaseFetchAndSaveUsers = getKoin().get(),
+            skKeyValueData = getKoin().get(),
+            grpcCalls = getKoin().get(),
+            useCaseSaveFCMToken = getKoin().get()
         )
     }
 
@@ -104,23 +107,37 @@ class DashboardComponent(
         navigation.replaceCurrent(child)
     }
 
-    private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child = when (config) {
-        Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
-            DirectMessagesComponent(componentContext.childContext(DirectMessagesComponent::class.qualifiedName.toString()))
-        )
+    private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child =
+        when (config) {
+            Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
+                DirectMessagesComponent(componentContext.childContext(DirectMessagesComponent::class.qualifiedName.toString()))
+            )
 
-        Config.Home -> Dashboard.Child.HomeScreen(HomeScreenComponent(componentContext.childContext(HomeScreenComponent::class.qualifiedName.toString()), getKoin().get()))
-        Config.MentionsConfig -> Dashboard.Child.MentionsScreen
-        Config.Profile -> Dashboard.Child.UserProfileScreen(
-            UserProfileComponent(
-                componentContext.childContext(UserProfileComponent::class.qualifiedName.toString())
-            ) {
-                navigateOnboarding()
-            }
-        )
+            Config.Home -> Dashboard.Child.HomeScreen(
+                HomeScreenComponent(
+                    componentContext.childContext(
+                        HomeScreenComponent::class.qualifiedName.toString()
+                    ), getKoin().get()
+                )
+            )
 
-        Config.Search -> Dashboard.Child.SearchScreen(SearchMessagesComponent(componentContext.childContext(SearchMessagesComponent::class.qualifiedName.toString())))
-    }
+            Config.MentionsConfig -> Dashboard.Child.MentionsScreen
+            Config.Profile -> Dashboard.Child.UserProfileScreen(
+                UserProfileComponent(
+                    componentContext.childContext(UserProfileComponent::class.qualifiedName.toString())
+                ) {
+                    navigateOnboarding()
+                }
+            )
+
+            Config.Search -> Dashboard.Child.SearchScreen(
+                SearchMessagesComponent(
+                    componentContext.childContext(
+                        SearchMessagesComponent::class.qualifiedName.toString()
+                    )
+                )
+            )
+        }
 
     override fun onChannelSelected(channel: DomainLayerChannels.SKChannel) {
         chatScreenComponent.chatViewModel.requestFetch(channel)

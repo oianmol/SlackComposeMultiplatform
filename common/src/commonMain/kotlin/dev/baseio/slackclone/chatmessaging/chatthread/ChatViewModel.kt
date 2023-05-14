@@ -27,7 +27,8 @@ class ChatViewModel(
     private val useCaseChannelMembers: UseCaseGetChannelMembers,
     private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
     private val sendMessageDelegate: SendMessageDelegate,
-    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels
+    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels,
+    private val navigateToRequestKeys: () -> Unit,
 ) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
@@ -168,6 +169,10 @@ class ChatViewModel(
             selection = textFieldValue.selection,
             composition = textFieldValue.composition
         )
+    }
+
+    fun requestSecurityKeys() {
+        navigateToRequestKeys()
     }
 }
 

@@ -80,14 +80,14 @@ kotlin {
                 api("androidx.camera:camera-extensions:1.3.0-alpha04")
                 implementation("com.google.guava:guava:29.0-android")
                 // Zxing
-                api("com.google.zxing:core:3.5.0")
+                api(libs.zxing.core)
 
-                implementation("com.google.mlkit:barcode-scanning:17.0.3")
+                implementation(libs.barcode.scanning)
                 api(libs.activity.compose)
-                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
-                implementation("com.google.firebase:firebase-core:21.1.1")
-                implementation("com.google.firebase:firebase-messaging:23.1.2")
-                implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
+                api(libs.androidx.lifecycle.runtime.ktx)
+                implementation(libs.firebase.core)
+                implementation(libs.firebase.messaging)
+                implementation(libs.firebase.messaging.ktx)
                 implementation(libs.koin.android)
                 implementation(libs.coroutines)
                 implementation(libs.lifecycleviewmodelktx)
@@ -99,9 +99,9 @@ kotlin {
             dependencies {
                 implementation(libs.coroutines)
                 implementation(libs.coroutines.swing)
-                implementation("io.ktor:ktor-client-java:2.1.0")
+                implementation(libs.ktor.jvm)
                 implementation(libs.koin.core.jvm)
-                api("com.google.protobuf:protobuf-java:3.21.9")
+                api(libs.protobuf.java)
             }
         }
 
@@ -112,15 +112,15 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(libs.coroutines.test)
-                implementation("app.cash.turbine:turbine:0.12.1")
-                implementation("dev.icerock.moko:test-core:0.6.1")
+                implementation(libs.turbine)
+                implementation(libs.test.core)
             }
         }
 
         val androidUnitTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
                 implementation(libs.sqldelight.jvmdriver)
                 implementation(libs.sqldelight.androiddriver)
                 implementation(libs.androidx.junit.ext.ktx)
@@ -132,7 +132,7 @@ kotlin {
             dependencies {
                 implementation(libs.grpc.okhttp)
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
                 implementation(libs.sqldelight.jvmdriver)
                 implementation(libs.coroutines.test)
             }

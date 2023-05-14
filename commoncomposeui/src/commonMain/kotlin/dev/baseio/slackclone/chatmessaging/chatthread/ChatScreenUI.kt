@@ -88,17 +88,27 @@ internal fun ChannelMembersDialog(viewModel: ChatViewModel) {
 
         Column(
             modifier = Modifier.align(Alignment.Center).width(width).height(height)
-                .background(LocalSlackCloneColor.current.uiBackground, shape = RoundedCornerShape(12.dp))
+                .background(
+                    LocalSlackCloneColor.current.uiBackground,
+                    shape = RoundedCornerShape(12.dp)
+                )
         ) {
-            ListItem(text = {
-                Text("Channel Members")
-            }, trailing = {
-                IconButton(onClick = {
-                    viewModel.showChannelDetailsRequested()
-                }) {
-                    Icon(Icons.Default.Close, contentDescription = null)
-                }
-            }, modifier = Modifier.background(LocalSlackCloneColor.current.appBarColor, shape = RoundedCornerShape(12.dp)))
+            ListItem(
+                text = {
+                    Text("Channel Members")
+                },
+                trailing = {
+                    IconButton(onClick = {
+                        viewModel.showChannelDetailsRequested()
+                    }) {
+                        Icon(Icons.Default.Close, contentDescription = null)
+                    }
+                },
+                modifier = Modifier.background(
+                    LocalSlackCloneColor.current.appBarColor,
+                    shape = RoundedCornerShape(12.dp)
+                )
+            )
 
             LazyColumn(Modifier) {
                 items(members) { skUser ->

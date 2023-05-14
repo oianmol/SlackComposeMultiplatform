@@ -14,7 +14,7 @@ interface DomainLayerMessages {
         val modifiedDate: Long,
         var isDeleted: Boolean = false,
         var isSynced: Boolean = false,
-        var decodedMessage: String = "Waiting for message."
+        var decodedMessage: String? = null
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

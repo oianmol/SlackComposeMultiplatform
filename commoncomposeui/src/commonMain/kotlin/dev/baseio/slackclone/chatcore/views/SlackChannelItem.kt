@@ -49,9 +49,13 @@ internal fun GroupChannelItem(
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit,
     textColor: Color
 ) {
-    SlackListItem(icon = Icons.Default.Lock, title = slackChannel.name, textColor = textColor, onItemClick = {
-        onItemClick(slackChannel)
-    })
+    SlackListItem(
+        icon = Icons.Default.Lock,
+        title = slackChannel.name,
+        textColor = textColor,
+        onItemClick = {
+            onItemClick(slackChannel)
+        })
 }
 
 @Composable
@@ -117,7 +121,7 @@ internal fun DMLastMessageItem(
 @Composable
 internal fun ChannelMessage(slackMessage: DomainLayerMessages.SKMessage, textSecondary: Color) {
     Text(
-        text = slackMessage.decodedMessage,
+        text = slackMessage.decodedMessage ?: "Waiting for message.",
         style = SlackCloneTypography.caption.copy(
             color = textSecondary.copy(
                 alpha = 0.8f

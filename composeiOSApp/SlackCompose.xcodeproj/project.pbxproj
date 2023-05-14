@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2152FB042600AC8F00CF470E /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iosApp.swift */; };
 		8969C5FE2A0EB6D7007CA867 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8969C5FD2A0EB6D7007CA867 /* Assets.xcassets */; };
+		899422AC2A0FDB7500708AE0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 899422AB2A0FDB7500708AE0 /* Launch Screen.storyboard */; };
 		C1FC908188C4E8695729CB06 /* Pods_SlackCompose.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DE96E47030356CE6AD9794A /* Pods_SlackCompose.framework */; };
 /* End PBXBuildFile section */
 
@@ -19,6 +20,7 @@
 		7555FF7B242A565900829871 /* SlackCompose.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlackCompose.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8969C5FD2A0EB6D7007CA867 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		899422AB2A0FDB7500708AE0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		8DE96E47030356CE6AD9794A /* Pods_SlackCompose.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlackCompose.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB3632DC29227652001CCB65 /* TeamId.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = TeamId.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				8969C5FD2A0EB6D7007CA867 /* Assets.xcassets */,
+				899422AB2A0FDB7500708AE0 /* Launch Screen.storyboard */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iosApp.swift */,
 			);
@@ -150,6 +153,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				899422AC2A0FDB7500708AE0 /* Launch Screen.storyboard in Resources */,
 				8969C5FE2A0EB6D7007CA867 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

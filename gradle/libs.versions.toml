@@ -12,15 +12,18 @@ core = "3.5.0"
 firebaseMessagingKtx = "23.1.2"
 firebaseMessaging = "23.1.2"
 firebaseCore = "21.1.1"
+grpcMultiplatformLib = "0.3.1"
 guava = "29.0-android"
 kamelImageVersion = "0.5-darwinandjs4"
 kotlin = "1.8.20"
+kotlinxSerializationJson = "1.4.0"
 ktorClientJava = "2.3.0"
 lifecycleRuntimeKtx = "2.6.1"
 mockkmp = "1.13.0"
 gms = "4.3.14"
 ksp = "1.8.20-1.0.11"
 google_protobuf = "0.9.0"
+okio = "3.3.0"
 protobufJava = "3.21.9"
 testCore = "0.6.1"
 timortel_grpc = "0.3.1"
@@ -89,6 +92,10 @@ androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtim
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
 barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+grpc-multiplatform-lib = { module = "io.github.timortel:grpc-multiplatform-lib", version.ref = "grpcMultiplatformLib" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobufJava" }
 windows-registry-util = { module = "com.github.sarxos:windows-registry-util", version.ref = "windowsRegistryUtil" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "core" }
@@ -157,6 +164,7 @@ coroutines_android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 
 ktor_core = { module = "io.ktor:ktor-client-core", version.ref = "ktor_version" }
 ktor_cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor_version" }
+ktor_android = {module="io.ktor:ktor-client-android", version.ref = "ktor_version"}
 ktor_jvm = { module = "io.ktor:ktor-client-java", version.ref = "ktor_version" }
 ktor_darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor_version" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit_version" }

@@ -5,18 +5,19 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import dev.baseio.slackclone.getKoin
 
 class ChatScreenComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    navigateToRequestKeys: () -> Unit,
 ) : ComponentContext by componentContext {
 
     val chatViewModel = instanceKeeper.getOrCreate {
         ChatViewModel(
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get(),
-            getKoin().get()
+            coroutineDispatcherProvider = getKoin().get(),
+            useCaseFetchAndSaveChannelMembers = getKoin().get(),
+            useCaseFetchAndSaveMessages = getKoin().get(),
+            useCaseChannelMembers = getKoin().get(),
+            useCaseStreamLocalMessages = getKoin().get(),
+            sendMessageDelegate = getKoin().get(),
+            skLocalDataSourceReadChannels = getKoin().get(), navigateToRequestKeys = navigateToRequestKeys
         )
     }
 }
