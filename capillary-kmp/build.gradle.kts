@@ -73,7 +73,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation(libs.coroutines)
                 implementation("com.squareup.okio:okio:3.2.0")
             }
         }
@@ -85,20 +85,20 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation("org.bouncycastle:bcprov-jdk16:1.46")
+                implementation(libs.bcprov.jdk16)
             }
         }
         val jvmTest by getting
         val androidMain by getting {
             dependencies {
-                implementation("joda-time:joda-time:2.9.9")
-                api("com.google.firebase:firebase-core:21.1.1")
-                api("com.google.firebase:firebase-messaging:23.1.2")
+                implementation(libs.joda.time)
+                api(libs.firebase.core)
+                api(libs.firebase.messaging)
             }
         }
         val androidUnitTest by getting {
             dependencies {
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
                 implementation(kotlin("test"))
             }
         }
@@ -122,23 +122,23 @@ android {
         testInstrumentationRunner =  "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     namespace = "org.example.library"
 }
 dependencies {
-    androidTestImplementation("junit:junit:4.12")
+    androidTestImplementation(libs.junit)
     // Core library
-    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation(libs.androidx.core)
 
     // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    androidTestImplementation(libs.androidxrunner)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.coroutines.test)
 
     // Assertions
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.ext:truth:1.5.0")
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.truth)
 
 }

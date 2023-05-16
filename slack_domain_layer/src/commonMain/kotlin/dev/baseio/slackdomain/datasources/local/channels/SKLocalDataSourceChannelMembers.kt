@@ -11,5 +11,5 @@ interface SKLocalDataSourceChannelMembers {
         workspaceId: String,
         channelId: String,
         uuid: String
-    ): DomainLayerChannels.SkChannelMember?
+    ): List<DomainLayerChannels.SkChannelMember>
 }

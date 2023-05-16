@@ -2,6 +2,7 @@ package dev.baseio.slackclone.chatmessaging.chatthread
 
 import com.arkivanov.decompose.value.MutableValue
 import dev.baseio.slackclone.SlackViewModel
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
@@ -16,26 +17,31 @@ import dev.icerock.moko.paging.LambdaPagedListDataSource
 import dev.icerock.moko.paging.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
-    coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
-    private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
-    private val useCaseChannelMembers: UseCaseGetChannelMembers,
-    private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
-    private val sendMessageDelegate: SendMessageDelegate,
-    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels,
-    private val navigateToRequestKeys: () -> Unit,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider = getKoin().get(),
+    private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers = getKoin().get(),
+    private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages = getKoin().get(),
+    private val useCaseChannelUsers: UseCaseGetChannelMembers = getKoin().get(),
+    private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages = getKoin().get(),
+    private val sendMessageDelegate: SendMessageDelegate = getKoin().get(),
+    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels = getKoin().get(),
 ) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
     val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
     var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
 
-    var showChannelDetails = MutableStateFlow(false)
+    var securityKeyRequested = MutableStateFlow(false)
+        private set
+    var securityKeyOffer = MutableStateFlow(false)
         private set
 
     var chatBoxState = MutableStateFlow(BoxState.Collapsed)
@@ -45,26 +51,23 @@ class ChatViewModel(
         throwable.printStackTrace()
     }
 
-    var parentJob: Job? = null
     private var limit = 20
 
     var skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
 
     fun requestFetch(channel: DomainLayerChannels.SKChannel) {
+        viewModelScope.cancel()
+
         channelFlow = MutableValue(channel)
         sendMessageDelegate.channel = (channelFlow.value)
         skMessagePagination.refresh()
-
-        parentJob?.cancel()
-        parentJob = Job()
         channelMembers.value = emptyList()
-
         loadWorkspaceChannelData(channel)
     }
 
     private fun loadWorkspaceChannelData(channel: DomainLayerChannels.SKChannel) {
         with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
-            fetchChannelMembers()
+            fetchChannelUsers()
             refreshChannelMembers()
             messageChangeListener()
         }
@@ -78,25 +81,30 @@ class ChatViewModel(
     }
 
     private fun UseCaseWorkspaceChannelRequest.refreshChannelMembers() =
-        viewModelScope.launch(parentJob!! + exceptions) {
+        viewModelScope.launch(exceptions) {
             useCaseFetchAndSaveChannelMembers.invoke(this@refreshChannelMembers)
         }
 
     private fun UseCaseWorkspaceChannelRequest.messageChangeListener() {
-        viewModelScope.launch(parentJob!! + exceptions) {
-            useCaseStreamLocalMessages.invoke(this@messageChangeListener)
-                .collectLatest { skMessageList ->
-                    chatMessagesFlow.value = skMessageList
-                }
-        }
+        useCaseStreamLocalMessages.invoke(this@messageChangeListener)
+            .onEach { skMessageList ->
+                chatMessagesFlow.value = skMessageList
+            }
+            .catch {
+                it.printStackTrace()
+            }
+            .launchIn(viewModelScope)
     }
 
-    private fun UseCaseWorkspaceChannelRequest.fetchChannelMembers() {
-        viewModelScope.launch(parentJob!! + exceptions) {
-            useCaseChannelMembers.invoke(this@fetchChannelMembers).collectLatest { skUserList ->
+    private fun UseCaseWorkspaceChannelRequest.fetchChannelUsers() {
+        useCaseChannelUsers.invoke(this@fetchChannelUsers)
+            .onEach { skUserList ->
                 channelMembers.value = skUserList
             }
-        }
+            .catch {
+                it.printStackTrace()
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun getPagination() = Pagination(
@@ -149,10 +157,6 @@ class ChatViewModel(
         deleteMessageRequest.value = null
     }
 
-    fun showChannelDetailsRequested() {
-        showChannelDetails.value = !showChannelDetails.value
-    }
-
     fun requestFetch(channelId: String, function: (DomainLayerChannels.SKChannel) -> Unit) {
         viewModelScope.launch {
             val channel = skLocalDataSourceReadChannels.getChannelByChannelId(channelId)
@@ -172,7 +176,11 @@ class ChatViewModel(
     }
 
     fun requestSecurityKeys() {
-        navigateToRequestKeys()
+        securityKeyRequested.value = true
+    }
+
+    fun offerSecurityKeys() {
+        securityKeyOffer.value = true
     }
 }
 

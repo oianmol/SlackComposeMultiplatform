@@ -3,6 +3,7 @@ package dev.baseio.slackclone.dashboard.vm
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackclone.fcmToken
+import dev.baseio.slackclone.getKoin
 import dev.baseio.slackdata.datasources.local.channels.loggedInUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
@@ -24,16 +25,16 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class DashboardVM(
-    coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    private val useCaseObserveMessages: UseCaseFetchAndUpdateChangeInMessages,
-    private val useCaseObserveUsers: UseCaseFetchAndUpdateChangeInUsers,
-    private val useCaseObserveChannels: UseCaseFetchAndUpdateChangeInChannels,
-    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace,
-    private val useCaseFetchChannels: UseCaseFetchAndSaveChannels,
-    private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers,
-    private val skKeyValueData: SKLocalKeyValueSource,
-    private val grpcCalls: IGrpcCalls,
-    private val useCaseSaveFCMToken: UseCaseSaveFCMToken,
+    coroutineDispatcherProvider: CoroutineDispatcherProvider = getKoin().get(),
+    private val useCaseObserveMessages: UseCaseFetchAndUpdateChangeInMessages = getKoin().get(),
+    private val useCaseObserveUsers: UseCaseFetchAndUpdateChangeInUsers = getKoin().get(),
+    private val useCaseObserveChannels: UseCaseFetchAndUpdateChangeInChannels = getKoin().get(),
+    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace = getKoin().get(),
+    private val useCaseFetchChannels: UseCaseFetchAndSaveChannels = getKoin().get(),
+    private val useCaseFetchAndSaveUsers: UseCaseFetchAndSaveUsers = getKoin().get(),
+    private val skKeyValueData: SKLocalKeyValueSource = getKoin().get(),
+    private val grpcCalls: IGrpcCalls = getKoin().get(),
+    private val useCaseSaveFCMToken: UseCaseSaveFCMToken = getKoin().get(),
 ) :
     SlackViewModel(coroutineDispatcherProvider) {
     val selectedChatChannel = MutableStateFlow<DomainLayerChannels.SKChannel?>(null)
@@ -59,7 +60,10 @@ class DashboardVM(
                     useCaseFetchChannels.invoke(workspaceId, 0, 20)
                     useCaseFetchAndSaveUsers(workspaceId)
                 }
-                grpcCalls.listenToChangeInChannelMembers(workspaceId, skKeyValueData.loggedInUser(workspaceId).uuid).map {
+                grpcCalls.listenToChangeInChannelMembers(
+                    workspaceId,
+                    skKeyValueData.loggedInUser(workspaceId).uuid
+                ).map {
                     useCaseFetchChannels.invoke(workspaceId, 0, 20)
                 }.launchIn(viewModelScope)
             }

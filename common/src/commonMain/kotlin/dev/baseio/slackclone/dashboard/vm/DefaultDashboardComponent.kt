@@ -54,9 +54,6 @@ class DashboardComponent(
         }
     val chatScreenComponent = ChatScreenComponent(
         componentContext = childContext(ChatScreenComponent::class.qualifiedName.toString()),
-        navigateToRequestKeys = {
-
-        }
     )
     val recentChannelsComponent = SlackChannelComponent(
         childContext(SlackChannelComponent::class.qualifiedName.toString().plus("recent")),

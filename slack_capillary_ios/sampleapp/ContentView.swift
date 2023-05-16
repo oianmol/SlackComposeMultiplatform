@@ -14,10 +14,10 @@ struct ContentView: View {
     
     init() {
         CapillaryIOS.initNow(chainId: "anmol",isUnitTest: false)
-        
+
         let publicKey = CapillaryIOS.publicKey(chainId: "anmol")
         let privateKey = CapillaryIOS.privateKey(chainId: "anmol")!
-        
+
         let encrypted = CapillaryIOS.encrypt(data: "anmol".data(using: .utf8)!, publicKey: publicKey!)
         print("encrypted now")
         

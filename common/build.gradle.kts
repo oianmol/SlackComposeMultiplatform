@@ -61,7 +61,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-
                 implementation(libs.datetime)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.koin.core)
@@ -73,12 +72,12 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 // CameraX
-                api("androidx.camera:camera-camera2:1.3.0-alpha04")
-                api("androidx.camera:camera-lifecycle:1.3.0-alpha04")
-                api("androidx.camera:camera-view:1.3.0-alpha04")
-                api("androidx.camera:camera-video:1.3.0-alpha04")
-                api("androidx.camera:camera-extensions:1.3.0-alpha04")
-                implementation("com.google.guava:guava:29.0-android")
+                api(libs.androidx.camera.camera2)
+                api(libs.androidx.camera.lifecycle)
+                api(libs.androidx.camera.view)
+                api(libs.androidx.camera.video)
+                api(libs.androidx.camera.extensions)
+                implementation(libs.guava)
                 // Zxing
                 api(libs.zxing.core)
 
@@ -102,6 +101,8 @@ kotlin {
                 implementation(libs.ktor.jvm)
                 implementation(libs.koin.core.jvm)
                 api(libs.protobuf.java)
+                api(libs.zxing.core)
+                api(libs.zxing.javase)
             }
         }
 
@@ -183,9 +184,8 @@ android {
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+    kotlin {
+        jvmToolchain(11)
     }
     namespace = "dev.baseio.slackcommon"
 }

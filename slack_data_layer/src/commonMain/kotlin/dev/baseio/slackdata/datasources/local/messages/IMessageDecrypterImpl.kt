@@ -20,25 +20,23 @@ class IMessageDecrypterImpl(
             message.workspaceId,
             message.channelId,
             skKeyValueData.loggedInUser(message.workspaceId).uuid
-        )?.channelEncryptedPrivateKey?.let { safeChannelEncryptedPrivateKey ->
-            kotlin.runCatching {
-                capillary.decrypt(
-                    EncryptedData(
-                        safeChannelEncryptedPrivateKey.first,
-                        safeChannelEncryptedPrivateKey.second
-                    ),
-                    capillary.privateKey()
+        ).map { it.channelEncryptedPrivateKey }
+            .firstNotNullOfOrNull { safeChannelEncryptedPrivateKey ->
+                kotlin.runCatching {
+                    capillary.decrypt(
+                        EncryptedData(
+                            safeChannelEncryptedPrivateKey.first,
+                            safeChannelEncryptedPrivateKey.second
+                        ),
+                        capillary.privateKey()
+                    )
+                }.getOrNull()
+            }?.let { bytes ->
+                finalMessageAfterDecryption(
+                    message,
+                    bytes
                 )
-            }.recoverCatching {
-                println(it)
-                return@recoverCatching null
-            }.getOrNull()
-        }?.let { bytes ->
-            finalMessageAfterDecryption(
-                message,
-                bytes
-            )
-        }
+            }
     }
 
     private fun finalMessageAfterDecryption(

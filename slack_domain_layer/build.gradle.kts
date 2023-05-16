@@ -67,9 +67,8 @@ android {
         minSdk = 24
         targetSdk = 33
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+    kotlin {
+        jvmToolchain(11)
     }
     namespace = "dev.baseio.slackdomain"
 }

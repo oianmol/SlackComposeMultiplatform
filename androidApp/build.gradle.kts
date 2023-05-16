@@ -69,10 +69,6 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -85,4 +81,7 @@ android {
         }
     }
     namespace = "dev.baseio.slackclone"
+    kotlin {
+        jvmToolchain(11)
+    }
 }

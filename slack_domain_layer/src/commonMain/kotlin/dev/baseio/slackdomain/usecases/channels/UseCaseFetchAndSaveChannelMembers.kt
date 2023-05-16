@@ -9,6 +9,7 @@ class UseCaseFetchAndSaveChannelMembers(
 ) {
     suspend operator fun invoke(useCaseWorkspaceChannelRequest: UseCaseWorkspaceChannelRequest) {
         networkSource.fetchChannelMembers(useCaseWorkspaceChannelRequest).mapCatching {
+            println("saving $it")
             localSource.save(it)
         }
     }

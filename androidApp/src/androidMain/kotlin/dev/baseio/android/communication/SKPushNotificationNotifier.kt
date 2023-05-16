@@ -1,5 +1,6 @@
 package dev.baseio.android.communication
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -74,6 +75,7 @@ class SKPushNotificationNotifier(
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun notifyAllWithSummary(
         notifications: List<Pair<Notification, Int>>,
         channel: DomainLayerChannels.SKChannel,
@@ -174,7 +176,7 @@ class SKPushNotificationNotifier(
         "${channel.channelName}: " + getMessage(skMessage)
 
     private fun getMessage(skMessage: DomainLayerMessages.SKMessage): String {
-        return skMessage.decodedMessage.takeIf { it.isNotEmpty() } ?: "Encrypted Message"
+        return skMessage.decodedMessage.takeIf { it.isNullOrEmpty().not() } ?: "Encrypted Message"
     }
 
     // The flag FLAG_UPDATE_CURRENT is used in conjunction with request code to update pending intent

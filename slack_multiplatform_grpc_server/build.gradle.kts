@@ -23,8 +23,8 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.4.0")
 
     implementation("io.grpc:grpc-netty-shaded:1.50.2")
-    implementation("com.google.zxing:core:3.5.0")
-    implementation("com.google.zxing:javase:3.5.0")
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.javase)
 
     // mongodb
     implementation("org.litote.kmongo:kmongo:4.7.2")

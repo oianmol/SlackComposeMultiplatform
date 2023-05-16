@@ -45,7 +45,6 @@ kotlin {
                 implementation(libs.datetime)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.koin.core)
-
                 implementation(libs.kamel.image)
 
                 implementation(compose.runtime)
@@ -195,9 +194,8 @@ android {
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
     namespace = "dev.baseio.composeui"
+    kotlin {
+        jvmToolchain(11)
+    }
 }

@@ -47,32 +47,47 @@ class SKNetworkSourceChannelImpl(
         channel: DomainLayerChannels.SKChannel,
         userName: String
     ): List<DomainLayerChannels.SkChannelMember> {
-        val channelEncryptedPrivateKeyForLoggedInUser =
+        val channelEncryptedPrivateKeysForLoggedInUser =
             skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
                 channel.workspaceId,
                 channel.channelId,
                 skLocalKeyValueSource.loggedInUser(channel.workspaceId).uuid
-            )!!.channelEncryptedPrivateKey
+            ).map { it.channelEncryptedPrivateKey }
         val capillary =
             CapillaryInstances.getInstance(skLocalKeyValueSource.loggedInUser(channel.workspaceId).email!!)
-        val decryptedChannelPrivateKeyForLoggedInUser = capillary.decrypt(
-            EncryptedData(
-                channelEncryptedPrivateKeyForLoggedInUser.first,
-                channelEncryptedPrivateKeyForLoggedInUser.second
-            ),
-            capillary.privateKey()
-        )
-        val channelPrivateKeyEncryptedForInvitedUser = iDataEncrypter.encrypt(
-            decryptedChannelPrivateKeyForLoggedInUser,
-            skLocalDataSourceUsers.getUserByUserName(
-                channel.workspaceId,
-                userName
-            )!!.publicKey!!.keyBytes
-        ) // TODO fix this ask the backend if not available in local cache!
-        return inviteUserInternal(
-            userName, channel.channelId,
-            channelPrivateKeyEncryptedForInvitedUser
-        )
+
+        val decryptedChannelPrivateKeyForLoggedInUser =
+            channelEncryptedPrivateKeysForLoggedInUser.firstNotNullOfOrNull { channelEncryptedPrivateKeyForLoggedInUser ->
+                kotlin.runCatching {
+                    capillary.decrypt(
+                        EncryptedData(
+                            channelEncryptedPrivateKeyForLoggedInUser.first,
+                            channelEncryptedPrivateKeyForLoggedInUser.second
+                        ),
+                        capillary.privateKey()
+                    )
+                }.getOrNull()
+            }
+
+        val channelPrivateKeyEncryptedForInvitedUser =
+            decryptedChannelPrivateKeyForLoggedInUser?.let {
+                iDataEncrypter.encrypt(
+                    it,
+                    skLocalDataSourceUsers.getUserByUserName(
+                        channel.workspaceId,
+                        userName
+                    )!!.publicKey!!.keyBytes
+                )
+            } // TODO fix this ask the backend if not available in local cache!
+        return channelPrivateKeyEncryptedForInvitedUser?.let {
+            inviteUserInternal(
+                userName, channel.channelId,
+                it
+            )
+        } ?: run {
+            // TODO check, why do we have empty list here ?
+            emptyList()
+        }
     }
 }
 

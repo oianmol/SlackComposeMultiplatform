@@ -13,7 +13,11 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -459,7 +463,39 @@ internal fun RowScope.BottomNavItem(
     BottomNavigationItem(
         selectedContentColor = LocalSlackCloneColor.current.bottomNavSelectedColor,
         unselectedContentColor = LocalSlackCloneColor.current.bottomNavUnSelectedColor,
-        icon = { Icon(Icons.Default.Home, contentDescription = null, Modifier.size(24.dp)) },
+        icon = {
+            when (navBackStackEntry) {
+                is Dashboard.Child.DirectMessagesScreen -> Icon(
+                    Icons.Default.Message,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                is Dashboard.Child.HomeScreen -> Icon(
+                    Icons.Default.Home,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                Dashboard.Child.MentionsScreen -> Icon(
+                    Icons.Default.Email,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                is Dashboard.Child.SearchScreen -> Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                is Dashboard.Child.UserProfileScreen -> Icon(
+                    Icons.Default.VerifiedUser,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+            }
+        },
         label = {
             Text(
                 screen.name,
