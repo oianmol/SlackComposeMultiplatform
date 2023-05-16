@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
 class ChatViewModel(
     coroutineDispatcherProvider: CoroutineDispatcherProvider = getKoin().get(),
@@ -47,12 +48,17 @@ class ChatViewModel(
     var chatBoxState = MutableStateFlow(BoxState.Collapsed)
         private set
 
+    private var parentJob: Job = Job()
+
     var skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
 
     fun requestFetch(channel: DomainLayerChannels.SKChannel) {
         channelFlow = MutableValue(channel)
         sendMessageDelegate.channel = (channelFlow.value)
         skMessagePagination.refresh()
+
+        parentJob.cancel()
+        parentJob = Job()
         channelMembers.value = emptyList()
         loadWorkspaceChannelData(channel)
     }
@@ -75,30 +81,30 @@ class ChatViewModel(
     private fun UseCaseWorkspaceChannelRequest.refreshChannelMembers() =
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
-        }) {
+        } + parentJob) {
             useCaseFetchAndSaveChannelMembers.invoke(this@refreshChannelMembers)
         }
 
     private fun UseCaseWorkspaceChannelRequest.messageChangeListener() {
-        useCaseStreamLocalMessages.invoke(this@messageChangeListener)
+        useCaseStreamLocalMessages(this@messageChangeListener)
             .onEach { skMessageList ->
                 chatMessagesFlow.value = skMessageList
             }
             .catch {
                 it.printStackTrace()
             }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + parentJob)
     }
 
     private fun UseCaseWorkspaceChannelRequest.fetchChannelUsers() {
-        useCaseChannelUsers.invoke(this@fetchChannelUsers)
+        useCaseChannelUsers(this@fetchChannelUsers)
             .onEach { skUserList ->
                 channelMembers.value = skUserList
             }
             .catch {
                 it.printStackTrace()
             }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + parentJob)
     }
 
     private fun getPagination() = Pagination(

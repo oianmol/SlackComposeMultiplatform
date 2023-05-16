@@ -21,7 +21,7 @@ internal fun ChatScreenUI(
     viewModel: ChatViewModel = chatScreenComponent.chatViewModel,
     slackChannel: DomainLayerChannels.SKChannel
 ) {
-    val scaffoldState = rememberBottomSheetScaffoldState()
+    val scaffoldState = rememberScaffoldState()
     var membersDialog by remember { mutableStateOf(false) }
     val offerSecurityKeys by viewModel.securityKeyOffer.collectAsState()
     val requestSecurityKeys by viewModel.securityKeyRequested.collectAsState()
@@ -32,12 +32,9 @@ internal fun ChatScreenUI(
         viewModel.requestFetch(slackChannel)
     }
 
-    BottomSheetScaffold(
+    Scaffold(
         backgroundColor = LocalSlackCloneColor.current.uiBackground,
         contentColor = LocalSlackCloneColor.current.textSecondary,
-        sheetBackgroundColor = LocalSlackCloneColor.current.uiBackground,
-        sheetContentColor = LocalSlackCloneColor.current.textSecondary,
-        sheetPeekHeight = 0.dp,
         modifier = modifier,
         scaffoldState = scaffoldState,
         snackbarHost = {
@@ -46,25 +43,6 @@ internal fun ChatScreenUI(
         topBar = {
             ChatAppBar(onBackClick, channel) {
                 membersDialog = true
-                scope.launch {
-                    scaffoldState.bottomSheetState.expand()
-                }
-            }
-        },
-        sheetContent = {
-            if (membersDialog) {
-                ChannelMembersDialog(members) {
-                    membersDialog = false
-                    scope.launch {
-                        scaffoldState.bottomSheetState.collapse()
-                    }
-                }
-            }
-            if (offerSecurityKeys) {
-                SecurityKeysOfferUI()
-            }
-            if (requestSecurityKeys) {
-                SecurityKeysRequestUI()
             }
         },
     ) { innerPadding ->
@@ -73,6 +51,18 @@ internal fun ChatScreenUI(
                 modifier = Modifier.fillMaxSize(),
                 chatScreenComponent
             )
+
+            if (membersDialog) {
+                ChannelMembersDialog(members) {
+                    membersDialog = false
+                }
+            }
+            if (offerSecurityKeys) {
+                SecurityKeysOfferUI()
+            }
+            if (requestSecurityKeys) {
+                SecurityKeysRequestUI()
+            }
         }
     }
 }
