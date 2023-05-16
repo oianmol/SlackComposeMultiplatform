@@ -52,7 +52,7 @@ class SKLocalDataSourceUsersImpl(
     }
 
     override fun getUser(workspaceId: String, uuid: String): DomainLayerUsers.SKUser? {
-        return slackDB.slackDBQueries.getUser(workspaceId, uuid).executeAsOneOrNull()?.let {
+        return slackDB.slackDBQueries.getUser(workspaceId = workspaceId, userid = uuid).executeAsOneOrNull()?.let {
             mapper.mapToDomain(it)
         }
     }

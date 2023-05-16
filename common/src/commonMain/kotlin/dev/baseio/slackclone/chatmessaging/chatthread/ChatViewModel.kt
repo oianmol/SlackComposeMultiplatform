@@ -47,17 +47,9 @@ class ChatViewModel(
     var chatBoxState = MutableStateFlow(BoxState.Collapsed)
         private set
 
-    private val exceptions = CoroutineExceptionHandler { _, throwable ->
-        throwable.printStackTrace()
-    }
-
-    private var limit = 20
-
     var skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
 
     fun requestFetch(channel: DomainLayerChannels.SKChannel) {
-        viewModelScope.cancel()
-
         channelFlow = MutableValue(channel)
         sendMessageDelegate.channel = (channelFlow.value)
         skMessagePagination.refresh()
@@ -81,7 +73,9 @@ class ChatViewModel(
     }
 
     private fun UseCaseWorkspaceChannelRequest.refreshChannelMembers() =
-        viewModelScope.launch(exceptions) {
+        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
+        }) {
             useCaseFetchAndSaveChannelMembers.invoke(this@refreshChannelMembers)
         }
 
@@ -114,7 +108,7 @@ class ChatViewModel(
             val request = UseCaseWorkspaceChannelRequest(
                 channelFlow.value.workspaceId,
                 (channelFlow.value.channelId),
-                limit,
+                20,
                 currentList?.size ?: 0
             )
             useCaseFetchAndSaveMessages.invoke(
