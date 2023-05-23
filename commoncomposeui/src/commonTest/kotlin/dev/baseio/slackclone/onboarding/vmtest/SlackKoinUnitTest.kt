@@ -2,39 +2,16 @@ package dev.baseio.slackclone.onboarding.vmtest
 
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.security.CapillaryEncryption
-import dev.baseio.security.CapillaryInstances
-import dev.baseio.security.toPublicKey
 import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.Platform.ANDROID
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.platformType
-import dev.baseio.slackdata.datasources.remote.channels.toKMSlackPublicKey
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.encryptionModule
 import dev.baseio.slackdata.injection.testDataSourcesModule
 import dev.baseio.slackdata.injection.testDispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
 import dev.baseio.slackdata.localdata.testDbConnection
-import dev.baseio.slackdata.protos.KMSKChannel
-import dev.baseio.slackdata.protos.KMSKChannels
-import dev.baseio.slackdata.protos.KMSKCreateWorkspaceRequest
-import dev.baseio.slackdata.protos.KMSKDMChannels
-import dev.baseio.slackdata.protos.KMSKEncryptedMessage
-import dev.baseio.slackdata.protos.KMSKWorkspaces
-import dev.baseio.slackdata.protos.kmSKAuthResult
-import dev.baseio.slackdata.protos.kmSKChannel
-import dev.baseio.slackdata.protos.kmSKChannelMember
-import dev.baseio.slackdata.protos.kmSKChannelMembers
-import dev.baseio.slackdata.protos.kmSKChannels
-import dev.baseio.slackdata.protos.kmSKDMChannel
-import dev.baseio.slackdata.protos.kmSKDMChannels
-import dev.baseio.slackdata.protos.kmSKEncryptedMessage
-import dev.baseio.slackdata.protos.kmSKMessage
-import dev.baseio.slackdata.protos.kmSKStatus
-import dev.baseio.slackdata.protos.kmSKUser
-import dev.baseio.slackdata.protos.kmSKWorkspace
-import dev.baseio.slackdata.protos.kmSKWorkspaces
 import dev.baseio.slackdata.provideKeystoreIfRequired
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
@@ -58,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import kotlinx.datetime.Clock
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -110,7 +86,7 @@ abstract class SlackKoinUnitTest : KoinTest {
 
     private fun iGrpcCalls() = koinApplication.koin.get<IGrpcCalls>()
 
-    suspend fun authorizeUserFirst() {
+    suspend fun assumeAuthorized() {
         given(iGrpcCalls()).invocation {
             skKeyValueData
         }.thenReturn(koinApplication.koin.get())

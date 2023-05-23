@@ -32,7 +32,7 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
     @Test
     fun `when create channel is called with new channel name createdChannel is not null and local database has it!`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
             val channelId = "1"
             val name = "channel_public_$channelId"
 
@@ -61,6 +61,9 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
                         asserter.assertTrue({ "was expecting true" }, it.loading)
                     }
                     awaitItem().also {
+                        asserter.assertTrue({ "was expecting true" }, it.loading)
+                    }
+                    awaitItem().also {
                         asserter.assertTrue({ "was expecting false" }, it.loading.not())
                     }
                     asserter.assertTrue({ "was expecting $wasNavigated" }, wasNavigated)
@@ -82,7 +85,7 @@ class CreateNewChannelVMTest : SlackKoinUnitTest() {
     @Test
     fun `when create channel is called with existing channel name then we get an exception`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val channelId = "1"
 

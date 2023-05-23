@@ -3,7 +3,7 @@ package dev.baseio.slackdata.localdata
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
 class FakeKeyValueSource : SKLocalKeyValueSource {
-    val hashMap = HashMap<String, Any>()
+    private val hashMap = HashMap<String, Any>()
     override fun clear() {
         hashMap.clear()
     }

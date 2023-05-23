@@ -29,7 +29,7 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
     @Test
     fun `when user creates a channel then the app navigates to it`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val channelId = "1"
 
@@ -61,7 +61,7 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
     @Test
     fun `when user searches a channel he gets the channel list with that criteria`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val channelId = "1"
             val name = "channel_public_$channelId"
