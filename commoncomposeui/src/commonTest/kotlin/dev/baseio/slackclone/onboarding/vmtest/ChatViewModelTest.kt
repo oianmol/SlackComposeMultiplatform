@@ -23,7 +23,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.asserter
 
-class ChatViewModelTest : SlackKoinUnitTest() {
+class ChatViewModelTest : SlackKoinTest() {
 
     private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages by inject()
     private val useCaseChannelMembers: UseCaseGetChannelMembers by inject()
@@ -48,7 +48,7 @@ class ChatViewModelTest : SlackKoinUnitTest() {
     @Test
     fun `when a message is sent it's found in the local database! and then pagination loads the messages`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
 
@@ -70,7 +70,7 @@ class ChatViewModelTest : SlackKoinUnitTest() {
             // assert that sendMessageDelegate
             val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
             chatViewModel.requestFetch(channels.first())
-            assertEquals(channels.first(), chatViewModel.channel)
+            assertEquals(channels.first(), chatViewModel.channelForSendingMessage)
 
             val pagingState = chatViewModel.skMessagePagination.state.asFlow()
 

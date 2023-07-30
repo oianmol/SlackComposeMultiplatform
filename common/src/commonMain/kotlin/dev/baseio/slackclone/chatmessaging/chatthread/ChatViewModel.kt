@@ -17,10 +17,8 @@ import dev.icerock.moko.paging.LambdaPagedListDataSource
 import dev.icerock.moko.paging.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -38,27 +36,23 @@ class ChatViewModel(
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
     val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
-    var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
-
-    var securityKeyRequested = MutableStateFlow(false)
-        private set
-    var securityKeyOffer = MutableStateFlow(false)
-        private set
-
-    var chatBoxState = MutableStateFlow(BoxState.Collapsed)
-        private set
+    val chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
+    val skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
+    val securityKeyRequested = MutableStateFlow(false)
+    val securityKeyOffer = MutableStateFlow(false)
+    val chatBoxState = MutableStateFlow(BoxState.Collapsed)
 
     private var parentJob: Job = Job()
 
-    var skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
 
     fun requestFetch(channel: DomainLayerChannels.SKChannel) {
         channelFlow = MutableValue(channel)
-        sendMessageDelegate.channel = (channelFlow.value)
+        channelForSendingMessage = (channelFlow.value)
         skMessagePagination.refresh()
 
         parentJob.cancel()
         parentJob = Job()
+
         channelMembers.value = emptyList()
         loadWorkspaceChannelData(channel)
     }
@@ -73,7 +67,7 @@ class ChatViewModel(
 
     fun sendMessageNow(message: String) {
         viewModelScope.launch {
-            sendMessageDelegate.sendMessage(message.trim().trimEnd())
+            sendMessage(message.trim().trimEnd())
             chatBoxState.value = BoxState.Collapsed
         }
     }
@@ -149,7 +143,7 @@ class ChatViewModel(
 
     fun deleteMessage() {
         viewModelScope.launch {
-            sendMessageDelegate.deleteMessageNow(channel)
+            deleteMessageFromChannelNow(channelForSendingMessage)
         }
     }
 

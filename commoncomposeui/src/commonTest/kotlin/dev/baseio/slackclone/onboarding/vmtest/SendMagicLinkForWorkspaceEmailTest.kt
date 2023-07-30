@@ -12,7 +12,7 @@ import kotlin.test.Test
 import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
-class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
+class SendMagicLinkForWorkspaceEmailTest : SlackKoinTest() {
 
     private lateinit var viewModel: SendMagicLinkForWorkspaceViewModel
     private fun getViewModel(email: String) = SendMagicLinkForWorkspaceViewModel(
@@ -80,9 +80,9 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
 
         runTest {
             viewModel.sendMagicLink()
-            viewModel.uiState.test(timeout = 5.seconds) {
+            viewModel.uiState.test {
                 awaitItem().apply {
-                    asserter.assertTrue(actual = this.error != null, message = "error was null!")
+                    asserter.assertTrue("was expecting to fail",this.error != null)
                 }
             }
         }

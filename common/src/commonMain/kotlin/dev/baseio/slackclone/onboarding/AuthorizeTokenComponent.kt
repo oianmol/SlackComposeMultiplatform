@@ -18,7 +18,6 @@ class AuthorizeTokenComponent(
                 useCaseFetchAndSaveCurrentUser = getKoin().get(),
                 useCaseFetchAndSaveUserWorkspace = getKoin().get(),
                 authToken = token,
-                navigateBackNow = navigateBack,
                 navigateDashboard = navigateDashboard
             )
         }

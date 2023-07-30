@@ -1,41 +1,18 @@
 package dev.baseio.slackclone.onboarding.vmtest
 
+import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.security.CapillaryEncryption
-import dev.baseio.security.CapillaryInstances
-import dev.baseio.security.toPublicKey
 import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.Platform.ANDROID
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
+import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.platformType
-import dev.baseio.slackdata.datasources.remote.channels.toKMSlackPublicKey
+import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.encryptionModule
-import dev.baseio.slackdata.injection.testDataSourcesModule
-import dev.baseio.slackdata.injection.testDispatcherModule
 import dev.baseio.slackdata.injection.useCaseModule
-import dev.baseio.slackdata.localdata.testDbConnection
-import dev.baseio.slackdata.protos.KMSKChannel
-import dev.baseio.slackdata.protos.KMSKChannels
-import dev.baseio.slackdata.protos.KMSKCreateWorkspaceRequest
-import dev.baseio.slackdata.protos.KMSKDMChannels
-import dev.baseio.slackdata.protos.KMSKEncryptedMessage
-import dev.baseio.slackdata.protos.KMSKWorkspaces
-import dev.baseio.slackdata.protos.kmSKAuthResult
-import dev.baseio.slackdata.protos.kmSKChannel
-import dev.baseio.slackdata.protos.kmSKChannelMember
-import dev.baseio.slackdata.protos.kmSKChannelMembers
-import dev.baseio.slackdata.protos.kmSKChannels
-import dev.baseio.slackdata.protos.kmSKDMChannel
-import dev.baseio.slackdata.protos.kmSKDMChannels
-import dev.baseio.slackdata.protos.kmSKEncryptedMessage
-import dev.baseio.slackdata.protos.kmSKMessage
-import dev.baseio.slackdata.protos.kmSKStatus
-import dev.baseio.slackdata.protos.kmSKUser
-import dev.baseio.slackdata.protos.kmSKWorkspace
-import dev.baseio.slackdata.protos.kmSKWorkspaces
-import dev.baseio.slackdata.provideKeystoreIfRequired
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
@@ -49,47 +26,50 @@ import dev.baseio.slackdomain.usecases.users.UseCaseFetchChannelsWithSearch
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseAuthWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
-import io.mockative.classOf
 import io.mockative.Mock
 import io.mockative.any
+import io.mockative.classOf
 import io.mockative.given
 import io.mockative.mock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import kotlinx.datetime.Clock
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import testDataSourcesModule
+import testDispatcherModule
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-abstract class SlackKoinUnitTest : KoinTest {
+abstract class SlackKoinTest : KoinTest {
 
     @Mock
     var iGrpcCalls: IGrpcCalls = mock(classOf())
 
-    val koinApplication: KoinApplication = startKoin {
-        modules(
-            module {
-                single {
-                    SlackDB.invoke(testDbConnection())
-                }
-            },
-            useCaseModule,
-            viewModelDelegateModule,
-            dataMappersModule,
-            encryptionModule,
-            testDataSourcesModule {
-                iGrpcCalls
-            },
-            testDispatcherModule
-        )
+    val koinApplication: KoinApplication by lazy {
+        startKoin {
+            modules(
+                module {
+                    single { SlackDB.invoke(DriverFactory(get()).createDriver(SlackDB.Schema)) }
+                },
+                useCaseModule,
+                viewModelDelegateModule,
+                dataMappersModule,
+                encryptionModule,
+                testDataSourcesModule {
+                    iGrpcCalls
+                },
+                testDispatcherModule
+            )
+        }.also {
+            koinApp = it
+        }
     }
+
     protected lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
     protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
     protected val useCaseAuthWorkspace: UseCaseAuthWorkspace by inject()
@@ -110,7 +90,7 @@ abstract class SlackKoinUnitTest : KoinTest {
 
     private fun iGrpcCalls() = koinApplication.koin.get<IGrpcCalls>()
 
-    suspend fun authorizeUserFirst() {
+    suspend fun assumeAuthorized() {
         given(iGrpcCalls()).invocation {
             skKeyValueData
         }.thenReturn(koinApplication.koin.get())
@@ -184,8 +164,6 @@ abstract class SlackKoinUnitTest : KoinTest {
     private fun platformMess() {
         when (platformType()) {
             ANDROID -> {
-                Dispatchers.setMain(coroutineDispatcherProvider.main)
-                provideKeystoreIfRequired()
             }
 
             Platform.IOS -> {
@@ -196,3 +174,9 @@ abstract class SlackKoinUnitTest : KoinTest {
         }
     }
 }
+
+internal fun testDbConnection(): SqlDriver {
+    return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        .also { SlackDB.Schema.create(it) }
+}
+

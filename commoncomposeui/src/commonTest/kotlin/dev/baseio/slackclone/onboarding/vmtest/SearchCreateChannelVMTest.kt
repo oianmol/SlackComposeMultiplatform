@@ -1,18 +1,17 @@
 package dev.baseio.slackclone.onboarding.vmtest
 
-import androidx.compose.runtime.snapshotFlow
 import app.cash.turbine.test
 import dev.baseio.slackclone.chatmessaging.newchat.SearchCreateChannelVM
 import dev.baseio.slackdata.datasources.remote.channels.mapToDomainSkChannel
 import io.mockative.any
 import io.mockative.given
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.asserter
 
-class SearchCreateChannelVMTest : SlackKoinUnitTest() {
-    var navigated = false
+class SearchCreateChannelVMTest : SlackKoinTest() {
+    var navigated = MutableStateFlow(false)
 
     private val searchCreateChannelVM: SearchCreateChannelVM by lazy {
         SearchCreateChannelVM(
@@ -22,14 +21,14 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
             useCaseCreateChannel,
             useCaseFetchChannelsWithSearch
         ) {
-            navigated = true
+            navigated.value = true
         }
     }
 
     @Test
-    fun `when user creates a channel then the app navigates to it`() {
+    fun when_user_creates_a_channel_then_the_app_navigates_to_it() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val channelId = "1"
 
@@ -50,9 +49,8 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
                 ).mapToDomainSkChannel()
             )
 
-            snapshotFlow {
-                navigated
-            }.distinctUntilChanged().test {
+            navigated.test {
+                awaitItem()
                 asserter.assertTrue("was expecting to be navigated", awaitItem())
             }
         }
@@ -61,7 +59,7 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
     @Test
     fun `when user searches a channel he gets the channel list with that criteria`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val channelId = "1"
             val name = "channel_public_$channelId"

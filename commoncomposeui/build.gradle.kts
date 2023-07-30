@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
@@ -12,6 +13,11 @@ plugins {
 
 group = "dev.baseio.slackclone.composeui"
 version = "1.0"
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
+}
+
 
 kotlin {
     android()
@@ -32,7 +38,8 @@ kotlin {
             baseName = "commoncomposeui"
             isStatic = true
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+        extraSpecAttributes["resources"] =
+            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -82,6 +89,28 @@ kotlin {
                 implementation(libs.androidx.junit.ext.ktx)
                 implementation(libs.coroutines.test)
                 implementation(libs.grpc.okhttp)
+            }
+        }
+        val androidInstrumentedTest by getting {
+            dependencies {
+                implementation(libs.androidx.core)
+                implementation(libs.androidx.ui.test.manifest)
+                implementation(libs.androidx.ui.test)
+                implementation(libs.androidx.ui.test.junit4)
+                implementation(libs.sqldelight.jvmdriver)
+                implementation(libs.sqldelight.androiddriver)
+                implementation(libs.coroutines.test)
+                implementation(libs.coroutines)
+                implementation(libs.androidx.uiautomator)
+                implementation(libs.androidx.rules)
+
+                implementation(libs.koin.test)
+                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(libs.test.core)
+                implementation("io.mockative:mockative:1.4.1")
+
             }
         }
         val jvmTest by getting {
@@ -177,7 +206,7 @@ dependencies {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -192,7 +221,7 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
     packagingOptions {
-        resources.excludes.add("google/protobuf/*.proto")
+        resources.excludes.addAll(listOf("META-INF/INDEX.LIST", "google/protobuf/*.proto"))
     }
     namespace = "dev.baseio.composeui"
     kotlin {

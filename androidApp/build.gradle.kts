@@ -51,7 +51,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")
     }

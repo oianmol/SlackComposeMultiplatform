@@ -1,5 +1,3 @@
-package dev.baseio.slackdata.localdata
-
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
 class FakeKeyValueSource : SKLocalKeyValueSource {
