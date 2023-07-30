@@ -6,13 +6,14 @@ import dev.baseio.slackclone.chatmessaging.newchat.SearchCreateChannelVM
 import dev.baseio.slackdata.datasources.remote.channels.mapToDomainSkChannel
 import io.mockative.any
 import io.mockative.given
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.asserter
 
 class SearchCreateChannelVMTest : SlackKoinUnitTest() {
-    var navigated = false
+    var navigated = MutableStateFlow(false)
 
     private val searchCreateChannelVM: SearchCreateChannelVM by lazy {
         SearchCreateChannelVM(
@@ -22,7 +23,7 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
             useCaseCreateChannel,
             useCaseFetchChannelsWithSearch
         ) {
-            navigated = true
+            navigated.value = true
         }
     }
 
@@ -50,9 +51,8 @@ class SearchCreateChannelVMTest : SlackKoinUnitTest() {
                 ).mapToDomainSkChannel()
             )
 
-            snapshotFlow {
-                navigated
-            }.distinctUntilChanged().test {
+            navigated.test {
+                awaitItem()
                 asserter.assertTrue("was expecting to be navigated", awaitItem())
             }
         }

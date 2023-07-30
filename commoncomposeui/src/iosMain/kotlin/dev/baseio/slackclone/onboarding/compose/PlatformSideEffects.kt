@@ -52,7 +52,7 @@ actual object PlatformSideEffects {
     ) {
         val statusBar = uiView()
         SideEffect {
-            statusBar?.backgroundColor = topColor.toUIColor()
+            statusBar.backgroundColor = topColor.toUIColor()
             UINavigationBar.appearance().backgroundColor = bottomColor.toUIColor()
         }
     }

@@ -9,6 +9,7 @@ import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
@@ -80,9 +81,9 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
 
         runTest {
             viewModel.sendMagicLink()
-            viewModel.uiState.test(timeout = 5.seconds) {
+            viewModel.uiState.test {
                 awaitItem().apply {
-                    asserter.assertTrue(actual = this.error != null, message = "error was null!")
+                    asserter.assertTrue("was expecting to fail",this.error != null)
                 }
             }
         }

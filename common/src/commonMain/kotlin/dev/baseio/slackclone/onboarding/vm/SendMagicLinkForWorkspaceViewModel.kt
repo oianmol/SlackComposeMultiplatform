@@ -43,7 +43,6 @@ class SendMagicLinkForWorkspaceViewModel(
     fun sendMagicLink() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
-                throwable.printStackTrace()
                 uiState.value = uiState.value.copy(error = throwable, loading = false)
             }
         ) {

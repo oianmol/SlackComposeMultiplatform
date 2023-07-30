@@ -15,7 +15,6 @@ class AuthorizeTokenVM(
     private val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser,
     private val useCaseFetchAndSaveUserWorkspace: UseCaseFetchAndSaveWorkspaces,
     private val authToken: String,
-    private val navigateBackNow: () -> Unit,
     private val navigateDashboard: () -> Unit
 ) :
     SlackViewModel(coroutineDispatcherProvider) {
@@ -23,7 +22,7 @@ class AuthorizeTokenVM(
     val uiState = MutableStateFlow(AuthCreateWorkspaceVMState())
 
     init {
-        initiateWithToken(navigateBackNow, authToken, navigateDashboard)
+        initiateWithToken(authToken, navigateDashboard)
     }
 
     /**
@@ -43,14 +42,12 @@ class AuthorizeTokenVM(
 
 
     private fun initiateWithToken(
-        navigateBackNow: () -> Unit,
         authToken: String,
         navigateDashboard: () -> Unit
     ) {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
-                navigateBackNow()
                 uiState.value = uiState.value.copy(error = throwable)
             }
         ) {
@@ -62,6 +59,6 @@ class AuthorizeTokenVM(
     }
 
     fun retry() {
-        initiateWithToken(navigateBackNow, authToken, navigateDashboard)
+        initiateWithToken(authToken, navigateDashboard)
     }
 }
