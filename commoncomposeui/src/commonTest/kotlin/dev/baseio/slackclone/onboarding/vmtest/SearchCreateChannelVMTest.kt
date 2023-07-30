@@ -26,7 +26,7 @@ class SearchCreateChannelVMTest : SlackKoinTest() {
     }
 
     @Test
-    fun `when user creates a channel then the app navigates to it`() {
+    fun when_user_creates_a_channel_then_the_app_navigates_to_it() {
         runTest {
             assumeAuthorized()
 

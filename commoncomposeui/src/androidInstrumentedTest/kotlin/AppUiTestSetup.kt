@@ -6,6 +6,7 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
+import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.onboarding.vmtest.SlackKoinTest
 import org.junit.After
 import org.junit.Before
@@ -39,8 +40,10 @@ class AppUiTestSetup : SlackKoinTest(), UiTestDiSetup {
     context(ComposeContentTestRule)
     override fun setAppContent() {
         setContent {
-            SlackApp {
-                rootComponent
+            SlackCloneTheme {
+                SlackApp {
+                    rootComponent
+                }
             }
         }
     }

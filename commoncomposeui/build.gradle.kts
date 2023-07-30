@@ -38,7 +38,8 @@ kotlin {
             baseName = "commoncomposeui"
             isStatic = true
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+        extraSpecAttributes["resources"] =
+            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
@@ -91,7 +92,6 @@ kotlin {
             }
         }
         val androidInstrumentedTest by getting {
-            dependsOn(commonTest)
             dependencies {
                 implementation(libs.androidx.core)
                 implementation(libs.androidx.ui.test.manifest)
@@ -103,6 +103,14 @@ kotlin {
                 implementation(libs.coroutines)
                 implementation(libs.androidx.uiautomator)
                 implementation(libs.androidx.rules)
+
+                implementation(libs.koin.test)
+                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(libs.test.core)
+                implementation("io.mockative:mockative:1.4.1")
+
             }
         }
         val jvmTest by getting {
@@ -198,7 +206,7 @@ dependencies {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -213,7 +221,7 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
     packagingOptions {
-        resources.excludes.add("google/protobuf/*.proto")
+        resources.excludes.addAll(listOf("META-INF/INDEX.LIST", "google/protobuf/*.proto"))
     }
     namespace = "dev.baseio.composeui"
     kotlin {
