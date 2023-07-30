@@ -49,23 +49,26 @@ abstract class SlackKoinUnitTest : KoinTest {
     @Mock
     var iGrpcCalls: IGrpcCalls = mock(classOf())
 
-    val koinApplication: KoinApplication = startKoin {
-        modules(
-            module {
-                single {
-                    SlackDB.invoke(testDbConnection())
-                }
-            },
-            useCaseModule,
-            viewModelDelegateModule,
-            dataMappersModule,
-            encryptionModule,
-            testDataSourcesModule {
-                iGrpcCalls
-            },
-            testDispatcherModule
-        )
+    val koinApplication: KoinApplication by lazy {
+        startKoin {
+            modules(
+                module {
+                    single {
+                        SlackDB.invoke(testDbConnection())
+                    }
+                },
+                useCaseModule,
+                viewModelDelegateModule,
+                dataMappersModule,
+                encryptionModule,
+                testDataSourcesModule {
+                    iGrpcCalls
+                },
+                testDispatcherModule
+            )
+        }
     }
+
     protected lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
     protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
     protected val useCaseAuthWorkspace: UseCaseAuthWorkspace by inject()

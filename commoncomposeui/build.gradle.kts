@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
@@ -12,6 +13,11 @@ plugins {
 
 group = "dev.baseio.slackclone.composeui"
 version = "1.0"
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
+}
+
 
 kotlin {
     android()
