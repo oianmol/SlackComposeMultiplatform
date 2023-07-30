@@ -84,6 +84,21 @@ kotlin {
                 implementation(libs.grpc.okhttp)
             }
         }
+        val androidInstrumentedTest by getting {
+            dependsOn(commonTest)
+            dependencies {
+                implementation(libs.androidx.core)
+                implementation(libs.androidx.ui.test.manifest)
+                implementation(libs.androidx.ui.test)
+                implementation(libs.androidx.ui.test.junit4)
+                implementation(libs.sqldelight.jvmdriver)
+                implementation(libs.sqldelight.androiddriver)
+                implementation(libs.coroutines.test)
+                implementation(libs.coroutines)
+                implementation(libs.androidx.uiautomator)
+                implementation(libs.androidx.rules)
+            }
+        }
         val jvmTest by getting {
             dependencies {
                 implementation(libs.grpc.okhttp)
