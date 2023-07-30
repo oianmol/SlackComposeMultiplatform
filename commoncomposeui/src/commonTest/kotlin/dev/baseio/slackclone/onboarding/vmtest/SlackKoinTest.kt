@@ -44,7 +44,7 @@ import org.koin.test.inject
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-abstract class SlackKoinUnitTest : KoinTest {
+abstract class SlackKoinTest : KoinTest {
 
     @Mock
     var iGrpcCalls: IGrpcCalls = mock(classOf())

@@ -1,18 +1,16 @@
 package dev.baseio.slackclone.onboarding.vmtest
 
-import androidx.compose.runtime.snapshotFlow
 import app.cash.turbine.test
 import dev.baseio.slackclone.chatmessaging.newchat.SearchCreateChannelVM
 import dev.baseio.slackdata.datasources.remote.channels.mapToDomainSkChannel
 import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.asserter
 
-class SearchCreateChannelVMTest : SlackKoinUnitTest() {
+class SearchCreateChannelVMTest : SlackKoinTest() {
     var navigated = MutableStateFlow(false)
 
     private val searchCreateChannelVM: SearchCreateChannelVM by lazy {

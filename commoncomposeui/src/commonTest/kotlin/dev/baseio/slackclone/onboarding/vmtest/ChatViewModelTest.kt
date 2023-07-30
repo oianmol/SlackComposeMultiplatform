@@ -23,7 +23,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.asserter
 
-class ChatViewModelTest : SlackKoinUnitTest() {
+class ChatViewModelTest : SlackKoinTest() {
 
     private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages by inject()
     private val useCaseChannelMembers: UseCaseGetChannelMembers by inject()

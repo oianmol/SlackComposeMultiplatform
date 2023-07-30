@@ -10,6 +10,9 @@ interface UiTestDiSetup {
     @Before
     fun setupKoin()
 
+    context(ComposeContentTestRule)
+    fun setAppContent()
+
     @After
     fun close()
 }

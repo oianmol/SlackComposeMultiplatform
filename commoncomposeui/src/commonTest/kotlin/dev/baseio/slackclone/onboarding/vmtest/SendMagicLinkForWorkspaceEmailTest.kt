@@ -9,11 +9,10 @@ import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
-class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
+class SendMagicLinkForWorkspaceEmailTest : SlackKoinTest() {
 
     private lateinit var viewModel: SendMagicLinkForWorkspaceViewModel
     private fun getViewModel(email: String) = SendMagicLinkForWorkspaceViewModel(

@@ -13,7 +13,7 @@ import org.koin.test.inject
 import kotlin.test.Test
 import kotlin.test.asserter
 
-class CreateNewChannelVMTest : SlackKoinUnitTest() {
+class CreateNewChannelVMTest : SlackKoinTest() {
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
     private var wasNavigated = false
     private var navigationWith: (SKChannel) -> Unit = {
