@@ -31,9 +31,10 @@ The project supports android, compose iOS and jvm platform, make sure you match 
 ![Slack Multiplatform (3)](https://user-images.githubusercontent.com/4393101/205478274-23b55650-5676-4530-bd12-cdbd96dd098d.png)
 
 
-Video Demo 
+Video Demo with Andorid, iOS and JVM Desktop
 
 https://user-images.githubusercontent.com/4393101/229371347-1cebf7bf-384d-4ec0-bfcf-19b1e34e6290.mp4
+
 
 
 
