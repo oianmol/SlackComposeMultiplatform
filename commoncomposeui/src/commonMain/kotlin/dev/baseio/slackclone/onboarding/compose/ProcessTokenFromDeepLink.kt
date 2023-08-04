@@ -74,7 +74,7 @@ internal fun ProcessAuthTokenScreen(component: AuthorizeTokenComponent) {
                             text = "Failed to verify the token! \n${uiState.error?.message}️",
                             fontWeight = FontWeight.Light,
                             style = SlackCloneTypography.subtitle1.copy(
-                                color = slackWhite,
+                                color = LocalSlackCloneColor.current.textPrimary,
                                 letterSpacing = 4.sp
                             ),
                             modifier = Modifier.padding(8.dp)

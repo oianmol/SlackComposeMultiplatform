@@ -125,7 +125,7 @@ object AuthTestFixtures {
 
     fun testWorkspace() = kmSKWorkspace {
         this.uuid = "1"
-        this.name = "slack"
+        this.name = "testworkspace"
         this.domain = "slack.com"
     }
 

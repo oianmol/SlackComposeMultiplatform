@@ -1,4 +1,4 @@
-package dev.transactionapp.mobile.robots
+package robots
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
@@ -20,6 +20,13 @@ suspend fun clickNodeWithTag(tag: String) {
 context(ComposeContentTestRule)
 suspend fun scrollAndTypeOnTFWithTag(tag: String, text: String) {
     scrollToTag(tag)
+    onNodeWithTag(tag)
+        .performTextInput(text)
+    awaitIdle()
+}
+
+context(ComposeContentTestRule)
+suspend fun typeOnTFWithTag(tag: String, text: String) {
     onNodeWithTag(tag)
         .performTextInput(text)
     awaitIdle()

@@ -52,8 +52,8 @@ class AuthorizeTokenVM(
             }
         ) {
             uiState.value = uiState.value.copy(loading = true)
-            useCaseFetchAndSaveUserWorkspace.invoke(authToken)
-            useCaseFetchAndSaveCurrentUser.invoke()
+            useCaseFetchAndSaveUserWorkspace.invoke(authToken).getOrThrow()
+            useCaseFetchAndSaveCurrentUser.invoke().getOrThrow()
             navigateDashboard()
         }
     }

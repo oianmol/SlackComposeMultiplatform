@@ -7,7 +7,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.onboarding.vmtest.SlackKoinTest
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -19,7 +19,7 @@ class AppUiTestSetup : SlackKoinTest(), UiTestDiSetup {
     @get:Rule
     override val rule = createAndroidComposeRule<ComponentActivity>()
 
-    private val rootComponent by lazy {
+    override val rootComponent by lazy {
         RootComponent(
             DefaultComponentContext(
                 LifecycleRegistry()
@@ -29,12 +29,13 @@ class AppUiTestSetup : SlackKoinTest(), UiTestDiSetup {
 
 
     @Before
-    override fun setupKoin() {
+    override fun setupKoin() : Unit = runBlocking {
         koinApplication.koin.also {
             it.loadModules(listOf(module {
                 single<Context> { rule.activity }
             }))
         }
+        setupMocks()
     }
 
     context(ComposeContentTestRule)

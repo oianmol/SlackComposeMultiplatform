@@ -1,5 +1,3 @@
-package dev.baseio.slackclone.onboarding.vmtest
-
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import dev.baseio.database.SlackDB
@@ -8,6 +6,7 @@ import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.Platform.ANDROID
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.koinApp
+import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
 import dev.baseio.slackclone.platformType
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.injection.dataMappersModule
@@ -32,18 +31,18 @@ import io.mockative.classOf
 import io.mockative.given
 import io.mockative.mock
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
+import org.junit.Before
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import testDataSourcesModule
-import testDispatcherModule
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 
 abstract class SlackKoinTest : KoinTest {
 
@@ -83,14 +82,35 @@ abstract class SlackKoinTest : KoinTest {
     protected val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser by inject()
     protected val getUsers: UseCaseFetchAndSaveUsers by inject()
 
-    @BeforeTest
+    @Before
     fun setUp() {
         platformMess()
+        runBlocking {
+            setupMocks()
+        }
     }
 
     private fun iGrpcCalls() = koinApplication.koin.get<IGrpcCalls>()
 
     suspend fun assumeAuthorized() {
+        useCaseAuthWorkspace.invoke(AuthTestFixtures.testUser().email, "slack.com")
+        useCaseFetchAndSaveCurrentUser.invoke()
+        getWorkspaces.invoke("some token")
+        selectedWorkspace = useCaseGetSelectedWorkspace.invoke()!!
+        getChannels.invoke(selectedWorkspace.uuid, 0, 20)
+        val channels = skLocalDataSourceChannels.fetchAllChannels(selectedWorkspace.uuid).first()
+        channels.forEach {
+            useCaseFetchAndSaveChannelMembers.invoke(
+                UseCaseWorkspaceChannelRequest(
+                    it.workspaceId,
+                    it.channelId
+                )
+            )
+        }
+        getUsers.invoke(selectedWorkspace.uuid)
+    }
+
+    suspend fun setupMocks() {
         given(iGrpcCalls()).invocation {
             skKeyValueData
         }.thenReturn(koinApplication.koin.get())
@@ -129,21 +149,30 @@ abstract class SlackKoinTest : KoinTest {
             .whenInvokedWith(any(), any(), any(), any())
             .thenReturn(AuthTestFixtures.testPublicChannels("1"))
 
-        useCaseAuthWorkspace.invoke(AuthTestFixtures.testUser().email, "slack.com")
-        useCaseFetchAndSaveCurrentUser.invoke()
-        getWorkspaces.invoke("some token")
-        selectedWorkspace = useCaseGetSelectedWorkspace.invoke()!!
-        getChannels.invoke(selectedWorkspace.uuid, 0, 20)
-        val channels = skLocalDataSourceChannels.fetchAllChannels(selectedWorkspace.uuid).first()
-        channels.forEach {
-            useCaseFetchAndSaveChannelMembers.invoke(
-                UseCaseWorkspaceChannelRequest(
-                    it.workspaceId,
-                    it.channelId
-                )
-            )
-        }
-        getUsers.invoke(selectedWorkspace.uuid)
+        given(iGrpcCalls())
+            .function(iGrpcCalls()::listenToChangeInMessages)
+            .whenInvokedWith(any(), any())
+            .thenReturn(emptyFlow())
+
+        given(iGrpcCalls())
+            .function(iGrpcCalls()::listenToChangeInUsers)
+            .whenInvokedWith(any(), any())
+            .thenReturn(emptyFlow())
+
+        given(iGrpcCalls())
+            .function(iGrpcCalls()::listenToChangeInChannels)
+            .whenInvokedWith(any(), any())
+            .thenReturn(emptyFlow())
+
+        given(iGrpcCalls())
+            .function(iGrpcCalls()::listenToChangeInDMChannels)
+            .whenInvokedWith(any(), any())
+            .thenReturn(emptyFlow())
+
+        given(iGrpcCalls())
+            .function(iGrpcCalls()::listenToChangeInChannelMembers)
+            .whenInvokedWith(any(), any(), any())
+            .thenReturn(emptyFlow())
     }
 
 

@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -322,6 +323,7 @@ internal fun QrCodeButton(scanMode: Boolean, onClick: () -> Unit) {
         },
         Modifier
             .fillMaxWidth()
+            .testTag( if (!scanMode) "scanqr" else "closescanqr")
             .height(40.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         border = BorderStroke(2.dp, Color.White)
@@ -346,6 +348,7 @@ internal fun LoginButton(
         },
         Modifier
             .fillMaxWidth()
+            .testTag("magiclink")
             .height(40.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(52, 120, 92, 255))
     ) {

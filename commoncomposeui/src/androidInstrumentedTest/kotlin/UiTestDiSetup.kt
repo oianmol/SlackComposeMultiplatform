@@ -1,4 +1,5 @@
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import dev.baseio.slackclone.RootComponent
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -15,4 +16,5 @@ interface UiTestDiSetup {
 
     @After
     fun close()
+    val rootComponent: RootComponent
 }

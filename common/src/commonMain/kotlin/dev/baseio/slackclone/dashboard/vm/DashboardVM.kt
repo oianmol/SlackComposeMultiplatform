@@ -17,6 +17,7 @@ import dev.baseio.slackdomain.usecases.chat.UseCaseFetchAndUpdateChangeInMessage
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndSaveUsers
 import dev.baseio.slackdomain.usecases.users.UseCaseFetchAndUpdateChangeInUsers
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -69,7 +70,9 @@ class DashboardVM(
             }
         }.launchIn(viewModelScope)
 
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+            throwable.printStackTrace()
+        }) {
             useCaseSaveFCMToken.invoke(fcmToken())
         }
         useCaseGetSelectedWorkspace.invokeFlow().onEach {

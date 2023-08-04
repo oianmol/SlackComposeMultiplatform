@@ -15,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,6 +64,7 @@ internal fun EmailTF(email: String, onUpdate: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
+        modifier = Modifier.testTag("emailinput"),
         value = email,
         onValueChange = { newEmail ->
             onUpdate(newEmail)
