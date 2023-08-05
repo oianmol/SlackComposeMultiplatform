@@ -1,5 +1,6 @@
 package dev.baseio.slackclone
 
+import dev.baseio.grpc.GrpcCalls
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.dataSourceModule
@@ -23,7 +24,13 @@ fun initKoin(): KoinApplication {
     return startKoin {
         modules(
             platformModule(),
-            dataSourceModule,
+            dataSourceModule {
+                GrpcCalls(
+                    skKeyValueData = slackKoinApp.koin.get(),
+                    address = BuildKonfig.ipAddr,
+                    coroutineDispatcherProvider = slackKoinApp.koin.get()
+                )
+            },
             encryptionModule,
             dataMappersModule,
             useCaseModule,
