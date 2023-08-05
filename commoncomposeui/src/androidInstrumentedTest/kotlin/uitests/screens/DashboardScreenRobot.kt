@@ -1,4 +1,4 @@
-package screens
+package uitests.screens
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText

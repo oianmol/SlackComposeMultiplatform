@@ -1,4 +1,4 @@
-package robots
+package uitests.robots
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag

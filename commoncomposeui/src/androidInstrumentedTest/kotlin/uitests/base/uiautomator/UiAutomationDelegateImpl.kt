@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.uiautomator
 
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry

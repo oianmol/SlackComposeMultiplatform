@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.authorizedtest
 
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.usecases.auth.UseCaseFetchAndSaveCurrentUser

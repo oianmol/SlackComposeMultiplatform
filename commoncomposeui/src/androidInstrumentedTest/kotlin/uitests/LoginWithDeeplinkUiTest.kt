@@ -5,15 +5,15 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.junit.Before
 import org.junit.Test
-import screens.dashboardScreenRobot
-import screens.emailAddressInputRobot
-import screens.gettingStartedRobot
-import uitests.base.FakeDependencies
-import uitests.base.FakeSlackAppDependencies
-import uitests.base.SlackAppSetup
-import uitests.base.SlackAppSetupImpl
-import uitests.base.UiAutomation
-import uitests.base.UiAutomationDelegateImpl
+import uitests.screens.dashboardScreenRobot
+import uitests.screens.emailAddressInputRobot
+import uitests.screens.gettingStartedRobot
+import uitests.base.uiautomator.UiAutomation
+import uitests.base.uiautomator.UiAutomationDelegateImpl
+import uitests.base.composeappsetup.SlackAppSetup
+import uitests.base.composeappsetup.SlackAppSetupImpl
+import uitests.base.mockgrpc.FakeDependencies
+import uitests.base.mockgrpc.FakeSlackAppDependencies
 
 class LoginWithDeeplinkUiTest : SlackAppSetup by SlackAppSetupImpl(),
     FakeDependencies by FakeSlackAppDependencies(),

@@ -1,10 +1,11 @@
-package uitests.base
+package uitests.base.mockgrpc
 
 import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
 import dev.baseio.slackclone.slackKoinApp
 import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.flow.emptyFlow
+import uitests.base.composeappsetup.iGrpcCalls
 
 class FakeSlackAppDependencies : FakeDependencies {
     override fun fakeListenToChangeInChannelMembers() {

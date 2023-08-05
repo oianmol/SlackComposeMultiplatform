@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.authorizedtest
 
 import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels

@@ -1,8 +1,8 @@
-package screens
+package uitests.screens
 
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import robots.clickWithText
-import robots.typeOnTFWithTag
+import uitests.robots.clickWithText
+import uitests.robots.typeOnTFWithTag
 
 class EmailAddressInputRobot {
 

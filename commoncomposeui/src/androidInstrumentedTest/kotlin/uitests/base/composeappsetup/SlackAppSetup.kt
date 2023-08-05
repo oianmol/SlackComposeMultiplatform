@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.composeappsetup
 
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import dev.baseio.grpc.IGrpcCalls

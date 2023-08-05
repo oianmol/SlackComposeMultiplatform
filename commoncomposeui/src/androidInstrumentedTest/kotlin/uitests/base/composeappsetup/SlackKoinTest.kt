@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.composeappsetup
 
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls

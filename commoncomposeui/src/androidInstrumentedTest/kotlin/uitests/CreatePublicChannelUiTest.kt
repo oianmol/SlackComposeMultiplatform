@@ -2,14 +2,14 @@ package uitests
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import uitests.base.AuthorizedTest
-import uitests.base.FakeDependencies
-import uitests.base.FakeSlackAppDependencies
-import uitests.base.SlackAppSetup
-import uitests.base.SlackAppSetupImpl
-import uitests.base.SlackAuthorizedTest
-import uitests.base.UiAutomation
-import uitests.base.UiAutomationDelegateImpl
+import uitests.base.uiautomator.UiAutomation
+import uitests.base.uiautomator.UiAutomationDelegateImpl
+import uitests.base.authorizedtest.AuthorizedTest
+import uitests.base.authorizedtest.SlackAuthorizedTest
+import uitests.base.composeappsetup.SlackAppSetup
+import uitests.base.composeappsetup.SlackAppSetupImpl
+import uitests.base.mockgrpc.FakeDependencies
+import uitests.base.mockgrpc.FakeSlackAppDependencies
 
 class CreatePublicChannelUiTest : SlackAppSetup by SlackAppSetupImpl(),
     FakeDependencies by FakeSlackAppDependencies(),

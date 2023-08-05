@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.uiautomator
 
 import androidx.test.uiautomator.UiDevice
 

@@ -1,9 +1,9 @@
-package screens
+package uitests.screens
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import robots.clickNodeWithTag
+import uitests.robots.clickNodeWithTag
 
 @OptIn(ExperimentalTestApi::class)
 class GettingStartedRobot {

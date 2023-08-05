@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.composeappsetup
 
 import android.content.Context
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package uitests.base
+package uitests.base.mockgrpc
 
 interface FakeDependencies {
 
