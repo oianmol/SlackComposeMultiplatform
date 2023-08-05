@@ -4,10 +4,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 
-interface UiTestDiSetup {
+interface SlackAppSetup {
 
     @get:Rule
     val rule: ComposeContentTestRule
+    val rootComponent: RootComponent
+
     @Before
     fun setupKoin()
 
@@ -16,5 +18,4 @@ interface UiTestDiSetup {
 
     @After
     fun close()
-    val rootComponent: RootComponent
 }

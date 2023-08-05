@@ -1,4 +1,3 @@
-import UiAutomation
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -28,12 +27,14 @@ class UiAutomationDelegateImpl : UiAutomation {
 
     override fun denyPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
-            val denyPermission = device.findObject(UiSelector().text(
-                when (Build.VERSION.SDK_INT) {
-                    in 24..28 -> "DENY"
-                    else -> "Deny"
-                }
-            ))
+            val denyPermission = device.findObject(
+                UiSelector().text(
+                    when (Build.VERSION.SDK_INT) {
+                        in 24..28 -> "DENY"
+                        else -> "Deny"
+                    }
+                )
+            )
             if (denyPermission.exists()) {
                 denyPermission.click()
             }

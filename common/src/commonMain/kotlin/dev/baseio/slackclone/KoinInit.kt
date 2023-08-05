@@ -10,15 +10,15 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 
-lateinit var koinApp: KoinApplication
+lateinit var slackKoinApp: KoinApplication
 
-fun getKoin() = koinApp.koin
+fun getKoin() = slackKoinApp.koin
 
 expect fun platformModule(): Module
 
 fun initKoin(): KoinApplication {
-    if (::koinApp.isInitialized) {
-        return koinApp
+    if (::slackKoinApp.isInitialized) {
+        return slackKoinApp
     }
     return startKoin {
         modules(
@@ -31,6 +31,6 @@ fun initKoin(): KoinApplication {
             dispatcherModule
         )
     }.also {
-        koinApp = it
+        slackKoinApp = it
     }
 }

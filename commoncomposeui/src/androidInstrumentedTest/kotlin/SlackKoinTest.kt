@@ -1,18 +1,11 @@
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.slackclone.Platform
-import dev.baseio.slackclone.Platform.ANDROID
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
-import dev.baseio.slackclone.koinApp
 import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
-import dev.baseio.slackclone.platformType
 import dev.baseio.slackdata.DriverFactory
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.encryptionModule
 import dev.baseio.slackdata.injection.useCaseModule
-import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.auth.UseCaseFetchAndSaveCurrentUser
@@ -26,23 +19,14 @@ import dev.baseio.slackdomain.usecases.workspaces.UseCaseAuthWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import io.mockative.Mock
-import io.mockative.any
 import io.mockative.classOf
-import io.mockative.given
 import io.mockative.mock
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.resetMain
-import org.junit.Before
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import kotlin.test.AfterTest
 
 abstract class SlackKoinTest : KoinTest {
 
@@ -64,35 +48,22 @@ abstract class SlackKoinTest : KoinTest {
                 },
                 testDispatcherModule
             )
-        }.also {
-            koinApp = it
         }
     }
 
-    protected lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
-    protected val coroutineDispatcherProvider: CoroutineDispatcherProvider by inject()
-    protected val useCaseAuthWorkspace: UseCaseAuthWorkspace by inject()
+    private lateinit var selectedWorkspace: DomainLayerWorkspaces.SKWorkspace
+    private val useCaseAuthWorkspace: UseCaseAuthWorkspace by inject()
     protected val useCaseCreateChannel: UseCaseCreateChannel by inject()
     protected val useCaseFetchChannelsWithSearch: UseCaseFetchChannelsWithSearch by inject()
-    protected val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
+    private val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace by inject()
     private val getWorkspaces: UseCaseFetchAndSaveWorkspaces by inject()
     private val getChannels: UseCaseFetchAndSaveChannels by inject()
     private val skLocalDataSourceChannels: SKLocalDataSourceReadChannels by inject()
-    protected val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers by inject()
-    protected val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser by inject()
-    protected val getUsers: UseCaseFetchAndSaveUsers by inject()
+    private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers by inject()
+    private val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser by inject()
+    private val getUsers: UseCaseFetchAndSaveUsers by inject()
 
-    @Before
-    fun setUp() {
-        platformMess()
-        runBlocking {
-            setupMocks()
-        }
-    }
-
-    private fun iGrpcCalls() = koinApplication.koin.get<IGrpcCalls>()
-
-    suspend fun assumeAuthorized() {
+    suspend fun authenticateUser() {
         useCaseAuthWorkspace.invoke(AuthTestFixtures.testUser().email, "slack.com")
         useCaseFetchAndSaveCurrentUser.invoke()
         getWorkspaces.invoke("some token")
@@ -109,103 +80,4 @@ abstract class SlackKoinTest : KoinTest {
         }
         getUsers.invoke(selectedWorkspace.uuid)
     }
-
-    suspend fun setupMocks() {
-        given(iGrpcCalls()).invocation {
-            skKeyValueData
-        }.thenReturn(koinApplication.koin.get())
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::currentLoggedInUser)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testUser())
-
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::currentLoggedInUser)
-            .whenInvokedWith()
-            .thenReturn(AuthTestFixtures.testUser())
-
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::sendMagicLink)
-            .whenInvokedWith(any(), any())
-            .thenReturn(AuthTestFixtures.testWorkspace())
-
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::sendMagicLink)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testWorkspace())
-
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::getWorkspaces)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testWorkspaces())
-
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::getAllDMChannels)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testDMChannels())
-
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::getPublicChannels)
-            .whenInvokedWith(any(), any(), any(), any())
-            .thenReturn(AuthTestFixtures.testPublicChannels("1"))
-
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInMessages)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
-
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInUsers)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
-
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInChannels)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
-
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInDMChannels)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
-
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInChannelMembers)
-            .whenInvokedWith(any(), any(), any())
-            .thenReturn(emptyFlow())
-    }
-
-
-    @AfterTest
-    fun tearDown() {
-        stopKoin()
-        when (platformType()) {
-            ANDROID -> {
-                Dispatchers.resetMain()
-            }
-
-            else -> {
-                // nothing special
-            }
-        }
-    }
-
-    private fun platformMess() {
-        when (platformType()) {
-            ANDROID -> {
-            }
-
-            Platform.IOS -> {
-            }
-
-            Platform.JVM -> {
-            }
-        }
-    }
 }
-
-internal fun testDbConnection(): SqlDriver {
-    return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        .also { SlackDB.Schema.create(it) }
-}
-
