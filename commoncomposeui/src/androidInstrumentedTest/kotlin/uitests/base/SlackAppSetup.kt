@@ -1,3 +1,5 @@
+package uitests.base
+
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.RootComponent

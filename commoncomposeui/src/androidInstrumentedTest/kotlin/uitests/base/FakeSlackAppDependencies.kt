@@ -1,8 +1,7 @@
-package uitests
+package uitests.base
 
 import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
 import dev.baseio.slackclone.slackKoinApp
-import iGrpcCalls
 import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.flow.emptyFlow

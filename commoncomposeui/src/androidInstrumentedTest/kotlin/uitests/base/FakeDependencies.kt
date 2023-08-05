@@ -1,4 +1,4 @@
-package uitests
+package uitests.base
 
 interface FakeDependencies {
 

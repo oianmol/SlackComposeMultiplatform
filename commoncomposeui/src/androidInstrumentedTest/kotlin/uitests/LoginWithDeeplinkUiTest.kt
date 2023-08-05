@@ -1,9 +1,5 @@
 package uitests
 
-import SlackAppSetup
-import SlackAppSetupImpl
-import UiAutomation
-import UiAutomationDelegateImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -12,8 +8,14 @@ import org.junit.Test
 import screens.dashboardScreenRobot
 import screens.emailAddressInputRobot
 import screens.gettingStartedRobot
+import uitests.base.FakeDependencies
+import uitests.base.FakeSlackAppDependencies
+import uitests.base.SlackAppSetup
+import uitests.base.SlackAppSetupImpl
+import uitests.base.UiAutomation
+import uitests.base.UiAutomationDelegateImpl
 
-class TestCreateWorkspace : SlackAppSetup by SlackAppSetupImpl(),
+class LoginWithDeeplinkUiTest : SlackAppSetup by SlackAppSetupImpl(),
     FakeDependencies by FakeSlackAppDependencies(),
     UiAutomation by UiAutomationDelegateImpl() {
 
@@ -26,7 +28,7 @@ class TestCreateWorkspace : SlackAppSetup by SlackAppSetupImpl(),
     }
 
     @Test
-    fun testCreateWorkspaceFlow(): Unit = runBlocking {
+    fun testLoginFlowWithDeepLink(): Unit = runBlocking {
         with(rule) {
             setAppContent()
             awaitIdle()

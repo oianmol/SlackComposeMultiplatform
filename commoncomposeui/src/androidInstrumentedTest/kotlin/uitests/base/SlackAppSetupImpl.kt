@@ -1,3 +1,5 @@
+package uitests.base
+
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -31,7 +33,7 @@ class SlackAppSetupImpl : SlackKoinTest(), SlackAppSetup {
 
     @Before
     override fun setupKoin(): Unit = runBlocking {
-        koinApplication.also {
+        testKoinApplication.also {
             it.koin.loadModules(listOf(module {
                 single<Context> { rule.activity }
             }))
