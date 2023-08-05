@@ -4,13 +4,7 @@ import SlackAppSetup
 import SlackAppSetupImpl
 import UiAutomation
 import UiAutomationDelegateImpl
-import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
-import dev.baseio.slackclone.slackKoinApp
-import io.mockative.any
-import io.mockative.given
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.junit.Before
@@ -20,6 +14,7 @@ import screens.emailAddressInputRobot
 import screens.gettingStartedRobot
 
 class TestCreateWorkspace : SlackAppSetup by SlackAppSetupImpl(),
+    FakeDependencies by FakeSlackAppDependencies(),
     UiAutomation by UiAutomationDelegateImpl() {
 
 
@@ -55,71 +50,28 @@ class TestCreateWorkspace : SlackAppSetup by SlackAppSetupImpl(),
         }
     }
 
-    private fun iGrpcCalls() = slackKoinApp.koin.get<IGrpcCalls>()
-
     private suspend fun setupFakeNetwork() {
-        given(iGrpcCalls()).invocation {
-            skKeyValueData
-        }.thenReturn(slackKoinApp.koin.get())
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::currentLoggedInUser)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testUser())
+        fakeLocalKeyValueStorage()
 
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::currentLoggedInUser)
-            .whenInvokedWith()
-            .thenReturn(AuthTestFixtures.testUser())
+        fakeCurrentLoggedinUser()
 
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::sendMagicLink)
-            .whenInvokedWith(any(), any())
-            .thenReturn(AuthTestFixtures.testWorkspace())
+        fakeSendMagicLink()
 
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::sendMagicLink)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testWorkspace())
+        fakeGetWorkspaces()
 
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::getWorkspaces)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testWorkspaces())
+        fakeDMChannels()
 
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::getAllDMChannels)
-            .whenInvokedWith(any())
-            .thenReturn(AuthTestFixtures.testDMChannels())
+        fakePublicChannels()
 
-        given(iGrpcCalls())
-            .suspendFunction(iGrpcCalls()::getPublicChannels)
-            .whenInvokedWith(any(), any(), any(), any())
-            .thenReturn(AuthTestFixtures.testPublicChannels("1"))
+        fakeListenToChangeInMessages()
 
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInMessages)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
+        fakeListenToChangeInUsers()
 
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInUsers)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
+        fakeListenToChangeInChannels()
 
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInChannels)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
+        fakeListenToChangeInDMChannels()
 
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInDMChannels)
-            .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
-
-        given(iGrpcCalls())
-            .function(iGrpcCalls()::listenToChangeInChannelMembers)
-            .whenInvokedWith(any(), any(), any())
-            .thenReturn(emptyFlow())
+        fakeListenToChangeInChannelMembers()
     }
 
 }

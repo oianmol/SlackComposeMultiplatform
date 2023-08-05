@@ -1,5 +1,7 @@
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.RootComponent
+import dev.baseio.slackclone.slackKoinApp
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -19,3 +21,5 @@ interface SlackAppSetup {
     @After
     fun close()
 }
+
+fun iGrpcCalls() = slackKoinApp.koin.get<IGrpcCalls>()
