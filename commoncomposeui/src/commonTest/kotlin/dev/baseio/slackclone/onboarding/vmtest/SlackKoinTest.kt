@@ -6,6 +6,7 @@ import dev.baseio.slackclone.Platform
 import dev.baseio.slackclone.Platform.ANDROID
 import dev.baseio.slackclone.data.injection.viewModelDelegateModule
 import dev.baseio.slackclone.platformType
+import dev.baseio.slackclone.slackKoinApp
 import dev.baseio.slackdata.injection.dataMappersModule
 import dev.baseio.slackdata.injection.encryptionModule
 import dev.baseio.slackdata.injection.testDataSourcesModule
@@ -33,6 +34,7 @@ import io.mockative.given
 import io.mockative.mock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.koin.core.KoinApplication
@@ -66,6 +68,8 @@ abstract class SlackKoinTest : KoinTest {
                 },
                 testDispatcherModule
             )
+        }.also {
+            slackKoinApp = it
         }
     }
 
@@ -84,7 +88,11 @@ abstract class SlackKoinTest : KoinTest {
 
     @BeforeTest
     fun setUp() {
-        platformMess()
+        runBlocking {
+            koinApplication
+            platformMess()
+            assumeAuthorized()
+        }
     }
 
     private fun iGrpcCalls() = koinApplication.koin.get<IGrpcCalls>()
