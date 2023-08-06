@@ -5,9 +5,33 @@ import dev.baseio.slackclone.slackKoinApp
 import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import uitests.base.composeappsetup.iGrpcCalls
 
 class FakeSlackAppDependencies : FakeDependencies {
+
+    override suspend fun fakeChannelMembers(){
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::fetchChannelMembers)
+            .whenInvokedWith(any(), any(),)
+            .thenReturn(AuthTestFixtures.fakePublicChannelMembers(AuthTestFixtures.testPublicChannels("1").channelsList.first()))
+
+    }
+
+    override suspend fun fakeFetchMessages(messages:List<String>) {
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::fetchMessages)
+            .whenInvokedWith(any())
+            .thenReturn(AuthTestFixtures.fakeMessages(messages))
+    }
+
+    override suspend fun fakeCreatePublicChannel() {
+        given(iGrpcCalls())
+            .suspendFunction(iGrpcCalls()::savePublicChannel)
+            .whenInvokedWith(any(), any())
+            .thenReturn(AuthTestFixtures.testPublicChannel("1", "1"))
+    }
+
     override fun fakeListenToChangeInChannelMembers() {
         given(iGrpcCalls())
             .function(iGrpcCalls()::listenToChangeInChannelMembers)
@@ -36,11 +60,11 @@ class FakeSlackAppDependencies : FakeDependencies {
             .thenReturn(emptyFlow())
     }
 
-    override fun fakeListenToChangeInMessages() {
+    override suspend fun fakeListenToChangeInMessages(message: String) {
         given(iGrpcCalls())
             .function(iGrpcCalls()::listenToChangeInMessages)
             .whenInvokedWith(any(), any())
-            .thenReturn(emptyFlow())
+            .thenReturn(flowOf(AuthTestFixtures.channelPublicMessageSnapshot(message)))
     }
 
     override suspend fun fakePublicChannels() {

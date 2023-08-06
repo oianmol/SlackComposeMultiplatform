@@ -65,7 +65,7 @@ class LoginWithDeeplinkUiTest : SlackAppSetup by SlackAppSetupImpl(),
 
         fakePublicChannels()
 
-        fakeListenToChangeInMessages()
+        fakeListenToChangeInMessages("test_message_1")
 
         fakeListenToChangeInUsers()
 

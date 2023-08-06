@@ -10,6 +10,7 @@ import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 import dev.baseio.slackclone.slackKoinApp
+import dev.baseio.slackdomain.usecases.auth.UseCaseLogout
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -38,6 +39,7 @@ class SlackAppSetupImpl : SlackKoinTest(), SlackAppSetup {
                 single<Context> { rule.activity }
             }))
             slackKoinApp = it
+            slackKoinApp.koin.get<UseCaseLogout>().invoke()
         }
     }
 

@@ -46,6 +46,9 @@ class CreatePublicChannelUiTest : SlackAppSetup by SlackAppSetupImpl(),
 
             newChatThreadScreenRobot {
                 typeChannelName("test_channel")
+                clickCreate()
+
+                verifyChatThreadOpen()
             }
         }
     }
@@ -63,7 +66,7 @@ class CreatePublicChannelUiTest : SlackAppSetup by SlackAppSetupImpl(),
 
         fakePublicChannels()
 
-        fakeListenToChangeInMessages()
+        fakeListenToChangeInMessages("test_message_1")
 
         fakeListenToChangeInUsers()
 
@@ -72,6 +75,12 @@ class CreatePublicChannelUiTest : SlackAppSetup by SlackAppSetupImpl(),
         fakeListenToChangeInDMChannels()
 
         fakeListenToChangeInChannelMembers()
+
+        fakeCreatePublicChannel()
+
+        fakeFetchMessages(listOf("test_message_1"))
+
+        fakeChannelMembers()
     }
 
 }
