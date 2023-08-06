@@ -1,4 +1,4 @@
-package dev.baseio.slackclone.onboarding.vmtest
+package uitests
 
 import dev.baseio.security.CapillaryEncryption
 import dev.baseio.security.CapillaryInstances

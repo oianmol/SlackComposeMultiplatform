@@ -1,11 +1,11 @@
 package uitests.base.mockgrpc
 
-import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
 import dev.baseio.slackclone.slackKoinApp
 import io.mockative.any
 import io.mockative.given
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import uitests.AuthTestFixtures
 import uitests.base.composeappsetup.iGrpcCalls
 
 class FakeSlackAppDependencies : FakeDependencies {

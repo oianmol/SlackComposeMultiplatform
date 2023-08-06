@@ -76,7 +76,7 @@ kotlin {
                 implementation(libs.coroutines.test)
                 implementation(libs.turbine)
                 implementation(libs.test.core)
-                implementation("io.mockative:mockative:1.4.1")
+                implementation(libs.mockative)
             }
         }
 
@@ -109,7 +109,7 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(libs.test.core)
-                implementation("io.mockative:mockative:1.4.1")
+                implementation(libs.mockative)
 
             }
         }

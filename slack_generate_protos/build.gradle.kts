@@ -23,12 +23,12 @@ repositories {
 
 dependencies {
     protobuf(project(":slack_protos"))
-    api("com.google.protobuf:protobuf-kotlin:${Versions.PROTOBUF}")
-    api("com.google.protobuf:protobuf-java-util:${Versions.PROTOBUF}")
-    api("io.grpc:grpc-protobuf:${Versions.GRPC}")
-    api("io.grpc:grpc-stub:${Versions.GRPC}")
-    api("io.grpc:grpc-kotlin-stub:${Versions.GRPC_KOTLIN}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    api(libs.protobuf.kotlin)
+    api(libs.protobuf.java.util)
+    api(libs.grpc.protobuf)
+    api(libs.grpc.stub)
+    api(libs.grpc.kotlin.stub)
+    api(libs.coroutines)
 }
 
 protobuf {
@@ -64,6 +64,6 @@ protobuf {
     }
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_18
+    targetCompatibility = JavaVersion.VERSION_18
 }

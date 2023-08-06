@@ -1,6 +1,5 @@
 package uitests.base.authorizedtest
 
-import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.usecases.auth.UseCaseFetchAndSaveCurrentUser
 import dev.baseio.slackdomain.usecases.channels.UseCaseFetchAndSaveChannelMembers
@@ -12,7 +11,6 @@ import dev.baseio.slackdomain.usecases.workspaces.UseCaseFetchAndSaveWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.koin.test.KoinTest
 import org.koin.test.inject
 

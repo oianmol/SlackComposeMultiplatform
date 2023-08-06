@@ -6,8 +6,10 @@ import dev.baseio.security.toPublicKey
 import dev.baseio.slackdata.datasources.remote.channels.toKMSlackPublicKey
 import dev.baseio.slackdata.protos.KMSKChannel
 import dev.baseio.slackdata.protos.KMSKChannels
+import dev.baseio.slackdata.protos.KMSKMessages
 import dev.baseio.slackdata.protos.KMSKDMChannels
 import dev.baseio.slackdata.protos.KMSKEncryptedMessage
+import dev.baseio.slackdata.protos.KMSKMessageChangeSnapshot
 import dev.baseio.slackdata.protos.KMSKWorkspaces
 import dev.baseio.slackdata.protos.kmSKAuthResult
 import dev.baseio.slackdata.protos.kmSKChannel
@@ -18,6 +20,8 @@ import dev.baseio.slackdata.protos.kmSKDMChannel
 import dev.baseio.slackdata.protos.kmSKDMChannels
 import dev.baseio.slackdata.protos.kmSKEncryptedMessage
 import dev.baseio.slackdata.protos.kmSKMessage
+import dev.baseio.slackdata.protos.kmSKMessageChangeSnapshot
+import dev.baseio.slackdata.protos.kmSKMessages
 import dev.baseio.slackdata.protos.kmSKStatus
 import dev.baseio.slackdata.protos.kmSKUser
 import dev.baseio.slackdata.protos.kmSKWorkspace
@@ -29,6 +33,13 @@ object AuthTestFixtures {
         return kmSKChannels {
             this.channelsList.add(testPublicChannel("1", workId))
             this.channelsList.add(testPublicChannel("2", workId))
+        }
+    }
+
+    suspend fun fakeMessages(): KMSKMessages {
+        return kmSKMessages {
+            this.messagesList.add(channelPublicMessage("test_message_1"))
+            this.messagesList.add(channelPublicMessage("test_message_2"))
         }
     }
 
@@ -81,37 +92,59 @@ object AuthTestFixtures {
         this.text = testEncryptedMessageFrom(testPublicChannels("1").channelsList.first(), message)
     }
 
-    suspend fun testPublichannelMembers(channel: KMSKChannel) = kmSKChannelMembers {
+    suspend fun channelPublicMessageSnapshot(message: String): KMSKMessageChangeSnapshot {
+        return kmSKMessageChangeSnapshot {
+            latest = kmSKMessage {
+                this.channelId = testPublicChannels("1").channelsList.first().uuid
+                this.uuid = "random${System.now().toEpochMilliseconds()}"
+                this.sender = "1"
+                this.workspaceId = testWorkspaces().workspacesList.first().uuid
+                this.text =
+                    testEncryptedMessageFrom(testPublicChannels("1").channelsList.first(), message)
+            }
+        }
+    }
+
+    suspend fun fakePublicChannelMembers(channel: KMSKChannel) = kmSKChannelMembers {
         val channelPrivateKey = CapillaryInstances.getInstance(channel.uuid).privateKey()
         return kmSKChannelMembers {
             this.membersList.add(
                 kmSKChannelMember {
-                    val userPublicKey = CapillaryInstances.getInstance("1").publicKey()
-                    val encryptedPrivateKey =
+                    val userPublicKey =
+                        CapillaryInstances.getInstance("testuser1@test.com").publicKey()
+                    runCatching {
+                        // this fails on Android for obvious reasons
                         CapillaryEncryption.encrypt(channelPrivateKey.encoded, userPublicKey)
+                    }.getOrNull()?.let {
+                        this@kmSKChannelMember.channelPrivateKey = kmSKEncryptedMessage {
+                            this.first = it.first
+                            this.second = it.second
+                        }
+                    }
                     this.uuid = "somerandom${channel.uuid}1"
                     this.workspaceId = channel.workspaceId
                     this.channelId = channel.uuid
                     this.memberId = "1"
-                    this.channelPrivateKey = kmSKEncryptedMessage {
-                        this.first = encryptedPrivateKey.first
-                        this.second = encryptedPrivateKey.second
-                    }
+
                 }
             )
             this.membersList.add(
                 kmSKChannelMember {
-                    val userPublicKey = CapillaryInstances.getInstance("2").publicKey()
-                    val encryptedPrivateKey =
+                    val userPublicKey =
+                        CapillaryInstances.getInstance("testuser2@test.com").publicKey()
+
+                    runCatching {
                         CapillaryEncryption.encrypt(channelPrivateKey.encoded, userPublicKey)
+                    }.getOrNull()?.let {
+                        this@kmSKChannelMember.channelPrivateKey = kmSKEncryptedMessage {
+                            this.first = it.first
+                            this.second = it.second
+                        }
+                    }
                     this.uuid = "somerandom${channel.uuid}2"
                     this.workspaceId = channel.workspaceId
                     this.channelId = channel.uuid
                     this.memberId = "2"
-                    this.channelPrivateKey = kmSKEncryptedMessage {
-                        this.first = encryptedPrivateKey.first
-                        this.second = encryptedPrivateKey.second
-                    }
                 }
             )
         }
@@ -125,7 +158,7 @@ object AuthTestFixtures {
 
     fun testWorkspace() = kmSKWorkspace {
         this.uuid = "1"
-        this.name = "slack"
+        this.name = "testworkspace"
         this.domain = "slack.com"
     }
 
@@ -140,10 +173,19 @@ object AuthTestFixtures {
 
     suspend fun testUser() = kmSKUser {
         this.uuid = "1"
-        this.email = "sdfdsf@sdfdf.com"
-        this.name = "sdfdsf"
+        this.email = "testuser1@test.com"
+        this.name = "testuser"
         this.workspaceId = "1"
         this.publicKey =
-            CapillaryInstances.getInstance("1").publicKey().encoded.toKMSlackPublicKey()
+            CapillaryInstances.getInstance("testuser1@test.com")
+                .publicKey().encoded.toKMSlackPublicKey()
+    }
+
+    suspend fun fakeMessages(messages: List<String>): KMSKMessages {
+        return kmSKMessages {
+            this.messagesList.addAll(messages.map {
+                channelPublicMessage(it)
+            })
+        }
     }
 }

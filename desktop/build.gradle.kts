@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -7,6 +8,12 @@ plugins {
 
 group = "dev.baseio.slackclone.desktop"
 version = "1.0"
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
+    kotlinOptions.jvmTarget = "11"
+}
+
 
 kotlin {
     jvm {
@@ -29,13 +36,6 @@ kotlin {
                 api(project(":slack_domain_layer"))
                 implementation(libs.koin.core)
                 implementation(libs.koin.core.jvm)
-            }
-        }
-        val jvmTest by getting {
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            dependencies {
-                implementation(compose.uiTestJUnit4)
-                implementation(libs.koin.test)
             }
         }
     }

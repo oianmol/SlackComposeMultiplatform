@@ -21,6 +21,7 @@ import kotlinx.datetime.Clock
 import org.koin.test.inject
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.asserter
 
 class ChatViewModelTest : SlackKoinTest() {
@@ -32,7 +33,8 @@ class ChatViewModelTest : SlackKoinTest() {
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
 
     @get:TestRule
-    val instantTaskExecutorRule = AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
+    val instantTaskExecutorRule =
+        AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
 
     private val chatViewModel by lazy {
         ChatViewModel(
@@ -54,13 +56,19 @@ class ChatViewModelTest : SlackKoinTest() {
 
             given(iGrpcCalls)
                 .suspendFunction(iGrpcCalls::sendMessage)
-                .whenInvokedWith(any(), any(),)
-                .thenReturn( AuthTestFixtures.channelPublicMessage(message))
+                .whenInvokedWith(any(), any())
+                .thenReturn(AuthTestFixtures.channelPublicMessage(message))
 
             given(iGrpcCalls)
                 .suspendFunction(iGrpcCalls::fetchChannelMembers)
-                .whenInvokedWith(any(), any(),)
-                .thenReturn(AuthTestFixtures.testPublichannelMembers(AuthTestFixtures.testPublicChannels("1").channelsList.first()))
+                .whenInvokedWith(any(), any())
+                .thenReturn(
+                    AuthTestFixtures.fakePublicChannelMembers(
+                        AuthTestFixtures.testPublicChannels(
+                            "1"
+                        ).channelsList.first()
+                    )
+                )
 
             given(iGrpcCalls)
                 .suspendFunction(iGrpcCalls::fetchMessages)
@@ -68,13 +76,22 @@ class ChatViewModelTest : SlackKoinTest() {
                 .thenReturn(testMessages(AuthTestFixtures.channelPublicMessage(message)))
 
             // assert that sendMessageDelegate
-            val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
+            val channels =
+                skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
+
             chatViewModel.requestFetch(channels.first())
+
+            chatViewModel.sendMessage(message)
+
+
             assertEquals(channels.first(), chatViewModel.channelForSendingMessage)
 
             val pagingState = chatViewModel.skMessagePagination.state.asFlow()
 
             // assert pagination fetches new messages
+            chatViewModel.chatMessagesFlow.test {
+                assertEquals(awaitItem().first().decodedMessage, message)
+            }
             pagingState.test {
                 awaitItem().apply {
                     asserter.assertTrue("was expecting success state", this.isSuccess())

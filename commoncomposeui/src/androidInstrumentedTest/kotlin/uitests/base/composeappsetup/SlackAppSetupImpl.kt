@@ -31,7 +31,6 @@ class SlackAppSetupImpl : SlackKoinTest(), SlackAppSetup {
         )
     }
 
-
     @Before
     override fun setupKoin(): Unit = runBlocking {
         testKoinApplication.also {

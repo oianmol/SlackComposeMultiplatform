@@ -6,6 +6,8 @@ import app.cash.turbine.test
 import dev.baseio.database.SlackDB
 import dev.baseio.grpc.IGrpcCalls
 import dev.baseio.slackclone.onboarding.vmtest.AuthTestFixtures
+import dev.baseio.slackclone.onboarding.vmtest.SlackKoinTest
+import dev.baseio.slackclone.slackKoinApp
 import dev.baseio.slackdata.datasources.local.users.SKLocalDataSourceUsersImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceReadWorkspacesImpl
 import dev.baseio.slackdata.datasources.local.workspaces.SKLocalDataSourceWriteWorkspacesImpl
@@ -29,48 +31,23 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.asserter
 
-class AuthorizeTokenVMTest {
-    @Mock
-    var iGrpcCalls: IGrpcCalls = mock(classOf())
-    val slackDB = SlackDB.invoke(testDbConnection())
-    private val coroutinesDispatcherProvider = TestCoroutineDispatcherProvider()
-    private val skLocalKeyValueSource = FakeKeyValueSource()
-    private val skAuthNetworkDataSource = SKAuthNetworkDataSourceImpl(iGrpcCalls)
-    private val skLocalDataSourceUsers = SKLocalDataSourceUsersImpl(
-        slackDB, skLocalKeyValueSource = skLocalKeyValueSource,
-        SlackUserMapper()
-    )
-    private val useCaseFetchAndSaveCurrentUser =
-        UseCaseFetchAndSaveCurrentUser(skAuthNetworkDataSource, skLocalDataSourceUsers)
-    private val useCaseFetchAndSaveUserWorkspace = UseCaseFetchAndSaveWorkspaces(
-        skLocalKeyValueSource,
-        SKNetworkDataSourceReadWorkspacesImpl(iGrpcCalls),
-        SKLocalDataSourceWriteWorkspacesImpl(slackDB, coroutinesDispatcherProvider),
-        UseCaseSetLastSelectedWorkspace(
-            skLocalDataSourceReadWorkspaces = SKLocalDataSourceReadWorkspacesImpl(
-                slackDB,
-                skLocalKeyValueSource,
-                SlackWorkspaceMapper(),
-                coroutinesDispatcherProvider
-            )
-        )
-    )
+class AuthorizeTokenVMTest : SlackKoinTest() {
     private var wasNavigated = MutableStateFlow(false)
     private val navigateDashboard: () -> Unit = {
         wasNavigated.value = true
     }
 
-
     private val viewModel by lazy {
         AuthorizeTokenVM(
-            coroutinesDispatcherProvider,
-            useCaseFetchAndSaveCurrentUser,
-            useCaseFetchAndSaveUserWorkspace,
-            "authToken",
-            navigateDashboard
+            coroutineDispatcherProvider = slackKoinApp.koin.get(),
+            useCaseFetchAndSaveCurrentUser = slackKoinApp.koin.get(),
+            useCaseFetchAndSaveUserWorkspace = slackKoinApp.koin.get(),
+            authToken = "authToken",
+            navigateDashboard = navigateDashboard
         )
     }
 
@@ -92,7 +69,6 @@ class AuthorizeTokenVMTest {
         }
 
         wasNavigated.test {
-            awaitItem() // false
             asserter.assertTrue("was expecting to be navigated", awaitItem())
             ensureAllEventsConsumed()
         }

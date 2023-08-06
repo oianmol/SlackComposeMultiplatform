@@ -61,7 +61,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.datetime)
+                api(libs.datetime)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.koin.core)
                 implementation(libs.coroutines)

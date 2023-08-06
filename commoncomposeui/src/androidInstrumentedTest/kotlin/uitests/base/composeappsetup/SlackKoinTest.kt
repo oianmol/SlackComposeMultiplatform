@@ -1,6 +1,5 @@
 package uitests.base.composeappsetup
 
-import android.app.Instrumentation
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.baseio.database.SlackDB
@@ -32,6 +31,7 @@ abstract class SlackKoinTest {
                     single { SlackDB.invoke(DriverFactory(get()).createDriver(SlackDB.Schema)) }
                     single<Context> { InstrumentationRegistry.getInstrumentation().targetContext  }
                 },
+                dispatcherModule,
                 useCaseModule,
                 viewModelDelegateModule,
                 dataMappersModule,
@@ -40,7 +40,6 @@ abstract class SlackKoinTest {
                 dataSourceModule {
                     iGrpcCalls
                 },
-                dispatcherModule,
             )
         }
     }
