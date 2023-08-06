@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -59,7 +60,10 @@ internal fun CreateNewChannelUI(
 }
 
 @Composable
-internal fun NewChannelContent(innerPadding: PaddingValues, createNewChannelComponent: CreateNewChannelComponent) {
+internal fun NewChannelContent(
+    innerPadding: PaddingValues,
+    createNewChannelComponent: CreateNewChannelComponent
+) {
     Box(modifier = Modifier.padding(innerPadding)) {
         SlackCloneSurface(
             modifier = Modifier.fillMaxSize()
@@ -87,9 +91,12 @@ internal fun Name() {
 
 @Composable
 internal fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
-    val searchChannel by createNewChannelComponent.viewModel.createChannelState.collectAsState(mainDispatcher)
+    val searchChannel by createNewChannelComponent.viewModel.createChannelState.collectAsState(
+        mainDispatcher
+    )
 
     TextField(
+        modifier = Modifier.fillMaxWidth().testTag("nametf"),
         value = searchChannel.channel.name,
         onValueChange = { newValue ->
             val newId = newValue.replace(" ", "_")
@@ -102,7 +109,10 @@ internal fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
             Text(text = "#", style = textStyleFieldSecondary())
         },
         trailingIcon = {
-            Text(text = "${80 - searchChannel.channel.name.length}", style = textStyleFieldSecondary())
+            Text(
+                text = "${80 - searchChannel.channel.name.length}",
+                style = textStyleFieldSecondary()
+            )
         },
         placeholder = {
             Text(
@@ -115,7 +125,6 @@ internal fun NameField(createNewChannelComponent: CreateNewChannelComponent) {
         colors = textFieldColors(),
         singleLine = true,
         maxLines = 1,
-        modifier = Modifier.fillMaxWidth()
     )
 }
 
@@ -155,10 +164,11 @@ internal fun NewChannelAppBar(
         },
         backgroundColor = LocalSlackCloneColor.current.appBarColor,
         actions = {
-            TextButton(onClick = {
-                createNewChannelComponent.viewModel.createChannelState.value.channel.name.takeIf { it.isNotEmpty() }?.let {
-                    createNewChannelComponent.viewModel.createChannel()
-                } ?: run {
+            TextButton(modifier = Modifier.testTag("btnCreateChannel"), onClick = {
+                createNewChannelComponent.viewModel.createChannelState.value.channel.name.takeIf { it.isNotEmpty() }
+                    ?.let {
+                        createNewChannelComponent.viewModel.createChannel()
+                    } ?: run {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 }
             }) {

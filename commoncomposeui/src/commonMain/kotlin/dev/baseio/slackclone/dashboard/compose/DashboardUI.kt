@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
@@ -193,14 +194,19 @@ internal fun DashboardUI(
             }
 
             else -> {
-                val onItemClick = { channel: Any ->
-                    dashboardVM.selectedChatChannel.value = channel as DomainLayerChannels.SKChannel
-                    chatScreenComponent.chatViewModel.requestFetch(channel)
-                    dashboardVM.isChatViewClosed.value = false
+                val onItemClick = remember {
+                    { channel: Any ->
+                        dashboardVM.selectedChatChannel.value =
+                            channel as DomainLayerChannels.SKChannel
+                        chatScreenComponent.chatViewModel.requestFetch(channel)
+                        dashboardVM.isChatViewClosed.value = false
+                    }
                 }
-                val clearChat = {
-                    dashboardVM.isChatViewClosed.value = true
-                    dashboardVM.selectedChatChannel.value = null
+                val clearChat = remember {
+                    {
+                        dashboardVM.isChatViewClosed.value = true
+                        dashboardVM.selectedChatChannel.value = null
+                    }
                 }
                 SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = { modifier ->
                     SlackSideBarLayoutDesktop(
@@ -409,7 +415,7 @@ internal fun DashboardChildren(
 internal fun FloatingDM(onClick: () -> Unit) {
     FloatingActionButton(onClick = {
         onClick()
-    }, backgroundColor = Color.White) {
+    }, backgroundColor = Color.White, modifier = Modifier.testTag("fabnewthread")) {
         Icon(
             imageVector = Icons.Default.Edit,
             contentDescription = null,

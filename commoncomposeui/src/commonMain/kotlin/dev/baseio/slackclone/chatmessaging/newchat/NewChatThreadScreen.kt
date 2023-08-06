@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -113,6 +114,7 @@ internal fun SearchUsersTF(newChatThread: NewChatThreadComponent) {
     val searchChannel by newChatThread.viewModel.search.collectAsState(mainDispatcher)
 
     TextField(
+        modifier = Modifier.testTag("searchtf"),
         value = searchChannel,
         onValueChange = { newValue ->
             newChatThread.viewModel.search(newValue)
@@ -178,7 +180,7 @@ internal fun SearchNavTitle() {
 internal fun NavBackIcon(newChatThread: NewChatThreadComponent) {
     IconButton(onClick = {
         newChatThread.navigationPop()
-    }) {
+    }, modifier = Modifier.testTag("navback")) {
         Icon(
             imageVector = Icons.Filled.Clear,
             contentDescription = "clear",

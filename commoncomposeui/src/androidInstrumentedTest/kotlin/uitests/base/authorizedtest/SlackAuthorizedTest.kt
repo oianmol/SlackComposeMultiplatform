@@ -26,7 +26,6 @@ class SlackAuthorizedTest : AuthorizedTest, KoinTest {
     override val useCaseFetchAndSaveCurrentUser: UseCaseFetchAndSaveCurrentUser by inject()
     override val getUsers: UseCaseFetchAndSaveUsers by inject()
 
-    @Before
     override fun authenticateUser() {
         runBlocking {
             useCaseAuthWorkspace.invoke(AuthTestFixtures.testUser().email, "slack.com")

@@ -12,7 +12,6 @@ import org.junit.Before
 
 interface AuthorizedTest {
 
-    @Before
     fun authenticateUser()
     val useCaseAuthWorkspace: UseCaseAuthWorkspace
     val useCaseGetSelectedWorkspace: UseCaseGetSelectedWorkspace

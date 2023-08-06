@@ -2,14 +2,18 @@ package uitests
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import uitests.base.uiautomator.UiAutomation
-import uitests.base.uiautomator.UiAutomationDelegateImpl
+import org.junit.Test
 import uitests.base.authorizedtest.AuthorizedTest
 import uitests.base.authorizedtest.SlackAuthorizedTest
 import uitests.base.composeappsetup.SlackAppSetup
 import uitests.base.composeappsetup.SlackAppSetupImpl
 import uitests.base.mockgrpc.FakeDependencies
 import uitests.base.mockgrpc.FakeSlackAppDependencies
+import uitests.base.uiautomator.UiAutomation
+import uitests.base.uiautomator.UiAutomationDelegateImpl
+import uitests.screens.dashboardScreenRobot
+import uitests.screens.newChatThreadScreenRobot
+import uitests.screens.searchCreateChannelUiRobot
 
 class CreatePublicChannelUiTest : SlackAppSetup by SlackAppSetupImpl(),
     FakeDependencies by FakeSlackAppDependencies(),
@@ -20,6 +24,29 @@ class CreatePublicChannelUiTest : SlackAppSetup by SlackAppSetupImpl(),
     fun setup() {
         runBlocking {
             setupFakeNetwork()
+            authenticateUser()
+        }
+    }
+
+    @Test
+    fun testCreatePublicChannelFlow(): Unit = runBlocking {
+        with(rule) {
+            setAppContent()
+            awaitIdle()
+
+            dashboardScreenRobot {
+                clickWorkspaceIcon()
+                expandPublicChannelsGroup()
+                clickAddNewButton()
+            }
+
+            searchCreateChannelUiRobot {
+                clickCreateChannel()
+            }
+
+            newChatThreadScreenRobot {
+                typeChannelName("test_channel")
+            }
         }
     }
 

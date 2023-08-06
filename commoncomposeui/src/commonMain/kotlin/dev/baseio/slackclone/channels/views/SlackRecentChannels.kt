@@ -24,7 +24,7 @@ internal fun SlackRecentChannels(
     var expandCollapseModel by remember {
         mutableStateOf(
             ExpandCollapseModel(
-                1,
+                2,
                 recent,
                 needsPlusButton = false,
                 isOpen = true
