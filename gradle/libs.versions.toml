@@ -90,6 +90,7 @@ uiTest = "1.4.3"
 uiTestManifest = "1.4.3"
 firebaseAppDist = "4.0.0"
 rules = "1.5.0"
+roborazzi="1.6.0-alpha-3"
 
 [libraries]
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
@@ -239,3 +240,4 @@ timortel-grpc = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", ve
 mockkmp = { id = "org.kodein.mock.mockmp", version.ref = "mockkmp" }
 googleservices = { id = "com.google.gms.google-services", version.ref = "gms" }
 kotlin-symbol-processing = {id = "com.google.devtools.ksp",version.ref="ksp"}
+roborazzi-plugin = {id = "io.github.takahirom.roborazzi",version.ref="roborazzi"}

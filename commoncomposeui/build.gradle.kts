@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.rick.nativecoroutines)
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.symbol.processing)
+    id("io.github.takahirom.roborazzi")
 }
 
 group = "dev.baseio.slackclone.composeui"
