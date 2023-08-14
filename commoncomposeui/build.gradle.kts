@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -115,12 +116,16 @@ kotlin {
             }
         }
         val jvmTest by getting {
+            @OptIn(ExperimentalComposeLibrary::class)
             dependencies {
                 implementation(libs.grpc.okhttp)
                 implementation(kotlin("test-junit"))
                 implementation(libs.junit)
                 implementation(libs.sqldelight.jvmdriver)
                 implementation(libs.coroutines.test)
+                implementation(libs.koin.test)
+                implementation(libs.mockative)
+                implementation(compose.uiTestJUnit4)
             }
         }
         val androidMain by getting {
@@ -192,7 +197,7 @@ kotlin {
 kotlin {
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.all {
-            // TODO: the current compose binary surprises LLVM, so disable checks for now.
+// TODO: the current compose binary surprises LLVM, so disable checks for now.
             freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
         }
     }
