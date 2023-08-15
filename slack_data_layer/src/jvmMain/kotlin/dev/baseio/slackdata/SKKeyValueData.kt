@@ -4,17 +4,22 @@ import java.util.prefs.Preferences
 
 actual class SKKeyValueData {
     private val rootPreferences: Preferences = Preferences.userRoot()
-    private val preferences: Preferences = rootPreferences.node(System.getProperty("user.home"))
+    private var preferences: Preferences? = null
+    private val defaultPreferences = rootPreferences.node(System.getProperty("user.home"))
+
+    actual fun switchFile(workspaceId: String) {
+        preferences = rootPreferences.node(System.getProperty("user.home") + "/" + workspaceId)
+    }
 
     actual fun save(key: String, value: String) {
-        preferences.put(key, value)
+        (preferences ?: defaultPreferences).put(key, value)
     }
 
     actual fun get(key: String): String? {
-        return preferences.get(key, null)
+        return (preferences ?: defaultPreferences).get(key, null)
     }
 
     actual fun clear() {
-        preferences.clear()
+        (preferences ?: defaultPreferences).clear()
     }
 }

@@ -6,6 +6,7 @@ import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetSelectedWorkspace
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseGetWorkspaces
 import dev.baseio.slackdomain.usecases.workspaces.UseCaseSetLastSelectedWorkspace
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -39,8 +40,8 @@ class SideNavVM(
         }
     }
 
-    override fun logout() {
-        userProfileDelegate.logout()
+    override fun logout(viewModelScope: CoroutineScope) {
+        userProfileDelegate.logout(viewModelScope)
     }
 
     fun isSelectedWorkspace(skWorkspace: DomainLayerWorkspaces.SKWorkspace): Boolean {

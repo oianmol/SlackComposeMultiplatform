@@ -14,12 +14,13 @@ class IMessageDecrypterImpl(
     private val skLocalDataSourceChannelMembers: SKLocalDataSourceChannelMembers,
 ) : IMessageDecrypter {
     override suspend fun decrypted(message: DomainLayerMessages.SKMessage): DomainLayerMessages.SKMessage? {
+        val user = skKeyValueData.loggedInUser(message.workspaceId)
         val capillary =
-            CapillaryInstances.getInstance(skKeyValueData.loggedInUser(message.workspaceId).email!!)
+            CapillaryInstances.getInstance(user?.email!!)
         return skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
             message.workspaceId,
             message.channelId,
-            skKeyValueData.loggedInUser(message.workspaceId).uuid
+            user.uuid
         ).map { it.channelEncryptedPrivateKey }
             .firstNotNullOfOrNull { safeChannelEncryptedPrivateKey ->
                 kotlin.runCatching {

@@ -5,7 +5,6 @@ import dev.baseio.slackdomain.usecases.auth.UseCaseFetchAndSaveCurrentUser
 import dev.baseio.slackdomain.usecases.auth.UseCaseLogout
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMCode
 import io.github.timortel.kotlin_multiplatform_grpc_lib.KMStatusException
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -13,7 +12,7 @@ import kotlinx.coroutines.launch
 interface UserProfileDelegate {
     val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?>
     fun getCurrentUser(viewModelScope: CoroutineScope, navigateOnboardingRoot: () -> Unit)
-    fun logout()
+    fun logout(viewModelScope: CoroutineScope)
 }
 
 class UserProfileDelegateImpl(
@@ -21,25 +20,31 @@ class UserProfileDelegateImpl(
     private val useCaseClearAuth: UseCaseLogout
 ) : UserProfileDelegate {
 
-    override val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?> = MutableStateFlow(null)
+    override val currentLoggedInUser: MutableStateFlow<DomainLayerUsers.SKUser?> =
+        MutableStateFlow(null)
 
-    override fun logout() {
-        useCaseClearAuth()
+    override fun logout(viewModelScope: CoroutineScope) {
+       viewModelScope.launch {
+           useCaseClearAuth()
+       }
     }
 
-    override fun getCurrentUser(viewModelScope: CoroutineScope, navigateOnboardingRoot: () -> Unit) {
-        viewModelScope.launch(
-            CoroutineExceptionHandler { _, throwable ->
+    override fun getCurrentUser(
+        viewModelScope: CoroutineScope,
+        navigateOnboardingRoot: () -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = useCaseFetchAndSaveCurrentUser()
+                currentLoggedInUser.value = result.getOrThrow()
+            } catch (exception: Exception) {
                 when {
-                    throwable is KMStatusException && throwable.status.code == KMCode.UNAUTHENTICATED -> {
+                    exception is KMStatusException && exception.status.code == KMCode.UNAUTHENTICATED -> {
                         useCaseClearAuth()
                         navigateOnboardingRoot()
                     }
                 }
             }
-        ) {
-            val result = useCaseFetchAndSaveCurrentUser()
-            currentLoggedInUser.value = result.getOrThrow()
         }
     }
 }

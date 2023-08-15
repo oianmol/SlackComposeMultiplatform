@@ -35,7 +35,7 @@ val useCaseModule = module {
     factory { UseCaseSearchChannel(get()) }
     factory { UseCaseFetchLocalUsers(get()) }
     factory { UseCaseFetchAndSaveUsers(get(), get()) }
-    factory { UseCaseLogout(get(), get()) }
+    factory { UseCaseLogout(get(), get(), get()) }
     factory { UseCaseFetchChannelsWithSearch(get(), get(), get(), get()) }
     factory { UseCaseFetchAndSaveCurrentUser(get(), get()) }
     factory { UseCaseAuthWorkspace(get()) }

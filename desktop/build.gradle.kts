@@ -1,11 +1,9 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.compose)
-    alias(libs.plugins.kotlin.symbol.processing)
 }
 
 group = "dev.baseio.slackclone.desktop"
@@ -14,32 +12,6 @@ version = "1.0"
 tasks.withType<KotlinCompile> {
     kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
     kotlinOptions.jvmTarget = "11"
-}
-
-val osName = System.getProperty("os.name")
-val targetOs = when {
-    osName == "Mac OS X" -> "macos"
-    osName.startsWith("Win") -> "windows"
-    osName.startsWith("Linux") -> "linux"
-    else -> error("Unsupported OS: $osName")
-}
-
-val targetArch = when (val osArch = System.getProperty("os.arch")) {
-    "x86_64", "amd64" -> "x64"
-    "aarch64" -> "arm64"
-    else -> error("Unsupported arch: $osArch")
-}
-
-val skikoversion = "0.7.76" // or any more recent version
-val target = "${targetOs}-${targetArch}"
-
-
-dependencies {
-    configurations
-        .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
-        .forEach {
-            add(it.name, "io.mockative:mockative-processor:1.4.1")
-        }
 }
 
 
@@ -56,6 +28,7 @@ kotlin {
                 implementation(libs.grpc.netty)
                 implementation(project(":commoncomposeui"))
                 api(project(":common"))
+                implementation(compose.desktop.currentOs)
                 implementation(libs.windows.registry.util)
                 api(libs.decompose.core)
                 api(libs.decompose.core.jvm)
@@ -63,17 +36,6 @@ kotlin {
                 api(project(":slack_domain_layer"))
                 implementation(libs.koin.core)
                 implementation(libs.koin.core.jvm)
-            }
-        }
-
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.koin.test)
-                implementation(libs.mockative)
-                @OptIn(ExperimentalComposeLibrary::class)
-                implementation(compose.uiTestJUnit4) // there is no non-ui testing
-                implementation(compose.desktop.currentOs) // ui-testings needs skiko
-
             }
         }
     }

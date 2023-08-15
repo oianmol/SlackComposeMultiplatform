@@ -57,7 +57,7 @@ internal fun UserProfileUI(component: UserProfileComponent, profileVM: UserProfi
             SlackListItem(icon = Icons.Default.Person, title = "View Profile")
             SlackListItem(icon = Icons.Default.Notifications, title = "Notifications")
             SlackListItem(icon = Icons.Default.ExitToApp, title = "Logout", onItemClick = {
-                profileVM.logout()
+                profileVM.logout(profileVM.viewModelScope)
                 component.navigateOnboardingRoot()
             })
         }

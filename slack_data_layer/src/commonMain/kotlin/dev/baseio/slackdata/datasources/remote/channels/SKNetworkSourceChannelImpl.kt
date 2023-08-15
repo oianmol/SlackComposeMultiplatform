@@ -47,14 +47,14 @@ class SKNetworkSourceChannelImpl(
         channel: DomainLayerChannels.SKChannel,
         userName: String
     ): List<DomainLayerChannels.SkChannelMember> {
+        val user = skLocalKeyValueSource.loggedInUser(channel.workspaceId)
         val channelEncryptedPrivateKeysForLoggedInUser =
             skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
                 channel.workspaceId,
                 channel.channelId,
-                skLocalKeyValueSource.loggedInUser(channel.workspaceId).uuid
+                user?.uuid ?: "" // TODO check if passing empty or throwing exception is better here
             ).map { it.channelEncryptedPrivateKey }
-        val capillary =
-            CapillaryInstances.getInstance(skLocalKeyValueSource.loggedInUser(channel.workspaceId).email!!)
+        val capillary = CapillaryInstances.getInstance(user?.email!!)
 
         val decryptedChannelPrivateKeyForLoggedInUser =
             channelEncryptedPrivateKeysForLoggedInUser.firstNotNullOfOrNull { channelEncryptedPrivateKeyForLoggedInUser ->

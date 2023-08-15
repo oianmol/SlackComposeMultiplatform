@@ -69,8 +69,11 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
             val channel =
                 getKoin().get<SKLocalDataSourceReadChannels>().getChannelByChannelId(channelId)
 
-            sendMessage(workspaceId, channelId, quickReplyResult, user, channel)
-            notifyMessageSent(notificationId, context)
+            user?.let {
+                sendMessage(workspaceId, channelId, quickReplyResult, it, channel)
+                notifyMessageSent(notificationId, context)
+            }
+
         }
     }
 

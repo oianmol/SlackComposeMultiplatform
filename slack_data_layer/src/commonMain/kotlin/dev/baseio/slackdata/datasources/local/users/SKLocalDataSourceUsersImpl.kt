@@ -22,7 +22,10 @@ class SKLocalDataSourceUsersImpl(
 ) :
     SKLocalDataSourceUsers {
 
-    override fun getUsersByWorkspaceAndName(workspace: String, name: String): Flow<List<DomainLayerUsers.SKUser>> {
+    override fun getUsersByWorkspaceAndName(
+        workspace: String,
+        name: String
+    ): Flow<List<DomainLayerUsers.SKUser>> {
         return slackDB.slackDBQueries
             .selectAllUsersAndName(workspace, name)
             .asFlow()
@@ -52,19 +55,21 @@ class SKLocalDataSourceUsersImpl(
     }
 
     override fun getUser(workspaceId: String, uuid: String): DomainLayerUsers.SKUser? {
-        return slackDB.slackDBQueries.getUser(workspaceId = workspaceId, userid = uuid).executeAsOneOrNull()?.let {
+        return slackDB.slackDBQueries.getUser(workspaceId = workspaceId, userid = uuid)
+            .executeAsOneOrNull()?.let {
             mapper.mapToDomain(it)
         }
     }
 
     override fun getUserByUserName(workspaceId: String, userName: String): DomainLayerUsers.SKUser {
-        return slackDB.slackDBQueries.getUserByUserName(workspaceId, userName).executeAsOne().toSkUser()
+        return slackDB.slackDBQueries.getUserByUserName(workspaceId, userName).executeAsOne()
+            .toSkUser()
     }
 
     override fun saveLoggedInUser(user: DomainLayerUsers.SKUser?) {
         user?.let {
             val json = Json.encodeToString(user)
-            skLocalKeyValueSource.save(LOGGED_IN_USER + user.workspaceId, json)
+            skLocalKeyValueSource.save(LOGGED_IN_USER, json, user.workspaceId)
         }
     }
 

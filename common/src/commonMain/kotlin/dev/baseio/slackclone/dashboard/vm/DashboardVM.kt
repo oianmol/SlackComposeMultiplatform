@@ -61,12 +61,14 @@ class DashboardVM(
                     useCaseFetchChannels.invoke(workspaceId, 0, 20)
                     useCaseFetchAndSaveUsers(workspaceId)
                 }
-                grpcCalls.listenToChangeInChannelMembers(
-                    workspaceId,
-                    skKeyValueData.loggedInUser(workspaceId).uuid
-                ).map {
-                    useCaseFetchChannels.invoke(workspaceId, 0, 20)
-                }.launchIn(viewModelScope)
+                skKeyValueData.loggedInUser(workspaceId)?.uuid?.let {
+                    grpcCalls.listenToChangeInChannelMembers(
+                        workspaceId,
+                        it
+                    ).map {
+                        useCaseFetchChannels.invoke(workspaceId, 0, 20)
+                    }.launchIn(viewModelScope)
+                }
             }
         }.launchIn(viewModelScope)
 

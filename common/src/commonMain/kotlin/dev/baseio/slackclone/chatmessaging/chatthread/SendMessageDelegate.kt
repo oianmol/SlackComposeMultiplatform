@@ -71,7 +71,7 @@ class SendMessageDelegateImpl(
                     decodedMessage = message,
                     messageFirst = "",
                     messageSecond = "",
-                    sender = skKeyValueData.loggedInUser(channelForSendingMessage.workspaceId).uuid,
+                    sender = skKeyValueData.loggedInUser(channelForSendingMessage.workspaceId)?.uuid?:"",
                     createdDate = Clock.System.now().toEpochMilliseconds(),
                     modifiedDate = Clock.System.now().toEpochMilliseconds(),
                     isDeleted = false,
