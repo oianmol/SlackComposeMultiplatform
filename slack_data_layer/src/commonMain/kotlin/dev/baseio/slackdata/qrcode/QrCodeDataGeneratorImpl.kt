@@ -1,10 +1,10 @@
 package dev.baseio.slackdata.qrcode
 
-import dev.baseio.slackdomain.qrcode.QrCodeGenerator
+import dev.baseio.slackdomain.qrcode.QrCodeDataGenerator
 import dev.baseio.slackdomain.security.SecurityKeyDataPart
 import kotlin.math.ceil
 
-class QrCodeGeneratorImpl : QrCodeGenerator {
+class QrCodeDataGeneratorImpl : QrCodeDataGenerator {
     override fun generateFrom(key: ByteArray): List<SecurityKeyDataPart> {
         return key.splitAsKeyDataPart()
     }

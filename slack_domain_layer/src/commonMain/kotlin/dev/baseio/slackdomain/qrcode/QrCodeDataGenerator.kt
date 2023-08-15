@@ -2,6 +2,6 @@ package dev.baseio.slackdomain.qrcode
 
 import dev.baseio.slackdomain.security.SecurityKeyDataPart
 
-interface QrCodeGenerator {
+interface QrCodeDataGenerator {
     fun generateFrom(key: ByteArray) : List<SecurityKeyDataPart>
 }

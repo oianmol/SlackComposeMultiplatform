@@ -1,11 +1,11 @@
 package dev.baseio.slackdata.qrcode
 
-import dev.baseio.slackdomain.qrcode.QrCodeGenerator
+import dev.baseio.slackdomain.qrcode.QrCodeDataGenerator
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class QrCodeGeneratorTest {
-    private val subject: QrCodeGenerator = QrCodeGeneratorImpl()
+    private val subject: QrCodeDataGenerator = QrCodeDataGeneratorImpl()
 
     @Test
     fun testQrCodeGeneratorImpl() {
