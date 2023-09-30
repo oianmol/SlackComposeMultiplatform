@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package dev.baseio.slackclone.qrscanner
 
 import dev.baseio.extensions.toByteArrayFromNSData
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreGraphics.CGAffineTransformMakeScale
 import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
 import platform.CoreImage.CIContext

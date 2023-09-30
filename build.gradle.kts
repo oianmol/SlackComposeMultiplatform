@@ -12,12 +12,13 @@ plugins {
     alias(libs.plugins.navigation.safeargs.kotlin) apply false
     alias(libs.plugins.kotlin.symbol.processing) apply false
     alias(libs.plugins.roborazzi.plugin) apply false
+    alias(libs.plugins.compose) apply false
 }
 
 group = "dev.baseio.slackclone"
 version = "1.0"
 
-subprojects {
+/*subprojects {
     apply(plugin = rootProject.libs.plugins.ktlint.get().pluginId)
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -28,7 +29,7 @@ subprojects {
             }
         }
     }
-}
+}*/
 
 apply(from = teamPropsFile("git-hooks.gradle.kts"))
 

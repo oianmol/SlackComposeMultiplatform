@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package dev.baseio.slackclone.onboarding.compose
 
 import androidx.compose.runtime.Composable
@@ -5,6 +7,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import dev.baseio.slackclone.commonui.theme.SlackCloneColor
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.zeroValue
 import platform.CoreGraphics.CGRect
 import platform.UIKit.UIApplication
@@ -20,7 +23,7 @@ actual object PlatformSideEffects {
         val statusBar = uiView()
         SideEffect {
             with(SlackCloneColor.toUIColor()) {
-                statusBar?.backgroundColor = this
+                statusBar.backgroundColor = this
                 UINavigationBar.appearance().backgroundColor = this
             }
         }

@@ -14,7 +14,7 @@ import dev.baseio.slackclone.dashboard.compose.WindowSize
 import dev.baseio.slackclone.dashboard.compose.getWindowSizeClass
 
 @Composable
-fun SecurityKeysRequestUI() {
+fun SecurityKeysRequestUI(viewModel: ChatViewModel) {
     BoxWithConstraints(
         modifier = Modifier
             .background(LocalSlackCloneColor.current.onUiBackground)

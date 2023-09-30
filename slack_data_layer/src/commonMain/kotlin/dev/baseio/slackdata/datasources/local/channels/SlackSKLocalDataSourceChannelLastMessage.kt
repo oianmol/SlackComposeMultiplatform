@@ -61,7 +61,7 @@ class SlackSKLocalDataSourceChannelLastMessage(
             }
         }.map { skLastMessageList ->
             skLastMessageList.map { skLastMessage ->
-                val decrypted = iMessageDecrypter.decrypted(skLastMessage.message)
+                val decrypted = iMessageDecrypter.decrypted(skLastMessage.message).getOrNull()
                 skLastMessage.copy(message = decrypted ?: skLastMessage.message)
             }
         }

@@ -2,15 +2,12 @@ package dev.baseio.slackclone.chatmessaging.chatthread
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import dev.baseio.slackclone.chatmessaging.chatthread.composables.ChatScreenContent
 import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -58,10 +55,10 @@ internal fun ChatScreenUI(
                 }
             }
             if (offerSecurityKeys) {
-                SecurityKeysOfferUI()
+                SecurityKeysOfferUI(viewModel)
             }
             if (requestSecurityKeys) {
-                SecurityKeysRequestUI()
+                SecurityKeysRequestUI(viewModel)
             }
         }
     }

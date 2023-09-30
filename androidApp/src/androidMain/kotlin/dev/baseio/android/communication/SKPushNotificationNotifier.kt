@@ -63,7 +63,7 @@ class SKPushNotificationNotifier(
             val notifications = messages.map { skMessage ->
                 getKoin()
                 skMessage.decodedMessage =
-                    getKoin().get<IMessageDecrypter>().decrypted(skMessage)?.decodedMessage ?: ""
+                    getKoin().get<IMessageDecrypter>().decrypted(skMessage).getOrNull()?.decodedMessage ?: ""
                 skMessage
             }.map { skMessage ->
                 notificationFromFCMDataModel(skMessage, channel)

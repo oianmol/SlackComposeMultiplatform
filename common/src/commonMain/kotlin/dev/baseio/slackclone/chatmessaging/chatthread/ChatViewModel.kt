@@ -3,7 +3,9 @@ package dev.baseio.slackclone.chatmessaging.chatthread
 import com.arkivanov.decompose.value.MutableValue
 import dev.baseio.slackclone.SlackViewModel
 import dev.baseio.slackclone.getKoin
+import dev.baseio.slackdata.datasources.local.channels.loggedInUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
 class ChatViewModel(
     coroutineDispatcherProvider: CoroutineDispatcherProvider = getKoin().get(),
@@ -32,6 +35,8 @@ class ChatViewModel(
     private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages = getKoin().get(),
     private val sendMessageDelegate: SendMessageDelegate = getKoin().get(),
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels = getKoin().get(),
+    private val skLocalDataSourceChannelMembers: SKLocalDataSourceChannelMembers = getKoin().get(),
+    private val skLocalKeyValueSource: SKLocalKeyValueSource = getKoin().get()
 ) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
@@ -175,6 +180,19 @@ class ChatViewModel(
 
     fun offerSecurityKeys() {
         securityKeyOffer.value = true
+    }
+
+    /**
+     * We get the user's private key for the channel so that he can share it with others
+     */
+    fun offerPrivateKeyViaQRCode() {
+        viewModelScope.launch {
+            val myPrivateKey = skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
+                workspaceId = channelFlow.value.workspaceId,
+                channelFlow.value.channelId,
+                skLocalKeyValueSource.loggedInUser(channelForSendingMessage.workspaceId)?.uuid ?: ""
+            )
+        }
     }
 }
 

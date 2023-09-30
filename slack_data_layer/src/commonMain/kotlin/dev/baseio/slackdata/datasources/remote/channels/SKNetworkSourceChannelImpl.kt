@@ -48,21 +48,19 @@ class SKNetworkSourceChannelImpl(
         userName: String
     ): List<DomainLayerChannels.SkChannelMember> {
         val user = skLocalKeyValueSource.loggedInUser(channel.workspaceId)
-        val channelEncryptedPrivateKeysForLoggedInUser =
-            skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
-                channel.workspaceId,
-                channel.channelId,
-                user?.uuid ?: "" // TODO check if passing empty or throwing exception is better here
-            ).map { it.channelEncryptedPrivateKey }
         val capillary = CapillaryInstances.getInstance(user?.email!!)
 
         val decryptedChannelPrivateKeyForLoggedInUser =
-            channelEncryptedPrivateKeysForLoggedInUser.firstNotNullOfOrNull { channelEncryptedPrivateKeyForLoggedInUser ->
+            skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
+                channel.workspaceId,
+                channel.channelId,
+                user.uuid
+            )?.let {
                 kotlin.runCatching {
                     capillary.decrypt(
                         EncryptedData(
-                            channelEncryptedPrivateKeyForLoggedInUser.first,
-                            channelEncryptedPrivateKeyForLoggedInUser.second
+                            it.channelEncryptedPrivateKey.first,
+                            it.channelEncryptedPrivateKey.second
                         ),
                         capillary.privateKey()
                     )

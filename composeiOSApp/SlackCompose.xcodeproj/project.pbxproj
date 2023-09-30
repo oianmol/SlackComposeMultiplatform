@@ -104,7 +104,7 @@
 				7555FF79242A565900829871 /* Resources */,
 				9964867F0862B4D9FB6ABFC7 /* Frameworks */,
 				93FFAEF3620DEC13F52FC8BE /* [CP] Embed Pods Frameworks */,
-				B5B9FE47B425DB9164E2296B /* [CP] Copy Pods Resources */,
+				0FAE0CFFA7C4879C59DA2015 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -161,6 +161,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0FAE0CFFA7C4879C59DA2015 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		93FFAEF3620DEC13F52FC8BE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,23 +193,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B5B9FE47B425DB9164E2296B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SlackCompose/Pods-SlackCompose-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E8D673591E7196AEA2EA10E2 /* [CP] Check Pods Manifest.lock */ = {

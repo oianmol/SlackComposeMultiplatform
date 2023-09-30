@@ -46,7 +46,7 @@ class SKLocalDataSourceMessagesImpl(
             .map { slackMessages ->
                 slackMessages.map { slackMessage ->
                     val message = entityMapper.mapToDomain(slackMessage)
-                    iMessageDecrypter.decrypted(message) ?: message
+                    iMessageDecrypter.decrypted(message).getOrNull() ?: message
                 }
             }
             .flowOn(coroutineMainDispatcherProvider.default)

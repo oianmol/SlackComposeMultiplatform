@@ -12,14 +12,14 @@ actual class SKKeyValueData {
     }
 
     actual fun get(key: String, workspaceId: String?): String? {
-        return (workspaceId?.let {
-            NSUserDefaults(suiteName = workspaceId)
-        } ?: NSUserDefaults.standardUserDefaults()).stringForKey(key)
+        return workspaceId?.let {
+            NSUserDefaults(suiteName = workspaceId).stringForKey(key)
+        } ?: NSUserDefaults.standardUserDefaults().stringForKey(key)
     }
 
     actual fun clear(workspaceId: String?) {
-        (workspaceId?.let {
-            NSUserDefaults(suiteName = workspaceId)
-        } ?: NSUserDefaults.standardUserDefaults()).resetStandardUserDefaults()
+        workspaceId?.let {
+            NSUserDefaults.standardUserDefaults().removePersistentDomainForName(workspaceId)
+        } ?: NSUserDefaults.resetStandardUserDefaults()
     }
 }
