@@ -54,7 +54,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.mokopaging)
                 api(project(":slack_domain_layer"))
                 api(project(":slack_data_layer"))
                 implementation(project(":common"))
