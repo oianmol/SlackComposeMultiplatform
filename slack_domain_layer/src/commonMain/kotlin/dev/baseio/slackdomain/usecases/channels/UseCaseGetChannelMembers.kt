@@ -15,12 +15,23 @@ class UseCaseGetChannelMembers(
 ) {
     operator fun invoke(useCaseWorkspaceChannelRequest: UseCaseWorkspaceChannelRequest): Flow<List<DomainLayerUsers.SKUser>> {
         return flow {
-            val result = skNetworkDataSourceReadChannelMembers.fetchChannelMembers(useCaseWorkspaceChannelRequest)
-            localSource.save(result.getOrThrow())
-            localSource.get(useCaseWorkspaceChannelRequest.workspaceId, useCaseWorkspaceChannelRequest.channelId!!)
+            //fetch from network
+            val result = skNetworkDataSourceReadChannelMembers.fetchChannelMembers(
+                request = useCaseWorkspaceChannelRequest
+            )
+            //save to local
+            localSource.save(members = result.getOrDefault(emptyList()))
+            // get from local
+            localSource.get(
+                workspaceId = useCaseWorkspaceChannelRequest.workspaceId,
+                channelId = useCaseWorkspaceChannelRequest.channelId!!
+            )
                 .map { skChannelMembers ->
                     skChannelMembers.mapNotNull {
-                        skLocalDataSourceUsers.getUser(useCaseWorkspaceChannelRequest.workspaceId, it.memberId)
+                        skLocalDataSourceUsers.getUser(
+                            workspaceId = useCaseWorkspaceChannelRequest.workspaceId,
+                            uuid = it.memberId
+                        )
                     }
                 }
         }

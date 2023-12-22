@@ -15,37 +15,33 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.baseio.android.util.showToast
-import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import dev.baseio.slackclone.rememberComposeWindow
-import org.example.android.R
+import dev.baseio.slackclone.R
 
 class SlackAndroidActivity : AppCompatActivity() {
 
-    fun Intent.channelId() = this.extras?.getString(SlackAndroidActivity.EXTRA_CHANNEL_ID)
 
-    fun Intent.workspaceId() = this.extras?.getString(SlackAndroidActivity.EXTRA_WORKSPACE_ID)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val defaultComponentContext = DefaultComponentContext(
+    private val rootComponent by lazy {
+        RootComponent(DefaultComponentContext(
             lifecycle = lifecycle,
             savedStateRegistry = savedStateRegistry,
             viewModelStore = viewModelStore,
             onBackPressedDispatcher = onBackPressedDispatcher
-        )
+        ))
+    }
 
-        val root by lazy {
-            RootComponent(defaultComponentContext)
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContent {
-            MobileApp {
-                root
+            SlackCloneTheme {
+                SlackApp {
+                    rootComponent
+                }
             }
-            ChannelNavigator(root)
-            AuthNavigator(root)
+            ChannelNavigator(rootComponent)
+            AuthNavigator(rootComponent)
             askForPostNotificationPermission()
         }
     }
@@ -56,8 +52,8 @@ class SlackAndroidActivity : AppCompatActivity() {
             intent?.action?.let {
                 if (it == Intent.ACTION_VIEW) {
                     intent.data?.getQueryParameter("token")?.takeIf { token -> token.isNotEmpty() }
-                        ?.let {
-                            root.navigateAuthorizeWithToken(it)
+                        ?.let { token ->
+                            root.navigateAuthorizeWithToken(token)
                         }
                 }
             }
@@ -110,19 +106,7 @@ class SlackAndroidActivity : AppCompatActivity() {
         const val EXTRA_WORKSPACE_ID = "workspaceId"
         const val INTENT_KEY_NOT_ID: String = "notification_id"
     }
-}
 
-@Composable
-internal fun MobileApp(root: () -> RootComponent) {
-    val rememberedComposeWindow by rememberComposeWindow()
-
-    CompositionLocalProvider(
-        LocalWindow provides rememberedComposeWindow
-    ) {
-        SlackCloneTheme {
-            SlackApp {
-                root.invoke()
-            }
-        }
-    }
+    private fun Intent.channelId() = this.extras?.getString(EXTRA_CHANNEL_ID)
+    private fun Intent.workspaceId() = this.extras?.getString(EXTRA_WORKSPACE_ID)
 }

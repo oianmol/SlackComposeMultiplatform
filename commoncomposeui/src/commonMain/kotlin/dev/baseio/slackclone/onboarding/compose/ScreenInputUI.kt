@@ -1,7 +1,11 @@
 package dev.baseio.slackclone.onboarding.compose
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import dev.baseio.slackdomain.isEmailValid
 
 @Composable
@@ -13,6 +17,7 @@ internal fun EmailAddressInputUI(
     var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
 
     CommonInputUI(
+        modifier = Modifier,
         navigateBack = navigateBack,
         navigateNext = {
             if (isEmailValid(email)) {

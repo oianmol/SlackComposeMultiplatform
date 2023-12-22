@@ -20,20 +20,30 @@ class UseCaseFetchChannelsWithSearch(
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels,
     private val skLocalKeyValueSource: SKLocalKeyValueSource,
 ) {
-    operator fun invoke(workspaceId: String, search: String): Flow<List<DomainLayerChannels.SKChannel>> {
+    operator fun invoke(
+        workspaceId: String,
+        search: String
+    ): Flow<List<DomainLayerChannels.SKChannel>> {
         val localUsers = useCaseFetchLocalUsers(workspaceId, search).map { skUsers ->
             skUsers.map { skUser ->
-                val user = Json.decodeFromString<DomainLayerUsers.SKUser>(skLocalKeyValueSource.get(LOGGED_IN_USER.plus(workspaceId))!!)
+                val user = skLocalKeyValueSource.loggedInUser(workspaceId)!!
                 val dmChannel =
-                    skLocalDataSourceReadChannels.getChannelByReceiverIdAndSenderId(workspaceId, skUser.uuid, user.uuid)
-                val uuid = dmChannel?.uuid ?: (workspaceId + "${Clock.System.now().toEpochMilliseconds()}")
+                    skLocalDataSourceReadChannels.getChannelByReceiverIdAndSenderId(
+                        workspaceId,
+                        skUser.uuid,
+                        user.uuid
+                    )
+                val uuid =
+                    dmChannel?.uuid ?: (workspaceId + "${Clock.System.now().toEpochMilliseconds()}")
                 DomainLayerChannels.SKChannel.SkDMChannel(
                     workId = workspaceId,
                     senderId = dmChannel?.senderId ?: user.uuid,
                     receiverId = skUser.uuid,
                     uuid = uuid,
                     deleted = false,
-                    channelPublicKey = dmChannel?.channelPublicKey ?: DomainLayerUsers.SKSlackKey(ByteArray(0))
+                    channelPublicKey = dmChannel?.channelPublicKey ?: DomainLayerUsers.SKSlackKey(
+                        ByteArray(0)
+                    )
                 ).apply {
                     channelName = skUser.name
                     pictureUrl = skUser.avatarUrl
@@ -49,4 +59,8 @@ class UseCaseFetchChannelsWithSearch(
             return@combine first + second.filterIsInstance<DomainLayerChannels.SKChannel.SkGroupChannel>()
         }
     }
+}
+
+fun SKLocalKeyValueSource.loggedInUser(workspaceId: String): DomainLayerUsers.SKUser? {
+    return this.get(LOGGED_IN_USER, workspaceId)?.let { Json.decodeFromString(it) }
 }

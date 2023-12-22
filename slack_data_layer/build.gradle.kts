@@ -1,6 +1,7 @@
 import io.github.timortel.kotlin_multiplatform_grpc_plugin.GrpcMultiplatformExtension.OutputTarget
 
 plugins {
+    id("maven-publish")
     id(libs.plugins.kotlin.native.cocoapods.get().pluginId)
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.android.library)
@@ -14,12 +15,6 @@ plugins {
 
 group = "dev.baseio.slackclone"
 version = "1.0"
-
-val ktor_version = "2.1.0"
-
-object Jvm {
-    val target = JavaVersion.VERSION_18
-}
 
 repositories {
     mavenCentral()
@@ -64,15 +59,16 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                implementation("com.squareup.sqldelight:runtime:1.5.5")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+                implementation(libs.datetime)
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.kotlinx.serialization.json)
                 implementation(libs.datetime)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.coroutines)
                 implementation(project(":slack_domain_layer"))
                 implementation(kotlin("stdlib-common"))
-                api("io.github.timortel:grpc-multiplatform-lib:0.3.1")
+                api(libs.grpc.multiplatform.lib)
+                implementation(libs.okio)
             }
             kotlin.srcDirs(
                 projectDir.resolve("build/generated/source/kmp-grpc/commonMain/kotlin").canonicalPath,
@@ -101,6 +97,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.okio.fakefilesystem)
             }
         }
         val androidMain by getting {
@@ -109,10 +106,11 @@ kotlin {
                 projectDir.resolve("build/generated/source/kmp-grpc/jvmMain/kotlin").canonicalPath,
             )
             dependencies {
+                api(libs.zxing.core)
                 implementation(libs.sqldelight.androiddriver)
-                implementation("androidx.security:security-crypto-ktx:1.1.0-alpha05")
+                implementation(libs.securitycrypto)
                 api(project(":slack_generate_protos"))
-                implementation("io.ktor:ktor-client-android:$ktor_version")
+                implementation(libs.ktor.android)
             }
         }
         val iosArm64Main by getting {
@@ -140,8 +138,8 @@ kotlin {
                 projectDir.resolve("build/generated/source/kmp-grpc/iosMain/kotlin").canonicalPath,
             )
             dependencies {
-                implementation("com.squareup.sqldelight:native-driver:1.5.3")
-                implementation("io.ktor:ktor-client-darwin:$ktor_version")
+                implementation(libs.sqldelight.nativedriver)
+                implementation(libs.ktor.darwin)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
@@ -151,7 +149,7 @@ kotlin {
 
         val androidUnitTest by getting {
             dependencies {
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
             }
         }
         val jvmMain by getting {
@@ -163,7 +161,7 @@ kotlin {
                 implementation(libs.coroutines.swing)
                 implementation(libs.sqldelight.jvmdriver)
                 api(project(":slack_generate_protos"))
-                implementation("io.ktor:ktor-client-java:$ktor_version")
+                implementation(libs.ktor.jvm)
             }
         }
     }
@@ -210,15 +208,14 @@ sqldelight {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = (24)
         targetSdk = (33)
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+    kotlin {
+        jvmToolchain(11)
     }
     namespace = "dev.baseio.slackdata"
 }

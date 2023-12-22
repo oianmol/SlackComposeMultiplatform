@@ -51,6 +51,8 @@ internal fun ChatScreenContent(
                 modifier = Modifier.weight(1f),
                 alertLongClick = {
                     viewModel.alertLongClick(it)
+                }, onClickRequestSecurityKeys = {
+                    screenComponent.chatViewModel.requestSecurityKeys()
                 }
             )
             ChatMessageBoxWrapped(screenComponent, checkBoxState, change)

@@ -1,5 +1,5 @@
 package dev.baseio.slackclone.qrscanner
 
 enum class QrScannerMode {
-    CAMERA, QR_DISPLAY
+    SHOW_QR_SCANNER_CAMERA, SHOW_QR_CODE_VIEW
 }

@@ -13,15 +13,18 @@ import dev.baseio.slackdomain.usecases.chat.UseCaseStreamLocalMessages
 import dev.icerock.moko.mvvm.livedata.asFlow
 import dev.icerock.moko.test.AndroidArchitectureInstantTaskExecutorRule
 import dev.icerock.moko.test.TestRule
+import io.mockative.any
+import io.mockative.given
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.koin.test.inject
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.asserter
 
-class ChatViewModelTest : SlackKoinUnitTest() {
+class ChatViewModelTest : SlackKoinTest() {
 
     private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages by inject()
     private val useCaseChannelMembers: UseCaseGetChannelMembers by inject()
@@ -30,7 +33,8 @@ class ChatViewModelTest : SlackKoinUnitTest() {
     private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels by inject()
 
     @get:TestRule
-    val instantTaskExecutorRule = AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
+    val instantTaskExecutorRule =
+        AndroidArchitectureInstantTaskExecutorRule() // just because of moko-paging
 
     private val chatViewModel by lazy {
         ChatViewModel(
@@ -46,20 +50,48 @@ class ChatViewModelTest : SlackKoinUnitTest() {
     @Test
     fun `when a message is sent it's found in the local database! and then pagination loads the messages`() {
         runTest {
-            authorizeUserFirst()
+            assumeAuthorized()
 
             val message = "Hey! a new message ${Clock.System.now().toEpochMilliseconds()}"
-            mocker.everySuspending { iGrpcCalls.sendMessage(isAny(), isAny()) } returns channelPublicMessage(message)
-            mocker.everySuspending { iGrpcCalls.fetchChannelMembers(isAny(), isAny()) } returns testPublichannelMembers(testPublicChannels("1").channelsList.first())
-            mocker.everySuspending { iGrpcCalls.fetchMessages(isAny()) } returns testMessages(channelPublicMessage(message))
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::sendMessage)
+                .whenInvokedWith(any(), any())
+                .thenReturn(AuthTestFixtures.channelPublicMessage(message))
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::fetchChannelMembers)
+                .whenInvokedWith(any(), any())
+                .thenReturn(
+                    AuthTestFixtures.fakePublicChannelMembers(
+                        AuthTestFixtures.testPublicChannels(
+                            "1"
+                        ).channelsList.first()
+                    )
+                )
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::fetchMessages)
+                .whenInvokedWith(any())
+                .thenReturn(testMessages(AuthTestFixtures.channelPublicMessage(message)))
+
             // assert that sendMessageDelegate
-            val channels = skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
+            val channels =
+                skLocalDataSourceReadChannels.fetchAllChannels(selectedWorkspace.uuid).first()
+
             chatViewModel.requestFetch(channels.first())
-            assertEquals(channels.first(), chatViewModel.channel)
+
+            chatViewModel.sendMessage(message)
+
+
+            assertEquals(channels.first(), chatViewModel.channelForSendingMessage)
 
             val pagingState = chatViewModel.skMessagePagination.state.asFlow()
 
             // assert pagination fetches new messages
+            chatViewModel.chatMessagesFlow.test {
+                assertEquals(awaitItem().first().decodedMessage, message)
+            }
             pagingState.test {
                 awaitItem().apply {
                     asserter.assertTrue("was expecting success state", this.isSuccess())

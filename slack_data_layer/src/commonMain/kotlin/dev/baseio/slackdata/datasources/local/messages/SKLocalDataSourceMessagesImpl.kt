@@ -19,7 +19,10 @@ class SKLocalDataSourceMessagesImpl(
     private val iMessageDecrypter: IMessageDecrypter
 ) : SKLocalDataSourceMessages {
 
-    override suspend fun getLocalMessages(workspaceId: String, userId: String): List<DomainLayerMessages.SKMessage> {
+    override suspend fun getLocalMessages(
+        workspaceId: String,
+        userId: String
+    ): List<DomainLayerMessages.SKMessage> {
         return slackMessageDao.slackDBQueries.selectAllMessagesByChannelId(
             workspaceId,
             userId,
@@ -41,11 +44,9 @@ class SKLocalDataSourceMessagesImpl(
             .flowOn(coroutineMainDispatcherProvider.io)
             .mapToList(coroutineMainDispatcherProvider.default)
             .map { slackMessages ->
-                slackMessages
-                    .map { slackMessage -> entityMapper.mapToDomain(slackMessage) }
-            }.map { skLastMessageList ->
-                skLastMessageList.map { skLastMessage ->
-                    iMessageDecrypter.decrypted(skLastMessage) ?: skLastMessage
+                slackMessages.map { slackMessage ->
+                    val message = entityMapper.mapToDomain(slackMessage)
+                    iMessageDecrypter.decrypted(message).getOrNull() ?: message
                 }
             }
             .flowOn(coroutineMainDispatcherProvider.default)

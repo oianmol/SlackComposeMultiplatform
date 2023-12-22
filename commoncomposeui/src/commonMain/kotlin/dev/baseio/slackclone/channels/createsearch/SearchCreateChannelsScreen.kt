@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -167,7 +168,7 @@ internal fun textFieldColorsChannelsScreen() = TextFieldDefaults.textFieldColors
 internal fun NewChannelFAB(newChannel: () -> Unit) {
     FloatingActionButton(onClick = {
         newChannel()
-    }, backgroundColor = Color.White) {
+    }, backgroundColor = Color.White, modifier = Modifier.testTag("newChannelFab")) {
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = null,

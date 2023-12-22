@@ -71,17 +71,21 @@ class ChannelService(
 
     override suspend fun savePublicChannel(request: SKChannel): SKChannel {
         val authData = AUTH_CONTEXT_KEY.get()
-        val previousChannelExists = channelsDataSource.checkIfGroupExisits(request.workspaceId, request.name)
+        val previousChannelExists =
+            channelsDataSource.checkIfGroupExisits(request.workspaceId, request.name)
         if (previousChannelExists) {
             val groupChannel =
-                channelsDataSource.getChannelByName(request.name, request.workspaceId) as SkChannel.SkGroupChannel
+                channelsDataSource.getChannelByName(
+                    request.name,
+                    request.workspaceId
+                ) as SkChannel.SkGroupChannel
             return groupChannel.toGRPC()
         }
 
         val skGroupChannel = request.toDBChannel()
 
         val userPublicKey = skUserPublicKey(authData, request)
-        val skChannelSlackKeyPair = with(CapillaryInstances.getInstance(skGroupChannel.uuid)) {
+        val (channel, channelPrivateKey) = with(CapillaryInstances.getInstance(skGroupChannel.uuid)) {
             val publicKeyChannel = publicKey().encoded // create the channel public key!
             // save the channel with the public key of channel
             val saved = channelsDataSource.savePublicChannel(
@@ -100,14 +104,14 @@ class ChannelService(
             sKInviteUserChannel {
                 this.channelId = skGroupChannel.uuid
                 this.userId = authData.userId
-                this.channelPrivateKey = skChannelSlackKeyPair.second
+                this.channelPrivateKey = channelPrivateKey
             },
             authData
         )
 
         sendPushNotifyChannelCreated(skGroupChannel, authData)
 
-        return skChannelSlackKeyPair.first ?: throw StatusException(Status.FAILED_PRECONDITION)
+        return channel ?: throw StatusException(Status.FAILED_PRECONDITION)
     }
 
     private fun sendPushNotifyChannelCreated(
@@ -131,7 +135,8 @@ class ChannelService(
 
     override suspend fun saveDMChannel(request: SKDMChannel): SKDMChannel {
         val authData = AUTH_CONTEXT_KEY.get()
-        val previousChannel = channelsDataSource.checkIfDMChannelExists(request.senderId, request.receiverId)
+        val previousChannel =
+            channelsDataSource.checkIfDMChannelExists(request.senderId, request.receiverId)
         previousChannel?.let {
             return it.toGRPC()
         } ?: kotlin.run {
@@ -149,7 +154,10 @@ class ChannelService(
                         request.workspaceId
                     )!!.publicKey
                     this.channelPrivateKey =
-                        keyManager.encrypt(keyManager.privateKey().encoded, userPublicKey.toPublicKey())
+                        keyManager.encrypt(
+                            keyManager.privateKey().encoded,
+                            userPublicKey.toPublicKey()
+                        )
                             .toSlackKey()
                 },
                 authData
@@ -164,7 +172,10 @@ class ChannelService(
                         request.workspaceId
                     )!!.publicKey
                     this.channelPrivateKey =
-                        keyManager.encrypt(keyManager.privateKey().encoded, userPublicKey.toPublicKey())
+                        keyManager.encrypt(
+                            keyManager.privateKey().encoded,
+                            userPublicKey.toPublicKey()
+                        )
                             .toSlackKey()
                 },
                 authData
@@ -183,8 +194,9 @@ class ChannelService(
         request: SKInviteUserChannel,
         userData: AuthData
     ): SKChannelMembers {
-        val user = usersDataSource.getUserWithUsername(userName = request.userId, userData.workspaceId)
-            ?: usersDataSource.getUserWithUserId(userId = request.userId, userData.workspaceId)
+        val user =
+            usersDataSource.getUserWithUsername(userName = request.userId, userData.workspaceId)
+                ?: usersDataSource.getUserWithUserId(userId = request.userId, userData.workspaceId)
         val channel =
             channelsDataSource.getChannelById(request.channelId, userData.workspaceId)
                 ?: channelsDataSource.getChannelByName(
@@ -244,7 +256,10 @@ class ChannelService(
     }
 
     override fun registerChangeInChannelMembers(request: SKChannelMember): Flow<SKChannelMemberChangeSnapshot> {
-        return channelsDataSource.getChannelMemberChangeStream(request.workspaceId, request.memberId).map { skChannel ->
+        return channelsDataSource.getChannelMemberChangeStream(
+            request.workspaceId,
+            request.memberId
+        ).map { skChannel ->
             SKChannelMemberChangeSnapshot.newBuilder()
                 .apply {
                     skChannel.first?.toGRPC()?.let { skChannel1 ->
@@ -265,14 +280,22 @@ class ChannelService(
                 .apply {
                     skChannel.first?.toGRPC()?.let { skChannel1 ->
                         val isMember =
-                            channelMemberDataSource.isMember(authData.userId, request.workspaceId, skChannel1.uuid)
+                            channelMemberDataSource.isMember(
+                                authData.userId,
+                                request.workspaceId,
+                                skChannel1.uuid
+                            )
                         if (isMember) {
                             previous = skChannel1
                         }
                     }
                     skChannel.second?.toGRPC()?.let { skChannel1 ->
                         val isMember =
-                            channelMemberDataSource.isMember(authData.userId, request.workspaceId, skChannel1.uuid)
+                            channelMemberDataSource.isMember(
+                                authData.userId,
+                                request.workspaceId,
+                                skChannel1.uuid
+                            )
                         if (isMember) {
                             latest = skChannel1
                         }
@@ -356,7 +379,8 @@ fun SKDMChannel.toDBChannel(): SkChannel.SkDMChannel {
         createdDate,
         modifiedDate,
         isDeleted,
-        SKUserPublicKey(keyBytes = this.publicKey.keybytesList.map { it.byte.toByte() }.toByteArray())
+        SKUserPublicKey(keyBytes = this.publicKey.keybytesList.map { it.byte.toByte() }
+            .toByteArray())
     )
 }
 
@@ -369,7 +393,8 @@ fun SKChannel.toDBChannel(): SkChannel.SkGroupChannel {
         modifiedDate,
         avatarUrl,
         isDeleted,
-        SKUserPublicKey(keyBytes = this.publicKey.keybytesList.map { it.byte.toByte() }.toByteArray())
+        SKUserPublicKey(keyBytes = this.publicKey.keybytesList.map { it.byte.toByte() }
+            .toByteArray())
     )
 }
 

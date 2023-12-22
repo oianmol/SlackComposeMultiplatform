@@ -11,7 +11,7 @@ abstract class SlackViewModel(coroutineDispatcherProvider: CoroutineDispatcherPr
     private val job = SupervisorJob()
 
     @NativeCoroutineScope
-    internal val viewModelScope = NativeCoroutineScope(job + coroutineDispatcherProvider.main)
+    val viewModelScope = NativeCoroutineScope(job + coroutineDispatcherProvider.main)
 
     override fun onDestroy() {
         viewModelScope.cancel() // Cancel the scope when the instance is destroyed

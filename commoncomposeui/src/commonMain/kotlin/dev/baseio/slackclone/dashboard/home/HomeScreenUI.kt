@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.channels.SlackChannelComponent
 import dev.baseio.slackclone.channels.views.SlackAllChannels
@@ -109,7 +110,7 @@ internal fun SlackWorkspaceTopAppBar(
 internal fun WorkspaceImageButton(appBarIconClick: () -> Unit, selectedWorkspace: DomainLayerWorkspaces.SKWorkspace?) {
     IconButton(onClick = {
         appBarIconClick()
-    }) {
+    }, modifier = Modifier.testTag("workspaceButton")) {
         SlackImageBox(
             Modifier.size(38.dp),
             selectedWorkspace?.picUrl ?: "https://avatars.slack-edge.com/2018-07-20/401750958992_1b07bb3c946bc863bfc6_88.png"

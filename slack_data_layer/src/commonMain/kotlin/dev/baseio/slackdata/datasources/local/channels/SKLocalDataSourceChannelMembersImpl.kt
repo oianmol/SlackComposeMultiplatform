@@ -23,7 +23,10 @@ class SKLocalDataSourceChannelMembersImpl(
         workspaceId: String,
         channelId: String
     ): Flow<List<DomainLayerChannels.SkChannelMember>> {
-        return slackDB.slackDBQueries.selectAllMembers(channelId, workspaceId).asFlow().mapToList()
+        return slackDB.slackDBQueries.selectAllMembers(
+            channelId = channelId,
+            workspaceId = workspaceId
+        ).asFlow().mapToList()
             .map {
                 it.map { it.toChannelMember() }
             }
@@ -44,8 +47,7 @@ class SKLocalDataSourceChannelMembersImpl(
         uuid: String
     ): DomainLayerChannels.SkChannelMember? {
         return slackDB.slackDBQueries.getChannelPrivateKeyForUser(channelId, workspaceId, uuid)
-            .executeAsOneOrNull()
-            ?.toChannelMember()
+            .executeAsOne()?.let { it.toChannelMember() }
     }
 
     override suspend fun save(members: List<DomainLayerChannels.SkChannelMember>) {

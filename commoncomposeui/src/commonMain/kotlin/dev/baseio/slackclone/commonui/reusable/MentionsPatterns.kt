@@ -52,7 +52,6 @@ internal fun MentionsTextField(
     cursorBrush: Brush = SolidColor(Color.Black),
     decorationBox: @Composable (innerTextField: @Composable () -> Unit) -> Unit =
         @Composable { innerTextField -> innerTextField() }
-
 ) {
     val spans =
         extractSpans(mentionText.text, listOf(urlPattern, mentionTagPattern, hashTagPattern, inviteTagPattern))

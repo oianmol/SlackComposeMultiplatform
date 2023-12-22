@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -14,7 +15,11 @@ import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 
 @Composable
-internal fun WorkspaceInputView(modifier: Modifier, workspaceUrl: String, onUpdate: (String) -> Unit) {
+internal fun WorkspaceInputView(
+    modifier: Modifier,
+    workspaceUrl: String,
+    onUpdate: (String) -> Unit
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -49,7 +54,7 @@ internal fun WorkspaceTF(workspaceUrl: String, onUpdate: (String) -> Unit) {
         onValueChange = { newEmail -> onUpdate(newEmail) },
         textStyle = textStyleField(),
         singleLine = true,
-        modifier = Modifier
+        modifier = Modifier.testTag("workspacetf")
             .width(IntrinsicSize.Min)
             .padding(top = 12.dp, bottom = 12.dp),
         maxLines = 1,

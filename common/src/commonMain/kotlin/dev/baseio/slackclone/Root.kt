@@ -117,7 +117,6 @@ class RootComponent(
             is Config.GettingStarted -> Root.Child.GettingStarted(
                 GettingStartedComponent(
                     componentContext = componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()),
-                    firstRun = config.firstLaunch,
                     navigateBack = ::navigationPop,
                     navigateDashboard = ::navigateDashboard
                 ) {

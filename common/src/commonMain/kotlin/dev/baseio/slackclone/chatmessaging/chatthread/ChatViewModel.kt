@@ -2,7 +2,10 @@ package dev.baseio.slackclone.chatmessaging.chatthread
 
 import com.arkivanov.decompose.value.MutableValue
 import dev.baseio.slackclone.SlackViewModel
+import dev.baseio.slackclone.getKoin
+import dev.baseio.slackdata.datasources.local.channels.loggedInUser
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
+import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceChannelMembers
 import dev.baseio.slackdomain.datasources.local.channels.SKLocalDataSourceReadChannels
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
@@ -17,53 +20,51 @@ import dev.icerock.moko.pagingmp.Pagination
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
+import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 
 class ChatViewModel(
-    coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers,
-    private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages,
-    private val useCaseChannelMembers: UseCaseGetChannelMembers,
-    private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages,
-    private val sendMessageDelegate: SendMessageDelegate,
-    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels
+    coroutineDispatcherProvider: CoroutineDispatcherProvider = getKoin().get(),
+    private val useCaseFetchAndSaveChannelMembers: UseCaseFetchAndSaveChannelMembers = getKoin().get(),
+    private val useCaseFetchAndSaveMessages: UseCaseFetchAndSaveMessages = getKoin().get(),
+    private val useCaseChannelUsers: UseCaseGetChannelMembers = getKoin().get(),
+    private val useCaseStreamLocalMessages: UseCaseStreamLocalMessages = getKoin().get(),
+    private val sendMessageDelegate: SendMessageDelegate = getKoin().get(),
+    private val skLocalDataSourceReadChannels: SKLocalDataSourceReadChannels = getKoin().get(),
+    private val skLocalDataSourceChannelMembers: SKLocalDataSourceChannelMembers = getKoin().get(),
+    private val skLocalKeyValueSource: SKLocalKeyValueSource = getKoin().get()
 ) : SlackViewModel(coroutineDispatcherProvider), SendMessageDelegate by sendMessageDelegate {
     lateinit var channelFlow: MutableValue<DomainLayerChannels.SKChannel>
 
     val channelMembers = MutableStateFlow<List<DomainLayerUsers.SKUser>>(emptyList())
-    var chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
+    val chatMessagesFlow = MutableStateFlow<List<DomainLayerMessages.SKMessage>>(emptyList())
+    val skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
+    val securityKeyRequested = MutableStateFlow(false)
+    val securityKeyOffer = MutableStateFlow(false)
+    val chatBoxState = MutableStateFlow(BoxState.Collapsed)
 
-    var showChannelDetails = MutableStateFlow(false)
-        private set
+    private var parentJob: Job = Job()
 
-    var chatBoxState = MutableStateFlow(BoxState.Collapsed)
-        private set
-
-    private val exceptions = CoroutineExceptionHandler { _, throwable ->
-        throwable.printStackTrace()
-    }
-
-    var parentJob: Job? = null
-    private var limit = 20
-
-    var skMessagePagination: Pagination<DomainLayerMessages.SKMessage> = getPagination()
 
     fun requestFetch(channel: DomainLayerChannels.SKChannel) {
         channelFlow = MutableValue(channel)
-        sendMessageDelegate.channel = (channelFlow.value)
+        channelForSendingMessage = (channelFlow.value)
         skMessagePagination.refresh()
 
-        parentJob?.cancel()
+        parentJob.cancel()
         parentJob = Job()
-        channelMembers.value = emptyList()
 
+        channelMembers.value = emptyList()
         loadWorkspaceChannelData(channel)
     }
 
     private fun loadWorkspaceChannelData(channel: DomainLayerChannels.SKChannel) {
         with(UseCaseWorkspaceChannelRequest(channel.workspaceId, channel.channelId)) {
-            fetchChannelMembers()
+            fetchChannelUsers()
             refreshChannelMembers()
             messageChangeListener()
         }
@@ -71,30 +72,38 @@ class ChatViewModel(
 
     fun sendMessageNow(message: String) {
         viewModelScope.launch {
-            sendMessageDelegate.sendMessage(message.trim().trimEnd())
+            sendMessage(message.trim().trimEnd())
             chatBoxState.value = BoxState.Collapsed
         }
     }
 
     private fun UseCaseWorkspaceChannelRequest.refreshChannelMembers() =
-        viewModelScope.launch(parentJob!! + exceptions) {
+        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
+        } + parentJob) {
             useCaseFetchAndSaveChannelMembers.invoke(this@refreshChannelMembers)
         }
 
     private fun UseCaseWorkspaceChannelRequest.messageChangeListener() {
-        viewModelScope.launch(parentJob!! + exceptions) {
-            useCaseStreamLocalMessages.invoke(this@messageChangeListener).collectLatest { skMessageList ->
+        useCaseStreamLocalMessages(this@messageChangeListener)
+            .onEach { skMessageList ->
                 chatMessagesFlow.value = skMessageList
             }
-        }
+            .catch {
+                it.printStackTrace()
+            }
+            .launchIn(viewModelScope + parentJob)
     }
 
-    private fun UseCaseWorkspaceChannelRequest.fetchChannelMembers() {
-        viewModelScope.launch(parentJob!! + exceptions) {
-            useCaseChannelMembers.invoke(this@fetchChannelMembers).collectLatest { skUserList ->
+    private fun UseCaseWorkspaceChannelRequest.fetchChannelUsers() {
+        useCaseChannelUsers(this@fetchChannelUsers)
+            .onEach { skUserList ->
                 channelMembers.value = skUserList
             }
-        }
+            .catch {
+                it.printStackTrace()
+            }
+            .launchIn(viewModelScope + parentJob)
     }
 
     private fun getPagination() = Pagination(
@@ -104,7 +113,7 @@ class ChatViewModel(
             val request = UseCaseWorkspaceChannelRequest(
                 channelFlow.value.workspaceId,
                 (channelFlow.value.channelId),
-                limit,
+                20,
                 currentList?.size ?: 0
             )
             useCaseFetchAndSaveMessages.invoke(
@@ -139,16 +148,12 @@ class ChatViewModel(
 
     fun deleteMessage() {
         viewModelScope.launch {
-            sendMessageDelegate.deleteMessageNow(channel)
+            deleteMessageFromChannelNow(channelForSendingMessage)
         }
     }
 
     fun clearLongClickMessageRequest() {
         deleteMessageRequest.value = null
-    }
-
-    fun showChannelDetailsRequested() {
-        showChannelDetails.value = !showChannelDetails.value
     }
 
     fun requestFetch(channelId: String, function: (DomainLayerChannels.SKChannel) -> Unit) {
@@ -158,6 +163,35 @@ class ChatViewModel(
                 requestFetch(it)
                 function(channel)
             }
+        }
+    }
+
+    fun messageUpdate(textFieldValue: TextFieldValue) {
+        chatMessage.value = TextFieldValue(
+            text = textFieldValue.text,
+            selection = textFieldValue.selection,
+            composition = textFieldValue.composition
+        )
+    }
+
+    fun requestSecurityKeys() {
+        securityKeyRequested.value = true
+    }
+
+    fun offerSecurityKeys() {
+        securityKeyOffer.value = true
+    }
+
+    /**
+     * We get the user's private key for the channel so that he can share it with others
+     */
+    fun offerPrivateKeyViaQRCode() {
+        viewModelScope.launch {
+            val myPrivateKey = skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
+                workspaceId = channelFlow.value.workspaceId,
+                channelFlow.value.channelId,
+                skLocalKeyValueSource.loggedInUser(channelForSendingMessage.workspaceId)?.uuid ?: ""
+            )
         }
     }
 }

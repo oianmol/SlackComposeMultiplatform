@@ -58,7 +58,7 @@ class SKNetworkDataSourceMessagesImpl(
 
     override suspend fun sendMessage(params: DomainLayerMessages.SKMessage, publicKey: DomainLayerUsers.SKSlackKey): DomainLayerMessages.SKMessage {
         val encryptedMessage: DomainLayerUsers.SKEncryptedMessage = iDataEncrypter.encrypt(
-            params.decodedMessage.encodeToByteArray(),
+            params.decodedMessage!!.encodeToByteArray(),
             publicKey.keyBytes,
         )
         return grpcCalls.sendMessage(

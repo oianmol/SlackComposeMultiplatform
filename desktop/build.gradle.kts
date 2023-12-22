@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
@@ -8,6 +9,12 @@ plugins {
 group = "dev.baseio.slackclone.desktop"
 version = "1.0"
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
+    kotlinOptions.jvmTarget = "11"
+}
+
+
 kotlin {
     jvm {
         withJava()
@@ -15,7 +22,6 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation(libs.kamelimage)
                 implementation(libs.ktor.jvm)
                 implementation(libs.ktor.core)
                 implementation(libs.ktor.cio)
@@ -23,20 +29,13 @@ kotlin {
                 implementation(project(":commoncomposeui"))
                 api(project(":common"))
                 implementation(compose.desktop.currentOs)
-                implementation("com.github.sarxos:windows-registry-util:0.3")
+                implementation(libs.windows.registry.util)
                 api(libs.decompose.core)
                 api(libs.decompose.core.jvm)
                 api(project(":slack_data_layer"))
                 api(project(":slack_domain_layer"))
                 implementation(libs.koin.core)
                 implementation(libs.koin.core.jvm)
-            }
-        }
-        val jvmTest by getting {
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            dependencies {
-                implementation(compose.uiTestJUnit4)
-                implementation(libs.koin.test)
             }
         }
     }

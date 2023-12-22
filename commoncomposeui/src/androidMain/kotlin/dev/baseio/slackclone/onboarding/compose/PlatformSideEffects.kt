@@ -9,17 +9,7 @@ import dev.baseio.slackclone.commonui.theme.SlackCloneColor
 actual object PlatformSideEffects {
 
     @Composable
-    internal actual fun GettingStartedScreen() {
-        val sysUiController = rememberSystemUiController()
-
-        SideEffect {
-            sysUiController.setNavigationBarColor(color = SlackCloneColor)
-            sysUiController.setSystemBarsColor(color = SlackCloneColor)
-        }
-    }
-
-    @Composable
-    internal actual fun SkipTypingScreen() {
+    internal actual fun SlackCloneColorOnPlatformUI() {
         val sysUiController = rememberSystemUiController()
 
         SideEffect {

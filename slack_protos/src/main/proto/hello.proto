@@ -262,16 +262,12 @@ service UsersService{
   rpc updateSKUser(SKUser) returns(SKUser);
 }
 
-service AuthService {
-  rpc savePushToken(SKPushToken) returns (dev.baseio.slackdata.common.Empty);
-}
-
 service QrCodeService{
   rpc generateQRCode(SKQrCodeGenerator) returns (stream SKQrCodeResponse);
   rpc verifyQrCode(SKQRAuthVerify) returns (SKAuthResult);
 }
 
 service SecurePushService {
-  rpc addOrUpdateUser (AddOrUpdateUserRequest) returns (dev.baseio.slackdata.common.Empty);
+  rpc savePushToken(SKPushToken) returns (dev.baseio.slackdata.common.Empty);
 }
 

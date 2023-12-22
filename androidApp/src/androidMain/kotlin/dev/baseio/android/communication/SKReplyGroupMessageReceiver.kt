@@ -19,7 +19,7 @@ import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.example.android.R
+import dev.baseio.slackclone.R
 
 class SKReplyGroupMessageReceiver : BroadcastReceiver() {
 
@@ -69,8 +69,11 @@ class SKReplyGroupMessageReceiver : BroadcastReceiver() {
             val channel =
                 getKoin().get<SKLocalDataSourceReadChannels>().getChannelByChannelId(channelId)
 
-            sendMessage(workspaceId, channelId, quickReplyResult, user, channel)
-            notifyMessageSent(notificationId, context)
+            user?.let {
+                sendMessage(workspaceId, channelId, quickReplyResult, it, channel)
+                notifyMessageSent(notificationId, context)
+            }
+
         }
     }
 

@@ -1,5 +1,5 @@
-@file:Suppress( "OPT_IN_USAGE")
-
+import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
@@ -10,10 +10,17 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.rick.nativecoroutines)
     alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin.symbol.processing)
+    id("io.github.takahirom.roborazzi")
 }
 
 group = "dev.baseio.slackclone.composeui"
 version = "1.0"
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
+}
+
 
 kotlin {
     android()
@@ -47,15 +54,22 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                api(libs.mokopaging)
                 api(project(":slack_domain_layer"))
                 api(project(":slack_data_layer"))
                 implementation(project(":common"))
                 implementation(libs.datetime)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.koin.core)
-                api(compose.runtime)
-                api(compose.foundation)
-                api(compose.material)
+                implementation(libs.kamel.image)
+
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.materialIconsExtended)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+
                 implementation(libs.coroutines)
                 implementation(kotlin("stdlib-common"))
                 implementation(libs.decompose.core)
@@ -82,15 +96,16 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(libs.coroutines.test)
-                implementation("app.cash.turbine:turbine:0.12.1")
-                implementation("dev.icerock.moko:test-core:0.6.1")
+                implementation(libs.turbine)
+                implementation(libs.test.core)
+                implementation(libs.mockative)
             }
         }
 
         val androidUnitTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
                 implementation(libs.sqldelight.jvmdriver)
                 implementation(libs.sqldelight.androiddriver)
                 implementation(libs.androidx.junit.ext.ktx)
@@ -98,33 +113,59 @@ kotlin {
                 implementation(libs.grpc.okhttp)
             }
         }
+        val androidInstrumentedTest by getting {
+            dependencies {
+                implementation(libs.androidx.core)
+                implementation(libs.androidx.ui.test.manifest)
+                implementation(libs.androidx.ui.test)
+                implementation(libs.androidx.ui.test.junit4)
+                implementation(libs.sqldelight.jvmdriver)
+                implementation(libs.sqldelight.androiddriver)
+                implementation(libs.coroutines.test)
+                implementation(libs.coroutines)
+                implementation(libs.androidx.uiautomator)
+                implementation(libs.androidx.rules)
+
+                implementation(libs.koin.test)
+                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(libs.test.core)
+                implementation(libs.mockative)
+
+            }
+        }
         val jvmTest by getting {
+            @OptIn(ExperimentalComposeLibrary::class)
             dependencies {
                 implementation(libs.grpc.okhttp)
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
                 implementation(libs.sqldelight.jvmdriver)
                 implementation(libs.coroutines.test)
+                implementation(libs.koin.test)
+                implementation(libs.mockative)
+                implementation(compose.uiTestJUnit4)
             }
         }
         val androidMain by getting {
             dependencies {
                 // CameraX
-                api("androidx.camera:camera-camera2:1.3.0-alpha05")
-                api("androidx.camera:camera-lifecycle:1.3.0-alpha05")
-                api("androidx.camera:camera-view:1.3.0-alpha05")
-                api("androidx.camera:camera-video:1.3.0-alpha05")
-                api("androidx.camera:camera-extensions:1.3.0-alpha05")
-                implementation("com.google.guava:guava:29.0-android")
+                api(libs.androidx.camera.camera2)
+                api(libs.androidx.camera.lifecycle)
+                api(libs.androidx.camera.view)
+                api(libs.androidx.camera.video)
+                api(libs.androidx.camera.extensions)
+                implementation(libs.guava)
                 // Zxing
-                api("com.google.zxing:core:3.5.0")
+                api(libs.zxing.core)
 
-                implementation("com.google.mlkit:barcode-scanning:17.1.0")
+                implementation(libs.barcode.scanning)
                 api(libs.activity.compose)
-                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-                implementation("com.google.firebase:firebase-core:21.1.1")
-                implementation("com.google.firebase:firebase-messaging:23.1.2")
-                implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
+                api(libs.androidx.lifecycle.runtime.ktx)
+                implementation(libs.firebase.core)
+                implementation(libs.firebase.messaging)
+                implementation(libs.firebase.messaging.ktx)
                 implementation(libs.koin.android)
                 implementation(libs.coroutines)
                 implementation(libs.lifecycleviewmodelktx)
@@ -139,12 +180,11 @@ kotlin {
             dependencies {
                 implementation(libs.coroutines)
                 implementation(libs.coroutines.swing)
-                api("io.ktor:ktor-client-java:2.1.0")
-                api(libs.kamelimage)
+                api(libs.ktor.jvm)
                 api(compose.preview)
                 implementation(libs.koin.core.jvm)
                 implementation(libs.decompose.composejb)
-                api("com.google.protobuf:protobuf-java:3.21.9")
+                api(libs.protobuf.java)
             }
         }
         val iosX64Main by getting {
@@ -177,15 +217,27 @@ kotlin {
 kotlin {
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.all {
-            // TODO: the current compose binary surprises LLVM, so disable checks for now.
+// TODO: the current compose binary surprises LLVM, so disable checks for now.
             freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
         }
     }
 }
 
+dependencies {
+    configurations
+        .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
+        .forEach {
+            add(it.name, "io.mockative:mockative-processor:1.4.1")
+        }
+}
+
 android {
-    compileSdk = 33
+    compileSdk = 34
+
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+
     defaultConfig {
         minSdk = 24
         targetSdk = 33
@@ -195,13 +247,12 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
     packagingOptions {
-        resources.excludes.add("google/protobuf/*.proto")
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        resources.excludes.addAll(listOf("META-INF/INDEX.LIST", "google/protobuf/*.proto"))
     }
     namespace = "dev.baseio.composeui"
+    kotlin {
+        jvmToolchain(11)
+    }
 }
 
 // Use a proper version of webpack, TODO remove after updating to Kotlin 1.9.

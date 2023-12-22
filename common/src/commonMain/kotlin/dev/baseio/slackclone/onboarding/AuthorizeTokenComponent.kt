@@ -17,8 +17,7 @@ class AuthorizeTokenComponent(
                 coroutineDispatcherProvider = getKoin().get(),
                 useCaseFetchAndSaveCurrentUser = getKoin().get(),
                 useCaseFetchAndSaveUserWorkspace = getKoin().get(),
-                token = token,
-                navigateBackNow = navigateBack,
+                authToken = token,
                 navigateDashboard = navigateDashboard
             )
         }

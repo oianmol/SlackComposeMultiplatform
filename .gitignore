@@ -24,3 +24,6 @@ local.properties
 /capillaryios/Podfile.lock
 /commoncomposeui/rsa_ecdsa_*
 /setuplocal.sh
+/composeiOSApp/Pods/
+/composeiOSApp/SlackCompose.xcworkspace/xcuserdata/anmolverma.xcuserdatad/
+/composeiOSApp/Podfile.lock

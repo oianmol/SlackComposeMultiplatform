@@ -7,36 +7,37 @@ group = "dev.baseio.slackserver"
 version = "1.0"
 
 dependencies {
-    implementation("javax.mail:mail:1.5.0-b01")
+    implementation(libs.mail)
     testImplementation(kotlin("test"))
-    testImplementation("app.cash.turbine:turbine:0.12.1")
+    testImplementation(libs.turbine)
     testImplementation(libs.coroutines.test)
-    testImplementation("io.grpc:grpc-testing:1.51.0")
+    testImplementation(libs.grpc.testing)
 
-    implementation("org.bouncycastle:bcprov-jdk16:1.46")
-    implementation("com.google.firebase:firebase-admin:9.1.1")
+    implementation(libs.bcprov.jdk16)
+    implementation(libs.firebase.admin)
     implementation(project(":capillary-kmp"))
+    implementation(libs.thymeleaf)
 
     implementation(project(":slack_generate_protos"))
 
     implementation(libs.koin.core)
 
-    implementation("io.grpc:grpc-netty-shaded:1.50.2")
-    implementation("com.google.zxing:core:3.5.0")
-    implementation("com.google.zxing:javase:3.5.0")
+    implementation(libs.grpc.netty)
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.javase)
 
     // mongodb
-    implementation("org.litote.kmongo:kmongo:4.7.2")
-    implementation("org.litote.kmongo:kmongo-async:4.7.2")
-    implementation("org.litote.kmongo:kmongo-coroutine:4.7.2")
+    implementation(libs.kmongo)
+    implementation(libs.kmongo.async)
+    implementation(libs.kmongo.coroutine)
 
     // jwt
-    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
+    implementation(libs.jjwt.api)
+    runtimeOnly(libs.jjwt.impl)
+    runtimeOnly(libs.jjwt.orgjson)
 
     // passwords
-    implementation("at.favre.lib:bcrypt:0.9.0")
+    implementation(libs.bcrypt)
 }
 
 tasks.test {
@@ -44,7 +45,7 @@ tasks.test {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
 
 application {

@@ -1,0 +1,269 @@
+[versions]
+
+#kotlin
+barcodeScanning = "17.2.0"
+bcprovJdk16 = "1.46"
+bcrypt = "0.9.0"
+buildkonfigGradlePlugin = "0.13.3"
+cameraExtensions = "1.3.0-rc02"
+cameraVideo = "1.3.0-rc02"
+cameraView = "1.3.0-rc02"
+cameraLifecycle = "1.3.0-rc02"
+cameraCamera2 = "1.3.0-rc02"
+firebaseAdmin = "9.1.1"
+grpcKotlinStub = "1.3.0"
+grpcProtobuf = "1.57.2"
+grpcTesting = "1.51.0"
+jjwtOrgjson = "0.11.5"
+jjwtImpl = "0.11.5"
+jjwtApi = "0.11.5"
+jodaTime = "2.9.9"
+kmongoCoroutine = "4.7.2"
+kmongoAsync = "4.7.2"
+kmongo = "4.7.2"
+mail = "1.5.0-b01"
+mockative = "1.4.1"
+protobufKotlin = "3.21.8"
+thymeleaf = "3.1.1.RELEASE"
+zxing = "3.5.0"
+firebaseMessagingKtx = "23.2.1"
+firebaseMessaging = "23.2.1"
+firebaseCore = "21.1.1"
+grpcMultiplatformLib = "0.3.1"
+guava = "29.0-android"
+kamelImageVersion = "0.5-darwinandjs4"
+kotlin = "1.9.10"
+kotlinxSerializationJson = "1.5.1"
+ktorClientJava = "2.3.0"
+lifecycleRuntimeKtx = "2.6.2"
+mockkmp = "1.13.0"
+gms = "4.4.0"
+ksp = "1.9.10-1.0.13"
+google_protobuf = "0.9.4"
+okio = "3.3.0"
+protobufJava = "3.22.3"
+testCore = "0.6.1"
+timortel_grpc = "0.3.1"
+agp = "7.4.2"
+kt_lint = "11.5.1"
+safe_args = "2.3.5"
+google_services_version = "4.4.0"
+koin = "3.4.3"
+android_junit_version = "1.1.5"
+firebase = "32.3.1"
+robo_electric_version = "4.3"
+arch_core_version = "2.2.0"
+core_test_version = "1.5.0"
+junit_version = "4.13.2"
+nav_version = "2.3.5"
+splashscreen = "1.0.1"
+retrofit_version = "2.9.0"
+accompanist_coil = "0.14.0"
+turbine = "1.0.0"
+viewmodel_ktx = "2.6.2"
+okhttp_version = "4.11.0"
+profile_installer = "1.3.1"
+androidx_security = "1.1.0-alpha06"
+mokopaging = "0.7.2"
+okhttp_grpc = "1.50.0"
+netty_shaded = "1.50.2"
+ktor_version = "2.3.0"
+timber_version = "5.0.1"
+appcompat = "1.6.1"
+ktx_core_version = "1.12.0"
+androidx_runner = "1.5.2"
+mockk = "1.13.5"
+common = ":common"
+commoncomposeui = ":commoncomposeui"
+decompose_version = "2.0.0-compose-experimental-alpha-02"
+decompose_composejb = "2.0.0-compose-experimental-alpha-02"
+compose_version = "1.5.2"
+compose_web_version = "1.4.0-dev-wasm05"
+compose_activity_version = "1.7.2"
+compose_constraint_layout_version = "1.0.1"
+compose_navigation_version = "2.7.3"
+navigation = "2.7.3"
+compose_coil_version = "2.3.0"
+accompanist_version = "0.28.0"
+accompanist_flow_layout_version = "0.24.13-rc"
+window_metrices_version = "1.1.0"
+activity_version = "1.7.2"
+accompanist_adaptive_version = "0.26.4-beta"
+coroutines_version = "1.7.3"
+roomversion = "2.5.2"
+gson_version = "2.10.1"
+sqldelight = "1.5.5"
+ricklephas_nativecoroutines = "1.0.0-ALPHA-18"
+kotlinxdatetime = "0.4.0"
+windowsRegistryUtil = "0.3"
+uiautomator = "2.3.0-alpha04"
+uiTestJunit4 = "1.5.2"
+uiTest = "1.5.2"
+uiTestManifest = "1.5.2"
+firebaseAppDist = "4.0.0"
+rules = "1.5.0"
+roborazzi = "1.6.0-alpha-3"
+
+[libraries]
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
+androidx-ui-test = { module = "androidx.compose.ui:ui-test", version.ref = "uiTest" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
+android_application = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraExtensions" }
+androidx-camera-video = { module = "androidx.camera:camera-video", version.ref = "cameraVideo" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+androidx-core = { module = "androidx.test:core", version.ref = "core_test_version" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "android_junit_version" }
+androidx-rules = { module = "androidx.test:rules", version.ref = "core_test_version" }
+androidx-truth = { module = "androidx.test.ext:truth", version.ref = "core_test_version" }
+bcprov-jdk16 = { module = "org.bouncycastle:bcprov-jdk16", version.ref = "bcprovJdk16" }
+bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
+buildkonfig-gradle-plugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfigGradlePlugin" }
+firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebaseAdmin" }
+firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+grpc-kotlin-stub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpcKotlinStub" }
+grpc-multiplatform-lib = { module = "io.github.timortel:grpc-multiplatform-lib", version.ref = "grpcMultiplatformLib" }
+grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcProtobuf" }
+grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpcProtobuf" }
+grpc-testing = { module = "io.grpc:grpc-testing", version.ref = "grpcTesting" }
+jjwt-orgjson = { module = "io.jsonwebtoken:jjwt-orgjson", version.ref = "jjwtOrgjson" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwtImpl" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwtApi" }
+joda-time = { module = "joda-time:joda-time", version.ref = "jodaTime" }
+kmongo-coroutine = { module = "org.litote.kmongo:kmongo-coroutine", version.ref = "kmongoCoroutine" }
+kmongo-async = { module = "org.litote.kmongo:kmongo-async", version.ref = "kmongoAsync" }
+kmongo = { module = "org.litote.kmongo:kmongo", version.ref = "kmongo" }
+mail = { module = "javax.mail:mail", version.ref = "mail" }
+mockative = { module = "io.mockative:mockative", version.ref = "mockative" }
+protobuf-java-util = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobufKotlin" }
+protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin", version.ref = "protobufKotlin" }
+thymeleaf = { module = "org.thymeleaf:thymeleaf", version.ref = "thymeleaf" }
+zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxing" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobufJava" }
+windows-registry-util = { module = "com.github.sarxos:windows-registry-util", version.ref = "windowsRegistryUtil" }
+zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+kamel-image = { module = "io.github.luca992.com.alialbaali.kamel:kamel-image", version.ref = "kamelImageVersion" }
+ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "kt_lint" }
+sqldelight = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
+kmp_native_coroutines = { module = "com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin", version.ref = "ricklephas_nativecoroutines" }
+kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+google_services = { module = "com.google.gms:google-services", version.ref = "google_services_version" }
+datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxdatetime" }
+
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines_version" }
+coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines_version" }
+
+coroutines_android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines_version" }
+coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines_version" }
+
+coroutinesx64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosx64", version.ref = "coroutines_version" }
+coroutinesarm64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64", version.ref = "coroutines_version" }
+coroutinesiossimulatorarm64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-iossimulatorarm64", version.ref = "coroutines_version" }
+
+sqldelight-androiddriver = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-jvmdriver = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
+sqldelight-nativedriver = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelight" }
+sqldelight-runtime = { module = "com.squareup.sqldelight:runtime", version.ref = "sqldelight" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-core_jvm = { module = "io.insert-koin:koin-core-jvm", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+lifecycleviewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "viewmodel_ktx" }
+decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose_version" }
+decompose-core-jvm = { module = "com.arkivanov.decompose:decompose-jvm", version.ref = "decompose_version" }
+decompose-js = { module = "com.arkivanov.decompose:decompose-js", version.ref = "decompose_composejb" }
+decompose-composejb = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose_composejb" }
+kt_std = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+ktx_core = { module = "androidx.core:core-ktx", version.ref = "ktx_core_version" }
+securitycrypto = { module = "androidx.security:security-crypto-ktx", version.ref = "androidx_security" }
+app_compat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+splash_screen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
+activity_compose = { module = "androidx.activity:activity-compose", version.ref = "compose_activity_version" }
+constraint_layout_compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "compose_constraint_layout_version" }
+compose_tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose_version" }
+compose_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose_version" }
+compose_ui_util = { module = "androidx.compose.ui:ui-util", version.ref = "compose_version" }
+accompanist_system_ui_controller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist_version" }
+accompanist_flow_layouts = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist_version" }
+coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "compose_coil_version" }
+compose_livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "compose_version" }
+compose_navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose_navigation_version" }
+accompanist_insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist_version" }
+accompanist_insets_ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist_version" }
+accompanist_coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanist_coil" }
+accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist_version" }
+accompanist_adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist_adaptive_version" }
+compose_junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose_version" }
+compose_test_manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose_version" }
+compose_window_matrices = { module = "androidx.window:window", version.ref = "window_metrices_version" }
+activity_ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity_version" }
+profile_installer = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profile_installer" }
+constraint_layout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "compose_constraint_layout_version" }
+
+roomruntime = { module = "androidx.room:room-runtime", version.ref = "roomversion" }
+roomcompiler = { module = "androidx.room:room-compiler", version.ref = "roomversion" }
+roomktx = { module = "androidx.room:room-ktx", version.ref = "roomversion" }
+roompaging = { module = "androidx.room:room-paging", version.ref = "roomversion" }
+
+ktor_core = { module = "io.ktor:ktor-client-core", version.ref = "ktor_version" }
+ktor_cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor_version" }
+ktor_android = { module = "io.ktor:ktor-client-android", version.ref = "ktor_version" }
+ktor_jvm = { module = "io.ktor:ktor-client-java", version.ref = "ktor_version" }
+ktor_darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor_version" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit_version" }
+retrofit_gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit_version" }
+logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp_version" }
+google_gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
+test-core = { module = "dev.icerock.moko:test-core", version.ref = "testCore" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber_version" }
+grpc_netty = { module = "io.grpc:grpc-netty-shaded", version.ref = "netty_shaded" }
+grpc_okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "okhttp_grpc" }
+sqldelight_native = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelight" }
+mokopaging = { module = "dev.icerock.moko:paging", version.ref = "mokopaging" }
+kamelimage = { module = "com.alialbaali.kamel:kamel-image", version.ref = "kamelImage" }
+firebaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robo_electric_version" }
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp_version" }
+coretestktx = { module = "androidx.test:core-ktx", version.ref = "core_test_version" }
+junit = { module = "junit:junit", version.ref = "junit_version" }
+androidxrunner = { module = "androidx.test:runner", version.ref = "androidx_runner" }
+androidx-junit-ext-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "android_junit_version" }
+archcore = { module = "androidx.arch.core:core-testing", version.ref = "arch_core_version" }
+libmockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
+[plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "compose_version" }
+compose_web = { id = "org.jetbrains.compose", version.ref = "compose_web_version" }
+android_application = { id = "com.android.application", version.ref = "agp" }
+kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android_library = { id = "com.android.library", version.ref = "agp" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "kt_lint" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+rick-nativecoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "ricklephas_nativecoroutines" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfigGradlePlugin" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+sqldelight_id = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation" }
+navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
+kotlin-native-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+google-protobuf = { id = "com.google.protobuf", version.ref = "google_protobuf" }
+timortel-grpc = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "timortel_grpc" }
+mockkmp = { id = "org.kodein.mock.mockmp", version.ref = "mockkmp" }
+googleservices = { id = "com.google.gms.google-services", version.ref = "gms" }
+kotlin-symbol-processing = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+roborazzi-plugin = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

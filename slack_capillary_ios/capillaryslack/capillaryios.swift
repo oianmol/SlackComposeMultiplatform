@@ -44,12 +44,18 @@ import CryptoKit
         payloadCiphertext:String,
         privateKey:Data
     ) -> Data? {
-        let decryptedSymmetricKeyBytes = try! StoredKey(PrivateKey(data: privateKey).reference).decryptAsData(Data.fromBase64(symmetricKeyCiphertext)!)
-        let symmetricKeyBytes = try! SymmetricKey(rawRepresentation: decryptedSymmetricKeyBytes)
-        
-        let sealedBoxToOpen = try! ChaChaPoly.SealedBox(combined: Data.fromBase64(payloadCiphertext)!)
-        let decryptedData = try! ChaChaPoly.open(sealedBoxToOpen, using: symmetricKeyBytes)
-        return decryptedData
+    do {
+        let decryptedSymmetricKeyBytes = try StoredKey(PrivateKey(data: privateKey).reference).decryptAsData(Data.fromBase64(symmetricKeyCiphertext)!)
+            let symmetricKeyBytes = try SymmetricKey(rawRepresentation: decryptedSymmetricKeyBytes)
+
+            let sealedBoxToOpen = try ChaChaPoly.SealedBox(combined: Data.fromBase64(payloadCiphertext)!)
+            let decryptedData = try ChaChaPoly.open(sealedBoxToOpen, using: symmetricKeyBytes)
+            return decryptedData
+    }
+    catch let e {
+       return nil
+    }
+
     }
     
     @objc public class func publicKeyFromBytes(data:Data) -> Data? {

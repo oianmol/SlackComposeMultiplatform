@@ -14,7 +14,7 @@ class EmailMagicLinkComponent(
 
     val viewModel =
         instanceKeeper.getOrCreate {
-            SendMagicLinkForWorkspaceEmail(
+            SendMagicLinkForWorkspaceViewModel(
                 coroutineDispatcherProvider = getKoin().get(),
                 useCaseAuthWorkspace = getKoin().get(),
                 useCaseSaveFCMToken = getKoin().get(),

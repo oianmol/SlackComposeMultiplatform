@@ -1,41 +1,48 @@
 package dev.baseio.slackclone.onboarding.compose
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.commonui.material.SlackSurfaceAppBar
 import dev.baseio.slackclone.commonui.theme.*
-import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
-import dev.baseio.slackclone.commonui.theme.SlackCloneSurface
-import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CommonInputUI(
+    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateNext: () -> Unit,
     subtitleText: String,
     TopView: @Composable (modifier: Modifier) -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
-    PlatformSideEffects.SkipTypingScreen()
+    PlatformSideEffects.SlackCloneColorOnPlatformUI()
+    val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
     SlackCloneTheme {
         Scaffold(
             backgroundColor = LocalSlackCloneColor.current.uiBackground,
             contentColor = LocalSlackCloneColor.current.textSecondary,
-            modifier = Modifier,
+            modifier = modifier,
             scaffoldState = scaffoldState,
             snackbarHost = {
                 scaffoldState.snackbarHostState
             }, topBar = {
             SlackSurfaceAppBar(
-                title = {},
+                title = {
+
+                },
+                elevation = 0.dp,
                 navigationIcon = {
                     IconButton({
                         navigateBack()
@@ -44,30 +51,31 @@ internal fun CommonInputUI(
                     }
                 },
                 backgroundColor = LocalSlackCloneColor.current.uiBackground,
+                contentColor = LocalSlackCloneColor.current.textSecondary,
                 actions = {}
             )
         }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                SlackCloneSurface(
-                    color = LocalSlackCloneColor.current.uiBackground,
+                Column(
                     modifier = Modifier
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .fillMaxHeight()
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.SpaceAround
-                    ) {
-                        // Create references for the composables to constrain
-                        Spacer(Modifier)
-                        Column {
-                            TopView(Modifier)
-                            SubTitle(modifier = Modifier, subtitleText)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                localSoftwareKeyboardController?.hide()
+                            }
                         }
-                        NextButton(modifier = Modifier, navigateNext)
+                        .padding(12.dp)
+                        .fillMaxHeight()
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    // Create references for the composables to constrain
+                    Spacer(Modifier)
+                    Column {
+                        TopView(Modifier)
+                        SubTitle(modifier = Modifier, subtitleText)
                     }
+                    NextButton(modifier = Modifier, navigateNext)
                 }
             }
         }

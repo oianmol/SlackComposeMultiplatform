@@ -13,58 +13,46 @@ class IMessageDecrypterImpl(
     private val iDataDecrypter: IDataDecryptor,
     private val skLocalDataSourceChannelMembers: SKLocalDataSourceChannelMembers,
 ) : IMessageDecrypter {
-    override suspend fun decrypted(message: DomainLayerMessages.SKMessage): DomainLayerMessages.SKMessage? {
-        val capillary =
-            CapillaryInstances.getInstance(skKeyValueData.loggedInUser(message.workspaceId).email!!)
-        return skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
-            message.workspaceId,
-            message.channelId,
-            skKeyValueData.loggedInUser(message.workspaceId).uuid
-        )?.channelEncryptedPrivateKey?.let { safeChannelEncryptedPrivateKey ->
-            kotlin.runCatching {
-                capillary.decrypt(
-                    EncryptedData(
-                        safeChannelEncryptedPrivateKey.first,
-                        safeChannelEncryptedPrivateKey.second
-                    ),
-                    capillary.privateKey()
-                )
-            }.recoverCatching {
-                println(it)
-                return@recoverCatching null
-            }.getOrNull()
-        }?.let { bytes ->
-            finalMessageAfterDecryption(
-                message,
-                bytes
+    override suspend fun decrypted(message: DomainLayerMessages.SKMessage): Result<DomainLayerMessages.SKMessage> {
+        return kotlin.runCatching {
+            val privateKey = usersDecryptedPrivateKey(
+                message.workspaceId,
+                message.channelId,
             )
+            val decodedMessage = privateKey?.let {
+                iDataDecrypter.decrypt(
+                    Pair(
+                        message.messageFirst,
+                        message.messageSecond
+                    ),
+                    privateKeyBytes = it
+                ).decodeToString()
+            } ?: throw Exception("Private key not available for channel member ?")
+            message.copy(decodedMessage = decodedMessage)
         }
     }
 
-    private fun finalMessageAfterDecryption(
-        skLastMessage: DomainLayerMessages.SKMessage,
-        privateKeyBytes: ByteArray
-    ): DomainLayerMessages.SKMessage {
-        var messageFinal = skLastMessage
-        runCatching {
-            messageFinal =
-                messageFinal.copy(
-                    decodedMessage = iDataDecrypter.decrypt(
-                        Pair(
-                            messageFinal.messageFirst,
-                            messageFinal.messageSecond
-                        ),
-                        privateKeyBytes = privateKeyBytes
-                    )
-                        .decodeToString()
-                )
-        }.exceptionOrNull()?.let {
-            it.printStackTrace()
-            messageFinal =
-                messageFinal.copy(
-                    decodedMessage = it.message.toString()
-                )
-        }
-        return messageFinal
+    private suspend fun usersDecryptedPrivateKey(
+        workspaceId: String,
+        channelId: String,
+    ): ByteArray? {
+        val user = skKeyValueData.loggedInUser(workspaceId)
+        //TODO the user should always have uuid and email, fix this!
+        val capillary = user?.email?.let { CapillaryInstances.getInstance(it) }
+        val safeChannelEncryptedPrivateKey =
+            user?.uuid?.let {
+                skLocalDataSourceChannelMembers.getChannelPrivateKeyForMe(
+                    workspaceId,
+                    channelId,
+                    it
+                )?.channelEncryptedPrivateKey
+            }
+        return capillary?.decrypt(
+            EncryptedData(
+                safeChannelEncryptedPrivateKey!!.first,
+                safeChannelEncryptedPrivateKey.second
+            ),
+            capillary.privateKey()
+        )
     }
 }

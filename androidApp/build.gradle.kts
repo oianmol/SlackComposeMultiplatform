@@ -26,10 +26,8 @@ kotlin {
                 api(project(":slack_domain_layer"))
                 implementation(libs.koin.core)
                 implementation(libs.koin.android)
-
                 // Firebase
-                implementation("com.google.firebase:firebase-messaging-ktx:23.1.2")
-
+                implementation(libs.firebase.messaging.ktx)
                 // Accompanist Permissions
                 implementation(libs.accompanist.permission)
             }
@@ -40,7 +38,6 @@ kotlin {
             dependencies {
                 implementation(libs.koin.test)
                 implementation(compose.uiTestJUnit4)
-
                 implementation(
                     libs.compose.junit
                 )
@@ -54,7 +51,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     packagingOptions {
         resources.excludes.add("google/protobuf/*.proto")
     }
@@ -72,10 +69,6 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -87,5 +80,8 @@ android {
             isMinifyEnabled = false
         }
     }
-    namespace = "org.example.android"
+    namespace = "dev.baseio.slackclone"
+    kotlin {
+        jvmToolchain(11)
+    }
 }

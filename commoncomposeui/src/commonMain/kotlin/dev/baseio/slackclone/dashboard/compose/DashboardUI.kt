@@ -13,7 +13,11 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -21,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
@@ -28,9 +33,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.essenty.backhandler.BackCallback
-import dev.baseio.slackclone.LocalWindow
 import dev.baseio.slackclone.RootComponent
-import dev.baseio.slackclone.WindowInfo
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenComponent
 import dev.baseio.slackclone.chatmessaging.chatthread.ChatScreenUI
 import dev.baseio.slackclone.commonui.reusable.SlackDragComposableView
@@ -67,11 +70,7 @@ internal fun DashboardUI(
     val isChatViewClosed by dashboardVM.isChatViewClosed.collectAsState(mainDispatcher)
 
     var isLeftNavOpen by remember { mutableStateOf(false) }
-    val size = getWindowSizeClass(LocalWindow.current)
-    val screenWidth = LocalWindow.current.width
-    val sideNavWidth = screenWidth * 0.8f
-    val sideNavPxValue = with(LocalDensity.current) { sideNavWidth.toPx() }
-    val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
+
 
     dashboardComponent.backHandler.register(
         BackCallback(!isChatViewClosed) {
@@ -86,7 +85,13 @@ internal fun DashboardUI(
     }
 
     BoxWithConstraints {
-        when (size) {
+        val screenWidth = maxWidth
+        val sideNavWidth = screenWidth * 0.8f
+        val sideNavPxValue = with(LocalDensity.current) { sideNavWidth.toPx() }
+        val screenWidthPxValue = with(LocalDensity.current) { screenWidth.toPx() }
+
+
+        when (getWindowSizeClass()) {
             WindowSize.Phones, WindowSize.SmallTablets -> {
                 SlackDragComposableView(
                     isLeftNavOpen = isLeftNavOpen,
@@ -109,10 +114,10 @@ internal fun DashboardUI(
                             {
                                 dashboardComponent.navigateOnboarding()
                             }, {
-                            dashboardComponent.navigateQrScanner(it)
-                        }, {
-                            dashboardComponent.navigateAddWorkspace()
-                        }
+                                dashboardComponent.navigateQrScanner(it)
+                            }, {
+                                dashboardComponent.navigateAddWorkspace()
+                            }
                         )
                     },
                     rightViewComposable = { chatViewModifier ->
@@ -153,10 +158,10 @@ internal fun DashboardUI(
                             {
                                 dashboardComponent.navigateOnboarding()
                             }, {
-                            dashboardComponent.navigateQrScanner(it)
-                        }, {
-                            dashboardComponent.navigateAddWorkspace()
-                        }
+                                dashboardComponent.navigateQrScanner(it)
+                            }, {
+                                dashboardComponent.navigateAddWorkspace()
+                            }
                         )
                     },
                     rightViewComposable = { chatViewModifier ->
@@ -189,33 +194,48 @@ internal fun DashboardUI(
             }
 
             else -> {
-                val onItemClick = { channel: Any ->
-                    dashboardVM.selectedChatChannel.value = channel as DomainLayerChannels.SKChannel
-                    chatScreenComponent.chatViewModel.requestFetch(channel)
-                    dashboardVM.isChatViewClosed.value = false
+                val onItemClick = remember {
+                    { channel: Any ->
+                        dashboardVM.selectedChatChannel.value =
+                            channel as DomainLayerChannels.SKChannel
+                        chatScreenComponent.chatViewModel.requestFetch(channel)
+                        dashboardVM.isChatViewClosed.value = false
+                    }
                 }
-                val clearChat = {
-                    dashboardVM.isChatViewClosed.value = true
-                    dashboardVM.selectedChatChannel.value = null
+                val clearChat = remember {
+                    {
+                        dashboardVM.isChatViewClosed.value = true
+                        dashboardVM.selectedChatChannel.value = null
+                    }
                 }
                 SlackDesktopLayout(modifier = Modifier.fillMaxSize(), sideBar = { modifier ->
-                    SlackSideBarLayoutDesktop(modifier, dashboardComponent.sideNavComponent, openDM = {
-                        clearChat()
-                        dashboardComponent.navigate(DashboardComponent.Config.DirectMessages)
-                    }, mentionsScreen = {
-                        clearChat()
-                        dashboardComponent.navigate(DashboardComponent.Config.MentionsConfig)
-                    }, searchScreen = {
-                        clearChat()
-                        dashboardComponent.navigate(DashboardComponent.Config.Search)
-                    }, userProfile = {
-                        clearChat()
-                        dashboardComponent.navigate(DashboardComponent.Config.Profile)
-                    }, qrCode = {
-                        dashboardComponent.navigateQrScanner(QrScannerMode.QR_DISPLAY)
-                    }, addWorkspace = {
-                        dashboardComponent.navigateAddWorkspace()
-                    }, dashboardComponent)
+                    SlackSideBarLayoutDesktop(
+                        modifier,
+                        dashboardComponent.sideNavComponent,
+                        openDM = {
+                            clearChat()
+                            dashboardComponent.navigate(DashboardComponent.Config.DirectMessages)
+                        },
+                        mentionsScreen = {
+                            clearChat()
+                            dashboardComponent.navigate(DashboardComponent.Config.MentionsConfig)
+                        },
+                        searchScreen = {
+                            clearChat()
+                            dashboardComponent.navigate(DashboardComponent.Config.Search)
+                        },
+                        userProfile = {
+                            clearChat()
+                            dashboardComponent.navigate(DashboardComponent.Config.Profile)
+                        },
+                        qrCode = {
+                            dashboardComponent.navigateQrScanner(QrScannerMode.SHOW_QR_CODE_VIEW)
+                        },
+                        addWorkspace = {
+                            dashboardComponent.navigateAddWorkspace()
+                        },
+                        dashboardComponent
+                    )
                 }, workSpaceAndChannels = { modifier ->
                     SlackWorkspaceLayoutDesktop(
                         modifier,
@@ -245,7 +265,10 @@ internal fun DashboardUI(
                             color = LocalSlackCloneColor.current.uiBackground,
                             modifier = contentModifier
                         ) {
-                            Children(stack = dashboardComponent.desktopStack, animation = stackAnimation(fade())) {
+                            Children(
+                                stack = dashboardComponent.desktopStack,
+                                animation = stackAnimation(fade())
+                            ) {
                                 when (val child = it.instance) {
                                     is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(
                                         onItemClick = onItemClick,
@@ -269,14 +292,14 @@ internal fun DashboardUI(
 
 enum class WindowSize { Phones, SmallTablets, BigTablets, DesktopOne, DesktopTwo }
 
-internal fun getWindowSizeClass(windowDpSize: WindowInfo): WindowSize = when {
-    windowDpSize.width < 0.dp ->
+internal fun BoxWithConstraintsScope.getWindowSizeClass(): WindowSize = when {
+    maxWidth < 0.dp ->
         throw IllegalArgumentException("Dp value cannot be negative")
 
-    windowDpSize.width < 600.dp -> WindowSize.Phones
-    windowDpSize.width < 960.dp -> WindowSize.SmallTablets
-    windowDpSize.width < 1024.dp -> WindowSize.BigTablets
-    windowDpSize.width < 1366.dp -> WindowSize.DesktopOne
+    maxWidth < 600.dp -> WindowSize.Phones
+    maxWidth < 960.dp -> WindowSize.SmallTablets
+    maxWidth < 1024.dp -> WindowSize.BigTablets
+    maxWidth < 1366.dp -> WindowSize.DesktopOne
     else -> WindowSize.DesktopTwo
 }
 
@@ -355,7 +378,11 @@ internal fun DashboardChildren(
     appBarIconClick: () -> Unit,
     onItemClick: (DomainLayerChannels.SKChannel) -> Unit
 ) {
-    Children(modifier = modifier, stack = dashboardComponent.phoneStack, animation = stackAnimation(fade())) {
+    Children(
+        modifier = modifier,
+        stack = dashboardComponent.phoneStack,
+        animation = stackAnimation(fade())
+    ) {
         when (val child = it.instance) {
             is Dashboard.Child.HomeScreen -> {
                 HomeScreenUI(
@@ -370,7 +397,11 @@ internal fun DashboardChildren(
                 )
             }
 
-            is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(onItemClick = onItemClick, child.component)
+            is Dashboard.Child.DirectMessagesScreen -> DirectMessagesUI(
+                onItemClick = onItemClick,
+                child.component
+            )
+
             is Dashboard.Child.MentionsScreen -> MentionsReactionsUI()
             is Dashboard.Child.SearchScreen -> SearchMessagesUI()
             is Dashboard.Child.UserProfileScreen -> {
@@ -384,7 +415,7 @@ internal fun DashboardChildren(
 internal fun FloatingDM(onClick: () -> Unit) {
     FloatingActionButton(onClick = {
         onClick()
-    }, backgroundColor = Color.White) {
+    }, backgroundColor = Color.White, modifier = Modifier.testTag("fabnewthread")) {
         Icon(
             imageVector = Icons.Default.Edit,
             contentDescription = null,
@@ -438,7 +469,39 @@ internal fun RowScope.BottomNavItem(
     BottomNavigationItem(
         selectedContentColor = LocalSlackCloneColor.current.bottomNavSelectedColor,
         unselectedContentColor = LocalSlackCloneColor.current.bottomNavUnSelectedColor,
-        icon = { Icon(Icons.Default.Home, contentDescription = null, Modifier.size(24.dp)) },
+        icon = {
+            when (navBackStackEntry) {
+                is Dashboard.Child.DirectMessagesScreen -> Icon(
+                    Icons.Default.Message,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                is Dashboard.Child.HomeScreen -> Icon(
+                    Icons.Default.Home,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                Dashboard.Child.MentionsScreen -> Icon(
+                    Icons.Default.Email,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                is Dashboard.Child.SearchScreen -> Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+
+                is Dashboard.Child.UserProfileScreen -> Icon(
+                    Icons.Default.VerifiedUser,
+                    contentDescription = null,
+                    Modifier.size(24.dp)
+                )
+            }
+        },
         label = {
             Text(
                 screen.name,

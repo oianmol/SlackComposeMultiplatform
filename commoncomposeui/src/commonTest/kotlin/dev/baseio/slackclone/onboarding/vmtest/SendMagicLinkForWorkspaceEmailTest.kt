@@ -2,18 +2,20 @@ package dev.baseio.slackclone.onboarding.vmtest
 
 import app.cash.turbine.test
 import dev.baseio.grpc.IGrpcCalls
-import dev.baseio.slackclone.onboarding.vm.SendMagicLinkForWorkspaceEmail
+import dev.baseio.slackclone.onboarding.vm.SendMagicLinkForWorkspaceViewModel
 import dev.baseio.slackdata.common.kmEmpty
 import dev.baseio.slackdata.protos.kmSKWorkspace
+import io.mockative.any
+import io.mockative.given
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.asserter
 import kotlin.time.Duration.Companion.seconds
 
-class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
+class SendMagicLinkForWorkspaceEmailTest : SlackKoinTest() {
 
-    private lateinit var viewModel: SendMagicLinkForWorkspaceEmail
-    private fun getViewModel(email: String) = SendMagicLinkForWorkspaceEmail(
+    private lateinit var viewModel: SendMagicLinkForWorkspaceViewModel
+    private fun getViewModel(email: String) = SendMagicLinkForWorkspaceViewModel(
         coroutineDispatcherProvider = coroutineDispatcherProvider,
         useCaseAuthWorkspace = useCaseAuthWorkspace,
         useCaseSaveFCMToken = koinApplication.koin.get(),
@@ -25,21 +27,38 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
     fun `viewModel informs the component to navigate after successful authentication`() {
         viewModel = getViewModel("sdf@sdffd.com")
         runTest {
-            mocker.every { koinApplication.koin.get<IGrpcCalls>().skKeyValueData } returns koinApplication.koin.get()
-            mocker.everySuspending {
-                koinApplication.koin.get<IGrpcCalls>().saveFcmToken(isAny(), isAny())
-            } returns kmEmpty { }
-            mocker.everySuspending {
-                koinApplication.koin.get<IGrpcCalls>().sendMagicLink(
-                    isAny(), isAny()
+
+            given(iGrpcCalls)
+                .invocation {
+                    koinApplication.koin.get<IGrpcCalls>().skKeyValueData
+                }
+                .thenReturn(
+                    koinApplication.koin.get()
                 )
-            } returns kmSKWorkspace { }
-            mocker.everySuspending {
-                koinApplication.koin.get<IGrpcCalls>().currentLoggedInUser(isAny())
-            } returns testUser()
+
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::saveFcmToken)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    kmEmpty { }
+                )
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::sendMagicLink)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    kmSKWorkspace { }
+                )
+
+            given(iGrpcCalls)
+                .suspendFunction(iGrpcCalls::currentLoggedInUser)
+                .whenInvokedWith(any())
+                .thenReturn(
+                    AuthTestFixtures.testUser()
+                )
 
             viewModel.sendMagicLink()
-            viewModel.state.test(timeout = 5.seconds) {
+            viewModel.uiState.test(timeout = 5.seconds) {
                 awaitItem().apply {
                     asserter.assertTrue(actual = loading, message = "Loading was not true!")
                 }
@@ -61,9 +80,9 @@ class SendMagicLinkForWorkspaceEmailTest : SlackKoinUnitTest() {
 
         runTest {
             viewModel.sendMagicLink()
-            viewModel.state.test(timeout = 5.seconds) {
+            viewModel.uiState.test {
                 awaitItem().apply {
-                    asserter.assertTrue(actual = this.error != null, message = "error was null!")
+                    asserter.assertTrue("was expecting to fail",this.error != null)
                 }
             }
         }

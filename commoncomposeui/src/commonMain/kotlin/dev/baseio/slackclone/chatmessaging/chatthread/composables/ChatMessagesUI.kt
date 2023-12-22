@@ -26,7 +26,8 @@ internal fun ChatMessagesUI(
     screenComponent: ChatScreenComponent,
     viewModel: ChatViewModel = screenComponent.chatViewModel,
     modifier: Modifier,
-    alertLongClick: (DomainLayerMessages.SKMessage) -> Unit
+    alertLongClick: (DomainLayerMessages.SKMessage) -> Unit,
+    onClickRequestSecurityKeys: () -> Unit,
 ) {
     val messages by viewModel.chatMessagesFlow.collectAsState()
     val members by viewModel.channelMembers.collectAsState()
@@ -42,7 +43,7 @@ internal fun ChatMessagesUI(
                     message,
                     alertLongClick,
                     members.firstOrNull { it.uuid == message.sender },
-                    onClickHash = {}
+                    onClickHash = {}, onClickRequestSecurityKeys
                 )
                 if (messageIndex + threshold >= messages.lastIndex) {
                     SideEffect {
@@ -52,7 +53,8 @@ internal fun ChatMessagesUI(
             }
             lastDrawnMessage = message.createdDate.calendar().formattedMonthDate()
             if (!isLastMessage(messageIndex, messages)) {
-                val nextMessageMonth = messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
+                val nextMessageMonth =
+                    messages[messageIndex + 1].createdDate.calendar().formattedMonthDate()
                 if (nextMessageMonth != lastDrawnMessage) {
                     item {
                         ChatHeader(message.createdDate)

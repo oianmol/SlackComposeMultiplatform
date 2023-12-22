@@ -14,11 +14,12 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") { from(files("./gradle/versions.toml")) }
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-
 
 rootProject.name = "SlackJetpackCompose"
 

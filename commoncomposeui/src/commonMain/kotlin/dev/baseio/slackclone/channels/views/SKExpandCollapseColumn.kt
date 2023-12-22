@@ -2,13 +2,25 @@ package dev.baseio.slackclone.channels.views
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.IconToggleButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.baseio.slackclone.chatcore.views.SlackChannelItem
@@ -16,7 +28,6 @@ import dev.baseio.slackclone.commonui.theme.LocalSlackCloneColor
 import dev.baseio.slackclone.commonui.theme.SlackCloneTypography
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun SKExpandCollapseColumn(
     expandCollapseModel: ExpandCollapseModel,
@@ -33,6 +44,7 @@ internal fun SKExpandCollapseColumn(
         Row(
             Modifier
                 .fillMaxWidth()
+                .testTag("expand_collapse_${expandCollapseModel.title}")
                 .clickable {
                     onExpandCollapse(!expandCollapseModel.isOpen)
                 },
@@ -76,7 +88,7 @@ internal fun AddButton(
     onClickAdd: () -> Unit
 ) {
     if (expandCollapseModel.needsPlusButton) {
-        IconButton(onClick = onClickAdd) {
+        IconButton(onClick = onClickAdd, modifier = Modifier.testTag("button_add")) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = null,

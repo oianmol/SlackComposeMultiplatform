@@ -12,7 +12,7 @@ import dev.baseio.slackclone.dashboard.compose.DashboardUI
 import dev.baseio.slackclone.onboarding.compose.EmailAddressInputUI
 import dev.baseio.slackclone.onboarding.compose.GettingStartedUI
 import dev.baseio.slackclone.onboarding.compose.ProcessEmailWorkspaceSendEmailUI
-import dev.baseio.slackclone.onboarding.compose.ProcessTokenFromDeepLink
+import dev.baseio.slackclone.onboarding.compose.ProcessAuthTokenScreen
 import dev.baseio.slackclone.onboarding.compose.WorkspaceInputUI
 import dev.baseio.slackclone.qrscanner.QRScannerUI
 
@@ -21,14 +21,21 @@ fun SlackApp(
     modifier: Modifier = Modifier,
     rootComponent: () -> RootComponent
 ) {
-    Children(modifier = modifier, stack = rootComponent().childStack, animation = stackAnimation(fade())) {
+    Children(
+        modifier = modifier.notchPadding(),
+        stack = rootComponent().childStack,
+        animation = stackAnimation(fade())
+    ) {
         when (val child = it.instance) {
             is Root.Child.AuthorizeWithToken -> {
-                ProcessTokenFromDeepLink(child.component)
+                // once we receive the deeplink with token, then we open this composable
+                ProcessAuthTokenScreen(child.component)
             }
+
             is Root.Child.AuthorizeSendEmail -> {
                 ProcessEmailWorkspaceSendEmailUI(child.component)
             }
+
             is Root.Child.GettingStarted -> {
                 GettingStartedUI(child.component)
             }
@@ -67,7 +74,12 @@ fun SlackApp(
                 WorkspaceInputUI(navigateBack = {
                     rootComponent().navigationPop()
                 }, navigateNext = { workspace ->
-                    rootComponent().navigatePush(RootComponent.Config.AuthorizeSendEmail(child.emailAddress, workspace))
+                    rootComponent().navigatePush(
+                        RootComponent.Config.AuthorizeSendEmail(
+                            child.emailAddress,
+                            workspace
+                        )
+                    )
                 })
             }
         }

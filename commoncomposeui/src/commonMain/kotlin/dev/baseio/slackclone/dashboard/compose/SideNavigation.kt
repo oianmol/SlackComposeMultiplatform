@@ -65,10 +65,10 @@ internal fun SideNavigation(
             }
             Spacer(modifier = Modifier.padding(8.dp))
             SideNavFooter(logout = {
-                sideNavComponent.viewModel.logout()
+                sideNavComponent.viewModel.logout(sideNavComponent.viewModel.viewModelScope)
                 navigateOnboardingClearRoutes()
             }, openQrScanner = {
-                navigateQrScanner(QrScannerMode.QR_DISPLAY)
+                navigateQrScanner(QrScannerMode.SHOW_QR_CODE_VIEW)
             }, addWorkspace = {
                 navigateAddWorkspace()
             })

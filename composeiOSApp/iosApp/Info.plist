@@ -55,5 +55,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+		<key>NSCameraUsageDescription</key>
+    	<string>This app uses camera for capturing photos</string>
+    	<key>UIApplicationSceneManifest</key>
+    	<dict>
+    		<key>UIApplicationSupportsMultipleScenes</key>
+    		<false/>
+    	</dict>
 </dict>
 </plist>

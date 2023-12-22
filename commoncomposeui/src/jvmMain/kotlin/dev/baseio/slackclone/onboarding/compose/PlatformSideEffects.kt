@@ -5,11 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 actual object PlatformSideEffects {
     @Composable
-    internal actual fun GettingStartedScreen() {
-    }
-
-    @Composable
-    internal actual fun SkipTypingScreen() {
+    internal actual fun SlackCloneColorOnPlatformUI() {
     }
 
     @Composable

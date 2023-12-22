@@ -2,7 +2,9 @@ package dev.baseio.slackserver.services
 
 import dev.baseio.slackdata.common.Empty
 import dev.baseio.slackdata.common.empty
-import dev.baseio.slackdata.protos.*
+import dev.baseio.slackdata.protos.SKAuthResult
+import dev.baseio.slackdata.protos.SKPushToken
+import dev.baseio.slackdata.protos.SecurePushServiceGrpcKt
 import dev.baseio.slackserver.data.models.SKUserPushToken
 import dev.baseio.slackserver.data.models.SkUser
 import dev.baseio.slackserver.data.sources.UserPushTokenDataSource
@@ -16,16 +18,15 @@ import io.jsonwebtoken.security.Keys
 import kotlinx.coroutines.Dispatchers
 import java.security.Key
 import java.time.Instant
-import java.util.*
+import java.util.Date
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
-class AuthService(
+class SecurePushService(
     coroutineContext: CoroutineContext = Dispatchers.IO,
     private val pushTokenDataSource: UserPushTokenDataSource,
-    authenticationDelegate: AuthenticationDelegate
-) :
-    AuthServiceGrpcKt.AuthServiceCoroutineImplBase(coroutineContext), AuthenticationDelegate by authenticationDelegate {
+) : SecurePushServiceGrpcKt.SecurePushServiceCoroutineImplBase(coroutineContext) {
 
     override suspend fun savePushToken(request: SKPushToken): Empty {
         val authData = AUTH_CONTEXT_KEY.get()

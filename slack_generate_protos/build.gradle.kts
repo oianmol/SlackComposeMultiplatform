@@ -23,11 +23,11 @@ repositories {
 
 dependencies {
     protobuf(project(":slack_protos"))
-    api("com.google.protobuf:protobuf-kotlin:${Versions.PROTOBUF}")
-    api("com.google.protobuf:protobuf-java-util:${Versions.PROTOBUF}")
-    api("io.grpc:grpc-protobuf:${Versions.GRPC}")
-    api("io.grpc:grpc-stub:${Versions.GRPC}")
-    api("io.grpc:grpc-kotlin-stub:${Versions.GRPC_KOTLIN}")
+    api(libs.protobuf.kotlin)
+    api(libs.protobuf.java.util)
+    api(libs.grpc.protobuf)
+    api(libs.grpc.stub)
+    api(libs.grpc.kotlin.stub)
     api(libs.coroutines)
 }
 
