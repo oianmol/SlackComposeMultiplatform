@@ -63,7 +63,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+       // iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
             baseName = "ComposeApp"
@@ -137,6 +137,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.sqlDelight.driver.sqlite)
+            implementation(libs.windows.registry.util)
         }
 
         jsMain.dependencies {
@@ -145,6 +146,7 @@ kotlin {
             api(npm("google-protobuf", "^3.19.1"))
             api(npm("grpc-web", "^1.3.0"))
             api(npm("protobufjs", "^6.11.2"))
+            implementation(devNpm("copy-webpack-plugin", "9.1.0"))
         }
 
         iosMain.dependencies {
@@ -187,6 +189,7 @@ sqldelight {
     databases {
         create("SlackDB") {
             packageName.set("dev.baseio.database")
+            generateAsync.set(true)
         }
         linkSqlite.set(true)
     }

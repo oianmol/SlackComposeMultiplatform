@@ -1,26 +1,18 @@
 package dev.baseio.slackdata
 
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import app.cash.sqldelight.db.QueryResult.AsyncValue
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlSchema
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import dev.baseio.database.SlackDB
 import java.io.File
 
 actual class DriverFactory {
-    actual fun createDriver(schema: SqlDriver.Schema): SqlDriver {
+    actual fun createDriver(): SqlDriver {
         val databasePath = File(System.getProperty("user.home"), "SlackDB.db")
-        val driver: SqlDriver = JdbcSqliteDriver("jdbc:sqlite:" + databasePath.absolutePath)
-        schema.create(driver)
-        return driver
+        return JdbcSqliteDriver("jdbc:sqlite:" + databasePath.absolutePath).also {
+            SlackDB.Schema.create(it)
+        }
     }
 
-    actual suspend fun createDriverBlocking(schema: SqlDriver.Schema): SqlDriver {
-        val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        schema.create(driver)
-        return driver
-    }
-
-    actual fun createInMemorySqlDriver(schema: SqlDriver.Schema): SqlDriver {
-        val driver: SqlDriver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-        schema.create(driver)
-        return driver
-    }
 }

@@ -1,28 +1,24 @@
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.CanvasBasedWindow
+import androidx.compose.ui.window.ComposeUIViewController
+import platform.UIKit.UIViewController
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
-import org.jetbrains.skiko.wasm.onWasmReady
+import dev.baseio.slackclone.initKoin
 
 val lifecycle = LifecycleRegistry()
 val rootComponent by lazy {
     RootComponent(
         context = DefaultComponentContext(lifecycle = lifecycle),
-    )
+        )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-fun main() {
-    onWasmReady {
-        CanvasBasedWindow("SlackCMP") {
-            SlackCloneTheme {
-                SlackApp {
-                    rootComponent
-                }
-            }
+fun MainViewController(): UIViewController = ComposeUIViewController {
+    initKoin()
+    SlackCloneTheme(isDarkTheme = true) {
+        SlackApp {
+            rootComponent
         }
     }
 }

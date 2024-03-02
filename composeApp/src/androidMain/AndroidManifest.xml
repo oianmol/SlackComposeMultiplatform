@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
-        android:name=".AndroidApp"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:label="SlackCMP"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:name="dev.baseio.android.SlackApp"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true"
+        android:supportsRtl="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/SplashTheme">
         <activity
-            android:name=".AppActivity"
+            android:name="dev.baseio.android.SlackAndroidActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.SlackJetpackCompose"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="slackclone"
+                    android:host="open"></data>
+            </intent-filter>
         </activity>
+
+        <service
+            android:name="dev.baseio.android.communication.SlackMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/slack" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <receiver android:name="dev.baseio.android.communication.SKReplyGroupMessageReceiver" />
+
     </application>
 
 </manifest>
