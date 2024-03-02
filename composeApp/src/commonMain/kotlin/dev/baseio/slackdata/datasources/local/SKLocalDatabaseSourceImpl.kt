@@ -4,7 +4,7 @@ import dev.baseio.database.SlackDB
 import dev.baseio.slackdomain.datasources.local.SKLocalDatabaseSource
 
 class SKLocalDatabaseSourceImpl(private val slackDB: SlackDB) : SKLocalDatabaseSource {
-    override fun clear() {
+    override suspend fun clear() {
         with(slackDB.slackDBQueries) {
             deleteAllMessages()
             deleteAllDMChannels()

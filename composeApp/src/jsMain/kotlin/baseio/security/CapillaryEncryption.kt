@@ -1,9 +1,7 @@
-@file:JvmName("CapillaryEncryptionJAva")
-
 package dev.baseio.security
 
-import java.util.Base64
-import javax.crypto.Cipher
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 actual object CapillaryEncryption {
     actual fun encrypt(
@@ -34,10 +32,12 @@ actual object CapillaryEncryption {
     }
 }
 
-private fun String.frombase64(): ByteArray? {
-    return Base64.getDecoder().decode(this)
+@OptIn(ExperimentalEncodingApi::class)
+private fun String.frombase64(): ByteArray {
+    return Base64.decode(this)
 }
 
+@OptIn(ExperimentalEncodingApi::class)
 private fun ByteArray.base64(): String {
-    return Base64.getEncoder().encodeToString(this)
+    return Base64.encode(this)
 }

@@ -1,11 +1,12 @@
 package dev.baseio.slackdata.datasources.local.users
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import database.SlackUser
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdata.local.asFlow
-import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdata.mapper.toSkUser
+import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.LOGGED_IN_USER
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.users.SKLocalDataSourceUsers
@@ -18,7 +19,8 @@ import kotlinx.serialization.json.Json
 class SKLocalDataSourceUsersImpl(
     private val slackDB: SlackDB,
     private val skLocalKeyValueSource: SKLocalKeyValueSource,
-    private val mapper: EntityMapper<DomainLayerUsers.SKUser, SlackUser>
+    private val mapper: EntityMapper<DomainLayerUsers.SKUser, SlackUser>,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
 ) :
     SKLocalDataSourceUsers {
 
@@ -29,7 +31,8 @@ class SKLocalDataSourceUsersImpl(
         return slackDB.slackDBQueries
             .selectAllUsersAndName(workspace, name)
             .asFlow()
-            .mapToList().map { slackUsers ->
+            .mapToList(coroutineDispatcherProvider.default)
+            .map { slackUsers ->
                 slackUsers.map { slackUser ->
                     mapper.mapToDomain(slackUser)
                 }
@@ -40,7 +43,8 @@ class SKLocalDataSourceUsersImpl(
         return slackDB.slackDBQueries
             .selectAllUsers(workspace)
             .asFlow()
-            .mapToList().map { slackUsers ->
+            .mapToList(coroutineDispatcherProvider.default)
+            .map { slackUsers ->
                 slackUsers.map { slackUser ->
                     mapper.mapToDomain(slackUser)
                 }
@@ -57,8 +61,8 @@ class SKLocalDataSourceUsersImpl(
     override fun getUser(workspaceId: String, uuid: String): DomainLayerUsers.SKUser? {
         return slackDB.slackDBQueries.getUser(workspaceId = workspaceId, userid = uuid)
             .executeAsOneOrNull()?.let {
-            mapper.mapToDomain(it)
-        }
+                mapper.mapToDomain(it)
+            }
     }
 
     override fun getUserByUserName(workspaceId: String, userName: String): DomainLayerUsers.SKUser {
@@ -73,7 +77,7 @@ class SKLocalDataSourceUsersImpl(
         }
     }
 
-    override fun saveUser(senderInfo: DomainLayerUsers.SKUser?) {
+    override suspend fun saveUser(senderInfo: DomainLayerUsers.SKUser?) {
         senderInfo?.let {
             slackDB.slackDBQueries.insertUser(
                 it.uuid,

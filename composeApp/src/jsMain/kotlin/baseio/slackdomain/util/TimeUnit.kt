@@ -7,3 +7,7 @@ actual enum class TimeUnit(val toMilliFactor: Long) {
     MINUTES(60 * 1000),
     SECONDS(1000)
 }
+
+actual fun TimeUnit.toMillis(duration: Long): Long {
+    return toMilliFactor.times(duration)
+}

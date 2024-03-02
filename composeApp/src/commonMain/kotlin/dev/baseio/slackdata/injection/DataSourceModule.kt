@@ -118,9 +118,10 @@ fun dataSourceModule(iGrpc: () -> IGrpcCalls) = module {
     }
     single<SKLocalDataSourceUsers> {
         SKLocalDataSourceUsersImpl(
-            get(),
-            get(),
-            get(SlackUserRandomUserQualifier),
+            slackDB = get(),
+            skLocalKeyValueSource = get(),
+            mapper = get(SlackUserRandomUserQualifier),
+            coroutineDispatcherProvider = get()
         )
     }
     single<SKLocalDataSourceMessages> {

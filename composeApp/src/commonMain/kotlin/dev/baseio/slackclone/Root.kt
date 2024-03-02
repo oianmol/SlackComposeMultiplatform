@@ -101,14 +101,15 @@ class RootComponent(
         when (config) {
             is Config.AuthorizeWithToken -> Root.Child.AuthorizeWithToken(
                 AuthorizeTokenComponent(
-                    componentContext = componentContext.childContext(AuthorizeTokenComponent::class.qualifiedName.toString()),
+                    componentContext = componentContext.childContext
+                        (AuthorizeTokenComponent::class.simpleName.toString()),
                     token = config.token, navigateBack = ::navigationPop, navigateDashboard = ::navigateDashboard
                 )
             )
 
             is Config.AuthorizeSendEmail -> Root.Child.AuthorizeSendEmail(
                 EmailMagicLinkComponent(
-                    componentContext = componentContext.childContext(EmailMagicLinkComponent::class.qualifiedName.toString()),
+                    componentContext = componentContext.childContext(EmailMagicLinkComponent::class.simpleName.toString()),
                     email = config.emailAddress,
                     workspace = config.workspace, ::navigateDashboard, ::navigationPop
                 )
@@ -116,7 +117,7 @@ class RootComponent(
 
             is Config.GettingStarted -> Root.Child.GettingStarted(
                 GettingStartedComponent(
-                    componentContext = componentContext.childContext(GettingStartedComponent::class.qualifiedName.toString()),
+                    componentContext = componentContext.childContext(GettingStartedComponent::class.simpleName.toString()),
                     navigateBack = ::navigationPop,
                     navigateDashboard = ::navigateDashboard
                 ) {
@@ -126,7 +127,7 @@ class RootComponent(
 
             is Config.DashboardScreen -> Root.Child.DashboardScreen(
                 DashboardComponent(
-                    componentContext = componentContext.childContext(DashboardComponent::class.qualifiedName.toString()),
+                    componentContext = componentContext.childContext(DashboardComponent::class.simpleName.toString()),
                     navigateOnboarding = {
                         navigation.navigate {
                             listOf(Config.GettingStarted(firstLaunch = true))
@@ -150,7 +151,7 @@ class RootComponent(
 
             Config.CreateNewChannelUI -> Root.Child.CreateNewChannel(
                 CreateNewChannelComponent(
-                    componentContext.childContext(CreateNewChannelComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(CreateNewChannelComponent::class.simpleName.toString()),
                     {
                         navigation.pop()
                     },
@@ -170,7 +171,7 @@ class RootComponent(
 
             Config.NewChatThreadScreen -> Root.Child.NewChatThread(
                 NewChatThreadComponent(
-                    componentContext.childContext(NewChatThreadComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(NewChatThreadComponent::class.simpleName.toString()),
                     {
                         navigation.pop()
                     },
@@ -187,7 +188,7 @@ class RootComponent(
 
             Config.SearchCreateChannelUI -> Root.Child.SearchCreateChannel(
                 SearchChannelsComponent(
-                    componentContext.childContext(SearchChannelsComponent::class.qualifiedName.toString()),
+                    componentContext.childContext(SearchChannelsComponent::class.simpleName.toString()),
                     {
                         navigation.pop()
                     },

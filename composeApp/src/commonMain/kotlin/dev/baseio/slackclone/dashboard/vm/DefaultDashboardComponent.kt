@@ -49,18 +49,18 @@ class DashboardComponent(
 ) : Dashboard, ComponentContext by componentContext {
 
     val sideNavComponent =
-        SideNavComponent(childContext(SideNavComponent::class.qualifiedName.toString())) {
+        SideNavComponent(childContext(SideNavComponent::class.simpleName.toString())) {
             navigateOnboarding()
         }
     val chatScreenComponent = ChatScreenComponent(
-        componentContext = childContext(ChatScreenComponent::class.qualifiedName.toString()),
+        componentContext = childContext(ChatScreenComponent::class.simpleName.toString()),
     )
     val recentChannelsComponent = SlackChannelComponent(
-        childContext(SlackChannelComponent::class.qualifiedName.toString().plus("recent")),
+        childContext(SlackChannelComponent::class.simpleName.toString().plus("recent")),
         "recent"
     )
     val allChannelsComponent = SlackChannelComponent(
-        childContext(SlackChannelComponent::class.qualifiedName.toString().plus("allChannels")),
+        childContext(SlackChannelComponent::class.simpleName.toString().plus("allChannels")),
         "allChannels"
     )
 
@@ -107,13 +107,13 @@ class DashboardComponent(
     private fun createChild(config: Config, componentContext: ComponentContext): Dashboard.Child =
         when (config) {
             Config.DirectMessages -> Dashboard.Child.DirectMessagesScreen(
-                DirectMessagesComponent(componentContext.childContext(DirectMessagesComponent::class.qualifiedName.toString()))
+                DirectMessagesComponent(componentContext.childContext(DirectMessagesComponent::class.simpleName.toString()))
             )
 
             Config.Home -> Dashboard.Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext.childContext(
-                        HomeScreenComponent::class.qualifiedName.toString()
+                        HomeScreenComponent::class.simpleName.toString()
                     ), getKoin().get()
                 )
             )
@@ -121,7 +121,7 @@ class DashboardComponent(
             Config.MentionsConfig -> Dashboard.Child.MentionsScreen
             Config.Profile -> Dashboard.Child.UserProfileScreen(
                 UserProfileComponent(
-                    componentContext.childContext(UserProfileComponent::class.qualifiedName.toString())
+                    componentContext.childContext(UserProfileComponent::class.simpleName.toString())
                 ) {
                     navigateOnboarding()
                 }
@@ -130,7 +130,7 @@ class DashboardComponent(
             Config.Search -> Dashboard.Child.SearchScreen(
                 SearchMessagesComponent(
                     componentContext.childContext(
-                        SearchMessagesComponent::class.qualifiedName.toString()
+                        SearchMessagesComponent::class.simpleName.toString()
                     )
                 )
             )

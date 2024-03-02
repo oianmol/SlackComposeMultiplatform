@@ -130,6 +130,19 @@ kotlin {
             implementation(libs.compose.uitooling)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.sqlDelight.driver.android)
+
+            // CameraX
+            api(libs.androidx.camera.camera2)
+            api(libs.androidx.camera.lifecycle)
+            api(libs.androidx.camera.view)
+            api(libs.androidx.camera.video)
+            api(libs.androidx.camera.extensions)
+            implementation(libs.guava)
+            // Zxing
+            api(libs.zxing.core)
+            api(libs.firebase.core)
+            api(libs.firebase.messaging)
+            implementation(libs.barcode.scanning)
         }
 
         jvmMain.dependencies {
@@ -138,6 +151,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.sqlDelight.driver.sqlite)
             implementation(libs.windows.registry.util)
+            api(libs.zxing.javase)
         }
 
         jsMain.dependencies {
@@ -146,6 +160,8 @@ kotlin {
             api(npm("google-protobuf", "^3.19.1"))
             api(npm("grpc-web", "^1.3.0"))
             api(npm("protobufjs", "^6.11.2"))
+            api(npm("node-forge","^0.5.1"))
+            api(npm("chacha20",""))
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
         }
 

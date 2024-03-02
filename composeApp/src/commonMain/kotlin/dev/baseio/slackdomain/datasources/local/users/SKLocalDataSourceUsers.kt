@@ -8,7 +8,7 @@ interface SKLocalDataSourceUsers {
     fun getUsersByWorkspaceAndName(workspace: String, name: String): Flow<List<DomainLayerUsers.SKUser>>
     fun getUsers(workspace: String): List<DomainLayerUsers.SKUser>
     fun getUser(workspaceId: String, uuid: String): DomainLayerUsers.SKUser?
-    fun saveUser(senderInfo: DomainLayerUsers.SKUser?)
+    suspend fun saveUser(senderInfo: DomainLayerUsers.SKUser?)
     fun getUserByUserName(workspaceId: String, userName: String): DomainLayerUsers.SKUser?
     fun saveLoggedInUser(user: DomainLayerUsers.SKUser?)
 }

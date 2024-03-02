@@ -1,9 +1,9 @@
 package dev.baseio.slackdata.datasources.local.channels
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import database.SlackChannelMember
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdata.local.asFlow
-import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.protos.KMSKEncryptedMessage
 import dev.baseio.slackdata.protos.kmSKEncryptedMessage
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
@@ -26,7 +26,8 @@ class SKLocalDataSourceChannelMembersImpl(
         return slackDB.slackDBQueries.selectAllMembers(
             channelId = channelId,
             workspaceId = workspaceId
-        ).asFlow().mapToList()
+        ).asFlow()
+            .mapToList(coroutineDispatcherProvider.default)
             .map {
                 it.map { it.toChannelMember() }
             }

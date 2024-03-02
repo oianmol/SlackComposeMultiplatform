@@ -1,12 +1,12 @@
 package dev.baseio.slackdata.datasources.local.channels
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import database.SelectLastMessageOfChannel
 import database.SkDMChannel
 import database.SkPublicChannel
 import database.SlackMessage
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdata.local.asFlow
-import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
@@ -70,13 +70,19 @@ class SlackSKLocalDataSourceChannelLastMessage(
     private fun skDMChannel(
         workspaceId: String,
         channelsWithLastMessage: SelectLastMessageOfChannel
-    ) = slackChannelDao.slackDBQueries.selectDMChannelById(workspaceId, channelsWithLastMessage.channelId)
+    ) = slackChannelDao.slackDBQueries.selectDMChannelById(
+        workspaceId,
+        channelsWithLastMessage.channelId
+    )
         .executeAsOneOrNull()
 
     private fun skPublicChannel(
         workspaceId: String,
         channelsWithLastMessage: SelectLastMessageOfChannel
-    ) = slackChannelDao.slackDBQueries.selectPublicChannelById(workspaceId, channelsWithLastMessage.channelId)
+    ) = slackChannelDao.slackDBQueries.selectPublicChannelById(
+        workspaceId,
+        channelsWithLastMessage.channelId
+    )
         .executeAsOneOrNull()
 
     private fun slackMessage(channelsWithLastMessage: SelectLastMessageOfChannel) = SlackMessage(

@@ -1,10 +1,10 @@
 package dev.baseio.slackdata.datasources.local.channels
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import database.SkDMChannel
 import database.SkPublicChannel
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdata.local.asFlow
-import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.LOGGED_IN_USER
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class SKLocalDataSourceReadChannelsImpl(
@@ -111,12 +110,12 @@ class SKLocalDataSourceReadChannelsImpl(
             kotlin.run {
                 slackChannelDao.slackDBQueries.selectPublicChannelById(workspaceId, uuid)
                     .executeAsOneOrNull()?.let {
-                    publicChannelMapper.mapToDomain(it)
-                }
+                        publicChannelMapper.mapToDomain(it)
+                    }
                     ?: slackChannelDao.slackDBQueries.selectDMChannelById(workspaceId, uuid)
                         .executeAsOneOrNull()?.let {
-                        directChannelMapper.mapToDomain(it)
-                    }
+                            directChannelMapper.mapToDomain(it)
+                        }
             }.run {
                 if (this is DomainLayerChannels.SKChannel.SkDMChannel) {
                     this.populateDMChannelWithOtherUser(

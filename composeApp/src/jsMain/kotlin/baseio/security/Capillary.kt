@@ -1,18 +1,31 @@
 package dev.baseio.security
+import kotlin.js.Promise
+
+external fun require(module: String): dynamic
+private val forge = require("node-forge")
+
 
 actual class Capillary actual constructor(chainId: String) {
     val keychainId = "rsa_ecdsa_jvm$chainId"
 
+
+    private val forge = require("node-forge")
+
     actual fun initialize(isTest: Boolean) {
-        JVMKeyStoreRsaUtils.generateKeyPair(keychainId)
+        // Implement key generation using `node-forge` or Web Cryptography API
+        // This is a placeholder. You'll need to adapt actual asynchronous JS code into Kotlin
+        val keyPair = forge.pki.rsa.generateKeyPair(KEY_SIZE)
+        val publicKey = forge.pki.publicKeyToPem(keyPair.publicKey)
+        val privateKey = forge.pki.privateKeyToPem(keyPair.privateKey)
+        JSKeyStoreRsaUtils.generateKeyPair(keychainId)
     }
 
     actual fun privateKey(): PrivateKey {
-        return JVMKeyStoreRsaUtils.getPrivateKey(keychainId)
+        return JSKeyStoreRsaUtils.getPrivateKey(keychainId)
     }
 
     actual fun publicKey(): PublicKey {
-        return JVMKeyStoreRsaUtils.getPublicKey(keychainId)
+        return JSKeyStoreRsaUtils.getPublicKey(keychainId)
     }
 
     actual fun encrypt(byteArray: ByteArray, publicKey: PublicKey): EncryptedData {
@@ -29,6 +42,6 @@ actual class Capillary actual constructor(chainId: String) {
     }
 
     actual fun getPublicKeyFromBytes(publicKeyBytes: ByteArray): PublicKey {
-        return JVMKeyStoreRsaUtils.getPublicKeyFromBytes(publicKeyBytes)
+        return JSKeyStoreRsaUtils.getPublicKeyFromBytes(publicKeyBytes)
     }
 }

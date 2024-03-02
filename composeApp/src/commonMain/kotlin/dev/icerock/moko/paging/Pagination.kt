@@ -4,8 +4,6 @@
 
 package dev.icerock.moko.paging
 
-import dev.icerock.moko.mvvm.ResourceState
-import dev.icerock.moko.mvvm.asState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async

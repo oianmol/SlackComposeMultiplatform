@@ -1,16 +1,19 @@
 package dev.baseio.slackdata.datasources.local.workspaces
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import database.SlackWorkspaces
 import dev.baseio.database.SlackDB
-import dev.baseio.slackdata.local.asFlow
-import dev.baseio.slackdata.local.mapToList
 import dev.baseio.slackdata.mapper.EntityMapper
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.CoroutineDispatcherProvider
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
 import dev.baseio.slackdomain.datasources.local.workspaces.SKLocalDataSourceReadWorkspaces
 import dev.baseio.slackdomain.model.workspaces.DomainLayerWorkspaces
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
@@ -24,16 +27,20 @@ class SKLocalDataSourceReadWorkspacesImpl(
     override suspend fun setLastSelected(skWorkspace: DomainLayerWorkspaces.SKWorkspace) {
         withContext(coroutineDispatcherProvider.io) {
             skLocalKeyValueSource.save(AUTH_TOKEN, skWorkspace.token)
-            slackDB.slackDBQueries.workspaceUpdateTime(Clock.System.now().toEpochMilliseconds(), skWorkspace.uuid)
+            slackDB.slackDBQueries.workspaceUpdateTime(
+                Clock.System.now().toEpochMilliseconds(),
+                skWorkspace.uuid
+            )
         }
     }
 
     override suspend fun lastSelectedWorkspace(): DomainLayerWorkspaces.SKWorkspace? {
         return withContext(coroutineDispatcherProvider.io) {
             kotlin.runCatching {
-                slackDB.slackDBQueries.lastSelected().executeAsList().firstOrNull()?.let { slackWorkspace ->
-                    entityMapper.mapToDomain(slackWorkspace)
-                }
+                slackDB.slackDBQueries.lastSelected().executeAsList().firstOrNull()
+                    ?.let { slackWorkspace ->
+                        entityMapper.mapToDomain(slackWorkspace)
+                    }
             }.getOrNull()
         }
     }
@@ -41,7 +48,7 @@ class SKLocalDataSourceReadWorkspacesImpl(
     override fun lastSelectedWorkspaceAsFlow(): Flow<DomainLayerWorkspaces.SKWorkspace> {
         return slackDB.slackDBQueries.lastSelected()
             .asFlow()
-            .mapToList()
+            .mapToList(coroutineDispatcherProvider.default)
             .map {
                 it.firstOrNull()
             }
@@ -59,9 +66,10 @@ class SKLocalDataSourceReadWorkspacesImpl(
 
     override suspend fun getWorkspace(uuid: String): DomainLayerWorkspaces.SKWorkspace? {
         return withContext(coroutineDispatcherProvider.io) {
-            slackDB.slackDBQueries.selectWorkspaceById(uuid).executeAsOneOrNull()?.let { slackWorkspace ->
-                entityMapper.mapToDomain(slackWorkspace)
-            }
+            slackDB.slackDBQueries.selectWorkspaceById(uuid).executeAsOneOrNull()
+                ?.let { slackWorkspace ->
+                    entityMapper.mapToDomain(slackWorkspace)
+                }
         }
     }
 
