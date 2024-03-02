@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package dev.baseio.slackdata.common;
+
+option java_multiple_files = true;
+
+message SKByteArrayElement{
+  int32 byte = 1;
+}
+
+message Empty {
+  string nothing = 1;
+}

@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package dev.baseio.slackdata.protos;
+
+option java_multiple_files = true;
+
+
+message SKQrCodeResponse{
+  repeated dev.baseio.slackdata.common.SKByteArrayElement byteArray = 1;
+  int64 totalSize = 2;
+  SKAuthResult authResult = 3;
+}
+
+message SKQrCodeGenerator{
+  int32 requestType = 1;
+}
+
+message SKQRAuthVerify{
+  string token = 1;
+}
+
+message SKEncryptedMessage{
+  string first = 1;
+  string second = 2;
+}
+
+message SKMessage {
+  string uuid = 1;
+  string workspaceId = 2;
+  string channelId = 3;
+  SKEncryptedMessage text = 4;
+  string sender = 5;
+  int64 createdDate = 6;
+  int64 modifiedDate = 7;
+  bool isDeleted = 8;
+}
+
+message SKLastMessage {
+  SKChannel channel = 1;
+  SKMessage lastMessage = 2;
+}
+
+message SKWorkspace {
+  string uuid = 1;
+  string name = 2;
+  string domain = 3;
+  string picUrl = 4;
+  int64 modifiedTime = 5;
+  bool isDeleted = 6;
+}
+
+message SlackKey {
+  repeated dev.baseio.slackdata.common.SKByteArrayElement keybytes = 4;
+}
+
+// A request to add the given user or update the FCM token of an existing user.
+message AddOrUpdateUserRequest {
+  string deviceid = 1;
+  string token = 2;
+}
+
+message SKUser {
+  string uuid = 1;
+  string workspaceId = 2;
+  string gender = 3;
+  string name = 4;
+  string location = 5;
+  string email = 6;
+  string username = 7;
+  int64 userSince = 8;
+  string phone = 9;
+  string avatarUrl = 10;
+  bool isDeleted = 11;
+  SlackKey publicKey = 12;
+}
+
+message SKUserChangeSnapshot{
+  SKUser previous = 1;
+  SKUser latest = 2;
+}
+
+message SKWorkspaceChangeSnapshot{
+  SKWorkspace previous = 1;
+  SKWorkspace latest = 2;
+}
+
+message SKMessageChangeSnapshot{
+  SKMessage previous = 1;
+  SKMessage latest = 2;
+}
+
+message SKChannelChangeSnapshot{
+  SKChannel previous = 1;
+  SKChannel latest = 2;
+}
+
+message SKChannelMemberChangeSnapshot{
+  SKChannelMember previous = 1;
+  SKChannelMember latest = 2;
+}
+
+message SKDMChannelChangeSnapshot{
+  SKDMChannel previous = 1;
+  SKDMChannel latest = 2;
+}
+
+message SKChannelMember{
+  string uuid = 1;
+  string channelId = 2;
+  string memberId = 3;
+  string workspaceId = 4;
+  SKEncryptedMessage channelPrivateKey = 5;
+}
+
+message SKChannelMembers{
+  repeated SKChannelMember members = 1;
+}
+
+message SKDMChannel{
+  string uuid = 1;
+  string workspaceId = 2;
+  string senderId = 3;
+  string receiverId = 4;
+  int64 createdDate = 5;
+  int64 modifiedDate = 6;
+  bool isDeleted = 7;
+  SlackKey publicKey = 8;
+  SlackKey privateKey = 9;
+}
+
+message SKChannel {
+  string uuid = 1;
+  string workspaceId = 2;
+  string name = 3;
+  int64 createdDate = 4;
+  int64 modifiedDate = 5;
+  string avatarUrl = 6;
+  bool isDeleted = 7;
+  SlackKey publicKey = 8;
+}
+
+message SKWorkspaces {
+  repeated SKWorkspace workspaces = 1;
+}
+
+message SKUsers {
+  repeated SKUser users = 1;
+}
+
+message SKChannels {
+  repeated SKChannel channels = 1;
+}
+
+message SKDMChannels{
+  repeated SKDMChannel channels = 1;
+
+}
+
+message SKMessages{
+  repeated SKMessage messages = 1;
+}
+
+message SKAuthUser {
+  string email = 1;
+  SKUser user = 3;
+}
+
+message SKStatus{
+  string information = 1;
+  string statusCode = 2;
+}
+
+message SKAuthResult{
+  string token = 1;
+  string refreshToken = 2;
+  SKStatus status = 3;
+}
+
+message SKPagedRequest{
+  int32 offset = 1;
+  int32 limit = 2;
+}
+
+message SKInviteUserChannel{
+  string userId = 1;
+  string channelId = 2;
+  SKEncryptedMessage channelPrivateKey = 3;
+}
+
+message SKWorkspaceChannelRequest{
+  string workspaceId = 1;
+  string channelId = 2;
+  SKPagedRequest paged = 3;
+}
+
+message SKChannelRequest{
+  string workspaceId = 1;
+  string channelId = 2;
+  SKPagedRequest paged = 3;
+}
+
+message SKCreateWorkspaceRequest{
+  SKWorkspace workspace = 1;
+  SKAuthUser user = 2;
+}
+
+
+
+message SKFindWorkspacesRequest{
+  string email = 1;
+  string name = 2;
+  SKPagedRequest paged = 3;
+}
+
+message SKPushToken{
+  string uuid = 1;
+  string token = 2;
+  string userId = 3;
+  int32 platform = 4;
+}
+
+service WorkspaceService {
+  rpc getWorkspaces(dev.baseio.slackdata.common.Empty) returns (SKWorkspaces);
+  rpc registerChangeInWorkspace(SKWorkspace) returns (stream SKWorkspaceChangeSnapshot);
+  rpc letMeIn(SKCreateWorkspaceRequest) returns (SKWorkspace);
+  rpc findWorkspacesForEmail(SKFindWorkspacesRequest) returns(SKWorkspaces);
+  rpc findWorkspaceForName(SKFindWorkspacesRequest) returns(SKWorkspace);
+  rpc updateWorkspace(SKWorkspace) returns(SKWorkspace);
+}
+
+service ChannelsService{
+  rpc getAllChannels(SKChannelRequest) returns (SKChannels);
+  rpc getAllDMChannels(SKChannelRequest) returns (SKDMChannels);
+
+  rpc registerChangeInDMChannels(SKChannelRequest) returns (stream SKDMChannelChangeSnapshot);
+  rpc registerChangeInChannels(SKChannelRequest) returns (stream SKChannelChangeSnapshot);
+  rpc registerChangeInChannelMembers(SKChannelMember) returns (stream SKChannelMemberChangeSnapshot);
+
+  rpc savePublicChannel(SKChannel) returns (SKChannel);
+  rpc saveDMChannel(SKDMChannel) returns(SKDMChannel);
+
+  rpc joinChannel(SKChannelMember) returns(SKChannelMember);
+  rpc inviteUserToChannel(SKInviteUserChannel) returns(SKChannelMembers);
+
+  rpc channelMembers(SKWorkspaceChannelRequest) returns(SKChannelMembers);
+}
+
+service MessagesService{
+  rpc getMessages(SKWorkspaceChannelRequest) returns (SKMessages);
+  rpc registerChangeInMessage(SKWorkspaceChannelRequest) returns (stream SKMessageChangeSnapshot);
+  rpc saveMessage(SKMessage) returns (SKMessage);
+  rpc updateMessage(SKMessage) returns (SKMessage);
+}
+
+service UsersService{
+  rpc getUsers(SKWorkspaceChannelRequest) returns (SKUsers);
+  rpc registerChangeInUsers(SKWorkspaceChannelRequest) returns (stream SKUserChangeSnapshot);
+  rpc saveUser(SKUser) returns (SKUser);
+  rpc currentLoggedInUser(dev.baseio.slackdata.common.Empty) returns (SKUser);
+  rpc updateSKUser(SKUser) returns(SKUser);
+}
+
+service QrCodeService{
+  rpc generateQRCode(SKQrCodeGenerator) returns (stream SKQrCodeResponse);
+  rpc verifyQrCode(SKQRAuthVerify) returns (SKAuthResult);
+}
+
+service SecurePushService {
+  rpc savePushToken(SKPushToken) returns (dev.baseio.slackdata.common.Empty);
+}
+
