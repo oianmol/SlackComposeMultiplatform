@@ -1,21 +1,20 @@
 package dev.baseio.slackdata
 
-import java.util.prefs.Preferences
+import kotlinx.browser.localStorage
+import org.w3c.dom.get
+import org.w3c.dom.set
 
 actual class SKKeyValueData {
-    private val rootPreferences: Preferences = Preferences.userRoot()
-    private var preferences: Preferences? = null
-    private val defaultPreferences = rootPreferences.node(System.getProperty("user.home"))
 
     actual fun save(key: String, value: String, workspaceId: String?) {
-        (preferences ?: defaultPreferences).put(key, value)
+        localStorage.set(key + workspaceId, value)
     }
 
     actual fun get(key: String, workspaceId: String?): String? {
-        return (preferences ?: defaultPreferences).get(key, null)
+        return localStorage.get(key + workspaceId)
     }
 
     actual fun clear(workspaceId: String?) {
-        (preferences ?: defaultPreferences).clear()
+        localStorage.clear()
     }
 }

@@ -7,12 +7,12 @@ typealias EncryptedData = Pair<String, String>
 
 expect object CapillaryEncryption {
 
-    fun encrypt(
+    suspend fun encrypt(
         plaintext: ByteArray,
         publicKey: PublicKey,
     ): EncryptedData
 
-    fun decrypt(
+    suspend fun decrypt(
         encryptedData: EncryptedData,
         privateKey: PrivateKey,
     ): ByteArray

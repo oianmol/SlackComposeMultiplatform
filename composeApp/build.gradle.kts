@@ -160,8 +160,9 @@ kotlin {
             api(npm("google-protobuf", "^3.19.1"))
             api(npm("grpc-web", "^1.3.0"))
             api(npm("protobufjs", "^6.11.2"))
-            api(npm("node-forge","^0.5.1"))
-            api(npm("chacha20",""))
+            api(npm("node-forge","^1.3.1"))
+            api(npm("qrcode", "^1.5.3"))
+
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
         }
 

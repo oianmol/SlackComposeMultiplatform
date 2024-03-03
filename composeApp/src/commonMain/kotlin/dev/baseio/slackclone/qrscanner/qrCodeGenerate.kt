@@ -1,3 +1,3 @@
 package dev.baseio.slackclone.qrscanner
 
-expect fun qrCodeGenerate(data: String): ByteArray
+expect suspend fun qrCodeGenerate(data: String): ByteArray

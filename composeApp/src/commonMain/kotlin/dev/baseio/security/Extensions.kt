@@ -1,4 +1,4 @@
 package dev.baseio.security
 
-expect fun ByteArray.toPrivateKey(): PrivateKey
-expect fun ByteArray.toPublicKey(): PublicKey
+expect suspend fun ByteArray.toPrivateKey(): PrivateKey
+expect suspend fun ByteArray.toPublicKey(): PublicKey

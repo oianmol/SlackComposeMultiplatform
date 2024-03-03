@@ -6,7 +6,7 @@ import dev.baseio.slackdomain.datasources.IDataEncrypter
 import dev.baseio.slackdomain.model.users.DomainLayerUsers
 
 class IDataEncrypterImpl : IDataEncrypter {
-    override fun encrypt(
+    override suspend fun encrypt(
         byteArray: ByteArray,
         publicKeyBytes: ByteArray
     ): DomainLayerUsers.SKEncryptedMessage {

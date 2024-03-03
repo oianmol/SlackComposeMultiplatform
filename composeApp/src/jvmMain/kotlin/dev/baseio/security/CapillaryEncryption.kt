@@ -6,7 +6,7 @@ import java.util.Base64
 import javax.crypto.Cipher
 
 actual object CapillaryEncryption {
-    actual fun encrypt(
+    actual suspend fun encrypt(
         plaintext: ByteArray,
         publicKey: PublicKey,
     ): EncryptedData {
@@ -18,7 +18,7 @@ actual object CapillaryEncryption {
         return Pair(symmetricKeyCiphertext.base64(), payloadCiphertext.base64())
     }
 
-    actual fun decrypt(
+    actual suspend fun decrypt(
         encryptedData: EncryptedData,
         privateKey: PrivateKey,
     ): ByteArray {

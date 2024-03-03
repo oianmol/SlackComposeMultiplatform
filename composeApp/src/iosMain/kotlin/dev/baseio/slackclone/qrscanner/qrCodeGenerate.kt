@@ -12,7 +12,7 @@ import platform.CoreImage.PNGRepresentationOfImage
 import platform.CoreImage.kCIFormatRGBA8
 import platform.Foundation.setValue
 
-actual fun qrCodeGenerate(data: String): ByteArray {
+actual suspend fun qrCodeGenerate(data: String): ByteArray {
     CIFilter().apply {
         name = "CIQRCodeGenerator"
     }.let {
