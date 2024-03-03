@@ -162,7 +162,8 @@ kotlin {
             api(npm("protobufjs", "^6.11.2"))
             api(npm("node-forge","^1.3.1"))
             api(npm("qrcode", "^1.5.3"))
-
+            implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
+            implementation(npm("sql.js", "1.8.0"))
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
         }
 

@@ -2,6 +2,7 @@ rootProject.name = "SlackCMP"
 include(":composeApp")
 include(":slack_protos")
 include(":slack_generate_protos")
+include(":server")
 
 pluginManagement {
     repositories {

@@ -5,6 +5,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.baseio.slackclone.initKoin
 import org.jetbrains.skiko.wasm.onWasmReady
 
 val lifecycle = LifecycleRegistry()
@@ -16,6 +17,7 @@ val rootComponent by lazy {
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    initKoin()
     onWasmReady {
         CanvasBasedWindow("SlackCMP") {
             SlackCloneTheme {
