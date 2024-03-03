@@ -129,6 +129,7 @@ kotlin {
             implementation(libs.sqlDelight.driver.android)
             implementation(libs.koin.android)
             implementation(libs.securitycrypto)
+            implementation(libs.grpc.okhttp)
 
             implementation(libs.splash.screen)
             implementation(libs.accompanist.permission)
