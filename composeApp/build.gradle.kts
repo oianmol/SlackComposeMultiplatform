@@ -44,12 +44,6 @@ kotlin {
         homepage = "https://github.com/oianmol"
         ios.deploymentTarget = "14.1"
         version = "1.0.0"
-        pod("capillaryslack") {
-            source = path(rootProject.projectDir.absolutePath + "/slack_capillary_ios/").also {
-                println(it)
-            }
-            extraOpts += listOf("-compiler-option", "-fmodules")
-        }
         pod("gRPC-ProtoRPC", moduleName = "GRPCClient")
         pod("Protobuf")
     }
@@ -118,6 +112,7 @@ kotlin {
             implementation(libs.sqlDelight.driver.extensions)
             implementation("media.kamel:kamel-image:0.9.3")
             api("io.github.timortel:grpc-multiplatform-lib:0.4.0")
+            implementation(project(":capillary-kmp"))
         }
 
         commonTest.dependencies {

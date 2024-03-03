@@ -1,36 +1,35 @@
 Pod::Spec.new do |spec|
-    spec.name                     = 'composeApp'
+    spec.name                     = 'capillary_kmp'
     spec.version                  = '1.0.0'
     spec.homepage                 = 'https://github.com/oianmol'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'SlackIos'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/composeApp.framework'
+    spec.summary                  = 'SlackCapillary'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/capillary_kmp.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
-    spec.dependency 'Protobuf'
-    spec.dependency 'gRPC-ProtoRPC'
+    spec.dependency 'capillaryslack'
                 
-    if !Dir.exist?('build/cocoapods/framework/composeApp.framework') || Dir.empty?('build/cocoapods/framework/composeApp.framework')
+    if !Dir.exist?('build/cocoapods/framework/capillary_kmp.framework') || Dir.empty?('build/cocoapods/framework/capillary_kmp.framework')
         raise "
 
-        Kotlin framework 'composeApp' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'capillary_kmp' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
-            ./gradlew :composeApp:generateDummyFramework
+            ./gradlew :capillary-kmp:generateDummyFramework
 
         Alternatively, proper pod installation is performed during Gradle sync in the IDE (if Podfile location is set)"
     end
                 
     spec.pod_target_xcconfig = {
-        'KOTLIN_PROJECT_PATH' => ':composeApp',
-        'PRODUCT_MODULE_NAME' => 'composeApp',
+        'KOTLIN_PROJECT_PATH' => ':capillary-kmp',
+        'PRODUCT_MODULE_NAME' => 'capillary_kmp',
     }
                 
     spec.script_phases = [
         {
-            :name => 'Build composeApp',
+            :name => 'Build capillary_kmp',
             :execution_position => :before_compile,
             :shell_path => '/bin/sh',
             :script => <<-SCRIPT
@@ -47,5 +46,5 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-    spec.resources = ['build/compose/ios/composeApp/compose-resources']
+                
 end

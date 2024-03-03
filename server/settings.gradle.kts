@@ -1,4 +1,4 @@
-rootProject.name = "slack_multiplatform_grpc_server"
+rootProject.name = "server"
 
 include(":slack_generate_protos")
 include(":slack_protos")

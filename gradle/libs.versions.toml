@@ -39,6 +39,23 @@ cameraCamera2 = "1.3.0-rc02"
 guava = "29.0-android"
 zxing = "3.5.0"
 
+# backend
+bcprovJdk16 = "1.46"
+turbine = "1.0.0"
+firebaseAdmin = "9.1.1"
+grpcTesting = "1.51.0"
+jjwtOrgjson = "0.11.5"
+jjwtImpl = "0.11.5"
+jjwtApi = "0.11.5"
+jodaTime = "2.9.9"
+kmongoCoroutine = "4.7.2"
+kmongoAsync = "4.7.2"
+kmongo = "4.7.2"
+mail = "1.5.0-b01"
+thymeleaf = "3.1.1.RELEASE"
+bcrypt = "0.9.0"
+netty_shaded = "1.50.2"
+
 
 [libraries]
 
@@ -50,6 +67,8 @@ composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref =
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
@@ -65,6 +84,11 @@ protobuf-java-util = { module = "com.google.protobuf:protobuf-java-util", versio
 grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcProtobuf" }
 grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpcProtobuf" }
 grpc-kotlin-stub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpcKotlinStub" }
+grpc-testing = { module = "io.grpc:grpc-testing", version.ref = "grpcTesting" }
+jjwt-orgjson = { module = "io.jsonwebtoken:jjwt-orgjson", version.ref = "jjwtOrgjson" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwtImpl" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwtApi" }
+joda-time = { module = "joda-time:joda-time", version.ref = "jodaTime" }
 
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose_version" }
 decompose-core-jvm = { module = "com.arkivanov.decompose:decompose-jvm", version.ref = "decompose_version" }
@@ -86,11 +110,26 @@ guava = { module = "com.google.guava:guava", version.ref = "guava" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
 zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxing" }
 
+
+# backend
+kmongo-coroutine = { module = "org.litote.kmongo:kmongo-coroutine", version.ref = "kmongoCoroutine" }
+kmongo-async = { module = "org.litote.kmongo:kmongo-async", version.ref = "kmongoAsync" }
+kmongo = { module = "org.litote.kmongo:kmongo", version.ref = "kmongo" }
+mail = { module = "javax.mail:mail", version.ref = "mail" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+bcprov-jdk16 = { module = "org.bouncycastle:bcprov-jdk16", version.ref = "bcprovJdk16" }
+bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
+firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebaseAdmin" }
+thymeleaf = { module = "org.thymeleaf:thymeleaf", version.ref = "thymeleaf" }
+grpc_netty = { module = "io.grpc:grpc-netty-shaded", version.ref = "netty_shaded" }
+
+
 [plugins]
 
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }

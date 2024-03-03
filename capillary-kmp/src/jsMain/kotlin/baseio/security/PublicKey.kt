@@ -2,7 +2,6 @@ package dev.baseio.security
 
 import baseio.security.NodeForge
 import baseio.security.NodeForge.pki.rsa.PublicKey
-import io.ktor.utils.io.core.toByteArray
 
 actual class PublicKey(var publicKey: NodeForge.pki.rsa.PublicKey) {
     actual var encoded: ByteArray = getEncodedPublicKey(publicKey)
@@ -15,5 +14,5 @@ fun getEncodedPublicKey(publicKey: PublicKey): ByteArray {
 
 // If you need the result in a format like Base64, which is common:
     val base64EncodedPublicKey = NodeForge.util.encode64(derPublicKey);
-    return base64EncodedPublicKey.toByteArray()
+    return base64EncodedPublicKey.encodeToByteArray()
 }

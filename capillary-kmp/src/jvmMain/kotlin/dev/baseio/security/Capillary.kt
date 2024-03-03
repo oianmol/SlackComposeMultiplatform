@@ -3,32 +3,32 @@ package dev.baseio.security
 actual class Capillary actual constructor(chainId: String) {
     val keychainId = "rsa_ecdsa_jvm$chainId"
 
-    actual fun initialize(isTest: Boolean) {
+    actual suspend fun initialize(isTest: Boolean) {
         JVMKeyStoreRsaUtils.generateKeyPair(keychainId)
     }
 
-    actual fun privateKey(): PrivateKey {
+    actual suspend fun privateKey(): PrivateKey {
         return JVMKeyStoreRsaUtils.getPrivateKey(keychainId)
     }
 
-    actual fun publicKey(): PublicKey {
+    actual suspend fun publicKey(): PublicKey {
         return JVMKeyStoreRsaUtils.getPublicKey(keychainId)
     }
 
-    actual fun encrypt(byteArray: ByteArray, publicKey: PublicKey): EncryptedData {
+    actual suspend fun encrypt(byteArray: ByteArray, publicKey: PublicKey): EncryptedData {
         return CapillaryEncryption.encrypt(
             byteArray,
             publicKey,
         )
     }
 
-    actual fun decrypt(byteArray: EncryptedData, privateKey: PrivateKey): ByteArray {
+    actual suspend fun decrypt(byteArray: EncryptedData, privateKey: PrivateKey): ByteArray {
         return CapillaryEncryption.decrypt(
             byteArray, privateKey,
         )
     }
 
-    actual fun getPublicKeyFromBytes(publicKeyBytes: ByteArray): PublicKey {
+    actual suspend fun getPublicKeyFromBytes(publicKeyBytes: ByteArray): PublicKey {
         return JVMKeyStoreRsaUtils.getPublicKeyFromBytes(publicKeyBytes)
     }
 }

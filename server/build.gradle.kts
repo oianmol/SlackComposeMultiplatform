@@ -10,12 +10,11 @@ dependencies {
     implementation(libs.mail)
     testImplementation(kotlin("test"))
     testImplementation(libs.turbine)
-    testImplementation(libs.coroutines.test)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.grpc.testing)
 
     implementation(libs.bcprov.jdk16)
     implementation(libs.firebase.admin)
-    implementation(project(":capillary-kmp"))
     implementation(libs.thymeleaf)
 
     implementation(project(":slack_generate_protos"))
@@ -38,14 +37,12 @@ dependencies {
 
     // passwords
     implementation(libs.bcrypt)
+    implementation(project(":capillary-kmp"))
+
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
 }
 
 application {
