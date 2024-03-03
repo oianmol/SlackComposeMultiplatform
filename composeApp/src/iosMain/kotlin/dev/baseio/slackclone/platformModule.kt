@@ -12,7 +12,7 @@ import org.koin.dsl.module
 actual fun platformModule(): Module {
     return module {
         single { SKKeyValueData() }
-        single { SlackDB.invoke(DriverFactory().createDriver(SlackDB.Schema)) }
+        single { SlackDB.invoke(DriverFactory().createDriver()) }
         factory<CoroutineScope> { CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate) }
     }
 }

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithSimulatorTests
 
 plugins {
@@ -52,10 +53,10 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        // iosSimulatorArm64()
+        iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "CapillaryKmp"
             isStatic = true
         }
 
@@ -79,6 +80,17 @@ kotlin {
                 "-rpath",
                 "/usr/lib/swift"
             )
+        }
+    }
+
+    targets.withType<KotlinNativeTarget>().configureEach {
+        compilations.configureEach {
+            compilerOptions.configure {
+                freeCompilerArgs.addAll(
+                    "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
+                    "-opt-in=kotlinx.cinterop.BetaInteropApi"
+                )
+            }
         }
     }
 

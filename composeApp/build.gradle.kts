@@ -4,6 +4,7 @@ import java.util.Enumeration
 import java.net.NetworkInterface
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithSimulatorTests
 import io.github.timortel.kotlin_multiplatform_grpc_plugin.GrpcMultiplatformExtension.OutputTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -39,7 +40,7 @@ kotlin {
 
         binaries.executable()
     }
-    
+
     cocoapods {
         summary = "SlackIos"
         homepage = "https://github.com/oianmol"
@@ -48,17 +49,17 @@ kotlin {
         pod("gRPC-ProtoRPC", moduleName = "GRPCClient")
         pod("Protobuf")
     }
-    
+
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
-    
+
     applyDefaultHierarchyTemplate()
 
     listOf(
         iosX64(),
         iosArm64(),
-       // iosSimulatorArm64()
+        iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
             baseName = "ComposeApp"
@@ -87,6 +88,18 @@ kotlin {
             )
         }
     }
+
+    targets.withType<KotlinNativeTarget>().configureEach {
+        compilations.configureEach {
+            compilerOptions.configure {
+                freeCompilerArgs.addAll(
+                    "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
+                    "-opt-in=kotlinx.cinterop.BetaInteropApi"
+                )
+            }
+        }
+    }
+
 
     sourceSets {
         all {
@@ -165,7 +178,7 @@ kotlin {
             api(npm("google-protobuf", "^3.19.1"))
             api(npm("grpc-web", "^1.3.0"))
             api(npm("protobufjs", "^6.11.2"))
-            api(npm("node-forge","^1.3.1"))
+            api(npm("node-forge", "^1.3.1"))
             api(npm("qrcode", "^1.5.3"))
             implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.1"))
             implementation(npm("sql.js", "1.8.0"))
@@ -216,7 +229,7 @@ sqldelight {
         }
         linkSqlite.set(true)
     }
-   
+
 }
 
 grpcKotlinMultiplatform {
@@ -228,9 +241,12 @@ grpcKotlinMultiplatform {
     }
 
     // Specify the folders where your proto files are located, you can list multiple.
-    protoSourceFolders.set(listOf(projectDir.parentFile.resolve("slack_protos/src/main/proto").also {
-        println(it)
-    }))
+    protoSourceFolders.set(
+        listOf(
+            projectDir.parentFile.resolve("slack_protos/src/main/proto").also {
+                println(it)
+            })
+    )
 }
 
 
@@ -255,12 +271,13 @@ buildConfig {
     packageName.set("dev.baseio.slackclone")
 
     buildConfigField("ipAddr", """${ipv4()}""")
-    
+
 }
 
 fun ipv4(): String {
     var result: InetAddress? = null
-    val interfaces: Enumeration<java.net.NetworkInterface> = (NetworkInterface.getNetworkInterfaces())
+    val interfaces: Enumeration<java.net.NetworkInterface> =
+        (NetworkInterface.getNetworkInterfaces())
     while (interfaces.hasMoreElements()) {
         val addresses: Enumeration<InetAddress> = interfaces.nextElement().getInetAddresses()
         while (addresses.hasMoreElements()) {

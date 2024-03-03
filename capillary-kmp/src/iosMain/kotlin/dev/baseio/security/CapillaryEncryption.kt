@@ -6,11 +6,13 @@ import cocoapods.capillaryslack.CapillaryIOS
 import dev.baseio.extensions.toByteArrayFromNSData
 import dev.baseio.extensions.toData
 import kotlinx.cinterop.BetaInteropApi
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.autoreleasepool
 import platform.Foundation.NSData
 
+@OptIn(ExperimentalForeignApi::class)
 actual object CapillaryEncryption {
-    actual fun encrypt(
+    actual suspend fun encrypt(
         plaintext: ByteArray,
         publicKey: PublicKey
     ): EncryptedData {
@@ -24,7 +26,7 @@ actual object CapillaryEncryption {
         }
     }
 
-    actual fun decrypt(
+    actual suspend fun decrypt(
         encryptedData: EncryptedData,
         privateKey: PrivateKey
     ): ByteArray {
