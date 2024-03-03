@@ -4,8 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import dev.baseio.slackclone.channels.createsearch.CreateNewChannelComponent
 import dev.baseio.slackclone.channels.createsearch.SearchChannelsComponent
 import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadComponent
@@ -16,6 +14,7 @@ import dev.baseio.slackclone.onboarding.vm.EmailMagicLinkComponent
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.AUTH_TOKEN
 import dev.baseio.slackdomain.datasources.local.SKLocalKeyValueSource
+import kotlinx.serialization.Serializable
 
 interface Root {
     val childStack: Value<ChildStack<*, Child>>
@@ -54,6 +53,7 @@ class RootComponent(
 
     override val childStack: Value<ChildStack<*, Root.Child>> = childStack(
         source = navigation,
+        serializer = Config.serializer(),
         initialConfiguration = skKeyValueData.get(AUTH_TOKEN)?.let {
             Config.DashboardScreen()
         } ?: run {
@@ -103,7 +103,9 @@ class RootComponent(
                 AuthorizeTokenComponent(
                     componentContext = componentContext.childContext
                         (AuthorizeTokenComponent::class.simpleName.toString()),
-                    token = config.token, navigateBack = ::navigationPop, navigateDashboard = ::navigateDashboard
+                    token = config.token,
+                    navigateBack = ::navigationPop,
+                    navigateDashboard = ::navigateDashboard
                 )
             )
 
@@ -133,13 +135,13 @@ class RootComponent(
                             listOf(Config.GettingStarted(firstLaunch = true))
                         }
                     }, navigateQrScanner = {
-                    navigation.push(Config.QrScanner(it))
-                },
+                        navigation.push(Config.QrScanner(it))
+                    },
                     navigateRoot = {
                         navigation.push(it)
                     }, navigateAddWorkspace = {
-                    navigation.push(Config.EmailMagicLink)
-                }
+                        navigation.push(Config.EmailMagicLink)
+                    }
                 ).also { dashboardComponent ->
                     config.channelId?.let { channelId ->
                         dashboardComponent.navigateChannel(
@@ -211,37 +213,38 @@ class RootComponent(
             is Config.SignInManually -> Root.Child.SignInManually(config.workspace)
         }
 
-    sealed class Config : Parcelable {
+    @Serializable
+    sealed class Config {
 
-        @Parcelize
+        @Serializable
         data class QrScanner(val mode: QrScannerMode) : Config()
 
-        @Parcelize
+        @Serializable
         data class GettingStarted(val firstLaunch: Boolean = true) : Config()
 
-        @Parcelize
+        @Serializable
         data class DashboardScreen(val channelId: String? = null, val workspaceId: String? = null) :
             Config()
 
-        @Parcelize
-        object EmailMagicLink : Config()
+        @Serializable
+        data object EmailMagicLink : Config()
 
-        @Parcelize
+        @Serializable
         data class SignInManually(val workspace: String) : Config()
 
-        @Parcelize
+        @Serializable
         data class AuthorizeSendEmail(val emailAddress: String, val workspace: String) : Config()
 
-        @Parcelize
+        @Serializable
         data class AuthorizeWithToken(val token: String) : Config()
 
-        @Parcelize
+        @Serializable
         object SearchCreateChannelUI : Config()
 
-        @Parcelize
+        @Serializable
         object CreateNewChannelUI : Config()
 
-        @Parcelize
+        @Serializable
         object NewChatThreadScreen : Config()
     }
 }

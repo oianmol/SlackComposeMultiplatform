@@ -2,9 +2,9 @@ package dev.baseio.slackclone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import dev.baseio.slackclone.channels.createsearch.CreateNewChannelUI
 import dev.baseio.slackclone.channels.createsearch.SearchCreateChannelUI
 import dev.baseio.slackclone.chatmessaging.newchat.NewChatThreadScreen

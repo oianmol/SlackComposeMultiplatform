@@ -20,10 +20,6 @@ class SendMagicLinkForWorkspaceViewModel(
 ) : SlackViewModel(coroutineDispatcherProvider) {
     val uiState = MutableStateFlow(AuthCreateWorkspaceVMState())
 
-    init {
-        sendMagicLink()
-    }
-
     private suspend fun endLoading() {
         uiState.value = uiState.value.copy(loaderState = false)
         delay(250)
@@ -43,6 +39,7 @@ class SendMagicLinkForWorkspaceViewModel(
     fun sendMagicLink() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
+                throwable.printStackTrace()
                 uiState.value = uiState.value.copy(error = throwable, loading = false)
             }
         ) {

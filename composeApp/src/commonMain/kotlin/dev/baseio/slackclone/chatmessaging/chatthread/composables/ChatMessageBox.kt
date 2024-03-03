@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import dev.baseio.slackclone.Keyboard
 import dev.baseio.slackclone.chatmessaging.chatthread.*
 import dev.baseio.slackclone.commonui.material.toCommonTextRange

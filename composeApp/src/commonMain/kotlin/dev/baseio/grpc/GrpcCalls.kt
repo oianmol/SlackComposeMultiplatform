@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class GrpcCalls(
-    private val address: String = "192.168.178.25",
+    private val address: String,
     private val port: Int = 8080,
     override val skKeyValueData: SKLocalKeyValueSource,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider

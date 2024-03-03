@@ -103,17 +103,17 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(libs.decompose.core)
-            implementation(libs.decompose.composejb)
+            implementation(libs.decompose.compose)
             implementation(libs.composeImageLoader)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.multiplatformSettings)
             implementation(libs.koin.core)
-
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.sqlDelight.driver.extensions)
-            implementation("media.kamel:kamel-image:0.9.3")
-            api("io.github.timortel:grpc-multiplatform-lib:0.4.0")
+            implementation(libs.kamel.image)
+            api(libs.grpc.multiplatform.lib)
             implementation(project(":capillary-kmp"))
         }
 

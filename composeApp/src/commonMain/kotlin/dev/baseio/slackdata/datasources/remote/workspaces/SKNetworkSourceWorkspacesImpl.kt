@@ -22,15 +22,13 @@ class SKNetworkSourceWorkspacesImpl(
     ) {
         return withContext(coroutineDispatcherProvider.io) {
             val publicKey = CapillaryInstances.getInstance(email).publicKey()
-            kotlin.run {
-                val result = grpcCalls.sendMagicLink(
-                    kmskCreateWorkspaceRequest(
-                        email,
-                        domain,
-                        publicKey.encoded
-                    )
+            grpcCalls.sendMagicLink(
+                kmskCreateWorkspaceRequest(
+                    email,
+                    domain,
+                    publicKey.encoded
                 )
-            }
+            )
         }
     }
 }

@@ -1,11 +1,13 @@
 [versions]
 
+grpcMultiplatformLib = "0.4.0"
+kamelImage = "0.9.3"
 kotlin = "1.9.22"
 compose = "1.6.0"
 agp = "7.4.2"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.8.2"
-okhttp_grpc = "1.50.0"
+okhttp_grpc = "1.62.2"
 compose-uitooling = "1.6.2"
 composeImageLoader = "1.7.1"
 buildConfig = "5.3.5"
@@ -23,8 +25,7 @@ firebaseMessaging = "23.4.1"
 firebaseCore = "21.1.1"
 androidx_security = "1.1.0-alpha06"
 
-decompose_version = "2.0.0-compose-experimental-alpha-02"
-decompose_composejb = "2.0.0-compose-experimental-alpha-02"
+decompose_version = "3.0.0-alpha08"
 
 grpcKmp = "0.4.0"
 protobufKotlin = "3.25.3"
@@ -61,6 +62,8 @@ netty_shaded = "1.61.1"
 
 
 [libraries]
+grpc-multiplatform-lib = { module = "io.github.timortel:grpc-multiplatform-lib", version.ref = "grpcMultiplatformLib" }
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
 securitycrypto = { module = "androidx.security:security-crypto-ktx", version.ref = "androidx_security" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -83,7 +86,7 @@ sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", versi
 sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-js = { module = "app.cash.sqldelight:web-worker-driver", version.ref = "sqlDelight" }
-sqlDelight-driver-extensions = { module = "app.cash.sqldelight:coroutines-extensions" , version.ref = "sqlDelight"}
+sqlDelight-driver-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 
 protobuf-kotlin = { module = "com.google.protobuf:protobuf-kotlin", version.ref = "protobufKotlin" }
 protobuf-java-util = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobufKotlin" }
@@ -98,8 +101,7 @@ joda-time = { module = "joda-time:joda-time", version.ref = "jodaTime" }
 
 decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose_version" }
 decompose-core-jvm = { module = "com.arkivanov.decompose:decompose-jvm", version.ref = "decompose_version" }
-decompose-composejb = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose_composejb" }
-
+decompose-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose_version" }
 windows-registry-util = { module = "com.github.sarxos:windows-registry-util", version.ref = "windowsRegistryUtil" }
 
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
@@ -141,5 +143,5 @@ buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 kotlin-native-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
-grpcKmp = {id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "grpcKmp"}
+grpcKmp = { id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "grpcKmp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

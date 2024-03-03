@@ -29,6 +29,7 @@ internal fun ProcessEmailWorkspaceSendEmailUI(component: EmailMagicLinkComponent
     val uiState by component.viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
         component.viewModel.showSlackProgressAnimation()
+        component.viewModel.sendMagicLink()
     }
     PlatformSideEffects.PlatformColors(
         LocalSlackCloneColor.current.uiBackground,

@@ -8,8 +8,6 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.channels.SlackChannelComponent
 import dev.baseio.slackclone.channels.directmessages.DirectMessagesComponent
@@ -85,6 +83,7 @@ class DashboardComponent(
     private val phoneChildStack = childStack(
         key = "phone",
         source = navigation,
+        serializer = Config.serializer(),
         initialConfiguration = Config.Home,
         handleBackButton = true, // Pop the back stack on back button press
         childFactory = ::createChild
@@ -93,6 +92,7 @@ class DashboardComponent(
     private val desktopChildStack = childStack(
         key = "desktop",
         source = navigation,
+        serializer = Config.serializer(),
         initialConfiguration = Config.DirectMessages,
         handleBackButton = true, // Pop the back stack on back button press
         childFactory = ::createChild
@@ -148,20 +148,21 @@ class DashboardComponent(
         }
     }
 
-    sealed class Config(val name: String) : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed class Config(val name: String) {
+        @Serializable
         object Home : Config("Home")
 
-        @Parcelize
+        @Serializable
         object DirectMessages : Config("DMs")
 
-        @Parcelize
+        @Serializable
         object MentionsConfig : Config("Mentions")
 
-        @Parcelize
+        @Serializable
         object Search : Config("Search")
 
-        @Parcelize
+        @Serializable
         object Profile : Config("You")
     }
 }
