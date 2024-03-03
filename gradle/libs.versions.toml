@@ -5,6 +5,7 @@ compose = "1.5.11"
 agp = "7.4.2"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.8.1"
+
 compose-uitooling = "1.5.4"
 voyager = "1.0.0"
 composeImageLoader = "1.7.1"
@@ -13,12 +14,15 @@ kotlinx-coroutines = "1.7.3"
 kotlinx-serialization = "1.6.2"
 kotlinx-datetime = "0.5.0"
 multiplatformSettings = "1.1.1"
-koin = "3.5.3"
+koin = "3.6.0-wasm-alpha2"
 sqlDelight = "2.0.1"
+splashscreen = "1.0.1"
+accompanist_version = "0.28.0"
 
 firebaseMessagingKtx = "23.2.1"
 firebaseMessaging = "23.2.1"
 firebaseCore = "21.1.1"
+androidx_security = "1.1.0-alpha06"
 
 decompose_version = "2.0.0-compose-experimental-alpha-02"
 decompose_composejb = "2.0.0-compose-experimental-alpha-02"
@@ -58,7 +62,7 @@ netty_shaded = "1.50.2"
 
 
 [libraries]
-
+securitycrypto = { module = "androidx.security:security-crypto-ktx", version.ref = "androidx_security" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
@@ -68,11 +72,14 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+splash_screen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
@@ -99,6 +106,7 @@ windows-registry-util = { module = "com.github.sarxos:windows-registry-util", ve
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
+accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist_version" }
 
 barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
 androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraExtensions" }
@@ -135,3 +143,4 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 kotlin-native-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 grpcKmp = {id = "io.github.timortel.kotlin-multiplatform-grpc-plugin", version.ref = "grpcKmp"}
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

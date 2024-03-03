@@ -3,18 +3,18 @@ import com.google.protobuf.gradle.*
 plugins {
     kotlin("jvm")
     id("java")
-    id("com.google.protobuf") version "0.9.0"
+    id("com.google.protobuf") version "0.9.4"
 }
 
 group = "dev.baseio.slackdatalib"
 version = "1.0.0"
 
 object Versions {
-    const val GRPC = "1.49.1"
-    const val GRPC_KOTLIN = "1.3.0"
-    const val PROTOBUF = "3.21.6"
+    const val GRPC = "1.62.2"
+    const val GRPC_KOTLIN = "1.4.1"
+    const val PROTOBUF = "3.25.3"
 
-    const val COROUTINES = "1.6.4"
+    const val COROUTINES = "1.7.3"
 }
 
 repositories {

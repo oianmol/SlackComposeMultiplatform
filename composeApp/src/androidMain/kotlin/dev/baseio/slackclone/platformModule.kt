@@ -12,6 +12,6 @@ actual fun platformModule(): Module {
     return module {
         single { SKKeyValueData(get()) }
         single { get<Context>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-        single { SlackDB.invoke(DriverFactory(get()).createDriver(SlackDB.Schema)) }
+        single { SlackDB.invoke(DriverFactory(get()).createDriver()) }
     }
 }

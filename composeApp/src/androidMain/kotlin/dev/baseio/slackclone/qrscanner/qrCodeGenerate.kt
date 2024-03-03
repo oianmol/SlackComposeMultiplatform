@@ -6,7 +6,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import java.io.ByteArrayOutputStream
 
-actual fun qrCodeGenerate(data: String): ByteArray {
+actual suspend fun qrCodeGenerate(data: String): ByteArray {
     val writer = QRCodeWriter()
     val bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, 400, 400)
     val w = bitMatrix.width

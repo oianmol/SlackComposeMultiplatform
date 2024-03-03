@@ -19,7 +19,7 @@ import dev.baseio.slackdomain.usecases.chat.UseCaseSendMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import dev.baseio.slackclone.R
+import dev.oianmol.slack.R
 
 class SKReplyGroupMessageReceiver : BroadcastReceiver() {
 

@@ -22,6 +22,8 @@ import dev.baseio.slackdomain.model.channel.DomainLayerChannels
 import dev.baseio.slackdomain.model.message.DomainLayerMessages
 import org.koin.java.KoinJavaComponent.getKoin
 import java.util.UUID
+import dev.oianmol.slack.R
+import dev.baseio.android.SlackAndroidActivity
 
 const val NOTIFICATION_CHANNEL_ID_MESSAGES: String = "MessagesMagicMountain"
 const val NOTIFICATION_ACTION_KEY_REPLY = "reply_key"
@@ -61,7 +63,8 @@ class SKPushNotificationNotifier(
             val notifications = messages.map { skMessage ->
                 getKoin()
                 skMessage.decodedMessage =
-                    getKoin().get<IMessageDecrypter>().decrypted(skMessage).getOrNull()?.decodedMessage ?: ""
+                    getKoin().get<IMessageDecrypter>().decrypted(skMessage)
+                        .getOrNull()?.decodedMessage ?: ""
                 skMessage
             }.map { skMessage ->
                 notificationFromFCMDataModel(skMessage, channel)

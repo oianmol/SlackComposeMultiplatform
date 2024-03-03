@@ -18,6 +18,7 @@ import dev.baseio.android.util.showToast
 import dev.baseio.slackclone.RootComponent
 import dev.baseio.slackclone.SlackApp
 import dev.baseio.slackclone.commonui.theme.SlackCloneTheme
+import dev.oianmol.slack.R
 
 class SlackAndroidActivity : AppCompatActivity() {
 

@@ -19,6 +19,7 @@ import dev.baseio.slackclone.dashboard.home.UserProfileComponent
 import dev.baseio.slackclone.getKoin
 import dev.baseio.slackclone.qrscanner.QrScannerMode
 import dev.baseio.slackdomain.model.channel.DomainLayerChannels
+import kotlinx.serialization.*
 
 class SearchMessagesComponent(componentContext: ComponentContext) :
     ComponentContext by componentContext

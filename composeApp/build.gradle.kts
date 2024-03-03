@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sqlDelight)
@@ -109,6 +110,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.multiplatformSettings)
             implementation(libs.koin.core)
+
             implementation(libs.sqlDelight.driver.extensions)
             implementation("media.kamel:kamel-image:0.9.3")
             api("io.github.timortel:grpc-multiplatform-lib:0.4.0")
@@ -125,6 +127,12 @@ kotlin {
             implementation(libs.compose.uitooling)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.sqlDelight.driver.android)
+            implementation(libs.koin.android)
+            implementation(libs.securitycrypto)
+
+            implementation(libs.splash.screen)
+            implementation(libs.accompanist.permission)
+            implementation(libs.firebase.messaging.ktx)
 
             // CameraX
             api(libs.androidx.camera.camera2)
@@ -177,7 +185,7 @@ android {
         minSdk = 24
         targetSdk = 34
 
-        applicationId = "dev.oianmol.slack.androidApp"
+        applicationId = "dev.oianmol.slack"
         versionCode = 1
         versionName = "1.0.0"
     }

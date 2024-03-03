@@ -8,4 +8,5 @@ plugins {
     alias(libs.plugins.sqlDelight).apply(false)
     alias(libs.plugins.kotlin.native.cocoapods).apply(false)
     alias(libs.plugins.grpcKmp).apply(false)
+    alias(libs.plugins.kotlin.parcelize).apply(false)
 }

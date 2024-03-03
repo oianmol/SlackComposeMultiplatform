@@ -8,5 +8,6 @@
     <string name="notif_messages">%1$d Messages</string>
     <string name="notification_enter_your_message">Enter your message</string>
     <string name="notif_reply">Reply</string>
+    <string name="notification_message_sent">Message Sent!</string>
 
 </resources>
