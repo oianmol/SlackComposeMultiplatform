@@ -42,6 +42,11 @@ kotlin {
             }
             extraOpts += listOf("-compiler-option", "-fmodules")
         }
+
+        framework {
+            baseName = "capillaryslack"
+            isStatic = true
+        }
     }
 
     compilerOptions {

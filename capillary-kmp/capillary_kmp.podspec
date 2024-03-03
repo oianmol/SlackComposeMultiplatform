@@ -6,15 +6,15 @@ Pod::Spec.new do |spec|
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'SlackCapillary'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/capillary_kmp.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/capillaryslack.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
     spec.dependency 'capillaryslack'
                 
-    if !Dir.exist?('build/cocoapods/framework/capillary_kmp.framework') || Dir.empty?('build/cocoapods/framework/capillary_kmp.framework')
+    if !Dir.exist?('build/cocoapods/framework/capillaryslack.framework') || Dir.empty?('build/cocoapods/framework/capillaryslack.framework')
         raise "
 
-        Kotlin framework 'capillary_kmp' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'capillaryslack' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
             ./gradlew :capillary-kmp:generateDummyFramework
@@ -24,7 +24,7 @@ Pod::Spec.new do |spec|
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':capillary-kmp',
-        'PRODUCT_MODULE_NAME' => 'capillary_kmp',
+        'PRODUCT_MODULE_NAME' => 'capillaryslack',
     }
                 
     spec.script_phases = [

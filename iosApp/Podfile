@@ -1,0 +1,15 @@
+target 'iosApp' do
+  use_frameworks!
+  platform :ios, '14.1'
+  pod 'Protobuf'
+  pod 'gRPC-ProtoRPC'
+  pod 'capillaryslack', :path => '../slack_capillary_ios'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+    end
+  end
+end
