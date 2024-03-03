@@ -48,16 +48,13 @@ protobuf {
         ofSourceSet("main").forEach {
             it.plugins {
                 id("grpc") {
-                    option("lite")
                 }
                 id("grpckt") {
-                    option("lite")
                 }
             }
 
             it.builtins {
                 id("kotlin") {
-                    option("lite")
                 }
             }
         }

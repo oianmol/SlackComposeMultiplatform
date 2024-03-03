@@ -155,6 +155,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.sqlDelight.driver.sqlite)
             implementation(libs.windows.registry.util)
+            implementation(libs.grpc.okhttp)
             api(libs.zxing.javase)
         }
 
@@ -222,7 +223,7 @@ grpcKotlinMultiplatform {
     with(kotlin) {
         targetSourcesMap.put(OutputTarget.COMMON, listOf(kotlin.sourceSets.commonMain.get()))
         targetSourcesMap.put(OutputTarget.IOS, listOf(kotlin.sourceSets.iosMain.get()))
-        targetSourcesMap.put(OutputTarget.JVM, listOf(kotlin.sourceSets.androidMain.get()))
+        targetSourcesMap.put(OutputTarget.JVM, listOf(kotlin.sourceSets.jvmMain.get()))
         targetSourcesMap.put(OutputTarget.JS, listOf(kotlin.sourceSets.jsMain.get()))
     }
 
