@@ -18,7 +18,7 @@ struct iosApp: App {
                     }
                         if let token = parameters["token"] {
                             if !token.isEmpty {
-                                MainKt.rootComponent.navigateAuthorizeWithToken(token: token)
+                                Main_iosKt.rootComponent.navigateAuthorizeWithToken(token: token)
                             }
                         }
                 }
@@ -35,7 +35,7 @@ struct ContentView: View {
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        MainKt.MainViewController()
+        Main_iosKt.MainViewController()
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
