@@ -33,7 +33,7 @@ object SlackServer {
     }
 
     fun start(): Server {
-        return ServerBuilder.forPort(8080)
+        return ServerBuilder.forPort(17600)
             // .useTransportSecurity(tlsCertFile, tlsPrivateKeyFile) // TODO enable this once the kmp library supports this.
             .addService(
                 SecurePushService(

@@ -29,6 +29,7 @@ fun initKoin(): KoinApplication {
                 GrpcCalls(
                     skKeyValueData = slackKoinApp.koin.get(),
                     address = BuildConfig.ipAddr,
+                    port = BuildConfig.port,
                     coroutineDispatcherProvider = slackKoinApp.koin.get()
                 )
             },

@@ -269,9 +269,8 @@ compose.experimental {
 
 buildConfig {
     packageName.set("dev.baseio.slackclone")
-
     buildConfigField("ipAddr", """${ipv4()}""")
-
+    buildConfigField("port", 8082)
 }
 
 fun ipv4(): String {
