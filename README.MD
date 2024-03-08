@@ -1,5 +1,23 @@
 # Slack Compose Multiplatform Application
 
+
+![Component 1](https://user-images.githubusercontent.com/4393101/197988428-87a04d5e-94e0-4f7e-9c34-48d04983b081.png)
+
+
+## 🏗️️ Built with 💪🏼 using Jetpack Compose And Kotlin Multiplatform 😁
+
+| What                                    | How                                                                                                                                                                             |
+|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 🎭 User Interface (Android,Desktop,iOS) | [Jetpack Compose JB!](https://developer.android.com/jetpack/compose)                                                                                                            |
+| 🏗 Architecture                         | [Decompose + Clean Architecture](https://arkivanov.github.io/Decompose/)                                                                                                        |
+| 💉 DI (Android)                         | [Koin](https://insert-koin.io/)                                                                                                                                                 |
+| 🌊 Async                                | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
+| 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
+| 📄 Pagination                           | [moko-paging](https://github.com/icerockdev/moko-paging)                                                                                                                        |
+| 🪔 Lint                                 | [ktlint gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle) , [ktlint Pinterest](https://github.com/pinterest/ktlint)                                                  |
+| 🤿 Testing with Turbine                                 | [Turbine](https://github.com/cashapp/turbine)                                                 |
+
+
 ## Before running!
  - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
  - install JDK 17 on your machine
@@ -24,22 +42,6 @@ To run the application on iPhone device/simulator:
 ### Browser
 Make sure to run envoy!
 Run the browser application: `./gradlew :composeApp:jsBrowserDevelopmentRun`
-
-![Component 1](https://user-images.githubusercontent.com/4393101/197988428-87a04d5e-94e0-4f7e-9c34-48d04983b081.png)
-
-
-## 🏗️️ Built with 💪🏼 using Jetpack Compose And Kotlin Multiplatform 😁
-
-| What                                    | How                                                                                                                                                                             |
-|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 🎭 User Interface (Android,Desktop,iOS) | [Jetpack Compose JB!](https://developer.android.com/jetpack/compose)                                                                                                            |
-| 🏗 Architecture                         | [Decompose + Clean Architecture](https://arkivanov.github.io/Decompose/)                                                                                                        |
-| 💉 DI (Android)                         | [Koin](https://insert-koin.io/)                                                                                                                                                 |
-| 🌊 Async                                | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
-| 🌐 Networking                           | [gRPC](https://grpc.io/)                                                                                                                                                        |
-| 📄 Pagination                           | [moko-paging](https://github.com/icerockdev/moko-paging)                                                                                                                        |
-| 🪔 Lint                                 | [ktlint gradle plugin](https://github.com/JLLeitschuh/ktlint-gradle) , [ktlint Pinterest](https://github.com/pinterest/ktlint)                                                  |
-| 🤿 Testing with Turbine                                 | [Turbine](https://github.com/cashapp/turbine)                                                 |
 
 
 ## Prerequisities
